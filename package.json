@@ -1,0 +1,16 @@
+{
+  "name": "dineq",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["server", "database"],
+  "engines": { "node": "^20.19.0 || >=22.12.0" },
+  "scripts": {
+    "dev": "npm run dev --workspace=server",
+    "start": "npm run start --workspace=server",
+    "test": "npm run test --workspace=server",
+    "test:record": "npm run test:record --workspace=server --",
+    "db:migrate": "npm run db:migrate --workspace=database --",
+    "db:seed": "npm run db:seed --workspace=database"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@dineq/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:migrate": "node migrate.js",
+    "db:seed": "node seed/seed.js"
+  },
+  "dependencies": {
+    "argon2": "^0.45.2",
+    "dotenv": "^18.0.9",
+    "pg": "^8.23.1"
+  }
+}

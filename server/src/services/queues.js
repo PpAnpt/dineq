@@ -94,6 +94,15 @@ export function createQueueService({ pool }) {
           throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
         }
 
+        // BR-02: one active (WAITING/CALLED) ticket per customer per queue.
+        const active = await client.query(
+          `SELECT 1 FROM queue_entries
+            WHERE queue_id = $1 AND customer_id = $2 AND status IN ('WAITING', 'CALLED')`,
+          [queueId, user.id]);
+        if (active.rowCount > 0) {
+          throw httpError(409, 'DUPLICATE_ACTIVE', 'You already have an active ticket in this queue');
+        }
+
         const ticketNo = queue.next_ticket_no;
         const inserted = await client.query(
           `INSERT INTO queue_entries (queue_id, customer_id, ticket_no, party_size, status)
@@ -108,6 +117,10 @@ export function createQueueService({ pool }) {
         return toTicket(inserted.rows[0]);
       } catch (error) {
         await client.query('ROLLBACK').catch(() => {});
+        // The partial unique index is the last line of defence against a race.
+        if (error.code === '23505' && error.constraint === 'queue_entries_one_active_customer') {
+          throw httpError(409, 'DUPLICATE_ACTIVE', 'You already have an active ticket in this queue');
+        }
         throw error;
       } finally {
         client.release();

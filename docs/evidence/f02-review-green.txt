@@ -1,0 +1,29 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f02-review-green.json"
+Working directory: server
+Commit: bced12862368feb20c4db087677dc8c2aff807e9
+Date: 2026-11-06T14:17:43.990Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/dineq/server
+
+ ✓ tests/f02-join.test.js (39 tests) 9443ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  356ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE  450ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  2177ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response)  313ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  369ms
+ ✓ tests/f01-auth.test.js (40 tests) 6212ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  370ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  371ms
+ ✓ tests/infra.test.js (8 tests) 883ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys  301ms
+
+ Test Files  3 passed (3)
+      Tests  87 passed (87)
+   Start at  21:17:44
+   Duration  18.55s (transform 183ms, setup 0ms, import 1.20s, tests 16.54s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/dineq/docs/evidence/f02-review-green.json
+
+Exit code: 0

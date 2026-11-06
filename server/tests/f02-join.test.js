@@ -143,6 +143,16 @@ describe('F-02 join queue', () => {
     expect(await nextTicketNo()).toBe(2);
   });
 
+  test('TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE', async () => {
+    const cookie = await login(customerEmail(1));
+    const responses = await Promise.all(Array.from({ length: 10 }, () => joinAs(cookie, 2)));
+    expect(responses.filter(r => r.status === 201)).toHaveLength(1);
+    for (const r of responses.filter(r => r.status !== 201)) expectError(r, 409, 'DUPLICATE_ACTIVE');
+    expect(await count('queue_entries')).toBe(1);
+    expect(await count('queue_events')).toBe(1);
+    expect(await nextTicketNo()).toBe(2);
+  });
+
   test('TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30', async () => {
     const cookies = await Promise.all(Array.from({ length: 30 }, (_, i) => login(customerEmail(i + 1))));
     const responses = await Promise.all(cookies.map(cookie => joinAs(cookie, 2)));
@@ -290,6 +300,40 @@ describe('F-02 path validation and authentication precedence', () => {
     expectError(response, 401, 'UNAUTHENTICATED');
     expect(response.body.error.message).not.toMatch(/uuid|not found/i);
     expect(await state()).toBe(before);
+  });
+
+  // Review of PR #13: the body is parsed only after Session/Role/UUID/Resource (SDS C.6.3 steps 3-5).
+  const rawJoin = (cookie, queueId, raw) => {
+    const call = request(app).post(`/api/queues/${queueId}/entries`)
+      .set('Content-Type', 'application/json');
+    return (cookie ? call.set('Cookie', cookie) : call).send(raw);
+  };
+
+  test('TEST-23 / AC-23: malformed JSON to an absent queue is 404 NOT_FOUND (resource before body parsing)', async () => {
+    const cookie = await login(customerEmail(1));
+    const before = await state();
+    expectError(await rawJoin(cookie, unknownId, '{'), 404, 'NOT_FOUND');
+    expect(await state()).toBe(before);
+  });
+
+  test('TEST-23 / AC-23: malformed JSON to a malformed UUID is 400 VALIDATION_ERROR', async () => {
+    const cookie = await login(customerEmail(1));
+    const before = await state();
+    expectError(await rawJoin(cookie, 'not-a-uuid', '{'), 400, 'VALIDATION_ERROR');
+    expect(await state()).toBe(before);
+  });
+
+  test('TEST-23 / AC-23: malformed JSON to an existing queue is 400 VALIDATION_ERROR and changes nothing', async () => {
+    const cookie = await login(customerEmail(1));
+    const before = await state();
+    expectError(await rawJoin(cookie, seedIds.queue, '{'), 400, 'VALIDATION_ERROR');
+    expect(await state()).toBe(before);
+    expect(await nextTicketNo()).toBe(1);
+  });
+
+  test('TEST-23 / AC-23: Session and Role are still checked before malformed JSON (401 anonymous, 403 Host)', async () => {
+    expectError(await rawJoin(null, seedIds.queue, '{'), 401, 'UNAUTHENTICATED');
+    expectError(await rawJoin(await login('host1@dineq.test'), seedIds.queue, '{'), 403, 'FORBIDDEN');
   });
 
   test('TEST-23 / AC-23: resource lookup precedes body validation (absent queue + bad partySize is 404; malformed id is 400)', async () => {

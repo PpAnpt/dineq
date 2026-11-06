@@ -1,6 +1,6 @@
 # Sprint 1 Software Test Specification (STS)
 
-> **Status:** Draft v0.1 (2026-11-04) · CPE334 Theme 9 · DineQ
+> **Status:** Draft v0.2 (2026-11-06) · CPE334 Theme 9 · DineQ
 
 รวม AC/TEST ของ F-01..F-03 และ Definition of Done; รายละเอียด flow อยู่ในไฟล์ contract แต่ละฟีเจอร์ สถานะทุกรายการเป็น PLANNED จนกว่าจะมีหลักฐานการรันจริง
 
@@ -14,6 +14,7 @@
 | AC-04 / TEST-04 | Logout แล้วใช้ Cookie เดิมเรียก /auth/me | 401 และ Session ถูกเพิกถอน | API Integration |
 | AC-05 / TEST-05 | ไม่ Login แล้วเรียก Endpoint ที่ Protected | 401 ไม่มีข้อมูลส่วนตัวรั่วไหล | API Integration |
 | AC-06 / TEST-06 | Customer เรียก Host-Only Endpoint | 403 ไม่มีการเปลี่ยน DB | API Integration |
+| AC-22 / TEST-22 | Request ที่เปลี่ยนข้อมูล (POST) ส่ง Header Origin ที่ไม่ตรง APP_ORIGIN | 403 ORIGIN_NOT_ALLOWED ไม่มีการเปลี่ยน DB | API Integration |
 
 ## F-02 Customer Walk-in Ticket Joining
 
@@ -26,6 +27,7 @@
 | AC-11 / TEST-11 | Customer A GET Ticket ของ Customer B | 403 ไม่มีข้อมูล B ใน Response | API + Authorization |
 | AC-12 / TEST-12 | Join Queue CLOSED หรือ partySize=0,9,1.5/ข้อความ | 409 QUEUE_CLOSED หรือ 400 INVALID_PARTY_SIZE; ไม่ Insert และไม่กินเลขคิว | API + DB Boundary |
 | AC-13 / TEST-13 | Host เรียก Join Endpoint ที่อนุญาตเฉพาะ Customer | 403 ไม่เกิด Ticket ใหม่ | API + Role |
+| AC-21 / TEST-21 | Customer Join สำเร็จ แล้วสร้าง App Instance ใหม่พร้อม DB Pool ใหม่ต่อ DB เดิม (จำลอง Restart) | Ticket และ JOINED Event ที่สร้างไว้ก่อนหน้ายังอ่านได้ครบ (ticketNo/partySize/status ตรงเดิม) | API + DB (Restart Persistence) |
 
 ## F-03 Host FIFO Calling & Complete Seating
 
@@ -60,3 +62,4 @@
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
+| v0.2 | 2026-11-06 | Add AC-21/TEST-21 (restart persistence) and AC-22/TEST-22 (Origin check); keep in sync with F-01/F-02 contracts |

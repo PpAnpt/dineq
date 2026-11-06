@@ -1,6 +1,6 @@
 # F-02 Customer Walk-in Ticket Joining - Sprint 1 Contract
 
-> **Status:** Draft v0.1 (2026-11-04) · CPE334 Theme 9 · DineQ
+> **Status:** Draft v0.2 (2026-11-06) · CPE334 Theme 9 · DineQ
 
 เป้าหมาย: ลูกค้าดูร้าน/คิว OPEN ระบุจำนวนคน (partySize 1–8) กดรับคิวและดูสถานะ WAITING ที่บันทึกจริง; API: GET /api/queues, POST /api/queues/:queueId/entries, GET /api/me/entries, GET /api/entries/:entryId
 
@@ -15,9 +15,11 @@ Main Flow: Login → เลือก OPEN Queue → ใส่ partySize → Join
 | AC-11 / TEST-11 | Customer A GET Ticket ของ Customer B | 403 ไม่มีข้อมูล B ใน Response | API + Authorization |
 | AC-12 / TEST-12 | Join Queue CLOSED หรือ partySize=0,9,1.5/ข้อความ | 409 QUEUE_CLOSED หรือ 400 INVALID_PARTY_SIZE; ไม่ Insert และไม่กินเลขคิว | API + DB Boundary |
 | AC-13 / TEST-13 | Host เรียก Join Endpoint ที่อนุญาตเฉพาะ Customer | 403 ไม่เกิด Ticket ใหม่ | API + Role |
+| AC-21 / TEST-21 | Customer Join สำเร็จ แล้วสร้าง App Instance ใหม่พร้อม DB Pool ใหม่ต่อ DB เดิม (จำลอง Restart) | Ticket และ JOINED Event ที่สร้างไว้ก่อนหน้ายังอ่านได้ครบ (ticketNo/partySize/status ตรงเดิม) | API + DB (Restart Persistence) |
 
 ## Revision History
 
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
+| v0.2 | 2026-11-06 | Add AC-21/TEST-21 (restart persistence) to give NFR-02 a Sprint 1 test |

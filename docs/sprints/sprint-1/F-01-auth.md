@@ -1,6 +1,6 @@
 # F-01 Authentication & Role Protection - Sprint 1 Contract
 
-> **Status:** Draft v0.1 (2026-11-04) · CPE334 Theme 9 · DineQ
+> **Status:** Draft v0.2 (2026-11-06) · CPE334 Theme 9 · DineQ
 
 เป้าหมาย: Customer และ Host Login/Logout ได้อย่างปลอดภัย Backend ตรวจ Role/Session ได้; UI มี Login Form, Loading, Error และ Redirect ตาม Role; Data ได้แก่ users/sessions
 
@@ -14,9 +14,11 @@ Main Flow: Login → Server ตรวจ Argon2id Hash → ออก HttpOnly Se
 | AC-04 / TEST-04 | Logout แล้วใช้ Cookie เดิมเรียก /auth/me | 401 และ Session ถูกเพิกถอน | API Integration |
 | AC-05 / TEST-05 | ไม่ Login แล้วเรียก Endpoint ที่ Protected | 401 ไม่มีข้อมูลส่วนตัวรั่วไหล | API Integration |
 | AC-06 / TEST-06 | Customer เรียก Host-Only Endpoint | 403 ไม่มีการเปลี่ยน DB | API Integration |
+| AC-22 / TEST-22 | Request ที่เปลี่ยนข้อมูล (POST) ส่ง Header Origin ที่ไม่ตรง APP_ORIGIN | 403 ORIGIN_NOT_ALLOWED ไม่มีการเปลี่ยน DB | API Integration |
 
 ## Revision History
 
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
+| v0.2 | 2026-11-06 | Add AC-22/TEST-22 (Origin check on mutating requests) to cover the CSRF rule in system-sds C.7 |

@@ -1,6 +1,6 @@
 # PART C — System-Level Software Design Specification (SDS) | 15 คะแนน
 
-> **Status:** Draft v0.1 (2026-11-04) · CPE334 Theme 9 · DineQ
+> **Status:** Draft v0.2 (2026-11-06) · CPE334 Theme 9 · DineQ
 
 ## C.1 Architecture และ Stack
 
@@ -26,6 +26,8 @@
 ความสัมพันธ์: users 1:N sessions, users 1:N queue_entries (Customer), restaurants 1:N service_queues, service_queues 1:N queue_entries, queue_entries 1:N queue_events และ users (Operator) N:M service_queues ผ่าน queue_operator_assignments
 
 Database Constraints: UNIQUE(queue_id,ticket_no); UNIQUE แบบ Partial สำหรับ (queue_id,customer_id) เฉพาะ WAITING/CALLED; UNIQUE แบบ Partial สำหรับ queue_id ที่มี CALLED; CHECK party_size BETWEEN 1 AND 8; CHECK timestamps/สถานะ; Foreign Key ตามความสัมพันธ์; ไม่ปล่อยให้ Browser เป็นผู้กำหนด Customer ID หรือ Ticket Number
+
+ชนิดข้อมูลมาตรฐาน: Primary Key ของทุกตารางที่มี `id` เป็น UUID (`gen_random_uuid()`); `ticket_no` และ `next_ticket_no` เป็น integer; ทุก Timestamp เป็น `timestamptz`; JSON ใช้ camelCase และ DB ใช้ snake_case
 
 ## C.3 State Transition และ Transaction
 
@@ -70,13 +72,39 @@ Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = 
 | POST | /api/auth/login | Public: email, password | 200 User + Cookie; 401 |
 | POST | /api/auth/logout | Login แล้ว | 204; ยกเลิก Session |
 | GET | /api/auth/me | Login แล้ว | 200 User; 401 |
-| GET | /api/queues | Login แล้ว | 200 Queue List |
+| GET | /api/queues | Login แล้ว | 200 Queue List (แต่ละรายการมี `isAssigned`); 401 |
 | POST | /api/queues/:queueId/entries | Customer: { partySize: 1..8 } | 201 WAITING; 400/403/409 |
 | GET | /api/me/entries | Customer | 200 ตั๋วของตัวเอง; 401 |
 | GET | /api/entries/:entryId | เจ้าของหรือ Assigned Host | 200 Ticket; 403/404 |
 | GET | /api/queues/:queueId/entries | Assigned Host | 200 WAITING/CALLED FIFO; 403 |
-| POST | /api/queues/:queueId/call-next | Assigned Host | 200 CALLED; 404/409 |
-| POST | /api/entries/:entryId/complete | Assigned Host | 200 COMPLETED; 403/409 |
+| POST | /api/queues/:queueId/call-next | Assigned Host | 200 CALLED; 401/403/404/409 |
+| POST | /api/entries/:entryId/complete | Assigned Host | 200 COMPLETED; 401/403/404/409 |
+
+### C.6.1 Response Shapes ที่กำหนดเพิ่ม (v0.2)
+
+- `GET /api/queues`: แต่ละรายการมี `isAssigned` (boolean) เป็น `true` เฉพาะเมื่อผู้เรียกเป็น Host ที่ถูก Assign ให้ Queue นั้น; Customer และ Host ที่ไม่ได้ Assign ได้ `false` — Host UI ใช้ค่านี้หา `queueId` ของตนเอง
+- Ticket JSON (Join, `/api/me/entries`, `/api/entries/:entryId`, Waiting List): `id`, `queueId`, `ticketNo`, `partySize`, `status`, `createdAt`, `calledAt`, `completedAt` (`calledAt`/`completedAt` เป็น `null` จนกว่าจะเปลี่ยนสถานะ); ไม่มี Email หรือข้อมูลส่วนตัวของ Customer ใน Waiting List ของ Host
+
+### C.6.2 Error Code Catalog (v0.2)
+
+รูปแบบ `{ error: { code, message } }`; `code` เป็นค่าคงที่ตามตาราง ส่วน `message` อ่านเข้าใจได้และไม่เปิดเผยข้อมูลส่วนตัว
+
+| HTTP | code | ใช้เมื่อ |
+| :---- | :---- | :---- |
+| 400 | VALIDATION_ERROR | Body/Param ไม่ถูกรูปแบบ (เช่น Login ไม่ส่ง email/password, UUID ผิดรูปแบบ) |
+| 400 | INVALID_PARTY_SIZE | partySize ไม่ใช่จำนวนเต็ม 1–8 (0, 9, 1.5, ข้อความ) |
+| 401 | UNAUTHENTICATED | ไม่มี Session, Session หมดอายุ หรือถูกเพิกถอน |
+| 401 | INVALID_CREDENTIALS | Email/Password ไม่ถูกต้อง (ข้อความเดียวกัน ไม่บอกว่า Email มีหรือไม่) |
+| 403 | FORBIDDEN | Role ไม่ถูกต้อง, ไม่ใช่เจ้าของ Ticket หรือ Host ไม่ได้ Assigned |
+| 403 | ORIGIN_NOT_ALLOWED | Request ที่เปลี่ยนข้อมูลมี Origin ไม่ตรง APP_ORIGIN |
+| 404 | NOT_FOUND | ไม่มี Resource (Queue/Entry) นั้นอยู่จริง |
+| 404 | NO_WAITING_ENTRY | Call Next แต่ไม่มี Ticket WAITING |
+| 409 | DUPLICATE_ACTIVE | Customer มี Ticket WAITING/CALLED อยู่แล้วใน Queue นั้น |
+| 409 | QUEUE_CLOSED | Join Queue ที่ CLOSED |
+| 409 | UNRESOLVED_CALLED | Call Next ขณะมี CALLED ค้างอยู่ |
+| 409 | INVALID_TRANSITION | เปลี่ยนสถานะผิดลำดับ (เช่น Complete ใบที่ไม่ใช่ CALLED) |
+
+ลำดับการตรวจ: Origin → Session (401) → Role/Ownership/Assignment (403) → Validation (400) → Resource (404) → Business Rule (409); คำขอที่ถูกปฏิเสธต้องไม่เปลี่ยน DB และไม่กินเลขคิว
 
 
 ## C.7 Authentication / Security / Configuration
@@ -95,8 +123,11 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 
 การตั้งค่าทดสอบ: Seed Customer อย่างน้อย 30 Accounts สำหรับ Concurrency Test, Host ที่ Assigned 1 คน, Host ไม่ Assigned 1 คน, ร้านอาหารหนึ่งสาขาและ OPEN Queue หนึ่งคิว; ใช้ข้อมูลสมมติและวิธีสร้างบัญชีทดสอบอย่างปลอดภัย ไม่ใส่รหัสผ่านจริงใน PDF
 
+บัญชี Seed (v0.2): `customer01@dineq.test` ถึง `customer30@dineq.test` (CUSTOMER), `host1@dineq.test` (HOST, Assigned กับ Queue ที่ Seed), `host2@dineq.test` (HOST, ไม่ Assigned); รหัสผ่านทุกบัญชีอ่านจาก env `SEED_DEMO_PASSWORD` ตอนรัน Seed (ไม่ Commit ลง Git/เอกสาร/Log) และเก็บเป็น Argon2id Hash เท่านั้น; ตัวแปร `TEST_DATABASE_URL` ใช้ฐานข้อมูลแยกสำหรับ Test (เพิ่มใน `.env.example` ร่วมกับ `DATABASE_URL`)
+
 ## Revision History
 
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
+| v0.2 | 2026-11-06 | Add error-code catalog and check order (C.6.2), response shapes incl. `isAssigned` and ticket JSON (C.6.1), UUID/timestamptz conventions (C.2), seed accounts and TEST_DATABASE_URL (C.7) |

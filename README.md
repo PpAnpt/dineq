@@ -2,9 +2,12 @@
 
 Restaurant walk-in queue management (CPE334 Theme 9)
 
-Sprint 1 infrastructure: Express API, PostgreSQL migrations/seed and Vitest + Supertest.
+Sprint 1 API: Express infrastructure, PostgreSQL migrations/seed, F-01 authentication
+and Vitest + Supertest.
 P1 contracts were merged in [PR #1](https://github.com/PpAnpt/dineq/pull/1)
 at `2d87368346ff18b5aabf06e5346c1142740c63a2` before the P2 implementation.
+P3 builds on the merged P2 infrastructure in [PR #2](https://github.com/PpAnpt/dineq/pull/2)
+at `8f4dc4e23bd06adecdca65beb40067d3137e5120`.
 
 ## Prerequisites
 
@@ -74,8 +77,34 @@ Invoke-RestMethod http://localhost:3000/api/health | ConvertTo-Json -Depth 3
 ```
 
 Expected response: `{ "data": { "status": "ok" } }`. Press Ctrl+C to stop the API.
-Only the health endpoint is implemented in P2. Authentication, queue operations
-and frontend screens belong to the later feature PRs.
+Authentication is available as described below. Queue business operations and
+frontend screens belong to the later feature PRs.
+
+## F-01 authentication and role protection
+
+| Method / endpoint | Behavior |
+| --- | --- |
+| `POST /api/auth/login` | Public; send `{ email, password }`; returns `{ data: { id, email, role } }` and the `dineq_session` Cookie |
+| `GET /api/auth/me` | Returns the current session user's identity and server-stored role |
+| `POST /api/auth/logout` | Revokes the current session in PostgreSQL, clears the Cookie and returns 204 |
+
+Passwords are verified with Argon2id. Login generates a new 32-byte random token;
+only its SHA-256 hash is stored in `sessions`, with server-enforced expiry from
+`SESSION_TTL_SECONDS`. The Cookie is HttpOnly, SameSite=Lax and Secure when
+`COOKIE_SECURE=true`. Missing, unknown, expired, revoked or inactive-user sessions
+are rejected with `401 UNAUTHENTICATED`. Invalid credentials return the same
+`401 INVALID_CREDENTIALS` for an unknown email, wrong password or inactive account.
+
+For `/api`, Origin checks run before Session checks; protected endpoints check
+Session and endpoint Role before parsing JSON. Only Login and Health are public.
+Mutating requests with an Origin Header different from `APP_ORIGIN` return
+`403 ORIGIN_NOT_ALLOWED`; an absent Header is allowed. Identity and Role never
+come from client-supplied body, query or identity headers.
+
+The Host-only list, call-next and complete routes enforce the HOST Role and
+currently return `501 NOT_IMPLEMENTED` to authenticated Hosts. Customers receive
+`403 FORBIDDEN` even with malformed JSON or an invalid path UUID. F-03 will replace
+these placeholders with assignment checks and queue operations.
 
 ## Database scripts and demo accounts
 
@@ -97,8 +126,8 @@ It adds one synthetic restaurant and one OPEN queue on an empty database.
 
 Test helpers in `server/tests/helpers/index.js` expose `resetAndSeed()`,
 `createTestApp()`, `getTestPool()`, `closeTestPool()` and `loginAs(email)`.
-`loginAs` calls the real login API and returns the session Cookie after F-01 is
-implemented; P2 does not implement or bypass authentication. Test files run
+`loginAs` calls the real F-01 login API and returns the session Cookie; it does not
+bypass authentication. Test files run
 serially because they share a resettable test database; a test can still issue
 30 concurrent requests through the test pool (maximum 40 connections).
 
@@ -145,3 +174,4 @@ To stop it after stopping the API:
 | Version | Date | Change |
 | --- | --- | --- |
 | v0.2 | 2026-11-06 | Add Windows P2 setup, database/seed/test commands and evidence workflow after merged P1 |
+| v0.3 | 2026-11-06 | Document F-01 authentication, session lifecycle, middleware order and temporary Host handlers after merged P2 |

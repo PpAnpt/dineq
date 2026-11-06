@@ -23,9 +23,10 @@ export function createRoutes({ pool, config }) {
   router.post('/queues/:queueId/entries', requireRole('CUSTOMER'));
   router.get('/me/entries', requireRole('CUSTOMER'));
 
-  router.use(json());
+  // No global body parser: a route that must check its resource before the body
+  // (SDS C.6.3 steps 4-5) parses JSON itself; /auth parses it here.
   router.get('/health', (_req, res) => res.json({ data: { status: 'ok' } }));
-  router.use('/auth', createAuthRoutes({ authService, config }));
+  router.use('/auth', json(), createAuthRoutes({ authService, config }));
   router.use(createQueueRoutes({ queueService: createQueueService({ pool }) }));
   // F-03 replaces these handlers; P3 only establishes authentication and role guards.
   for (const [method, path] of hostOnlyRoutes) {

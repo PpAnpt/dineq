@@ -72,10 +72,14 @@ export function createQueueService({ pool }) {
       return toTicket(entry);
     },
 
-    // Join Transaction (SDS C.3). The caller identity comes from the Session only.
-    async join(user, queueId, partySize) {
+    async assertQueueExists(queueId) {
       const exists = await pool.query('SELECT 1 FROM service_queues WHERE id = $1', [queueId]);
       if (exists.rowCount === 0) throw httpError(404, 'NOT_FOUND', 'Queue not found');
+    },
+
+    // Join Transaction (SDS C.3). The caller identity comes from the Session only.
+    async join(user, queueId, partySize) {
+      await this.assertQueueExists(queueId);
       if (!isValidPartySize(partySize)) {
         throw httpError(400, 'INVALID_PARTY_SIZE', 'partySize must be an integer from 1 to 8');
       }

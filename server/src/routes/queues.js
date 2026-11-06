@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, json } from 'express';
 import { requireUuid } from '../services/queues.js';
 
 // F-02 routes. Session and Role guards run earlier in routes/index.js (SDS C.6.3).
@@ -9,8 +9,15 @@ export function createQueueRoutes({ queueService }) {
     res.json({ data: await queueService.listQueues(req.user) });
   });
 
-  router.post('/queues/:queueId/entries', async (req, res) => {
-    const queueId = requireUuid(req.params.queueId, 'queueId');
+  // UUID shape and queue existence are checked before the JSON body is parsed (SDS C.6.3).
+  const resolveQueue = async (req, _res, next) => {
+    requireUuid(req.params.queueId, 'queueId');
+    await queueService.assertQueueExists(req.params.queueId);
+    next();
+  };
+
+  router.post('/queues/:queueId/entries', resolveQueue, json(), async (req, res) => {
+    const queueId = req.params.queueId;
     const partySize = req.body && typeof req.body === 'object' ? req.body.partySize : undefined;
     const ticket = await queueService.join(req.user, queueId, partySize);
     res.status(201).json({ data: ticket });

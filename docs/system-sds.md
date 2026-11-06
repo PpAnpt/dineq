@@ -1,6 +1,6 @@
 # PART C — System-Level Software Design Specification (SDS) | 15 คะแนน
 
-> **Status:** Draft v0.2 (2026-11-06) · CPE334 Theme 9 · DineQ
+> **Status:** Draft v0.3 (2026-11-06) · CPE334 Theme 9 · DineQ
 
 ## C.1 Architecture และ Stack
 
@@ -69,20 +69,41 @@ Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = 
 
 | Method | Endpoint | บทบาท / Request สำคัญ | Response / Error |
 | :---- | :---- | :---- | :---- |
-| POST | /api/auth/login | Public: email, password | 200 User + Cookie; 401 |
+| POST | /api/auth/login | Public: email, password | 200 User + Cookie; 400/401/403 |
 | POST | /api/auth/logout | Login แล้ว | 204; ยกเลิก Session |
 | GET | /api/auth/me | Login แล้ว | 200 User; 401 |
 | GET | /api/queues | Login แล้ว | 200 Queue List (แต่ละรายการมี `isAssigned`); 401 |
-| POST | /api/queues/:queueId/entries | Customer: { partySize: 1..8 } | 201 WAITING; 400/403/409 |
+| POST | /api/queues/:queueId/entries | Customer: { partySize: 1..8 } | 201 WAITING; 400/401/403/404/409 |
 | GET | /api/me/entries | Customer | 200 ตั๋วของตัวเอง; 401 |
-| GET | /api/entries/:entryId | เจ้าของหรือ Assigned Host | 200 Ticket; 403/404 |
-| GET | /api/queues/:queueId/entries | Assigned Host | 200 WAITING/CALLED FIFO; 403 |
-| POST | /api/queues/:queueId/call-next | Assigned Host | 200 CALLED; 401/403/404/409 |
-| POST | /api/entries/:entryId/complete | Assigned Host | 200 COMPLETED; 401/403/404/409 |
+| GET | /api/entries/:entryId | เจ้าของหรือ Assigned Host | 200 Ticket; 400/401/403/404 |
+| GET | /api/queues/:queueId/entries | Assigned Host | 200 WAITING/CALLED FIFO; 400/401/403/404 |
+| POST | /api/queues/:queueId/call-next | Assigned Host | 200 CALLED; 400/401/403/404/409 |
+| POST | /api/entries/:entryId/complete | Assigned Host | 200 COMPLETED; 400/401/403/404/409 |
 
-### C.6.1 Response Shapes ที่กำหนดเพิ่ม (v0.2)
+### C.6.1 Response Shapes (v0.3)
 
-- `GET /api/queues`: แต่ละรายการมี `isAssigned` (boolean) เป็น `true` เฉพาะเมื่อผู้เรียกเป็น Host ที่ถูก Assign ให้ Queue นั้น; Customer และ Host ที่ไม่ได้ Assign ได้ `false` — Host UI ใช้ค่านี้หา `queueId` ของตนเอง
+- `GET /api/queues`: คืน `{ data: [...] }`; เมื่อไม่มีคิวคืน `{ "data": [] }` แต่ละรายการมี `id` (Queue UUID), `restaurant: { id, name }` (Restaurant UUID และชื่อร้าน), `status` (`OPEN` หรือ `CLOSED`) และ `isAssigned` (boolean) เป็น `true` เฉพาะเมื่อผู้เรียกเป็น Host ที่ถูก Assign ให้ Queue นั้น; Customer และ Host ที่ไม่ได้ Assign ได้ `false` — UI ใช้ `item.id` เป็น `queueId` สำหรับ Join และ `/host/queues/:queueId` ไม่ใช้ Restaurant ID แทน Queue ID
+
+ตัวอย่าง Response สำหรับ Assigned Host (`isAssigned` ของรายการเดียวกันต้องเป็น `false` สำหรับ Customer และ Unassigned Host):
+
+```json
+{
+  "data": [
+    {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "restaurant": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "name": "DineQ Demo Restaurant"
+      },
+      "status": "OPEN",
+      "isAssigned": true
+    }
+  ]
+}
+```
+
+UUID และชื่อร้านในตัวอย่างเป็นข้อมูลสมมติสำหรับอธิบาย Shape ไม่ใช่ค่าตายตัวที่ Seed ต้องใช้; Response ไม่ส่ง `next_ticket_no`, Assignment Rows หรือข้อมูลส่วนตัวของ Customer
+
 - Ticket JSON (Join, `/api/me/entries`, `/api/entries/:entryId`, Waiting List): `id`, `queueId`, `ticketNo`, `partySize`, `status`, `createdAt`, `calledAt`, `completedAt` (`calledAt`/`completedAt` เป็น `null` จนกว่าจะเปลี่ยนสถานะ); ไม่มี Email หรือข้อมูลส่วนตัวของ Customer ใน Waiting List ของ Host
 
 ### C.6.2 Error Code Catalog (v0.2)
@@ -104,7 +125,29 @@ Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = 
 | 409 | UNRESOLVED_CALLED | Call Next ขณะมี CALLED ค้างอยู่ |
 | 409 | INVALID_TRANSITION | เปลี่ยนสถานะผิดลำดับ (เช่น Complete ใบที่ไม่ใช่ CALLED) |
 
-ลำดับการตรวจ: Origin → Session (401) → Role/Ownership/Assignment (403) → Validation (400) → Resource (404) → Business Rule (409); คำขอที่ถูกปฏิเสธต้องไม่เปลี่ยน DB และไม่กินเลขคิว
+### C.6.3 ลำดับตรวจตามประเภท Endpoint (v0.3)
+
+1. Origin: ทุก `POST/PUT/PATCH/DELETE` ที่มี Origin Header และไม่ตรง `APP_ORIGIN` คืน `403 ORIGIN_NOT_ALLOWED` ก่อนตรวจ Session/Body รวมถึง Login; ถ้าไม่มี Origin Header ให้ตรวจขั้นถัดไปตามปกติ
+2. Public Endpoint: `POST /api/auth/login` ไม่ต้องมี Session/Cookie; ตรวจ Body ก่อน (`400 VALIDATION_ERROR` เมื่อ email/password ขาดหรือชนิดข้อมูลไม่ถูกต้อง) แล้วตรวจ Credentials (`401 INVALID_CREDENTIALS` เมื่อไม่ตรง, `200` เมื่อถูกต้อง) ส่วน `GET /api/health` ไม่ต้องมี Session
+3. Protected Endpoint: ตรวจ Session ก่อน (`401 UNAUTHENTICATED`) แล้วตรวจ Role ของ Endpoint (`403 FORBIDDEN` เช่น Host เรียก Join หรือ Customer เรียก Host-only API) โดยยังไม่อ่าน/ส่งข้อมูล Resource ให้ผู้ไม่มีสิทธิ์
+4. สำหรับ Endpoint ที่รับ `:queueId`/`:entryId`: ตรวจรูปแบบ UUID (`400 VALIDATION_ERROR`) ก่อน Query Resource; UUID ถูกต้องแต่ไม่มี Queue/Entry นั้นคืน `404 NOT_FOUND` จากนั้นจึงตรวจ Ownership/Assignment ของ Resource ที่พบ (`403 FORBIDDEN`) โดยไม่เปิดเผยข้อมูลส่วนตัวใน Response ที่ปฏิเสธ
+5. ตรวจ Body ของคำขอที่ผ่านสิทธิ์แล้ว เช่น Join ที่ partySize ไม่ใช่จำนวนเต็ม 1–8 คืน `400 INVALID_PARTY_SIZE` จากนั้นตรวจ Business Rules ใน Transaction ตาม C.3 (`409` ตาม Catalog) ก่อนเขียนข้อมูล; Role/Assignment และสถานะที่ใช้ตัดสินการเขียนต้องยังถูกต้องภายใต้ Lock
+
+กรณี Call Next: หลังพบ Queue และผ่าน Assignment แล้ว ตรวจ CALLED ค้างก่อน (`409 UNRESOLVED_CALLED`); ถ้าไม่มี CALLED และไม่มี WAITING คืน `404 NO_WAITING_ENTRY` เป็นกรณีไม่พบรายการที่เรียกได้ ไม่ใช่ Queue หายไป
+
+ตัวอย่างผลที่ต้องได้ตามลำดับข้างต้น:
+
+| Endpoint / เงื่อนไข | Expected Result | Planned Verification |
+| :---- | :---- | :---- |
+| Login ด้วย Body ถูกต้องและไม่มี Cookie | 200 เมื่อ Credentials ถูกต้อง; ไม่ถูก Session Guard ปฏิเสธ | AC-01 / TEST-01 |
+| Anonymous เรียก Protected Endpoint แม้ UUID ผิดรูปแบบ | 401 UNAUTHENTICATED ไม่เปิดเผยข้อมูล Resource | AC-05 / TEST-05, AC-23/24 |
+| Customer เรียก Host-only Endpoint แม้ UUID ผิดรูปแบบ | 403 FORBIDDEN ก่อนตรวจ UUID | AC-20 / TEST-20, AC-24 |
+| ผู้ Login และ Role ถูกต้อง เรียกด้วย UUID ผิดรูปแบบ | 400 VALIDATION_ERROR | AC-23/24 / TEST-23/24 |
+| ผู้ Login และ Role ถูกต้อง เรียกด้วย UUID ที่ถูกต้องแต่ไม่มี Resource | 404 NOT_FOUND | AC-23/24 / TEST-23/24 |
+| Resource มีอยู่จริง แต่ไม่ใช่เจ้าของ/Host ไม่ได้ Assigned | 403 FORBIDDEN ไม่เปิดเผยข้อมูลส่วนตัว | AC-11/19 / TEST-11/19 |
+| Assigned Host Call Next เมื่อไม่มีทั้ง WAITING และ CALLED | 404 NO_WAITING_ENTRY; Row/Event/Counter ไม่เปลี่ยน | AC-24 / TEST-24 |
+
+คำขอที่ถูกปฏิเสธต้องไม่เปลี่ยน DB และไม่กินเลขคิว; ทุก Error ใช้ Shape ใน C.6.2
 
 
 ## C.7 Authentication / Security / Configuration
@@ -131,3 +174,4 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
 | v0.2 | 2026-11-06 | Add error-code catalog and check order (C.6.2), response shapes incl. `isAssigned` and ticket JSON (C.6.1), UUID/timestamptz conventions (C.2), seed accounts and TEST_DATABASE_URL (C.7) |
+| v0.3 | 2026-11-06 | Address PR #1 review: define full queue-list JSON and endpoint-specific check order, clarify public login and the two 404 outcomes, link planned verification |

@@ -23,7 +23,7 @@ database/{migrations/*.sql,migrate.js,seed/}     client/     docs/     docs/evid
 - `createApp({ pool })` factory (tests and restart test build their own instances).
 - One route file + one service file per feature; `routes/index.js` registers them (keeps parallel PRs conflict-free).
 - JSON: camelCase. DB: snake_case, UUID primary keys (`gen_random_uuid()`), `timestamptz`.
-- Success `{ "data": ... }`, failure `{ "error": { "code": "...", "message": "..." } }`. Never leak private data in 401/403. 404 only for truly missing resources; ownership violations are 403 (per AC-11).
+- Success `{ "data": ... }`, failure `{ "error": { "code": "...", "message": "..." } }`. Never leak private data in 401/403. 404 is `NOT_FOUND` for a missing Queue/Entry, or `NO_WAITING_ENTRY` when an authorized Call Next has no WAITING entry and no unresolved CALLED entry. Ownership/assignment violations on existing resources are 403 (per AC-11/19). Follow the endpoint-specific check order in `docs/system-sds.md` C.6.3; public Login does not require a session.
 - Security: Argon2id hashes; session token = 32 random bytes, only its SHA-256 stored; HttpOnly cookie `dineq_session` (SameSite=Lax, Secure via `COOKIE_SECURE`); user id / role / ticket number are **never** taken from the client; Origin check on mutating requests.
 - Business rules are enforced in the backend **and** the DB (constraints, transactions with `SELECT ... FOR UPDATE` on the queue row). Map PG unique violations (`23505`) to the documented 409 codes.
 - Config only via env vars (`.env.example` lists them). No secrets or real passwords in git, docs or logs. Seed password comes from `SEED_DEMO_PASSWORD`.
@@ -46,3 +46,9 @@ database/{migrations/*.sql,migrate.js,seed/}     client/     docs/     docs/evid
 - Keep changes bounded to the task/Issue. Show me the diff summary and real test output at the end of every task.
 - Append a line to `docs/ai-use-log.md` after each task.
 - If anything is ambiguous and affects a contract: ask (one concise question) instead of guessing.
+
+## Revision History
+
+| Version | Date | Change |
+| :---- | :---- | :---- |
+| v0.3 | 2026-11-06 | Align 404 guidance and public-login/check-order rules with the PR #1 contract fixes |

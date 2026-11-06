@@ -3,6 +3,8 @@
 ใช้ทีละข้อตามลำดับ **เปิดแชตใหม่ต่อ 1 prompt** (ทุก prompt สั่งให้อ่าน `CLAUDE.md` เองอยู่แล้ว) แล้วคัดลอกเฉพาะข้อความในกล่อง ```` ``` ````
 ก่อนเริ่มทุกครั้ง: `git status` ต้องสะอาด และอยู่บน branch ที่ prompt ระบุ
 
+ปรับตาม PR #1 review (v0.3): P3–P6 ใช้ Queue JSON และลำดับตรวจใน SDS C.6.1/C.6.3; P4 ต้องรวม TEST-23 และ P5 ต้องรวม TEST-24a..d โดยคง AC/TEST เดิมทั้งหมด
+
 ## วิธีทำงานต่อ 1 prompt
 
 1. วาง prompt → ดู diff และ **ผลรัน test จริง** ก่อนยอมรับ (อย่าเชื่อแค่ข้อความสรุปของ AI)
@@ -94,8 +96,11 @@ Branch: `feature/f-01-auth` จาก `sprint-1-staging` (หลัง P2 merge)
 ````text
 Read CLAUDE.md, docs/sprints/sprint-1/F-01-auth.md, test-spec.md (F-01 + AC-22), docs/system-sds.md (C.4, C.6, C.7). Run: git checkout sprint-1-staging; git pull; git checkout -b feature/f-01-auth.
 
+Follow C.6.3: Login is public and succeeds without an existing Cookie; protected routes check Session and endpoint Role before UUID validation or Resource lookup.
+
 PHASE RED
 - Write server/tests/f01-auth.test.js for TEST-01..06 and TEST-22 exactly as the STS describes (names start with "TEST-xx / AC-yy:"). Cover: Customer and Host valid login, wrong password and unknown email (same 401 INVALID_CREDENTIALS), /auth/me, expired session (set sessions.expires_at in the past directly in the DB) -> 401, logout then reuse of the old cookie -> 401 and revoked_at set, anonymous call to protected endpoints -> 401 with no private data, Customer calling a Host-only endpoint -> 403 with no DB change, foreign Origin -> 403 ORIGIN_NOT_ALLOWED.
+- TEST-01 must send no existing Session Cookie; TEST-05 must include a protected path with `not-a-uuid` and still receive 401 UNAUTHENTICATED before parameter validation.
 - Also assert the token is not stored in plain text (only its hash) and password_hash starts with $argon2id$.
 - Run them; confirm they fail because the behaviour is missing (not typos/imports). Commit: "test(F-01): add failing tests for AC-01..06, AC-22 (red)". Then npm run test:record -- f01-red on the clean tree and commit docs/evidence separately.
 
@@ -114,14 +119,17 @@ End: table AC -> test -> result taken from the real output, the 4 commit SHAs (t
 Branch: `feature/f-02-join-queue` จาก `sprint-1-staging` (หลัง F-01 merge)
 
 ````text
-Read CLAUDE.md, docs/sprints/sprint-1/F-02-join-queue.md, test-spec.md (F-02 + AC-21), docs/system-sds.md (C.2, C.3 Join Transaction, C.6). Run: git checkout sprint-1-staging; git pull; git checkout -b feature/f-02-join-queue.
+Read CLAUDE.md, docs/sprints/sprint-1/F-02-join-queue.md, test-spec.md (F-02 including AC-21/23), docs/system-sds.md (C.2, C.3 Join Transaction, C.6 including C.6.1/C.6.3). Run: git checkout sprint-1-staging; git pull; git checkout -b feature/f-02-join-queue.
 
 PHASE RED (all F-02 tests)
-- server/tests/f02-join.test.js for TEST-07..13 and TEST-21:
+- server/tests/f02-join.test.js for TEST-07..13, TEST-21 and TEST-23:
   07 queue list (restaurant, queue, OPEN/CLOSED, isAssigned); 08 join with partySize=4 -> 201 WAITING, ticketNo/partySize correct, JOINED event row, retrievable via GET; 09 duplicate active join -> 409 DUPLICATE_ACTIVE and still exactly one active entry; 10 concurrency: 30 different customers join at once (Promise.all, pool large enough) -> 30 x 201, distinct ticketNo 1..30, 30 rows, next_ticket_no = 31; 11 Customer A reads B's ticket -> 403, response contains none of B's data; 12 CLOSED queue -> 409 QUEUE_CLOSED, and partySize 0, 9, 1.5, "abc", null, missing -> 400 INVALID_PARTY_SIZE, each time zero new entries/events and next_ticket_no unchanged; 13 Host calls join -> 403, no ticket; 21 restart persistence via a fresh createApp + new pool.
-- Run, confirm red for the right reason, commit "test(F-02): add failing tests for AC-07..13, AC-21 (red)", test:record -- f02-red, commit evidence.
+- Extend TEST-07 to assert the full C.6.1 shape (`data` array, `id`, `restaurant: { id, name }`, `status`, boolean `isAssigned`): assigned Host gets true for its queue, Customer and unassigned Host get false. Also cover a fresh fixture with no queues -> `{ "data": [] }`.
+- TEST-23 / AC-23: as a logged-in Customer, GET /api/entries/:entryId and POST /api/queues/:queueId/entries with partySize=4 using `not-a-uuid` -> 400 VALIDATION_ERROR, then valid UUIDs confirmed absent in the DB -> 404 NOT_FOUND; repeat without a Session -> 401 UNAUTHENTICATED. Assert error shape and no new entries/events or counter changes. Keep TEST-11's existing-other-owner -> 403 assertions.
+- Run, confirm red for the right reason, commit "test(F-02): add failing tests for AC-07..13, AC-21/23 (red)", test:record -- f02-red, commit evidence.
 
 PHASE GREEN in two stages so TEST-09 has a genuine red->green interval:
+- Implement queue-list fields exactly as C.6.1; apply C.6.3 ordering (Session -> endpoint Role -> UUID -> Resource -> ownership/assignment -> body -> business rules), with 404 NOT_FOUND for absent queue/entry.
 - Stage 1: implement GET /api/queues, GET /api/me/entries, GET /api/entries/:entryId (owner or assigned Host) and the join transaction exactly as C.3 (BEGIN, SELECT ... FOR UPDATE on the queue, check OPEN, Customer role, partySize integer 1..8, take next_ticket_no, insert WAITING entry, increment counter, insert JOINED event, COMMIT; ROLLBACK on any failure) but WITHOUT the explicit duplicate-active pre-check and WITHOUT mapping the unique-violation error. Run everything. Report honestly which tests pass and the ACTUAL failure of TEST-09 (do not fake or guess it). Commit "feat(F-02): join queue transaction (duplicate rule pending)", then test:record -- f02-tdd-br02-red, commit evidence.
 - Stage 2: add the duplicate-active pre-check inside the transaction and map PG error 23505 to 409 DUPLICATE_ACTIVE (also covers the race). Run everything -> all F-02 tests green. Commit "feat(F-02): enforce one active ticket per customer (BR-02)", then test:record -- f02-tdd-br02-green and commit evidence.
 - Rules: no test edits to get green (list any genuine test bug and why). If you need an API field/shape that the contract lacks, stop and propose a contract revision first.
@@ -139,11 +147,13 @@ Branch: `feature/f-03-host-queue` จาก `sprint-1-staging` (หลัง F-0
 Read CLAUDE.md, docs/sprints/sprint-1/F-03-host-queue.md, test-spec.md (F-03), docs/system-sds.md (C.3 Call Next / Complete, C.4, C.6). Run: git checkout sprint-1-staging; git pull; git checkout -b feature/f-03-host-queue. Do not depend on F-02 code: in tests create WAITING entries (and their events) directly via SQL helpers (server/tests/helpers/, add a new file to avoid merge conflicts with the F-02 branch).
 
 PHASE RED
-- server/tests/f03-host.test.js for TEST-14..20:
-  14 Assigned Host lists WAITING/CALLED in FIFO order with ticketNo/partySize/status (no customer email/private data); Unassigned Host -> 403; 15 with WAITING 1 and 2, Call Next -> ticket 1 CALLED with called_at + CALLED event, ticket 2 still WAITING; 16 CALLED already exists -> 409 UNRESOLVED_CALLED, nobody new is CALLED (plus TEST-16b: two simultaneous Call Next requests -> exactly one 200 and one 409, exactly one CALLED row); 17 Complete a CALLED ticket -> COMPLETED + completed_at + COMPLETED event in DB, owner Customer sees it via GET; 18 Complete a WAITING or COMPLETED ticket -> 409 INVALID_TRANSITION, row and events unchanged; 19 Unassigned Host list / call-next / complete -> 403 and DB unchanged; 20 Customer calls call-next / complete -> 403 and DB unchanged. Also: Call Next with no WAITING -> 404 NO_WAITING_ENTRY.
-- Run, confirm red for the right reason, commit "test(F-03): add failing tests for AC-14..20 (red)", test:record -- f03-red, commit evidence.
+- server/tests/f03-host.test.js for TEST-14..20 and TEST-24a..d:
+  14 Assigned Host lists WAITING/CALLED in FIFO order with ticketNo/partySize/status (no customer email/private data); Unassigned Host -> 403; 15 with WAITING 1 and 2, Call Next -> ticket 1 CALLED with called_at + CALLED event, ticket 2 still WAITING; 16 CALLED already exists -> 409 UNRESOLVED_CALLED, nobody new is CALLED (plus TEST-16b: two simultaneous Call Next requests -> exactly one 200 and one 409, exactly one CALLED row); 17 Complete a CALLED ticket -> COMPLETED + completed_at + COMPLETED event in DB, owner Customer sees it via GET; 18 Complete a WAITING or COMPLETED ticket -> 409 INVALID_TRANSITION, row and events unchanged; 19 Unassigned Host list / call-next / complete -> 403 and DB unchanged; 20 Customer calls call-next / complete -> 403 and DB unchanged. Also: Call Next with neither WAITING nor CALLED -> 404 NO_WAITING_ENTRY (TEST-24a).
+- TEST-24 / AC-24: (a) existing assigned queue with neither WAITING nor CALLED -> 404 NO_WAITING_ENTRY; (b) valid UUIDs confirmed absent in DB for list/call-next/complete -> 404 NOT_FOUND; (c) the same three endpoints with `not-a-uuid` as Host -> 400 VALIDATION_ERROR; (d) repeat (b)/(c) as anonymous -> 401 UNAUTHENTICATED and as Customer -> 403 FORBIDDEN before UUID/resource checks. Assert error shape and unchanged rows/events/counters. A CALLED entry with no WAITING still returns 409 UNRESOLVED_CALLED under TEST-16.
+- Run, confirm red for the right reason, commit "test(F-03): add failing tests for AC-14..20, AC-24 (red)", test:record -- f03-red, commit evidence.
 
 PHASE GREEN
+- Follow SDS C.6.3 for all Host endpoints: Session -> Host Role -> UUID validation -> Resource lookup (404 NOT_FOUND) -> Assignment -> business rules. Do not treat a missing Resource as an assignment failure.
 - Replace the F-01 placeholder (501) handlers with real ones. Call Next per C.3: BEGIN, lock the queue row FOR UPDATE, verify Host assignment (403), reject if a CALLED entry exists (409; also map the partial-unique violation), pick the WAITING entry with the lowest ticket_no (404 if none), set CALLED + called_at, insert CALLED event, COMMIT. Complete: lock the entry, verify the Host is assigned to its queue (403), require status CALLED (else 409 INVALID_TRANSITION), set COMPLETED + completed_at, insert event in the same transaction. Never trust a queue/customer id from the client body.
 - No test edits to get green. Commit "feat(F-03): ...", test:record -- f03-green, commit evidence.
 
@@ -163,6 +173,7 @@ Build the minimal React + Vite client in client/ (plain CSS, no UI library, no p
 - Vite dev server on :5173 with a proxy of /api to the API (so cookies are same-origin; APP_ORIGIN = http://localhost:5173). Document it in README.
 - Pages: /login; /queues (Customer: queue list OPEN/CLOSED, partySize input 1..8, Join button); /my-queue (ticket no., partySize, status WAITING/CALLED/COMPLETED, empty state, Refresh button); /host/queues/:queueId (Waiting list in FIFO order, currently CALLED, Call Next, Complete).
 - After login call GET /api/auth/me and route by the server-provided role (Customer -> /queues, Host -> its queue found via isAssigned). Logout button. The UI must never send user id or role; client-side hiding is only UX, the backend already enforces permissions.
+- Read the queue list from `response.data`; each item has `id`, `restaurant: { id, name }`, `status`, `isAssigned` per SDS C.6.1. Use the item's `id` as `queueId` for Join and Host navigation.
 - Every page handles loading, empty and error states and shows the server's error message/code (e.g. DUPLICATE_ACTIVE, QUEUE_CLOSED, INVALID_PARTY_SIZE, UNRESOLVED_CALLED, 403). Fully keyboard-usable: labels on inputs, Enter submits, visible focus, buttons are real <button>s. Add data-testid on key elements for E2E.
 - If you need an API field or behaviour that is not in the contracts: stop and propose a contract revision first.
 
@@ -248,3 +259,9 @@ Output (Thai): a list of 3–6 SPECIFIC findings or questions the human reviewer
 ````text
 Read CLAUDE.md. A test is failing: <paste test name + error output>. Do NOT edit or skip the test and do not change expectations. Diagnose first: show the exact assertion that fails, what the code actually did, and whether the cause is in the implementation, the test setup, the DB state, or the spec. Propose the smallest fix and wait for my OK before changing anything. If you believe the test or spec is wrong, explain with evidence from the contract and propose a documented revision instead of a silent change.
 ````
+
+## Revision History
+
+| Version | Date | Change |
+| :---- | :---- | :---- |
+| v0.3 | 2026-11-06 | Sync P3–P6 with PR #1 fixes: public Login, queue-list JSON/isAssigned, endpoint-specific check order and TEST-23/24 |

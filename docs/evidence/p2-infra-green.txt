@@ -1,0 +1,19 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/p2-infra-green.json"
+Working directory: server
+Commit: 65a4ea92e6693ac8fb367cbabb42212e59385e65
+Date: 2026-11-06T11:05:33.357Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server
+
+ ✓ tests/infra.test.js (8 tests) 590ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  18:05:33
+   Duration  1.31s (transform 80ms, setup 0ms, import 450ms, tests 590ms, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/docs/evidence/p2-infra-green.json
+
+Exit code: 0

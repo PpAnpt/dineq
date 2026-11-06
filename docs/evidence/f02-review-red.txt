@@ -1,0 +1,84 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f02-review-red.json"
+Working directory: server
+Commit: 64370b8a7dd0736570426b5557475c4362d7c0ab
+Date: 2026-11-06T14:17:10.298Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/dineq/server
+
+ ❯ tests/f02-join.test.js (39 tests | 1 failed) 8479ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  358ms
+     ✓ TEST-07 / AC-07: 'Assigned Host' gets the C.6.1 shape with isAssigned=true 148ms
+     ✓ TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with isAssigned=false 146ms
+     ✓ TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED 147ms
+     ✓ TEST-07 / AC-07: a fixture with no queues returns { "data": [] } 246ms
+     ✓ TEST-07 / AC-07: queue list requires a Session 67ms
+     ✓ TEST-08 / AC-08: Customer joins an OPEN queue with partySize=4 and can read the ticket back 174ms
+     ✓ TEST-08 / AC-08: a Customer without tickets gets { "data": [] } from /api/me/entries 145ms
+     ✓ TEST-09 / AC-09: joining again while WAITING is rejected with 409 DUPLICATE_ACTIVE 162ms
+     ✓ TEST-09 / AC-09: joining again while CALLED is rejected with 409 DUPLICATE_ACTIVE 158ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE  396ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  2060ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response) 295ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  338ms
+     ✓ TEST-12 / AC-12: joining a CLOSED queue is 409 QUEUE_CLOSED with no insert and no ticket number used 151ms
+     ✓ TEST-12 / AC-12: partySize 0 is 400 INVALID_PARTY_SIZE and changes nothing 156ms
+     ✓ TEST-12 / AC-12: partySize 9 is 400 INVALID_PARTY_SIZE and changes nothing 152ms
+     ✓ TEST-12 / AC-12: partySize 1.5 is 400 INVALID_PARTY_SIZE and changes nothing 151ms
+     ✓ TEST-12 / AC-12: partySize "abc" is 400 INVALID_PARTY_SIZE and changes nothing 147ms
+     ✓ TEST-12 / AC-12: partySize null is 400 INVALID_PARTY_SIZE and changes nothing 152ms
+     ✓ TEST-12 / AC-12: partySize missing is 400 INVALID_PARTY_SIZE and changes nothing 154ms
+     ✓ TEST-12 / AC-12: boundary partySize 1 is accepted 149ms
+     ✓ TEST-12 / AC-12: boundary partySize 8 is accepted 153ms
+     ✓ TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change 159ms
+     ✓ TEST-13 / AC-13: Host has no Customer ticket list (/api/me/entries is Customer-only) 149ms
+     ✓ TEST-21 / AC-21: ticket and JOINED event survive a new app instance with a new DB pool 229ms
+     ✓ TEST-23 / AC-23: GET entry with malformed UUID is 400 VALIDATION_ERROR 137ms
+     ✓ TEST-23 / AC-23: POST join with malformed UUID is 400 VALIDATION_ERROR 142ms
+     ✓ TEST-23 / AC-23: GET entry with an absent UUID is 404 NOT_FOUND 149ms
+     ✓ TEST-23 / AC-23: POST join with an absent UUID is 404 NOT_FOUND 151ms
+     ✓ TEST-23 / AC-23: GET entry (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks 68ms
+     ✓ TEST-23 / AC-23: POST join (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks 88ms
+     ✓ TEST-23 / AC-23: GET entry (absent) without a Session is 401 UNAUTHENTICATED before UUID checks 94ms
+     ✓ TEST-23 / AC-23: POST join (absent) without a Session is 401 UNAUTHENTICATED before UUID checks 97ms
+     × TEST-23 / AC-23: malformed JSON to an absent queue is 404 NOT_FOUND (resource before body parsing) 182ms
+     ✓ TEST-23 / AC-23: malformed JSON to a malformed UUID is 400 VALIDATION_ERROR 145ms
+     ✓ TEST-23 / AC-23: malformed JSON to an existing queue is 400 VALIDATION_ERROR and changes nothing 149ms
+     ✓ TEST-23 / AC-23: Session and Role are still checked before malformed JSON (401 anonymous, 403 Host) 145ms
+     ✓ TEST-23 / AC-23: resource lookup precedes body validation (absent queue + bad partySize is 404; malformed id is 400) 182ms
+ ✓ tests/f01-auth.test.js (40 tests) 4920ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  345ms
+ ✓ tests/infra.test.js (8 tests) 753ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f02-join.test.js > F-02 path validation and authentication precedence > TEST-23 / AC-23: malformed JSON to an absent queue is 404 NOT_FOUND (resource before body parsing)
+AssertionError: expected 400 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 400
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:315:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 86 passed (87)
+   Start at  21:17:10
+   Duration  15.95s (transform 202ms, setup 0ms, import 1.11s, tests 14.15s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/dineq/docs/evidence/f02-review-red.json
+
+Exit code: 1

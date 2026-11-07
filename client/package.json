@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test:review": "node --test tests/review-ui.test.js"
+    "test:review": "node --test tests/review-ui.test.js",
+    "test:e2e": "playwright test",
+    "test:e2e:record": "node scripts/record-e2e-run.js"
   },
   "dependencies": {
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@vitejs/plugin-react": "^6.2.1",
     "playwright": "^1.65.0",
     "vite": "^8.3.6"

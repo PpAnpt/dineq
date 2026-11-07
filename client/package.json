@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "test:review": "node --test tests/review-ui.test.js"
   },
   "dependencies": {
     "react": "^19.3.1",
@@ -13,6 +14,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.2.1",
+    "playwright": "^1.65.0",
     "vite": "^8.3.6"
   }
 }

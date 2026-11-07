@@ -1,6 +1,6 @@
 # Requirements Traceability Matrix (B.2)
 
-> **Status:** Draft v0.3 (2026-11-06) · CPE334 Theme 9 · DineQ
+> **Status:** Draft v0.4 (2026-11-07) · CPE334 Theme 9 · DineQ
 
 | Requirement / Rule | Feature / Sprint | AC หรือ Verification / Test ที่วางไว้ | สถานะ |
 | :---- | :---- | :---- | :---- |
@@ -15,9 +15,9 @@
 | BR-01, NFR-03 | F-02 / S1 | AC-10 / TEST-10 | PLANNED |
 | BR-02 | F-02 / S1 | AC-09 / TEST-09 | PLANNED |
 | BR-07 | F-02 / S1 | AC-12 / TEST-12 | PLANNED |
-| FR-05 | F-03 / S1 | AC-14/24 / TEST-14/24 | PLANNED |
-| FR-06, BR-04/05 | F-03 / S1 | AC-15/16/24 / TEST-15/16/24 | PLANNED |
-| FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PLANNED |
+| FR-05 | F-03 / S1 | AC-14/24 / TEST-14/24 | PASS (`docs/evidence/f03-green.txt`, 108 passed, commit 3f212d7) |
+| FR-06, BR-04/05 | F-03 / S1 | AC-15/16/24 / TEST-15/16/24 | PASS (`docs/evidence/f03-green.txt`, 108 passed, commit 3f212d7) |
+| FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PASS (`docs/evidence/f03-green.txt`, 108 passed, commit 3f212d7) |
 | FR-08, BR-10 | F-04 / S2 | AC/STS ออกแบบก่อน Implement | PLANNED |
 | FR-09/10, BR-11 | F-05 / S2 | No-show/Table Assignment AC/STS | PLANNED |
 | FR-11/12 | F-06 / S2 | Multiple Queue/Config AC/STS | PLANNED |
@@ -36,3 +36,4 @@ Traceability ของ Sprint 2–3 ระบุเป็น PLANNED ได้�
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
 | v0.2 | 2026-11-06 | Close gaps before implementation: add NFR-02→AC-21, NFR-06 S1 mapping, FR-16/FR-15 S1 rows, AC-22 under NFR-01; split BR-03 and NFR-01 |
 | v0.3 | 2026-11-06 | Map queue-shape/assignment checks and new AC-23/24; explicitly cover both 404 codes and auth precedence without changing PLANNED statuses |
+| v0.4 | 2026-11-07 | Mark F-03 rows (FR-05/06/07) PASS after recorded green run f03-green at 3f212d7 (red run f03-red at 33c581a); other rows unchanged |

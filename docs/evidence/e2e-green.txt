@@ -1,0 +1,19 @@
+Command: playwright test --reporter=list,json (npm run test:e2e)
+Working directory: client
+Commit: eda34e323a3431a519f1579fe0be9e9aa271f8e2
+Date: 2026-11-07T12:36:38.103Z
+Node: v24.14.0
+
+
+Running 4 tests using 1 worker
+
+(node:50880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › e2e\sprint-1.spec.js:38:1 › E2E-1 / DEMO-01: join, Host Call Next + Complete, customer sees persisted COMPLETED (1.3s)
+  ok 2 [chromium] › e2e\sprint-1.spec.js:69:1 › E2E-2 / DEMO-02 + DEMO-03: duplicate active join and invalid party size are rejected (809ms)
+  ok 3 [chromium] › e2e\sprint-1.spec.js:96:1 › E2E-3 / DEMO-04: a Customer cannot use the Host page or call-next API (382ms)
+  ok 4 [chromium] › e2e\sprint-1.spec.js:113:1 › E2E-4 / DEMO-05: after logout the old session cookie is rejected (444ms)
+
+  4 passed (6.1s)
+
+Exit code: 0

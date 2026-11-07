@@ -1,0 +1,25 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/p6-api-regression.json"
+Working directory: server
+Commit: 0d75bc57b6399e16b87ee7c4b9fc3a6e6a130656
+Date: 2026-11-07T10:15:11.225Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server
+
+ ✓ tests/f02-join.test.js (39 tests) 7561ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  338ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  2016ms
+ ✓ tests/f01-auth.test.js (40 tests) 4411ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  433ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  323ms
+ ✓ tests/infra.test.js (8 tests) 673ms
+
+ Test Files  3 passed (3)
+      Tests  87 passed (87)
+   Start at  17:15:12
+   Duration  15.81s (transform 196ms, setup 0ms, import 2.16s, tests 12.64s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/docs/evidence/p6-api-regression.json
+
+Exit code: 0

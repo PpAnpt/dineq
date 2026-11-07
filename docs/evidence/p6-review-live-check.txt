@@ -1,0 +1,12 @@
+Command: node .local/ui-check/livecheck.mjs
+Commit: 87ffa245abe13951480bf95f56a53689e7785858
+Date: 2026-11-07T12:16:21.389Z
+Node: v24.14.0
+Mode: real API on current UI branch; headless Chrome; no queue mutations
+PASS: http://localhost:3000/api/health = 200
+PASS: http://localhost:5173/api/health = 200
+PASS: anonymous /api/auth/me = 401 (normal signed-out response)
+PASS: real Login screen visible without 502
+PASS: real seeded Customer login and queue list through Vite proxy
+PASS: logout returns to Login
+Result: 6 passed / 0 failed

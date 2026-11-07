@@ -61,3 +61,39 @@ do not remove existing data just to satisfy the empty-state assertion.
 
 The remaining human checks are review of PR #14 and P6, merge in dependency
 order, and the manual walkthrough using two separate browser profiles.
+
+## PR #15 review follow-up — 2026-11-07
+
+PR #14 has since merged into staging at `64cfaf1`; integration commit `c6b99af`
+brings it into the UI branch. There is no separate-worktree runtime dependency
+for this follow-up. The only merge conflict was the appended use-log rows;
+both rows were retained.
+
+Peer suggestions were implemented in `87ffa245abe13951480bf95f56a53689e7785858`:
+
+- Refresh the Host list after a 409, retaining its server error/code.
+- Remove the unused action argument.
+- Explain why a CLOSED queue cannot accept new tickets.
+
+The three regression tests in `client/tests/review-ui.test.js` were committed
+first (`719ebc1`) and failed for the missing refresh/explanation, then passed
+unchanged after the implementation. These browser tests use explicit response
+fixtures, no DB writes. Run Vite and Google Chrome, then
+`npm run test:review --workspace=client`.
+
+| Check | Actual result | Evidence |
+| --- | --- | --- |
+| UI regressions before fix | 0 passed / 3 failed / 0 skipped | `p6-review-red.txt` |
+| Same UI regressions after fix | 3 passed / 0 failed / 0 skipped | `p6-review-ui-green.txt` |
+| Combined real-DB API suite on this branch | 108 passed / 0 failed / 0 skipped, 4 files | `p6-review-api-green.txt` / `.json` |
+| Client production build | PASS, 19 modules | `npm run build:client` output in review task |
+| Live connectivity/Login check | 6 passed / 0 failed | `p6-review-live-check.txt`, `p6-review-login.png` |
+
+The reported 502 was reproduced: Vite was listening, API port 3000 had no
+listener, and the local PostgreSQL instance was stopped. Restarting the existing
+instance and API restored both direct and proxied health to 200. Anonymous me
+returns the expected 401 and the UI renders Login. The live browser check logged
+in and out with the seeded Customer through the real proxy/API, without changing
+queue entries. API and the user's existing Vite process were left running so
+the user can Retry/reload. The manual two-profile DEMO-01 check remains pending;
+these headless checks do not claim to be that manual walkthrough.

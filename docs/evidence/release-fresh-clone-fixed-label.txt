@@ -1,0 +1,23 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/local-20261107-200036.json"
+Working directory: server
+Commit: a7a145ec6b870abaed2b3ae13a88e0ffa832818d
+Date: 2026-11-07T13:00:37.642Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/siwal/AppData/Local/Temp/dineq-p8-repro-5bf3659d65/server
+
+ ✓ tests/f02-join.test.js (39 tests) 6380ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1696ms
+ ✓ tests/f01-auth.test.js (40 tests) 3673ms
+ ✓ tests/f03-host.test.js (21 tests) 2963ms
+ ✓ tests/infra.test.js (8 tests) 563ms
+
+ Test Files  4 passed (4)
+      Tests  108 passed (108)
+   Start at  20:00:38
+   Duration  16.01s (transform 171ms, setup 0ms, import 1.54s, tests 13.58s, environment 0ms)
+
+JSON report written to C:/Users/siwal/AppData/Local/Temp/dineq-p8-repro-5bf3659d65/docs/evidence/local-20261107-200036.json
+
+Exit code: 0

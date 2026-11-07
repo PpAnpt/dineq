@@ -15,7 +15,7 @@ export function isValidPartySize(value) {
   return typeof value === 'number' && Number.isInteger(value) && value >= 1 && value <= 8;
 }
 
-function toTicket(row) {
+export function toTicket(row) {
   return {
     id: row.id,
     queueId: row.queue_id,

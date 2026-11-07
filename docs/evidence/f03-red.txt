@@ -1,0 +1,331 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f03-red.json"
+Working directory: server
+Commit: 33c581afa97b354693ba3fc395cba916799564a0
+Date: 2026-11-06T15:48:25.290Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/dineq/server
+
+ ❯ tests/f03-host.test.js (21 tests | 18 failed) 2486ms
+     × TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data 270ms
+     × TEST-14 / AC-14: assigned Host gets { "data": [] } for an empty queue 105ms
+     × TEST-14 / AC-14: unassigned Host gets 403 FORBIDDEN and no ticket data 99ms
+     × TEST-15 / AC-15: Call Next calls the lowest ticket (FIFO); the next one stays WAITING 106ms
+     × TEST-16 / AC-16: Call Next while a CALLED ticket is unresolved -> 409 UNRESOLVED_CALLED 115ms
+     × TEST-16 / AC-16: CALLED with no WAITING still returns 409 UNRESOLVED_CALLED (not 404) 103ms
+     × TEST-16b / AC-16: two simultaneous Call Next requests -> exactly one 200 and one 409 152ms
+     × TEST-17 / AC-17: Complete a CALLED ticket -> COMPLETED in DB and visible to the owner 102ms
+     × TEST-18 / AC-18: Complete a WAITING ticket -> 409 INVALID_TRANSITION, row and events unchanged 104ms
+     × TEST-18 / AC-18: Complete a COMPLETED ticket -> 409 INVALID_TRANSITION, row and events unchanged 101ms
+     × TEST-19 / AC-19: unassigned Host cannot list / call-next / complete; DB unchanged 116ms
+     × TEST-19 / AC-19: assigned Host cannot act on another existing queue it is not assigned to 105ms
+     ✓ TEST-20 / AC-20: Customer cannot list / call-next / complete; no state changes 115ms
+     × TEST-24a / AC-24: Call Next on an assigned queue with neither WAITING nor CALLED ('no entries at all') -> 404 NO_WAITING_ENTRY 104ms
+     × TEST-24a / AC-24: Call Next on an assigned queue with neither WAITING nor CALLED ('only a COMPLETED entry') -> 404 NO_WAITING_ENTRY 103ms
+     × TEST-24b / AC-24: host1@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403) 101ms
+     × TEST-24b / AC-24: host2@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403) 109ms
+     × TEST-24c / AC-24: host1@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints 113ms
+     × TEST-24c / AC-24: host2@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints 112ms
+     ✓ TEST-24d / AC-24: anonymous -> 401 UNAUTHENTICATED and Customer -> 403 FORBIDDEN before UUID/resource checks (00000000-0000-4000-8000-000000000000) 125ms
+     ✓ TEST-24d / AC-24: anonymous -> 401 UNAUTHENTICATED and Customer -> 403 FORBIDDEN before UUID/resource checks (not-a-uuid) 121ms
+ ✓ tests/f02-join.test.js (39 tests) 5857ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1526ms
+ ✓ tests/f01-auth.test.js (40 tests) 3068ms
+ ✓ tests/infra.test.js (8 tests) 841ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys  396ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Host waiting list > TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ ❯ tests/f03-host.test.js:51:29
+     49|
+     50|     const response = await list(await login('host1@dineq.test'));
+     51|     expect(response.status).toBe(200);
+       |                             ^
+     52|     const items = response.body.data;
+     53|     expect(items.map(i => i.ticketNo)).toEqual([1, 2, 3]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Host waiting list > TEST-14 / AC-14: assigned Host gets { "data": [] } for an empty queue
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ ❯ tests/f03-host.test.js:70:29
+     68|   test('TEST-14 / AC-14: assigned Host gets { "data": [] } for an empt…
+     69|     const response = await list(await login('host1@dineq.test'));
+     70|     expect(response.status).toBe(200);
+       |                             ^
+     71|     expect(response.body).toEqual({ data: [] });
+     72|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Host waiting list > TEST-14 / AC-14: unassigned Host gets 403 FORBIDDEN and no ticket data
+AssertionError: expected 501 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:77:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Call Next > TEST-15 / AC-15: Call Next calls the lowest ticket (FIFO); the next one stays WAITING
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ ❯ tests/f03-host.test.js:88:29
+     86|
+     87|     const response = await callNext(await login('host1@dineq.test'));
+     88|     expect(response.status).toBe(200);
+       |                             ^
+     89|     expect(Object.keys(response.body.data).sort()).toEqual(TICKET_KEYS…
+     90|     expect(response.body.data).toMatchObject({ id: t1.id, ticketNo: 1,…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Call Next > TEST-16 / AC-16: Call Next while a CALLED ticket is unresolved -> 409 UNRESOLVED_CALLED
+AssertionError: expected 501 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:115:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Call Next > TEST-16 / AC-16: CALLED with no WAITING still returns 409 UNRESOLVED_CALLED (not 404)
+AssertionError: expected 501 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:123:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Call Next > TEST-16b / AC-16: two simultaneous Call Next requests -> exactly one 200 and one 409
+AssertionError: expected [ 501, 501 ] to deeply equal [ 200, 409 ]
+
+- Expected
++ Received
+
+  [
+-   200,
+-   409,
++   501,
++   501,
+  ]
+
+ ❯ tests/f03-host.test.js:132:49
+    130|
+    131|     const responses = await Promise.all([callNext(cookie), callNext(co…
+    132|     expect(responses.map(r => r.status).sort()).toEqual([200, 409]);
+       |                                                 ^
+    133|     const loser = responses.find(r => r.status === 409);
+    134|     expectError(loser, 409, 'UNRESOLVED_CALLED');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Complete > TEST-17 / AC-17: Complete a CALLED ticket -> COMPLETED in DB and visible to the owner
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ ❯ tests/f03-host.test.js:148:29
+    146|
+    147|     const response = await complete(await login('host1@dineq.test'), e…
+    148|     expect(response.status).toBe(200);
+       |                             ^
+    149|     expect(response.body.data).toMatchObject({ id: entry.id, ticketNo:…
+    150|     expect(response.body.data.completedAt).toEqual(expect.any(String));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Complete > TEST-18 / AC-18: Complete a WAITING ticket -> 409 INVALID_TRANSITION, row and events unchanged
+ FAIL  tests/f03-host.test.js > F-03 Complete > TEST-18 / AC-18: Complete a COMPLETED ticket -> 409 INVALID_TRANSITION, row and events unchanged
+AssertionError: expected 501 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:177:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 authorization > TEST-19 / AC-19: unassigned Host cannot list / call-next / complete; DB unchanged
+AssertionError: expected 501 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:192:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 authorization > TEST-19 / AC-19: assigned Host cannot act on another existing queue it is not assigned to
+AssertionError: expected 501 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:205:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 path, resource and empty-queue handling (AC-24) > TEST-24a / AC-24: Call Next on an assigned queue with neither WAITING nor CALLED ('no entries at all') -> 404 NO_WAITING_ENTRY
+ FAIL  tests/f03-host.test.js > F-03 path, resource and empty-queue handling (AC-24) > TEST-24a / AC-24: Call Next on an assigned queue with neither WAITING nor CALLED ('only a COMPLETED entry') -> 404 NO_WAITING_ENTRY
+AssertionError: expected 501 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:240:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 path, resource and empty-queue handling (AC-24) > TEST-24b / AC-24: host1@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403)
+ FAIL  tests/f03-host.test.js > F-03 path, resource and empty-queue handling (AC-24) > TEST-24b / AC-24: host2@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403)
+AssertionError: expected 501 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:252:41
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 path, resource and empty-queue handling (AC-24) > TEST-24c / AC-24: host1@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints
+ FAIL  tests/f03-host.test.js > F-03 path, resource and empty-queue handling (AC-24) > TEST-24c / AC-24: host2@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints
+AssertionError: expected 501 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 501
+
+ ❯ expectError tests/f03-host.test.js:35:27
+     33|
+     34| function expectError(response, status, code) {
+     35|   expect(response.status).toBe(status);
+       |                           ^
+     36|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     37|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f03-host.test.js:262:41
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  18 failed | 90 passed (108)
+   Start at  22:48:25
+   Duration  13.87s (transform 142ms, setup 0ms, import 1.01s, tests 12.25s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/dineq/docs/evidence/f03-red.json
+
+Exit code: 1

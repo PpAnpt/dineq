@@ -5,6 +5,8 @@ import { checkOrigin } from '../middleware/origin.js';
 import { createAuthRoutes } from './auth.js';
 import { createQueueRoutes } from './queues.js';
 import { createQueueService } from '../services/queues.js';
+import { createHostRoutes } from './host.js';
+import { createHostService } from '../services/host.js';
 
 export function createRoutes({ pool, config }) {
   const router = Router();
@@ -28,11 +30,6 @@ export function createRoutes({ pool, config }) {
   router.get('/health', (_req, res) => res.json({ data: { status: 'ok' } }));
   router.use('/auth', json(), createAuthRoutes({ authService, config }));
   router.use(createQueueRoutes({ queueService: createQueueService({ pool }) }));
-  // F-03 replaces these handlers; P3 only establishes authentication and role guards.
-  for (const [method, path] of hostOnlyRoutes) {
-    router[method](path, (_req, res) => res.status(501).json({
-      error: { code: 'NOT_IMPLEMENTED', message: 'Host queue operation is not implemented yet' },
-    }));
-  }
+  router.use(createHostRoutes({ hostService: createHostService({ pool }) }));
   return router;
 }

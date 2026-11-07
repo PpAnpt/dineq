@@ -1,0 +1,36 @@
+# F-03 Host FIFO Calling & Complete Seating - Sprint 1 Contract
+
+> **Status:** Draft v0.3 (2026-11-06) · CPE334 Theme 9 · DineQ
+
+เป้าหมาย: Host ที่ได้รับมอบหมายดู Waiting List พร้อมเลขคิวและจำนวนคน เรียกเลขถัดไปตาม FIFO แล้วกด Completed เมื่อพาลูกค้าเข้าร้านเรียบร้อย; API: GET /api/queues/:queueId/entries, POST /api/queues/:queueId/call-next, POST /api/entries/:entryId/complete
+
+Main Flow: Host Login → โหลด Waiting List → Call Next โดย Server เลือก ticketNo น้อยที่สุด → CALLED → Complete → COMPLETED พร้อม Event → Customer Refresh แล้วเห็นผล; Reject ไม่มีสิทธิ์, CALLED ค้าง, ไม่มี WAITING, Complete ผิดสถานะ
+
+| AC / Test ID | เงื่อนไข / Test Input | Expected Result | Test Level |
+| :---- | :---- | :---- | :---- |
+| AC-14 / TEST-14 | Assigned Host GET Waiting List; Unassigned Host ลองเช่นกัน | Assigned ได้เรียง FIFO + partySize; Unassigned 403 | API Integration |
+| AC-15 / TEST-15 | มี WAITING ticketNo 1/2; Host กด Call Next | ticketNo 1 → CALLED พร้อม Timestamp/Event; No.2 ยัง WAITING | API + DB |
+| AC-16 / TEST-16 | มี CALLED ค้างอยู่ แล้วกด Call Next ซ้ำ | 409 UNRESOLVED_CALLED ไม่มีใบใหม่เป็น CALLED | API + DB |
+| AC-17 / TEST-17 | Host Complete Ticket ที่ CALLED และ Customer GET อีกครั้ง | COMPLETED + completed_at/Event อยู่ DB และอ่านได้จริง | API + DB |
+| AC-18 / TEST-18 | ลอง Complete Ticket ที่ WAITING หรือ COMPLETED | 409 INVALID_TRANSITION; Row/Event ไม่เปลี่ยน | API + DB Boundary |
+| AC-19 / TEST-19 | Host ที่ไม่ Assigned ลองดู/เรียก/Complete Queue อื่น | 403 ไม่เปิดข้อมูลและไม่แก้ DB | API + Authorization |
+| AC-20 / TEST-20 | Customer ลอง Call Next/Complete | 403 ไม่มีข้อมูลสถานะเปลี่ยน | API + Authorization |
+| AC-24 / TEST-24 | Host เรียก List/Call Next/Complete ด้วย UUID ผิดรูปแบบหรือ UUID ที่ไม่มี Resource; Assigned Host Call Next ในคิวที่ไม่มี WAITING/CALLED; ทวน Path ที่ผิด/ไม่มี Resource ด้วย Anonymous และ Customer | Host: UUID ผิด → 400 VALIDATION_ERROR, Resource ไม่มี → 404 NOT_FOUND; Assigned Host บนคิวว่าง → 404 NO_WAITING_ENTRY; Anonymous → 401 UNAUTHENTICATED, Customer → 403 FORBIDDEN ก่อนตรวจ UUID; Row/Event/Counter ไม่เปลี่ยนและไม่เปิดเผยข้อมูลส่วนตัว | API + DB Boundary / Authorization |
+
+รายละเอียด TEST-24 (ทุกกรณีใช้ Error Shape จาก SDS C.6.2 และเทียบ DB ก่อน/หลัง):
+
+| Subcase | Preconditions / Action | Expected Result |
+| :---- | :---- | :---- |
+| TEST-24a | Seed Queue ที่มีอยู่จริงและ Host ที่ Assigned; ไม่มี WAITING หรือ CALLED แล้ว POST /api/queues/:queueId/call-next | 404 NO_WAITING_ENTRY |
+| TEST-24b | Login เป็น Host; ใช้ UUID ที่ถูกต้องและยืนยันว่าไม่มี Queue/Entry ใน DB กับ GET /api/queues/:queueId/entries, POST /api/queues/:queueId/call-next และ POST /api/entries/:entryId/complete | ทั้งสามคำขอคืน 404 NOT_FOUND ไม่คืน 403 จากการหา Assignment ไม่พบ |
+| TEST-24c | Login เป็น Host; ใช้ `not-a-uuid` กับทั้งสาม Endpoint ใน TEST-24b | ทั้งสามคำขอคืน 400 VALIDATION_ERROR ไม่เกิด DB Cast Error |
+| TEST-24d | ทวนทั้งสาม Endpoint ด้วย Path จาก TEST-24b/c โดยไม่ Login และโดย Login เป็น Customer | Anonymous ได้ 401 UNAUTHENTICATED; Customer ได้ 403 FORBIDDEN ก่อนตรวจ UUID/Resource |
+
+ถ้ามี CALLED ค้างอยู่แม้ไม่มี WAITING ให้ใช้ AC-16/TEST-16 (`409 UNRESOLVED_CALLED`) ไม่ใช่ TEST-24a
+
+## Revision History
+
+| Version | Date | Change |
+| :---- | :---- | :---- |
+| v0.1 | 2026-11-04 | Initial draft, committed before implementation |
+| v0.3 | 2026-11-06 | Add AC-24/TEST-24 for empty Call Next, missing resources, malformed UUIDs and auth/role precedence after PR #1 review |

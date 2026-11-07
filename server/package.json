@@ -1,0 +1,24 @@
+{
+  "name": "@dineq/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "vitest run",
+    "test:record": "node scripts/record-test-run.js"
+  },
+  "dependencies": {
+    "argon2": "^0.45.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.11",
+    "supertest": "^7.3.1",
+    "vitest": "^4.1.12"
+  }
+}

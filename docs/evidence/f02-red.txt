@@ -1,0 +1,484 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f02-red.json"
+Working directory: server
+Commit: 79b4eb1b16bc807907c59be4c33d53317b2c7899
+Date: 2026-11-06T12:28:26.051Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/dineq/server
+
+ ❯ tests/f02-join.test.js (34 tests | 27 failed) 24941ms
+     × TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false 1341ms
+     × TEST-07 / AC-07: 'Assigned Host' gets the C.6.1 shape with isAssigned=true 527ms
+     × TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with isAssigned=false 575ms
+     × TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED 557ms
+     × TEST-07 / AC-07: a fixture with no queues returns { "data": [] } 657ms
+     ✓ TEST-07 / AC-07: queue list requires a Session  343ms
+     × TEST-08 / AC-08: Customer joins an OPEN queue with partySize=4 and can read the ticket back 666ms
+     × TEST-08 / AC-08: a Customer without tickets gets { "data": [] } from /api/me/entries 599ms
+     × TEST-09 / AC-09: joining again while WAITING is rejected with 409 DUPLICATE_ACTIVE 655ms
+     × TEST-09 / AC-09: joining again while CALLED is rejected with 409 DUPLICATE_ACTIVE 602ms
+     × TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30 5436ms
+     × TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response) 935ms
+     × TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403 726ms
+     × TEST-12 / AC-12: joining a CLOSED queue is 409 QUEUE_CLOSED with no insert and no ticket number used 654ms
+     × TEST-12 / AC-12: partySize 0 is 400 INVALID_PARTY_SIZE and changes nothing 607ms
+     × TEST-12 / AC-12: partySize 9 is 400 INVALID_PARTY_SIZE and changes nothing 534ms
+     × TEST-12 / AC-12: partySize 1.5 is 400 INVALID_PARTY_SIZE and changes nothing 585ms
+     × TEST-12 / AC-12: partySize "abc" is 400 INVALID_PARTY_SIZE and changes nothing 548ms
+     × TEST-12 / AC-12: partySize null is 400 INVALID_PARTY_SIZE and changes nothing 538ms
+     × TEST-12 / AC-12: partySize missing is 400 INVALID_PARTY_SIZE and changes nothing 597ms
+     × TEST-12 / AC-12: boundary partySize 1 is accepted 606ms
+     × TEST-12 / AC-12: boundary partySize 8 is accepted 571ms
+     × TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change 518ms
+     × TEST-13 / AC-13: Host has no Customer ticket list (/api/me/entries is Customer-only) 566ms
+     × TEST-21 / AC-21: ticket and JOINED event survive a new app instance with a new DB pool 574ms
+     × TEST-23 / AC-23: GET entry with malformed UUID is 400 VALIDATION_ERROR 584ms
+     × TEST-23 / AC-23: POST join with malformed UUID is 400 VALIDATION_ERROR 604ms
+     ✓ TEST-23 / AC-23: GET entry with an absent UUID is 404 NOT_FOUND  640ms
+     ✓ TEST-23 / AC-23: POST join with an absent UUID is 404 NOT_FOUND  628ms
+     ✓ TEST-23 / AC-23: GET entry (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks  378ms
+     ✓ TEST-23 / AC-23: POST join (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks  327ms
+     ✓ TEST-23 / AC-23: GET entry (absent) without a Session is 401 UNAUTHENTICATED before UUID checks  313ms
+     ✓ TEST-23 / AC-23: POST join (absent) without a Session is 401 UNAUTHENTICATED before UUID checks  354ms
+     × TEST-23 / AC-23: resource lookup precedes body validation (absent queue + bad partySize is 404; malformed id is 400) 577ms
+ ✓ tests/f01-auth.test.js (40 tests) 20384ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  1320ms
+     ✓ TEST-01 / AC-01: 'HOST' logs in without a Cookie; identity, Argon2id and hashed session come from the server  540ms
+     ✓ TEST-01 / AC-01: Secure cookie and session TTL follow the supplied server configuration  538ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  1017ms
+     ✓ TEST-02 / AC-02: an inactive account cannot log in or create a session  653ms
+     ✓ TEST-02 / AC-02: 'null body' is rejected with the SDS validation code and no DB changes  381ms
+     ✓ TEST-02 / AC-02: 'missing credentials' is rejected with the SDS validation code and no DB changes  391ms
+     ✓ TEST-02 / AC-02: 'missing password' is rejected with the SDS validation code and no DB changes  417ms
+     ✓ TEST-02 / AC-02: 'non-string email' is rejected with the SDS validation code and no DB changes  362ms
+     ✓ TEST-02 / AC-02: 'non-string password' is rejected with the SDS validation code and no DB changes  446ms
+     ✓ TEST-02 / AC-02: malformed JSON at public Login is a validation error with no DB changes  400ms
+     ✓ TEST-03 / AC-03: /auth/me returns the session user and ignores forged identity/role fields  679ms
+     ✓ TEST-03 / AC-03: a session expired directly in PostgreSQL is rejected without changing DB state  624ms
+     ✓ TEST-03 / AC-03: an existing session stops working when its user becomes inactive  641ms
+     ✓ TEST-03 / AC-03: an unknown session token is rejected without creating or mutating a session  369ms
+     ✓ TEST-04 / AC-04: Logout revokes the stored session, clears the Cookie and rejects reuse of the old Cookie  637ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/auth/me' is rejected before routing/UUID checks with no private data or DB changes  381ms
+     ✓ TEST-05 / AC-05: anonymous 'post' '/api/auth/logout' is rejected before routing/UUID checks with no private data or DB changes  356ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/queues' is rejected before routing/UUID checks with no private data or DB changes  345ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/me/entries' is rejected before routing/UUID checks with no private data or DB changes  368ms
+     ✓ TEST-05 / AC-05: anonymous 'post' '/api/queues/22222222-2222-4222-8222-2…' is rejected before routing/UUID checks with no private data or DB changes  448ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/entries/not-a-uuid' is rejected before routing/UUID checks with no private data or DB changes  388ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/queues/not-a-uuid/entries' is rejected before routing/UUID checks with no private data or DB changes  385ms
+     ✓ TEST-05 / AC-05: anonymous 'post' '/api/queues/not-a-uuid/call-next' is rejected before routing/UUID checks with no private data or DB changes  378ms
+     ✓ TEST-05 / AC-05: anonymous 'post' '/api/entries/not-a-uuid/complete' is rejected before routing/UUID checks with no private data or DB changes  381ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/unknown-protected-route' is rejected before routing/UUID checks with no private data or DB changes  371ms
+     ✓ TEST-05 / AC-05: anonymous 'get' '/api/auth/login' is rejected before routing/UUID checks with no private data or DB changes  396ms
+     ✓ TEST-05 / AC-05: an anonymous malformed JSON request is rejected by Session before Body parsing  370ms
+     ✓ TEST-06 / AC-06: Customer 'get' '/api/queues/22222222-2222-4222-8222-2…' is forbidden despite forged Host identity, with DB unchanged  693ms
+     ✓ TEST-06 / AC-06: Customer 'post' '/api/queues/22222222-2222-4222-8222-2…' is forbidden despite forged Host identity, with DB unchanged  675ms
+     ✓ TEST-06 / AC-06: Customer 'post' '/api/entries/00000000-0000-4000-8000-…' is forbidden despite forged Host identity, with DB unchanged  673ms
+     ✓ TEST-06 / AC-06: Customer 'get' '/api/queues/not-a-uuid/entries' is forbidden despite forged Host identity, with DB unchanged  650ms
+     ✓ TEST-06 / AC-06: Customer 'post' '/api/queues/not-a-uuid/call-next' is forbidden despite forged Host identity, with DB unchanged  622ms
+     ✓ TEST-06 / AC-06: Customer 'post' '/api/entries/not-a-uuid/complete' is forbidden despite forged Host identity, with DB unchanged  651ms
+     ✓ TEST-22 / AC-22: foreign Origin on post is rejected before Session and JSON parsing with no DB changes  365ms
+     ✓ TEST-22 / AC-22: foreign Origin on put is rejected before Session and JSON parsing with no DB changes  367ms
+     ✓ TEST-22 / AC-22: foreign Origin on patch is rejected before Session and JSON parsing with no DB changes  375ms
+     ✓ TEST-22 / AC-22: foreign Origin on delete is rejected before Session and JSON parsing with no DB changes  373ms
+     ✓ TEST-22 / AC-22: foreign Origin on Login cannot create a session even with valid credentials  358ms
+     ✓ TEST-22 / AC-22: matching Origin permits Login, and foreign Origin does not block a read-only request  578ms
+ ✓ tests/infra.test.js (8 tests) 2722ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys  926ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 27 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Assigned Host' gets the C.6.1 shape with isAssigned=true
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with isAssigned=false
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f02-join.test.js:63:29
+     61|     const cookie = await login(email);
+     62|     const response = await request(app).get('/api/queues').set('Cookie…
+     63|     expect(response.status).toBe(200);
+       |                             ^
+     64|     expect(response.body).toEqual({ data: [item(isAssigned)] });
+     65|     expect(typeof response.body.data[0].isAssigned).toBe('boolean');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f02-join.test.js:71:29
+     69|     await pool.query("UPDATE service_queues SET status = 'CLOSED' WHER…
+     70|     const response = await request(app).get('/api/queues').set('Cookie…
+     71|     expect(response.status).toBe(200);
+       |                             ^
+     72|     expect(response.body).toEqual({ data: [item(false, 'CLOSED')] });
+     73|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: a fixture with no queues returns { "data": [] }
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f02-join.test.js:80:31
+     78|     for (const email of [customerEmail(1), 'host1@dineq.test']) {
+     79|       const response = await request(app).get('/api/queues').set('Cook…
+     80|       expect(response.status).toBe(200);
+       |                               ^
+     81|       expect(response.body).toEqual({ data: [] });
+     82|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-08 / AC-08: Customer joins an OPEN queue with partySize=4 and can read the ticket back
+AssertionError: expected 404 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 404
+
+ ❯ tests/f02-join.test.js:98:29
+     96|       // Identity and numbering come from the server; these client cla…
+     97|       .send({ partySize: 4, customerId: other, ticketNo: 99, status: '…
+     98|     expect(response.status).toBe(201);
+       |                             ^
+     99|     const ticket = {
+    100|       id: expect.stringMatching(UUID), queueId: seedIds.queue, ticketN…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-08 / AC-08: a Customer without tickets gets { "data": [] } from /api/me/entries
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f02-join.test.js:125:29
+    123|   test('TEST-08 / AC-08: a Customer without tickets gets { "data": [] …
+    124|     const response = await request(app).get('/api/me/entries').set('Co…
+    125|     expect(response.status).toBe(200);
+       |                             ^
+    126|     expect(response.body).toEqual({ data: [] });
+    127|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-09 / AC-09: joining again while WAITING is rejected with 409 DUPLICATE_ACTIVE
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-09 / AC-09: joining again while CALLED is rejected with 409 DUPLICATE_ACTIVE
+AssertionError: expected 404 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 404
+
+ ❯ tests/f02-join.test.js:131:46
+    129|   test.each(['WAITING', 'CALLED'])('TEST-09 / AC-09: joining again whi…
+    130|     const cookie = await login(customerEmail(1));
+    131|     expect((await joinAs(cookie, 2)).status).toBe(201);
+       |                                              ^
+    132|     if (status === 'CALLED') {
+    133|       await pool.query("UPDATE queue_entries SET status = 'CALLED', ca…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30
+AssertionError: expected [ 404, 404, 404, 404, 404, 404, …(24) ] to deeply equal [ 201, 201, 201, 201, 201, 201, …(24) ]
+
+- Expected
++ Received
+
+  [
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
+-   201,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
++   404,
+  ]
+
+ ❯ tests/f02-join.test.js:149:42
+    147|     const cookies = await Promise.all(Array.from({ length: 30 }, (_, i…
+    148|     const responses = await Promise.all(cookies.map(cookie => joinAs(c…
+    149|     expect(responses.map(r => r.status)).toEqual(Array(30).fill(201));
+       |                                          ^
+    150|     const numbers = responses.map(r => r.body.data.ticketNo).sort((a, …
+    151|     expect(numbers).toEqual(Array.from({ length: 30 }, (_, i) => i + 1…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response)
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ tests/f02-join.test.js:162:39
+    160|     const b = await login(customerEmail(2));
+    161|     const created = await joinAs(b, 5);
+    162|     const entryId = created.body.data.id;
+       |                                       ^
+    163|     const response = await request(app).get(`/api/entries/${entryId}`)…
+    164|     expectError(response, 403, 'FORBIDDEN');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ tests/f02-join.test.js:178:39
+    176|   test('TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned…
+    177|     const created = await joinAs(await login(customerEmail(1)), 3);
+    178|     const entryId = created.body.data.id;
+       |                                       ^
+    179|     const assigned = await request(app).get(`/api/entries/${entryId}`)…
+    180|     expect(assigned.status).toBe(200);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: joining a CLOSED queue is 409 QUEUE_CLOSED with no insert and no ticket number used
+AssertionError: expected 404 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 404
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:190:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: partySize 0 is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: partySize 9 is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: partySize 1.5 is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: partySize "abc" is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: partySize null is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: partySize missing is 400 INVALID_PARTY_SIZE and changes nothing
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:204:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: boundary partySize 1 is accepted
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: boundary partySize 8 is accepted
+AssertionError: expected 404 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 404
+
+ ❯ tests/f02-join.test.js:213:29
+    211|   test.each([1, 8])('TEST-12 / AC-12: boundary partySize %i is accepte…
+    212|     const response = await joinAs(await login(customerEmail(1)), party…
+    213|     expect(response.status).toBe(201);
+       |                             ^
+    214|     expect(response.body.data.partySize).toBe(partySize);
+    215|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:220:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-13 / AC-13: Host has no Customer ticket list (/api/me/entries is Customer-only)
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:230:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 restart persistence > TEST-21 / AC-21: ticket and JOINED event survive a new app instance with a new DB pool
+AssertionError: expected 404 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 404
+
+ ❯ tests/f02-join.test.js:239:28
+    237|     const cookie = await login(customerEmail(1));
+    238|     const created = await joinAs(cookie, 6);
+    239|     expect(created.status).toBe(201);
+       |                            ^
+    240|     const ticket = created.body.data;
+    241|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 path validation and authentication precedence > TEST-23 / AC-23: GET entry with malformed UUID is 400 VALIDATION_ERROR
+ FAIL  tests/f02-join.test.js > F-02 path validation and authentication precedence > TEST-23 / AC-23: POST join with malformed UUID is 400 VALIDATION_ERROR
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:270:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/27]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 path validation and authentication precedence > TEST-23 / AC-23: resource lookup precedes body validation (absent queue + bad partySize is 404; malformed id is 400)
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ expectError tests/f02-join.test.js:42:27
+     40|
+     41| function expectError(response, status, code) {
+     42|   expect(response.status).toBe(status);
+       |                           ^
+     43|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     44|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f02-join.test.js:299:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/27]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  27 failed | 55 passed (82)
+   Start at  19:28:27
+   Duration  54.43s (transform 592ms, setup 0ms, import 3.92s, tests 48.05s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/dineq/docs/evidence/f02-red.json
+
+Exit code: 1

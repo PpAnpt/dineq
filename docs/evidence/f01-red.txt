@@ -1,0 +1,367 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f01-red.json"
+Working directory: server
+Commit: d0bf738ac4ab8abd0187f7f1ee7531588a1c3f78
+Date: 2026-11-06T11:54:22.319Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server
+
+ ❯ tests/f01-auth.test.js (40 tests | 38 failed) 2909ms
+     × TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server 217ms
+     × TEST-01 / AC-01: 'HOST' logs in without a Cookie; identity, Argon2id and hashed session come from the server 54ms
+     × TEST-01 / AC-01: Secure cookie and session TTL follow the supplied server configuration 57ms
+     × TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes 60ms
+     × TEST-02 / AC-02: an inactive account cannot log in or create a session 72ms
+     ✓ TEST-02 / AC-02: 'null body' is rejected with the SDS validation code and no DB changes 68ms
+     × TEST-02 / AC-02: 'missing credentials' is rejected with the SDS validation code and no DB changes 59ms
+     × TEST-02 / AC-02: 'missing password' is rejected with the SDS validation code and no DB changes 58ms
+     × TEST-02 / AC-02: 'non-string email' is rejected with the SDS validation code and no DB changes 50ms
+     × TEST-02 / AC-02: 'non-string password' is rejected with the SDS validation code and no DB changes 54ms
+     ✓ TEST-02 / AC-02: malformed JSON at public Login is a validation error with no DB changes 84ms
+     × TEST-03 / AC-03: /auth/me returns the session user and ignores forged identity/role fields 110ms
+     × TEST-03 / AC-03: a session expired directly in PostgreSQL is rejected without changing DB state 79ms
+     × TEST-03 / AC-03: an existing session stops working when its user becomes inactive 89ms
+     × TEST-03 / AC-03: an unknown session token is rejected without creating or mutating a session 102ms
+     × TEST-04 / AC-04: Logout revokes the stored session, clears the Cookie and rejects reuse of the old Cookie 99ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/auth/me' is rejected before routing/UUID checks with no private data or DB changes 121ms
+     × TEST-05 / AC-05: anonymous 'post' '/api/auth/logout' is rejected before routing/UUID checks with no private data or DB changes 77ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/queues' is rejected before routing/UUID checks with no private data or DB changes 126ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/me/entries' is rejected before routing/UUID checks with no private data or DB changes 75ms
+     × TEST-05 / AC-05: anonymous 'post' '/api/queues/22222222-2222-4222-8222-2…' is rejected before routing/UUID checks with no private data or DB changes 89ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/entries/not-a-uuid' is rejected before routing/UUID checks with no private data or DB changes 85ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/queues/not-a-uuid/entries' is rejected before routing/UUID checks with no private data or DB changes 61ms
+     × TEST-05 / AC-05: anonymous 'post' '/api/queues/not-a-uuid/call-next' is rejected before routing/UUID checks with no private data or DB changes 51ms
+     × TEST-05 / AC-05: anonymous 'post' '/api/entries/not-a-uuid/complete' is rejected before routing/UUID checks with no private data or DB changes 52ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/unknown-protected-route' is rejected before routing/UUID checks with no private data or DB changes 45ms
+     × TEST-05 / AC-05: anonymous 'get' '/api/auth/login' is rejected before routing/UUID checks with no private data or DB changes 45ms
+     × TEST-05 / AC-05: an anonymous malformed JSON request is rejected by Session before Body parsing 49ms
+     × TEST-06 / AC-06: Customer 'get' '/api/queues/22222222-2222-4222-8222-2…' is forbidden despite forged Host identity, with DB unchanged 56ms
+     × TEST-06 / AC-06: Customer 'post' '/api/queues/22222222-2222-4222-8222-2…' is forbidden despite forged Host identity, with DB unchanged 47ms
+     × TEST-06 / AC-06: Customer 'post' '/api/entries/00000000-0000-4000-8000-…' is forbidden despite forged Host identity, with DB unchanged 47ms
+     × TEST-06 / AC-06: Customer 'get' '/api/queues/not-a-uuid/entries' is forbidden despite forged Host identity, with DB unchanged 49ms
+     × TEST-06 / AC-06: Customer 'post' '/api/queues/not-a-uuid/call-next' is forbidden despite forged Host identity, with DB unchanged 67ms
+     × TEST-06 / AC-06: Customer 'post' '/api/entries/not-a-uuid/complete' is forbidden despite forged Host identity, with DB unchanged 90ms
+     × TEST-22 / AC-22: foreign Origin on post is rejected before Session and JSON parsing with no DB changes 92ms
+     × TEST-22 / AC-22: foreign Origin on put is rejected before Session and JSON parsing with no DB changes 62ms
+     × TEST-22 / AC-22: foreign Origin on patch is rejected before Session and JSON parsing with no DB changes 55ms
+     × TEST-22 / AC-22: foreign Origin on delete is rejected before Session and JSON parsing with no DB changes 54ms
+     × TEST-22 / AC-22: foreign Origin on Login cannot create a session even with valid credentials 50ms
+     × TEST-22 / AC-22: matching Origin permits Login, and foreign Origin does not block a read-only request 47ms
+ ✓ tests/infra.test.js (8 tests) 471ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 38 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-01 / AC-01: 'HOST' logs in without a Cookie; identity, Argon2id and hashed session come from the server
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f01-auth.test.js:65:29
+     63|       .send({ email, password: process.env.SEED_DEMO_PASSWORD, userId:…
+     64|     const after = Date.now();
+     65|     expect(response.status).toBe(200);
+       |                             ^
+     66|     expect(response.body).toEqual({ data: { id: user.id, email, role }…
+     67|     expect(user.password_hash.startsWith('$argon2id$')).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-01 / AC-01: Secure cookie and session TTL follow the supplied server configuration
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f01-auth.test.js:90:29
+     88|     const response = await request(secureApp).post('/api/auth/login')
+     89|       .send({ email: customerEmail, password: process.env.SEED_DEMO_PA…
+     90|     expect(response.status).toBe(200);
+       |                             ^
+     91|     const cookie = sessionCookie(response);
+     92|     expect(cookie).toMatch(/; Secure(?:;|$)/i);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes
+AssertionError: expected 404 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 404
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:105:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-02 / AC-02: an inactive account cannot log in or create a session
+AssertionError: expected 404 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 404
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:117:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-02 / AC-02: 'missing credentials' is rejected with the SDS validation code and no DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-02 / AC-02: 'missing password' is rejected with the SDS validation code and no DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-02 / AC-02: 'non-string email' is rejected with the SDS validation code and no DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-02 / AC-02: 'non-string password' is rejected with the SDS validation code and no DB changes
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:132:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-03 / AC-03: /auth/me returns the session user and ignores forged identity/role fields
+Error: loginAs expected 200, received 404; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f01-auth.test.js:145:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-03 / AC-03: a session expired directly in PostgreSQL is rejected without changing DB state
+Error: loginAs expected 200, received 404; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f01-auth.test.js:156:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-03 / AC-03: an existing session stops working when its user becomes inactive
+Error: loginAs expected 200, received 404; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f01-auth.test.js:164:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-03 / AC-03: an unknown session token is rejected without creating or mutating a session
+AssertionError: expected 404 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 404
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:173:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-04 / AC-04: Logout revokes the stored session, clears the Cookie and rejects reuse of the old Cookie
+Error: loginAs expected 200, received 404; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f01-auth.test.js:178:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/auth/me' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'post' '/api/auth/logout' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/queues' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/me/entries' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'post' '/api/queues/22222222-2222-4222-8222-2…' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/entries/not-a-uuid' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/queues/not-a-uuid/entries' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'post' '/api/queues/not-a-uuid/call-next' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'post' '/api/entries/not-a-uuid/complete' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/unknown-protected-route' is rejected before routing/UUID checks with no private data or DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: anonymous 'get' '/api/auth/login' is rejected before routing/UUID checks with no private data or DB changes
+AssertionError: expected 404 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 404
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:209:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-05 / AC-05: an anonymous malformed JSON request is rejected by Session before Body parsing
+AssertionError: expected 400 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 400
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:217:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-06 / AC-06: Customer 'get' '/api/queues/22222222-2222-4222-8222-2…' is forbidden despite forged Host identity, with DB unchanged
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-06 / AC-06: Customer 'post' '/api/queues/22222222-2222-4222-8222-2…' is forbidden despite forged Host identity, with DB unchanged
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-06 / AC-06: Customer 'post' '/api/entries/00000000-0000-4000-8000-…' is forbidden despite forged Host identity, with DB unchanged
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-06 / AC-06: Customer 'get' '/api/queues/not-a-uuid/entries' is forbidden despite forged Host identity, with DB unchanged
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-06 / AC-06: Customer 'post' '/api/queues/not-a-uuid/call-next' is forbidden despite forged Host identity, with DB unchanged
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-06 / AC-06: Customer 'post' '/api/entries/not-a-uuid/complete' is forbidden despite forged Host identity, with DB unchanged
+Error: loginAs expected 200, received 404; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f01-auth.test.js:229:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-22 / AC-22: foreign Origin on post is rejected before Session and JSON parsing with no DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-22 / AC-22: foreign Origin on put is rejected before Session and JSON parsing with no DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-22 / AC-22: foreign Origin on patch is rejected before Session and JSON parsing with no DB changes
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-22 / AC-22: foreign Origin on delete is rejected before Session and JSON parsing with no DB changes
+AssertionError: expected 400 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 400
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:243:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-22 / AC-22: foreign Origin on Login cannot create a session even with valid credentials
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ expectError tests/f01-auth.test.js:46:27
+     44|
+     45| function expectError(response, status, code) {
+     46|   expect(response.status).toBe(status);
+       |                           ^
+     47|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     48|   expect(response.body.error.message.length).toBeGreaterThan(0);
+ ❯ tests/f01-auth.test.js:251:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/38]⎯
+
+ FAIL  tests/f01-auth.test.js > F-01 Authentication and role protection > TEST-22 / AC-22: matching Origin permits Login, and foreign Origin does not block a read-only request
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f01-auth.test.js:259:29
+    257|     const response = await request(app).post('/api/auth/login').set('O…
+    258|       .send({ email: customerEmail, password: process.env.SEED_DEMO_PA…
+    259|     expect(response.status).toBe(200);
+       |                             ^
+    260|     const cookie = sessionCookie(response).split(';', 1)[0];
+    261|     const before = await snapshot();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/38]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  38 failed | 10 passed (48)
+   Start at  18:54:22
+   Duration  4.56s (transform 89ms, setup 0ms, import 703ms, tests 3.38s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/docs/evidence/f01-red.json
+
+Exit code: 1

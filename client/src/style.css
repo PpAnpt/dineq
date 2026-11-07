@@ -1,0 +1,27 @@
+:root { font-family: system-ui, sans-serif; color: #182331; background: #f5f7fa; line-height: 1.5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #114da6; text-underline-offset: 3px; }
+header { padding: 1rem max(1rem, calc((100% - 1080px) / 2)); background: white; border-bottom: 1px solid #c4ceda; display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.brand { font-size: 1.4rem; font-weight: 750; }
+nav { display: flex; gap: 1rem; margin-right: auto; }
+main { max-width: 1080px; padding: 1rem; margin: auto; }
+h1 { font-size: 1.8rem; } h2 { font-size: 1.3rem; } h3 { font-size: 1.1rem; }
+button, input { font: inherit; padding: .65rem .85rem; border: 1px solid #6c7a8d; border-radius: .3rem; }
+button { background: #154a8e; color: white; cursor: pointer; }
+button:disabled { background: #e1e6ee; color: #4d596a; border-color: #9ca8b8; cursor: default; }
+input { background: white; color: inherit; display: block; margin: .3rem 0 1rem; width: 100%; }
+input[type=number] { max-width: 10rem; }
+label { display: block; font-weight: 600; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { margin-bottom: .7rem; }
+.login { max-width: 28rem; margin: 2rem auto; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 1rem; margin-top: 1rem; }
+.queue, .ticket { padding: 1rem; background: white; border: 1px solid #b8c4d2; border-radius: .4rem; }
+.error { background: #fff1ef; color: #8b2014; border: 1px solid #ad392a; padding: .8rem; margin: 1rem 0; overflow-wrap: anywhere; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+ol { padding-left: 1.5rem; } li { margin-bottom: .75rem; }
+:focus-visible { outline: 3px solid #9b4b00; outline-offset: 4px; }
+.skip-link { position: absolute; left: 1rem; top: -5rem; padding: .7rem; background: white; z-index: 1; }
+.skip-link:focus { top: 1rem; }
+@media (max-width: 600px) { header { align-items: flex-start; } header span { width: 100%; overflow-wrap: anywhere; } }

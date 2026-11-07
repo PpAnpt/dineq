@@ -1,0 +1,20 @@
+{
+  "name": "dineq",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["server", "database", "client"],
+  "engines": { "node": "^20.19.0 || >=22.12.0" },
+  "scripts": {
+    "dev": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build:client": "npm run build --workspace=client",
+    "start": "npm run start --workspace=server",
+    "test": "npm run test --workspace=server",
+    "test:record": "npm run test:record --workspace=server --",
+    "test:e2e": "npm run test:e2e --workspace=client",
+    "test:e2e:record": "npm run test:e2e:record --workspace=client --",
+    "db:migrate": "npm run db:migrate --workspace=database --",
+    "db:seed": "npm run db:seed --workspace=database"
+  }
+}

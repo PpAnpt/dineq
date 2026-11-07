@@ -1,0 +1,10 @@
+Command: git diff --exit-code <candidate-or-baseline> HEAD -- server client database package.json package-lock.json .env.example
+HEAD: 82ab0e042cf77fd1343ec886c9401c5937a08990
+Date: 2026-11-07T13:11:08.6331474Z
+Candidate: a7a145ec6b870abaed2b3ae13a88e0ffa832818d
+Baseline: 3d2ba1b78714f51127cdf07b7e44951c06ed8d7a
+Candidate diff output: 
+Candidate diff exit: 0
+Baseline diff output: 
+Baseline diff exit: 0
+Result: PASS - application, migration, tests, dependency configuration and env example unchanged; P8 changes README/docs/evidence only.

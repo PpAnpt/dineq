@@ -1,0 +1,20 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f01-green.json"
+Working directory: server
+Commit: 98863bdc1f4b8aa61f48f096ab8d2c9da05d7cac
+Date: 2026-11-06T11:58:37.652Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server
+
+ ✓ tests/f01-auth.test.js (40 tests) 3795ms
+ ✓ tests/infra.test.js (8 tests) 538ms
+
+ Test Files  2 passed (2)
+      Tests  48 passed (48)
+   Start at  18:58:38
+   Duration  5.51s (transform 97ms, setup 0ms, import 703ms, tests 4.33s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/docs/evidence/f01-green.json
+
+Exit code: 0

@@ -92,6 +92,8 @@ export function QueuesPage({ user }) {
       {queues.map(queue => <article key={queue.id} className="queue" data-testid="queue" data-queue-id={queue.id}>
         <h2>{queue.restaurant.name}</h2>
         <p>Status: <strong data-testid="queue-status">{queue.status}</strong></p>
+        {user.role === 'CUSTOMER' && queue.status === 'CLOSED' &&
+          <p>This queue is closed. New tickets are unavailable.</p>}
         {user.role === 'CUSTOMER' ? <JoinForm queue={queue} /> :
           queue.isAssigned && <a href={`/host/queues/${queue.id}`} data-testid="open-host-queue">Open Host queue</a>}
       </article>)}
@@ -120,7 +122,7 @@ export function HostPage({ queueId }) {
   const called = resource.data?.find(ticket => ticket.status === 'CALLED');
   // The API supplies ticket_no order; no timestamps or customer identities needed.
   const waiting = resource.data?.filter(ticket => ticket.status === 'WAITING') || [];
-  async function act(path, verb) {
+  async function act(path) {
     setPending(true);
     setError(null);
     setNotice('');
@@ -130,6 +132,9 @@ export function HostPage({ queueId }) {
       resource.refresh();
     } catch (failure) {
       setError(failure);
+      // Another Host may have changed the queue. Keep the conflict visible
+      // while reloading the server's current list instead of leaving stale actions.
+      if (failure.status === 409) resource.refresh();
     } finally {
       setPending(false);
     }
@@ -140,7 +145,7 @@ export function HostPage({ queueId }) {
     <div className="actions">
       <button onClick={() => { setError(null); setNotice(''); resource.refresh(); }}
         disabled={pending || resource.loading} data-testid="refresh-host-queue">Refresh</button>
-      <button onClick={() => act(`/queues/${encodeURIComponent(queueId)}/call-next`, 'Call Next')}
+      <button onClick={() => act(`/queues/${encodeURIComponent(queueId)}/call-next`)}
         disabled={unavailable} data-testid="call-next">Call Next</button>
     </div>
     <ErrorMessage error={error} />
@@ -152,7 +157,7 @@ export function HostPage({ queueId }) {
         <h2>Currently called</h2>
         {called ? <Ticket ticket={called}>
           <button disabled={unavailable} data-testid="complete-ticket"
-            onClick={() => act(`/entries/${called.id}/complete`, 'Complete')}>Complete</button>
+            onClick={() => act(`/entries/${called.id}/complete`)}>Complete</button>
         </Ticket> : <p>No ticket is currently called.</p>}
       </section>
       <section data-testid="waiting-list">

@@ -77,8 +77,10 @@ Invoke-RestMethod http://localhost:3000/api/health | ConvertTo-Json -Depth 3
 ```
 
 Expected response: `{ "data": { "status": "ok" } }`. Press Ctrl+C to stop the API.
-Use the frontend below to log in and join a queue. Host operations require F-03
-([PR #14](https://github.com/PpAnpt/dineq/pull/14)) to be merged into staging.
+Use the frontend below to log in and join a queue. F-03
+([PR #14](https://github.com/PpAnpt/dineq/pull/14)) is now merged into staging
+at `64cfaf1` and integrated into this UI branch, so Host operations run from
+this checkout without a separate backend worktree.
 
 ## Run the Sprint 1 client (P6)
 
@@ -126,7 +128,34 @@ npm run build:client
 This writes ignored `client/dist/`; serving a production build is outside this
 local Sprint 1 setup.
 
-DEMO-01, after F-03 is available:
+If the page shows `Unable to check session` with `502`, the UI has loaded but
+the API request is failing through the proxy. Keep the API process running as
+well as Vite, and start PostgreSQL before starting the API. For this workspace's
+isolated instance, use the `pg_ctl` command in the local database section below.
+Check both addresses from PowerShell:
+
+```powershell
+Invoke-RestMethod http://localhost:3000/api/health | ConvertTo-Json -Compress
+Invoke-RestMethod http://localhost:5173/api/health | ConvertTo-Json -Compress
+```
+
+Both should return `{"data":{"status":"ok"}}`. An anonymous request to
+`/api/auth/me` should return 401; the client handles that by showing Login.
+After restoring API/DB connectivity, click Retry or reload the page. A 502 is
+not a normal signed-out state.
+
+Run the three UI review regressions with Vite running and Google Chrome
+installed (headless, API response fixtures, no database writes):
+
+```powershell
+npm run test:review --workspace=client
+```
+
+They check refreshed Host state after both 409 conflicts and the CLOSED queue
+explanation. They are separate from the real-DB API suite (`npm test`) and P7's
+full E2E journeys.
+
+DEMO-01:
 
 1. Use two separate browser profiles (or a normal window and an InPrivate window)
    so the Customer and Host have separate session Cookies.
@@ -148,7 +177,8 @@ was an automated headless Chromium walkthrough against the seeded dev DB,
 **not a manual walkthrough**. Since F-03 was still open, its backend ran from an
 isolated worktree at `0867b8ca9924c211d467358815c366b773fa06de`; the UI branch
 itself starts from staging `facb223759e69c7d79929d138561e51d50866770`.
-P6 must follow PR #14 into staging for the combined Host flow. UI-only empty,
+That original verification preceded the merge of PR #14. The current UI branch
+now includes it; review follow-up results are recorded separately. UI-only empty,
 CLOSED and error response fixtures are identified separately in the transcript;
 the DEMO-01 journey, authentication and conflict checks used real API/DB data.
 
@@ -175,8 +205,7 @@ come from client-supplied body, query or identity headers.
 
 The Host-only list, call-next and complete routes enforce the HOST Role.
 Customers receive `403 FORBIDDEN` even with malformed JSON or an invalid path
-UUID. F-03 replaces the staging placeholders with assignment checks, FIFO Call
-Next and Complete; see the P6 dependency above.
+UUID. F-03 now supplies assignment checks, FIFO Call Next and Complete.
 
 ## Database scripts and demo accounts
 
@@ -248,3 +277,4 @@ To stop it after stopping the API:
 | v0.2 | 2026-11-06 | Add Windows P2 setup, database/seed/test commands and evidence workflow after merged P1 |
 | v0.3 | 2026-11-06 | Document F-01 authentication, session lifecycle, middleware order and temporary Host handlers after merged P2 |
 | v0.4 | 2026-11-07 | Add P6 client setup, proxy/Cookie behavior, browser demo steps and explicit unmerged F-03 verification dependency |
+| v0.5 | 2026-11-07 | Integrate merged F-03, document 502/API/DB startup diagnosis and UI review regression command |

@@ -1,0 +1,24 @@
+UI commit: 9e848d632dddd23aee10e49895b0c8ce2b79d52a
+Backend: 0867b8ca9924c211d467358815c366b773fa06de (PR #14, not merged)
+Date: 2026-11-07T10:14:00.345Z
+Node: v24.14.0
+Command: node .local/ui-check/check.mjs
+Mode: isolated headless Chromium; not a manual desktop walkthrough
+Browser: 156.0.8078.81
+PASS: Customer login via Enter, role routing, My queue empty state
+PASS: DEMO-01 Customer joins partySize 4 using queue.id; WAITING ticket persisted
+PASS: Real DUPLICATE_ACTIVE server code/message shown; native partySize range validation works
+PASS: DEMO-01 Host routing from isAssigned and Call Next -> CALLED
+PASS: Real UNRESOLVED_CALLED conflict displayed without hiding called ticket
+PASS: DEMO-01 Complete -> customer Refresh COMPLETED; DB timestamps and all 3 events verified
+PASS: Customer Host-page UX denied and backend direct Call Next independently returns 403
+PASS: Logout clears session and old cookie is rejected with 401
+PASS: Unassigned Host sees empty assignment state and no Host link
+PASS: Real INVALID_CREDENTIALS server message/code displayed
+PASS: UI-only response fixture: empty queue list
+PASS: UI-only response fixture: resource error code and message
+PASS: UI-only response fixture: CLOSED queue displayed and Join disabled
+PASS: 390px layout has no horizontal overflow
+PASS: Observed browser POSTs contain only credentials or partySize; no user id/role; no JS page errors
+Result: 15 checks passed / 0 failed
+DB evidence: entry a7d2e37e-50b8-4ea8-b666-47d82b807eec, partySize 4, COMPLETED, events JOINED -> CALLED -> COMPLETED

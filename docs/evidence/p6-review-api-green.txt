@@ -1,0 +1,24 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/p6-review-api-green.json"
+Working directory: server
+Commit: 87ffa245abe13951480bf95f56a53689e7785858
+Date: 2026-11-07T12:15:31.963Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server
+
+ ✓ tests/f02-join.test.js (39 tests) 7014ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  362ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1754ms
+ ✓ tests/f01-auth.test.js (40 tests) 3629ms
+ ✓ tests/f03-host.test.js (21 tests) 2933ms
+ ✓ tests/infra.test.js (8 tests) 558ms
+
+ Test Files  4 passed (4)
+      Tests  108 passed (108)
+   Start at  19:15:32
+   Duration  16.87s (transform 196ms, setup 0ms, import 1.69s, tests 14.13s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/docs/evidence/p6-review-api-green.json
+
+Exit code: 0

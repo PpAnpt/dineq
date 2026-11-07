@@ -152,8 +152,30 @@ npm run test:review --workspace=client
 ```
 
 They check refreshed Host state after both 409 conflicts and the CLOSED queue
-explanation. They are separate from the real-DB API suite (`npm test`) and P7's
-full E2E journeys.
+explanation. They are separate from the real-DB API suite (`npm test`) and the
+Playwright E2E journeys below.
+
+### E2E journeys (Playwright, Chromium)
+
+One-time install of the browser (Windows PowerShell, repo root):
+
+```powershell
+npm install
+npx playwright install chromium
+```
+
+Run (starts the API on the **test** database and the Vite client itself, resets and
+seeds `TEST_DATABASE_URL` before every test, writes screenshots to
+`docs/evidence/screenshots/DEMO-0X-step-N.png`):
+
+```powershell
+npm run test:e2e
+```
+
+Stop any running `npm run dev` / `npm run dev:client` first: ports 3000 and 5173
+are fixed and the suite refuses to reuse existing servers, so it can never hit the
+dev database. Record a run on a clean tree with
+`npm run test:e2e:record -- <label>` (writes `docs/evidence/<label>.txt/.json`).
 
 DEMO-01:
 

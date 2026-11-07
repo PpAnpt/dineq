@@ -12,6 +12,8 @@
     "start": "npm run start --workspace=server",
     "test": "npm run test --workspace=server",
     "test:record": "npm run test:record --workspace=server --",
+    "test:e2e": "npm run test:e2e --workspace=client",
+    "test:e2e:record": "npm run test:e2e:record --workspace=client --",
     "db:migrate": "npm run db:migrate --workspace=database --",
     "db:seed": "npm run db:seed --workspace=database"
   }

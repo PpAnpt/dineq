@@ -1,0 +1,48 @@
+Command: npm run build:client; npm run test:review --workspace=client; HTTP oversized-body probe
+Commit: a7a145ec6b870abaed2b3ae13a88e0ffa832818d
+Date: 2026-11-07T13:03:09.529Z
+Node: v24.14.0
+
+> npm run build:client
+
+> dineq@0.1.0 build:client
+> npm run build --workspace=client
+
+
+> @dineq/client@0.1.0 build
+> vite build
+
+vite v8.3.6 building client environment for production...
+transforming...
+✓ 19 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.40 kB │ gzip:  0.27 kB
+dist/assets/index-DF5rXkLO.css    1.69 kB │ gzip:  0.80 kB
+dist/assets/index-C4HEiZUM.js   229.67 kB │ gzip: 71.64 kB
+
+✓ built in 145ms
+
+Exit code: 0
+
+> npm run test:review --workspace=client
+
+> @dineq/client@0.1.0 test:review
+> node --test tests/review-ui.test.js
+
+✔ Host refreshes stale list after 409 UNRESOLVED_CALLED, preserving the server error (809.2865ms)
+✔ Host refreshes stale list after 409 INVALID_TRANSITION, preserving the server error (423.2491ms)
+✔ Customer sees why CLOSED queue cannot be joined (349.0107ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2052.3685
+
+Exit code: 0
+
+Oversized JSON login body (no real password): HTTP 413 {"error":{"code":"INTERNAL_ERROR","message":"request entity too large"}}
+No login/session created because body parser rejected the request. Code INTERNAL_ERROR on HTTP 413 is recorded as a known error-catalog limitation, not a passing AC.

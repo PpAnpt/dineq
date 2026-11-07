@@ -1,0 +1,24 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/release-full-run.json"
+Working directory: server
+Commit: a7a145ec6b870abaed2b3ae13a88e0ffa832818d
+Date: 2026-11-07T13:00:17.802Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server
+
+ ✓ tests/f02-join.test.js (39 tests) 6531ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  361ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1669ms
+ ✓ tests/f01-auth.test.js (40 tests) 3553ms
+ ✓ tests/f03-host.test.js (21 tests) 2995ms
+ ✓ tests/infra.test.js (8 tests) 661ms
+
+ Test Files  4 passed (4)
+      Tests  108 passed (108)
+   Start at  20:00:18
+   Duration  16.09s (transform 161ms, setup 0ms, import 1.42s, tests 13.74s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/docs/evidence/release-full-run.json
+
+Exit code: 0

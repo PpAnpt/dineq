@@ -79,7 +79,7 @@ Invoke-RestMethod http://localhost:3000/api/health | ConvertTo-Json -Depth 3
 Expected response: `{ "data": { "status": "ok" } }`. Press Ctrl+C to stop the API.
 Use the frontend below to log in and join a queue. F-03
 ([PR #14](https://github.com/PpAnpt/dineq/pull/14)) is now merged into staging
-at `64cfaf1` and integrated into this UI branch, so Host operations run from
+at `64cfaf1` and integrated into the Sprint 1 baseline, so Host operations run from
 this checkout without a separate backend worktree.
 
 ## Run the Sprint 1 client (P6)
@@ -199,7 +199,7 @@ was an automated headless Chromium walkthrough against the seeded dev DB,
 **not a manual walkthrough**. Since F-03 was still open, its backend ran from an
 isolated worktree at `0867b8ca9924c211d467358815c366b773fa06de`; the UI branch
 itself starts from staging `facb223759e69c7d79929d138561e51d50866770`.
-That original verification preceded the merge of PR #14. The current UI branch
+That original verification preceded the merge of PR #14. The current baseline
 now includes it; review follow-up results are recorded separately. UI-only empty,
 CLOSED and error response fixtures are identified separately in the transcript;
 the DEMO-01 journey, authentication and conflict checks used real API/DB data.
@@ -259,15 +259,20 @@ serially because they share a resettable test database; a test can still issue
 Commit source/config changes first, then run:
 
 ```powershell
-npm run test:record -- p2-infra-green
+$recordLabel = 'local-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
+npm run test:record -- $recordLabel
 ```
 
 This creates `docs/evidence/<label>.txt` (command, tested commit SHA, ISO time,
 Node version, full stdout/stderr, exit code) and `<label>.json` (Vitest report).
 The recorder rejects changes outside `docs/evidence`, invalid labels and existing
 labels, and returns the actual test exit code. Use a fresh label for another run.
-Commit evidence separately from the code it tests. `INFRA-*` smoke tests are not
-evidence that F-01/F-02/F-03 acceptance criteria have passed; those remain PLANNED.
+Commit evidence separately from the code it tests. Labels already committed in
+`docs/evidence` (for example `p2-infra-green`) cannot be reused, even in a fresh
+clone. The timestamp above creates a new label; wait a second or choose another
+label if you run it twice within the same second. `INFRA-*` smoke tests verify
+infrastructure only; feature AC results are mapped to the actual feature tests
+and recorded source commit in `docs/sprints/sprint-1/test-spec.md`.
 
 ## Local database instance in this workspace
 
@@ -300,3 +305,4 @@ To stop it after stopping the API:
 | v0.3 | 2026-11-06 | Document F-01 authentication, session lifecycle, middleware order and temporary Host handlers after merged P2 |
 | v0.4 | 2026-11-07 | Add P6 client setup, proxy/Cookie behavior, browser demo steps and explicit unmerged F-03 verification dependency |
 | v0.5 | 2026-11-07 | Integrate merged F-03, document 502/API/DB startup diagnosis and UI review regression command |
+| v0.6 | 2026-11-07 | P8 fresh-clone check: fix the existing-label recording example and clarify baseline/evidence wording |

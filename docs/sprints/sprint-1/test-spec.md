@@ -114,5 +114,4 @@ Real process-restart evidence at baseline `3d2ba1b78714f51127cdf07b7e44951c06ed8
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
 | v0.2 | 2026-11-06 | Add AC-21/TEST-21 (restart persistence) and AC-22/TEST-22 (Origin check); keep in sync with F-01/F-02 contracts |
 | v0.3 | 2026-11-06 | Sync reviewed contracts: public-login/auth precedence, queue JSON/isAssigned, new AC-23/24 with explicit 400/401/403/404 cases; all tests remain PLANNED |
-
 | v0.4 | 2026-11-07 | P8: add actual results for all 24 AC from release-full-run, full test-name ledger and honest DoD/manual/release statuses; preserve original AC/design |

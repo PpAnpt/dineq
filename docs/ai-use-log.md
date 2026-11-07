@@ -2,6 +2,13 @@
 
 Short log for the AI-use declaration (DoD-08). One entry per AI-assisted task: date, tool/model, task, what the human checked.
 
+P8 tools: Codex with PowerShell/Node/Git, GitHub CLI, npm, PostgreSQL CLI/SQL,
+Vitest/Supertest and Playwright Chromium. Tasks: fresh external clone and empty
+database setup, README reproduction/fix, real HTTP/SQL process-restart check,
+clean-source API/UI/E2E recordings, secret scan, AC/DoD result mapping and release
+handoff. Results and human work still pending are indexed in
+`docs/evidence/release-verification.md`; automated checks are not manual checks.
+
 | Date | Tool / model | Task | Human verification |
 | :---- | :---- | :---- | :---- |
 | 2026-11-06 | Claude (Antigravity) | (example) scaffold server + migration | ran npm test, read diff, reviewed by teammate in PR #__ |

@@ -1,0 +1,119 @@
+{
+    "command":  "gh api graphql (ProjectV2 query by ID)",
+    "data":  {
+                 "node":  {
+                              "title":  "DineQ Sprint 1 Board",
+                              "url":  "https://github.com/users/PpAnpt/projects/4",
+                              "views":  {
+                                            "nodes":  [
+                                                          {
+                                                              "name":  "Kanban",
+                                                              "layout":  "BOARD_LAYOUT",
+                                                              "verticalGroupByFields":  {
+                                                                                            "nodes":  [
+                                                                                                          {
+                                                                                                              "name":  "Status"
+                                                                                                          }
+                                                                                                      ]
+                                                                                        }
+                                                          }
+                                                      ]
+                                        },
+                              "items":  {
+                                            "nodes":  [
+                                                          {
+                                                              "content":  {
+                                                                              "number":  4,
+                                                                              "title":  "P1 — Revise Sprint 1 specifications and traceability",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  5,
+                                                                              "title":  "P2 — Scaffold API, PostgreSQL schema and test infrastructure",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  6,
+                                                                              "title":  "P3 / F-01 — Authentication, hashed sessions and role protection",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  7,
+                                                                              "title":  "P4 / F-02 — Join queue transaction and duplicate-active rule",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  8,
+                                                                              "title":  "P5 / F-03 — Host FIFO call-next and complete",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  9,
+                                                                              "title":  "P6 — Build the four minimal Sprint 1 UI pages",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  10,
+                                                                              "title":  "P7 — Add critical E2E journeys and screenshot evidence",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  11,
+                                                                              "title":  "P8 — Verify release reproducibility and prepare Sprint 1 release",
+                                                                              "state":  "CLOSED"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "Done"
+                                                                                   }
+                                                          },
+                                                          {
+                                                              "content":  {
+                                                                              "number":  12,
+                                                                              "title":  "P9 — Compile Part F evidence and submission checklist",
+                                                                              "state":  "OPEN"
+                                                                          },
+                                                              "fieldValueByName":  {
+                                                                                       "name":  "In Review"
+                                                                                   }
+                                                          }
+                                                      ]
+                                        }
+                          }
+             },
+    "capturedAt":  "2026-11-07T13:54:02.3372554Z"
+}

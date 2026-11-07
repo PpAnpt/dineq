@@ -1,0 +1,15 @@
+Documentation review checks (no runtime test rerun)
+Command: node documentation validation script through PowerShell stdin
+Reviewed initial head: d36945bf11cce265759e83b6caf22eff7f9a7972
+Date: 2026-11-07T13:56:27.842Z
+Node: v24.14.0
+PASS: 108 appendix file/name/status entries match release-full-run.json one-to-one.
+PASS: 24 AC rows with per-AC counts totaling 100 feature cases; 8 infrastructure cases kept separate.
+PASS: both code excerpts match actual test source.
+PASS: candidate API 108/0/0 and E2E 4/0/0 are the recorded counts, not claimed as new runs.
+PASS: application/test/dependency/env-example files identical to a7a145e, both committed head and working diff.
+PASS: current board snapshot contains all 9 tasks and is explicitly non-final.
+PASS: automated restart moved out of manual-check table; stale log/declaration facts corrected.
+TDD UI failure line verified in p6-review-red.txt: locator.waitFor: Timeout 2500ms exceeded.
+GitHub metadata re-read: PR #17 merged b164d2f by BBINGOAL at 2026-11-07T13:32:04Z; Issue #11 closed 2026-11-07T13:48:35Z.
+Human identities/approvals, final main release/tag/board screenshot and manual walkthrough remain unconfirmed or NOT EXECUTED.

@@ -2,6 +2,7 @@
 
 > **Source discipline.** Every number below is copied or computed from a recorded file in `docs/evidence/` (the `.txt` run output and the Vitest/Playwright `.json` reports), from `git log`, or from `gh` (GitHub PR/Issue metadata). Anything with no evidence file is marked `NOT EXECUTED`, `MISSING` or `[ ]`. Nothing is PASS without a recorded run. Compiled 2026-11-07 on top of `origin/sprint-1-staging` = `b164d2f545f5ef91f91c39c6047b2bc3e8c2fe2f`.
 > Draft for the PDF; two students must still read and confirm it.
+> Review update 2026-11-07: evidence assertions were checked against the JSON reports, metadata refreshed from GitHub, and a current (non-final) board snapshot recorded. Runtime tests were not re-run for this docs-only review.
 
 ## 1. Setup summary and release reference
 
@@ -11,7 +12,7 @@
 
 1. `npm ci`
 2. Copy `.env.example` to `.env`; set `DATABASE_URL`, `TEST_DATABASE_URL`, `APP_ORIGIN`, `SEED_DEMO_PASSWORD` (local value only; never committed).
-3. `npm run db:migrate` then `npm run db:seed` (idempotent, synthetic data: 1 restaurant/queue, 2 Hosts, 30 Customers).
+3. `npm run db:migrate`, `npm run db:migrate -- --test`, then `npm run db:seed` (idempotent, synthetic data: 1 restaurant/queue, 2 Hosts, 30 Customers).
 4. `npm run dev` (API, port 3000) and `npm run dev:client` (Vite, port 5173).
 
 Evidence: `docs/evidence/p2-setup.txt` (migrate/seed), `docs/evidence/release-fresh-clone.txt` and `release-fresh-clone-fixed-label.txt` (fresh clone: README setup, 108 passed). One README command (`test:record -- p2-infra-green`) failed in the fresh clone with `Evidence label already exists`; this was a documentation defect, not a test failure, and the README was corrected (`release-verification.md`).
@@ -25,7 +26,7 @@ Evidence: `docs/evidence/p2-setup.txt` (migrate/seed), `docs/evidence/release-fr
 | Release PR `sprint-1-staging` → `main` | **NOT OPENED** (no open PR; PRs #1–#17 all merged into staging) | `gh pr list` |
 | Tested release-candidate commit | `a7a145ec6b870abaed2b3ae13a88e0ffa832818d` | headers of `release-full-run.txt`, `release-e2e-run.txt` |
 | Current staging head | `b164d2f545f5ef91f91c39c6047b2bc3e8c2fe2f` (merge of PR #17) | `git rev-parse origin/sprint-1-staging` |
-| Source equivalence | `server/`, `client/`, `database/`, `package*.json`, `.env.example` identical between `a7a145e`, baseline `3d2ba1b` and the P8 head `82ab0e0`; later commits are docs/evidence only | `docs/evidence/release-source-equivalence.txt` (checked at `82ab0e0`, not re-run at the current staging head) |
+| Source equivalence | `server/`, `client/`, `database/`, `package*.json`, `.env.example` identical between tested `a7a145e`, integrated staging `b164d2f` and initial P9 head `d36945b`; later review changes are docs/evidence only | `docs/evidence/part-f-review-checks.txt`; historical P8 check remains in `release-source-equivalence.txt` at `82ab0e0` |
 
 **To fill after the release PR is merged and tagged:** the accepted `main` full SHA and the annotated tag SHA (`git rev-parse HEAD`, `git rev-parse v1.0-sprint1`). Do not substitute the tag for the SHAs inside run headers.
 
@@ -41,7 +42,7 @@ All rows: tested commit `a7a145ec6b870abaed2b3ae13a88e0ffa832818d`, 2026-11-07.
 | `npm run build:client` | PASS (19 modules transformed) | n/a | `release-build-ui-checks.txt` |
 | Fresh-clone API suite (README procedure) | recorded | 108 / 0 / 0 | `release-fresh-clone-fixed-label.txt/.json` |
 
-The 108 API/DB cases are separate from the 4 E2E and 3 UI-fixture cases (the counts are not summed). Failed/skipped automated tests: **none recorded** (0 and 0). Known defects and unexecuted checks are in section 8.
+The 108 API/DB cases are separate from the 4 E2E and 3 UI-fixture cases (the counts are not summed). Failed/skipped automated tests in these candidate runs: **none recorded** (0 and 0); historical Red failures are retained in section 5. Known defects and unexecuted checks are in section 10.
 
 Output excerpt (`docs/evidence/release-full-run.txt`):
 
@@ -106,6 +107,11 @@ UI fixture regressions (`client/tests/review-ui.test.js`; API fixtures, not back
 | Full keyboard / assistive-technology audit; exhaustive loading/empty/error states | **NOT EXECUTED** (partial label/focus/Enter checks only) | `docs/known-limitations.md` |
 | Cross-browser, HTTPS deployment, GCP, performance p95 | **NOT EXECUTED** | `docs/known-limitations.md` |
 | PostgreSQL service restart / DB-loss recovery | **NOT EXECUTED** | `docs/known-limitations.md` |
+
+### 3.4 Scripted process-restart check (automated)
+
+| Check | Actual result | Evidence |
+| :-- | :-- | :-- |
 | API **process** restart against the same DB (real HTTP + SQL event comparison), a scripted check, not a manual walkthrough | recorded: same ticket and JOINED→CALLED→COMPLETED events before/after | `release-restart-persistence.txt` (run at `3d2ba1b`, equivalent source) |
 
 ## 4. Test excerpts with run results
@@ -177,7 +183,7 @@ Dates are git author dates (Asia/Bangkok). Run counts are from the `.txt` header
 | **F-02 BR-02 duplicate rule — TEST-09** | `79b4eb1` tests unchanged → `431480f` / `f02-tdd-br02-red.txt` (header commit `d927b40`) | 2 failed, 80 passed (82) (Vitest total). Failing: `expected 500 to be 409 // Object.is equality` (2 failing) | `be72710` (2026-11-06 19:31:21) | `b043f53` (2026-11-06 19:31:38) / `f02-tdd-br02-green.txt` | 82 passed (82) (Vitest total) |
 | F-02 PR #13 review (malformed-JSON ordering) | `64370b8` (2026-11-06 21:17:08) → `eb38975` / `f02-review-red.txt` | 1 failed, 86 passed (87) (Vitest total). Failing: `expected 400 to be 404 // Object.is equality` (1 failing) | `bced128` (2026-11-06 21:17:42) | `b56bed4` (2026-11-06 21:18:09) / `f02-review-green.txt` | 87 passed (87) (Vitest total) |
 | F-03 host (AC-14..20, 24) | `33c581a` (2026-11-06 22:48:24) → `4c1340c` / `f03-red.txt` | 18 failed, 90 passed (108) (Vitest total). Failing: `expected 501 to be 200 // Object.is equality`; `expected 501 to be 403 // Object.is equality`; `expected 501 to be 409 // Object.is equality`; `expected [ 501, 501 ] to deeply equal [ 200, 409 ]`; `expected 501 to be 404 // Object.is equality`; `expected 501 to be 400 // Object.is equality` (18 failing) (the endpoints were 501 placeholders) | `3f212d7` (2026-11-06 22:49:50) | `86d4256` (2026-11-06 22:50:18) / `f03-green.txt` | 108 passed (108) (Vitest total) |
-| UI review fixes (PR #15) | `719ebc1` → `fed5f06` / `p6-review-red.txt` | 3 failed (UI fixtures; not DB tests) | `87ffa24` | `5bb2f2c` / `p6-review-ui-green.txt` | 3 passed |
+| UI review fixes (PR #15) | `719ebc1` (2026-11-07 19:13:58) → `fed5f06` / `p6-review-red.txt` | 3 failed (UI fixtures; not DB tests). Actual error: `locator.waitFor: Timeout 2500ms exceeded.` while waiting for CALLED, the refreshed empty state, and the CLOSED explanation | `87ffa24` (2026-11-07 19:15:30) | `5bb2f2c` (2026-11-07 19:17:23) / `p6-review-ui-green.txt` | 3 passed |
 
 Test-file integrity: `git diff --stat 79b4eb1 be72710 -- server/tests` and `git diff 79b4eb1 d927b40 -- server/tests/f02-join.test.js` showed no change to the F-02 tests between red and the BR-02 implementation; the PR #13 and PR #14 reviewers independently state the same (quoted in section 6). A reviewer-facing check is `git diff 33c581a 3f212d7 -- server/tests`.
 
@@ -193,9 +199,11 @@ Substantive review content (quoted from GitHub, shortened):
 - **PR #13:** independent PostgreSQL run 82 passed / 0 failed / 0 skipped; F-02 test file unchanged from Red `79b4eb1`; ten same-Customer concurrent joins gave one 201 + nine 409, one entry, `next_ticket_no = 2`; forced event-insert failure rolled back everything. **Blocking finding:** malformed JSON to a missing queue returned 400 before the 404 resource lookup, contradicting SDS C.6.3. Fixed in `bced128` after Red `64370b8` (section 5).
 - **PR #14:** independent run 108 / 0 / 0; F-03 tests unchanged from `33c581a`; checked FIFO, assignment/role checks, UUID/resource precedence, concurrent Call Next, transitions and atomic writes; no blocking findings.
 
-Other merged PRs into staging: #1 docs (APPROVED by BBINGOAL after CHANGES_REQUESTED), #2 scaffold (APPROVED by PpAnpt), #3 F-01 (APPROVED by PpAnpt), #15 UI (two COMMENTED reviews by PpAnpt), #16 E2E (COMMENTED by BBINGOAL), #17 release prep (COMMENTED by PpAnpt). Issues #4–#10 are CLOSED; #11 (P8) and #12 (P9) are still OPEN.
+Other merged PRs into staging: #1 docs (APPROVED by BBINGOAL after CHANGES_REQUESTED), #2 scaffold (APPROVED by PpAnpt), #3 F-01 (APPROVED by PpAnpt), #15 UI (two COMMENTED reviews by PpAnpt), #16 E2E (COMMENTED by BBINGOAL), #17 release prep (COMMENTED by PpAnpt). Issues #4–#11 are now CLOSED; #11 closed at 2026-11-07 13:48:35Z after its P8 PR merged. #12 (P9) remains OPEN with PR #18 in review.
 
-**Gaps to disclose honestly:** GitHub shows no `APPROVED` review state on #13, #14, #15, #16 or #17 (reviews are CHANGES_REQUESTED/COMMENTED; #13/#14 were merged by their author after a comment-only follow-up). If the team's approvals were given elsewhere, add that evidence. Final project-board status: **MISSING** (board not readable by this task; capture a screenshot).
+**Gaps to disclose honestly:** GitHub shows no `APPROVED` review state on #13, #14, #15, #16 or #17 (reviews are CHANGES_REQUESTED/COMMENTED; #13/#14 were merged by their author after a comment-only follow-up). If the team's approvals were given elsewhere, add that evidence.
+
+**Current board metadata (not final-release proof):** [DineQ Sprint 1 Board](https://github.com/users/PpAnpt/projects/4) is Kanban grouped by Status. The review synchronized completed P8 to Done and P9 to In Review. The actual snapshot is `docs/evidence/part-f-board-snapshot.json`: P1–P8 Done, P9 In Review, with capture time in the file. The final board screenshot after accepted release/P9 completion remains **MISSING**; do not call this in-progress snapshot the final board.
 
 ## 7. History sequence (contracts/tests before implementation)
 
@@ -287,16 +295,16 @@ Commit counts (`git log origin/sprint-1-staging --format=%an | sort | uniq -c`):
 
 | Student | Name | Student ID | GitHub login / git author | PRs authored | Reviews given (from `gh`) | Issues / work | Notes |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| A | [ ] | [ ] | `PpAnpt` (git author `PpAnpt`) | #1, #13, #14, #16 | #2, #3 (APPROVED); #15, #17 (COMMENTED) | P1 specs; P4/F-02; P5/F-03; P7 E2E | [ ] confirm |
+| A | [ ] | [ ] | `PpAnpt` (git author `PpAnpt`) | #1, #13, #14, #16; #18 in review | #2, #3 (APPROVED); #15, #17 (COMMENTED) | P1 specs; P4/F-02; P5/F-03; P7 E2E; P9 draft | [ ] confirm |
 | B | [ ] | [ ] | `BBINGOAL` (git author `Siwarak Chatvichai` and `BBINGOAL` — **[ ] confirm these are the same person**) | #2, #3, #15, #17 | #1 (CHANGES_REQUESTED → APPROVED); #13 (CHANGES_REQUESTED); #14, #16 (COMMENTED) | P2 scaffold; P3/F-01; P6 UI; P8 release prep | [ ] confirm |
 
 PR/Issue numbers come from `gh pr list/view` and `gh issue list`; who is "Student A/B" and the mapping of git author names to people is **not** in any file and needs the students' confirmation. Pair-work notes per Issue: `[ ]`.
 
 ## 9. AI-use declaration (draft from `docs/ai-use-log.md`)
 
-AI tools were used on the tasks logged in `docs/ai-use-log.md`: Claude (Antigravity), Claude Code (Sonnet 5.5) and Codex. The log records: specification revision and issue drafts (docs only); P2 scaffold, migrations, seed and test harness; F-01 auth (tests first, Red 38 failed / 10 passed → Green 48 passed); F-02 join queue (Red 27 failed → BR-02 stage Red 2 failed → Green 82 passed; review fix Red 1 failed → Green 87 passed); F-03 host (Red 18 failed → Green 108 passed); the PR #15 review fixes (3 failed → 3 passed); the React/Vite UI; and the Playwright E2E suite (4 passed). For each entry the log states what a human checked (test runs, diff reading, teammate PR review). The students own correctness and must be able to explain the design, tests and released behavior. AI did not approve or merge PRs.
+AI tools were used on the tasks actually logged in `docs/ai-use-log.md`: Claude Code (Sonnet 5.5) and Codex. The log records: specification revision and issue drafts; P2 scaffold, migrations, seed and test harness; F-01 auth (Red 38 failed / 10 passed → Green 48 passed); F-02 join (Red 27 failed → BR-02 Red 2 failed → Green 82 passed; review fix Red 1 failed → Green 87 passed); F-03 host (Red 18 failed → Green 108 passed); React/Vite UI and its review fixes (3 failed → 3 passed); Playwright E2E (4 passed); P8 fresh-clone/restart/release evidence; and this P9 compilation/review. Entries distinguish automated verification from the human-review status; an automated test run is not a manual check. Tool assistance also included review comments and the user-authorized GitHub CLI merge of PR #17 into staging (`b164d2f`), as recorded in the review follow-up log. GitHub account attribution alone does not establish which steps a student performed manually. The students must confirm their human review/approval steps and remain responsible for correctness and explaining the design, tests and final release.
 
-Log hygiene to fix before submission: several rows still contain `PR #__` or "teammate review pending", the first row is labelled "(example)", the P8 and P9 tasks have no row of their own in the version read (P9 row is added by this change), and one row is out of date order. The final P8 candidate row should be checked against the log on staging.
+Remaining log hygiene: several historical rows still contain `PR #__` or "teammate review pending". Add confirmed PR references and distinguish each row's original status from the current release status. The example row was removed in P8; both P8 and P9 have real task entries. Do not treat the former example as evidence of another tool's use. One F-03 entry is out of date order. Final human confirmations are still pending.
 
 ## 10. Known limitations (from `docs/known-limitations.md`)
 
@@ -323,7 +331,7 @@ Two PNG sets exist. **Set R (preferred):** `docs/evidence/release-screenshots/` 
 
 ## 12. Placeholders still needing real values
 
-The Google Doc for Part F could not be opened by this task (Drive search returned nothing; Google Docs access is not authorized here), so this list is built from this repository and the course requirements (§3.6/§4.2/§4.3), not from the Doc itself. Check each against the Doc:
+No specific live Google Doc URL/key was verified for this compilation. This checklist comes from the repository and course requirements (§3.6/§4.2/§4.3); it is not a verified inventory of placeholders in a live Doc. Compare it with the actual document before submission:
 
 1. Both students' names and IDs, repository URL (`https://github.com/PpAnpt/dineq`, from `gh`), selected theme (Theme 9) — [ ] names/IDs.
 2. Release tag name, annotated-tag SHA, accepted `main` full SHA, release PR number/date — **do not exist yet**.
@@ -457,3 +465,4 @@ The Google Doc for Part F could not be opened by this task (Drive search returne
 | Version | Date | Change |
 | :-- | :-- | :-- |
 | v0.1 | 2026-11-07 | Initial Part F evidence compilation from recorded evidence, git history and GitHub metadata |
+| v0.2 | 2026-11-07 | Review: align tool declaration with current log, separate scripted/manual checks, refresh Issue/board metadata and verify ledger/excerpts/source equivalence; release/human placeholders retained |

@@ -5,9 +5,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: 'localhost',
-    port: 5173,
+    port: Number(process.env.VITE_DEV_PORT || 5173),
     strictPort: true,
-    // Keep the browser Cookie and Origin on localhost:5173.
-    proxy: { '/api': { target: 'http://localhost:3000', changeOrigin: false } },
+    // Browser cookies and Origin stay on the frontend origin, including E2E ports.
+    proxy: { '/api': { target: process.env.API_PROXY_TARGET || 'http://localhost:3000', changeOrigin: false } },
   },
 });

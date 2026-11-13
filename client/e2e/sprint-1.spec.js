@@ -93,7 +93,7 @@ test('E2E-2 / DEMO-02 + DEMO-03: duplicate active join and invalid party size ar
   await context.close();
 });
 
-test('E2E-3 / DEMO-04: a Customer cannot use the Host page or call-next API', async ({ browser }) => {
+test('E2E-3 / DEMO-04: a Customer cannot use the Host page or call-next API', async ({ browser, baseURL }) => {
   const { context, page } = await newUser(browser, 'customer01@dineq.test');
 
   await page.goto(hostPath);
@@ -103,14 +103,14 @@ test('E2E-3 / DEMO-04: a Customer cannot use the Host page or call-next API', as
 
   // Direct API call with the Customer's real session cookie (not via the UI).
   const response = await page.request.post(`/api/queues/${seedIds.queue}/call-next`,
-    { headers: { Origin: 'http://localhost:5173' } });
+    { headers: { Origin: baseURL } });
   expect(response.status()).toBe(403);
   expect((await response.json()).error.code).toBe('FORBIDDEN');
 
   await context.close();
 });
 
-test('E2E-4 / DEMO-05: after logout the old session cookie is rejected', async ({ browser }) => {
+test('E2E-4 / DEMO-05: after logout the old session cookie is rejected', async ({ browser, baseURL }) => {
   const { context, page } = await newUser(browser, 'customer01@dineq.test');
 
   expect((await page.request.get('/api/auth/me')).status()).toBe(200);
@@ -124,7 +124,7 @@ test('E2E-4 / DEMO-05: after logout the old session cookie is rejected', async (
 
   // Replay the pre-logout token from a clean client: the server must have revoked it.
   const replay = await browser.newContext();
-  const stale = await replay.request.get('http://localhost:5173/api/auth/me',
+  const stale = await replay.request.get(`${baseURL}/api/auth/me`,
     { headers: { Cookie: `dineq_session=${oldCookie.value}` } });
   expect(stale.status()).toBe(401);
   await replay.close();

@@ -1,0 +1,59 @@
+name: CI & Docker Build
+on:
+  pull_request:
+    branches: [staging, main, sprint-1-staging]
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test-and-docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: dineq
+          POSTGRES_PASSWORD: ci-disposable-only
+          POSTGRES_DB: dineq_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U dineq -d dineq_test"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://dineq:ci-disposable-only@localhost:5432/dineq_test
+      TEST_DATABASE_URL: postgresql://dineq:ci-disposable-only@localhost:5432/dineq_test
+      SEED_DEMO_PASSWORD: ci-disposable-demo-only
+      APP_ORIGIN: http://localhost:5173
+      COOKIE_SECURE: 'false'
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # starter-kit pin
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # starter-kit pin
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Prepare separate development and test databases
+        run: |
+          node --input-type=module -e "import pg from 'pg'; const p = new pg.Pool({connectionString: process.env.DATABASE_URL}); try { await p.query('CREATE DATABASE dineq_ci'); } finally { await p.end(); }"
+          echo 'DATABASE_URL=postgresql://dineq:ci-disposable-only@localhost:5432/dineq_ci' >> "$GITHUB_ENV"
+      - name: Migrate, seed and test against PostgreSQL
+        run: |
+          npm run db:migrate
+          npm run db:migrate -- --test
+          npm run db:seed
+          npm test
+      - name: Build client and check production serving
+        run: |
+          npm run build:client
+          node --test server/checks/production.test.js
+      - run: npx playwright install --with-deps chromium
+      - name: Browser journeys
+        run: npm run test:e2e
+      - name: Verify production image builds (no push)
+        run: docker build -t dineq-lab5:ci .

@@ -33,3 +33,5 @@ handoff. Results and human work still pending are indexed in
 | 2026-11-13 | Codex | Diagnosed E2E port 3000 conflict as Docker invoicedoc-client. Made Playwright API/web ports configurable (3100/5273 defaults), wired Vite proxy and APP_ORIGIN, replaced hard-coded E2E Origin/replay URLs with baseURL without weakening assertions. Reran against isolated PostgreSQL: 4 passed (10.2s). Updated .env.example, README and Lab 5 deployment guide. No unrelated service stopped or remote changes made. |
 
 | 2026-11-13 | Codex | Authorized Lab 5 PR preparation: checked diff, verified action pins through GitHub API, publish staging baseline and Lab 5 branch for teammate review and CI. Ruleset read returned HTTP 403 (private repository/current plan); visibility unchanged. No merge or cloud action. |
+
+| 2026-11-13 | Codex | PR #20 requests PpAnpt review; first hosted CI run 43366271936 passed. User authorized public visibility/required checks; GitHub visibility update rejected (404), confirmed connected BBINGOAL has admin=false. Prepared ruleset.json and owner handoff; no visibility/ruleset change applied. |

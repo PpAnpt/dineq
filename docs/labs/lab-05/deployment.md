@@ -152,3 +152,16 @@ Remove-Item Env:E2E_API_PORT, Env:E2E_WEB_PORT
 ```
 
 No manual API or Vite startup is needed for E2E. The harness starts/stops both; TEST_DATABASE_URL and SEED_DEMO_PASSWORD still must point to disposable test fixtures. It never reuses a running dev server. Assertions were preserved: only hard-coded Origin and cookie-replay URLs in E2E-3/4 now use Playwright baseURL. Rerun output is local at `.local/lab5/e2e-ports.txt`.
+
+## Hosted CI and repository-settings handoff
+
+The first hosted PR run passed all steps: https://github.com/PpAnpt/dineq/actions/runs/43366271936 (`test-and-docker`, 1m37s), head ec7c92f. This includes API, production checks, E2E and Docker build.
+
+The student explicitly authorized Public visibility and required checks on 13 November 2026. The connected account BBINGOAL has push but not admin permission; GitHub rejected the visibility change (HTTP 404). The repository remains private and no ruleset has been applied. Owner PpAnpt must perform the following while authenticated as the owner/admin, after checking the published history contains no secrets:
+
+```powershell
+gh repo edit PpAnpt/dineq --visibility public --accept-visibility-change-consequences
+gh api --method POST repos/PpAnpt/dineq/rulesets --input docs/labs/lab-05/ruleset.json
+```
+
+The prepared ruleset targets main and staging, requires one approval (including approval after the last push), resolves review threads, dismisses stale approvals, requires the up-to-date test-and-docker check from GitHub Actions, blocks deletion/force pushes and has no bypass actors. Create it once; if a rule already exists, inspect/update it rather than creating duplicates. Do not merge the Lab 5 PR until the teammate approves and its latest CI run is green. A separate intentional failing PR remains needed to demonstrate the merge block.

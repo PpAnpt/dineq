@@ -172,8 +172,10 @@ seeds `TEST_DATABASE_URL` before every test, writes screenshots to
 npm run test:e2e
 ```
 
-Stop any running `npm run dev` / `npm run dev:client` first: ports 3000 and 5173
-are fixed and the suite refuses to reuse existing servers, so it can never hit the
+E2E starts a separate API on 3100 and Vite on 5273. Override them with
+`$env:E2E_API_PORT="3200"` and `$env:E2E_WEB_PORT="5373"` before running
+`npm run test:e2e`. The proxy and allowed Origin follow these values. The suite
+refuses to reuse existing servers, so it can never hit the
 dev database. Record a run on a clean tree with
 `npm run test:e2e:record -- <label>` (writes `docs/evidence/<label>.txt/.json`).
 

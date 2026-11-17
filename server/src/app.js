@@ -14,10 +14,11 @@ export function createApp({ pool, config = loadConfig() }) {
   app.use('/api', createRoutes({ pool, config }));
   if (config.nodeEnv === 'production') {
     const clientDist = fileURLToPath(new URL('../../client/dist/', import.meta.url));
+    const serveClient = express.static(clientDist);
     // Unknown API routes must retain their JSON response, never return the SPA.
     app.use((req, res, next) => {
       if (req.path === '/api' || req.path.startsWith('/api/')) return next();
-      return express.static(clientDist)(req, res, next);
+      return serveClient(req, res, next);
     });
     app.get(['/','/login','/queues','/my-queue','/host/queues/:queueId'], (_req, res) => {
       res.sendFile('index.html', { root: clientDist });

@@ -1,6 +1,6 @@
 # Lab 5: local deployment and CI preparation
 
-Status: local implementation verified, 13 November 2026. Follow-up authorized preparation publishes a Lab 5 review PR and CI; no merge, GCP deployment, billing or IAM changes are authorized. Cloud deployment is NOT EXECUTED.
+Status: local implementation verified, 13 November 2026; review follow-up 17 November 2026. Follow-up authorized preparation publishes a Lab 5 review PR and CI; no merge, GCP deployment, billing or IAM changes are authorized. Cloud deployment is NOT EXECUTED.
 
 ## Baseline and branch
 
@@ -91,13 +91,13 @@ Standalone image: `docker build -t dineq-lab5:local .`. The image needs DATABASE
 
 ## CI and quality gate
 
-`.github/workflows/ci-docker.yml` runs for PRs into staging, main and legacy sprint-1-staging, manually, or as a reusable workflow. The job `test-and-docker` installs from the lockfile, provisions PostgreSQL, migrates both isolated DBs, seeds dev fixtures, runs API tests, builds the SPA, verifies production routes, runs Chromium E2E and builds the production Docker image without pushing it. An earlier failed command fails the job; no continue-on-error/path filters bypass the gate. Permissions are contents:read only. No cloud authorization exists in this workflow.
+`.github/workflows/ci-docker.yml` runs for PRs into staging, main and legacy sprint-1-staging, pushes to staging/main, manually, or as a reusable workflow. The job `test-and-docker` installs from the lockfile, provisions PostgreSQL, migrates both isolated DBs, seeds dev fixtures, runs API tests, builds the SPA, verifies production routes, runs Chromium E2E and builds the production Docker image without pushing it. An earlier failed command fails the job; no continue-on-error/path filters bypass the gate. Permissions are contents:read only. No cloud authorization exists in this workflow.
 
-After authorization to publish, both integration and release paths need a GitHub ruleset requiring `test-and-docker`, a reviewed PR, current branch checks and no author self-approval. Run one intentional failing temporary PR to demonstrate merge blocking, then close/fix it without breaking the release. YAML alone does not enable branch protection. Hosted CI is being submitted through the review PR; its actual run must be inspected before claiming PASS. The required-check demonstration remains NOT EXECUTED. GitHub reports HTTP 403 for rulesets because this repository is private on its current plan; enable a supported plan or explicitly authorize making the repository public before enforcing this gate. Do not change visibility without the owner's approval.
+After authorization to publish, both integration and release paths need a GitHub ruleset requiring `test-and-docker`, a reviewed PR, current branch checks and no author self-approval. Run one intentional failing temporary PR to demonstrate merge blocking, then close/fix it without breaking the release. YAML alone does not enable branch protection. Hosted CI passed at c566a22 (run 43366563813). The repository is now public, but the connected account has no admin access. No ruleset is active; the owner must apply it. The required-check demonstration remains NOT EXECUTED.
 
 ## Actual local verification
 
-Tested the uncommitted Lab 5 working tree based on accepted release eaa555d; these results do not replace Sprint 1 immutable run headers.
+The local results below were originally run before the Lab 5 commits, based on accepted release eaa555d. The subsequent hosted run at committed head c566a22 passed the same CI checks. These records do not replace Sprint 1 immutable run headers.
 
 | Check | Observed result |
 | --- | --- |
@@ -155,13 +155,25 @@ No manual API or Vite startup is needed for E2E. The harness starts/stops both; 
 
 ## Hosted CI and repository-settings handoff
 
-The first hosted PR run passed all steps: https://github.com/PpAnpt/dineq/actions/runs/43366271936 (`test-and-docker`, 1m37s), head ec7c92f. This includes API, production checks, E2E and Docker build.
+Latest hosted PR run before this review follow-up passed all steps: https://github.com/PpAnpt/dineq/actions/runs/43366563813 (`test-and-docker`, 1m21s), head c566a22. This includes API, production checks, E2E and Docker build.
 
-The student explicitly authorized Public visibility and required checks on 13 November 2026. The connected account BBINGOAL has push but not admin permission; GitHub rejected the visibility change (HTTP 404). The repository remains private and no ruleset has been applied. Owner PpAnpt must perform the following while authenticated as the owner/admin, after checking the published history contains no secrets:
+The student explicitly authorized Public visibility and required checks on 13 November 2026. The connected account BBINGOAL has push but not admin permission; GitHub rejected the visibility change (HTTP 404). The owner subsequently made the repository public. On 17 November the connected account still has admin=false and no ruleset is active. Owner PpAnpt must perform the following while authenticated as the owner/admin, after checking the published history contains no secrets:
 
 ```powershell
-gh repo edit PpAnpt/dineq --visibility public --accept-visibility-change-consequences
 gh api --method POST repos/PpAnpt/dineq/rulesets --input docs/labs/lab-05/ruleset.json
 ```
 
 The prepared ruleset targets main and staging, requires one approval (including approval after the last push), resolves review threads, dismisses stale approvals, requires the up-to-date test-and-docker check from GitHub Actions, blocks deletion/force pushes and has no bypass actors. Create it once; if a rule already exists, inspect/update it rather than creating duplicates. Do not merge the Lab 5 PR until the teammate approves and its latest CI run is green. A separate intentional failing PR remains needed to demonstrate the merge block.
+
+## PR #20 review decisions (17 November 2026)
+
+- Keep docs/labs/lab-05, the path explicitly required by the Lab 5 handout and the original user request. Remove the unused lab-5/.gitkeep placeholder so there is one Lab 5 directory; retain lab-6/lab-7.
+- Retain the explicit Sprint 1 SPA route allowlist. Unknown paths intentionally return JSON 404 in production; known navigation routes are covered by production checks. A generalized fallback is a future routing decision, not required for the current screens.
+- Construct express.static once per app instance, not on every request.
+- CI now checks pushes to staging/main as well as PRs, so merge commits have their own checks. This is not a deployment workflow.
+- CLAUDE.md v0.4 reflects authorized Lab 5 scope and the current integration branch.
+- Visibility is already public by owner action. Course reference materials and machine paths/student names in historical evidence are present by the existing team publication decision; these are not credentials. The scanner cannot establish permission to redistribute course materials. Do not rewrite historical evidence or delete reference documents without a separate team decision.
+
+### History credential audit
+
+Gitleaks v8.30.1 (official gitleaks/gitleaks release) was run with `git . --log-opts=--all --redact` against all locally available Git refs, not only the current tree: 59 scanned non-merge commits, approximately 1.21 MB, no leaks found. The redacted JSON report is kept locally under .local/lab5/review-audit/history.json. This is pattern-based detection, not a guarantee that all possible credentials or personal information are absent. No secret values are printed or copied into committed evidence. Historical course documents and local paths remain a separate publication/privacy decision; Public visibility was explicitly authorized and applied by the owner.

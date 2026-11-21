@@ -211,8 +211,7 @@ Ruleset `protect-main` was applied by the owner and is active (review plus `test
 
 Run 44884767549 (push of release PR #25, commit d48edb1): job `test` (reusable CI) succeeded; in job `deploy` the Google Cloud sign-in, image build/push, **migrate job with `--wait`** and `gcloud run deploy` all succeeded. The next step failed: `gcloud run services update` was denied for the deployer service account (`run.revisions.list` denied), so the smoke test never ran and that run is not a successful deployment. Fix: pass `COOKIE_SECURE`/`APP_ORIGIN` to `gcloud run deploy` itself (that call is permitted) and compute the URL deterministically. No IAM change was made. The first successful run, public URL and persistence proof are still to be recorded.
 
-
-### Release #34 execution ? 21 November 2026
+### Release #34 execution - 21 November 2026
 
 Release merge `3eb3b0207ac3e54169cee00b2744c20d457ef68c`, run https://github.com/PpAnpt/dineq/actions/runs/44890711350: reusable CI, WIF, image push, migration and deployment all passed. Smoke failed before making HTTP checks because status.url was `https://s21271a0d-4d7hbszvwq-as.a.run.app` while derived APP_ORIGIN was `https://s21271a0d-670075229477.asia-southeast1.run.app`. Summary was skipped. This is NOT a fully successful deployment run and Issue #30 remains open.
 

@@ -106,20 +106,28 @@ jobs:
             --command=sh --args="^@@^-c@@$MIGRATE_COMMAND" --quiet
           gcloud run jobs execute "$MIGRATE_JOB_NAME" --region "$REGION" --project "$PROJECT_ID" --wait
 
+      # DineQ addition: COOKIE_SECURE and APP_ORIGIN are passed to `gcloud run deploy` itself.
+      # The first run showed the deployer account is not allowed to update the service in a separate step
+      # (run.revisions.list denied), so the public URL is derived instead of read back before deploying:
+      # https://<service>-<project number>.<region>.run.app, with the project number taken from WIF_PROVIDER.
+      # The smoke step then checks that this matches the URL Cloud Run reports.
+      # --update-env-vars only adds/changes these two keys; DATABASE_URL and other portal settings are kept.
       - name: Deploy to Cloud Run
+        env:
+          WIF_PROVIDER: ${{ vars.WIF_PROVIDER }}
         run: |
+          PROJECT_NUMBER="${WIF_PROVIDER#projects/}"; PROJECT_NUMBER="${PROJECT_NUMBER%%/*}"
+          URL="https://$SERVICE_NAME-$PROJECT_NUMBER.$REGION.run.app"
+          echo "SERVICE_URL=$URL" >> "$GITHUB_ENV"
           PORT_ARGS=()
           if [ -n "$APP_PORT" ]; then PORT_ARGS=(--port "$APP_PORT"); fi
-          gcloud run deploy "$SERVICE_NAME" --image "$IMAGE" --region "$REGION" --project "$PROJECT_ID" "${PORT_ARGS[@]}" --quiet
+          gcloud run deploy "$SERVICE_NAME" --image "$IMAGE" --region "$REGION" --project "$PROJECT_ID" "${PORT_ARGS[@]}" --update-env-vars "COOKIE_SECURE=true,APP_ORIGIN=$URL" --quiet
 
-      # DineQ addition: production settings that depend on the public URL, then a smoke test.
-      # --update-env-vars only adds/changes these two keys; secrets and DATABASE_URL set by the portal are kept.
-      - name: Configure production settings and smoke test
+      - name: Smoke test
         run: |
-          URL="$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format='value(status.url)')"
-          echo "SERVICE_URL=$URL" >> "$GITHUB_ENV"
-          gcloud run services update "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" \
-            --update-env-vars "COOKIE_SECURE=true,APP_ORIGIN=$URL" --quiet
+          ACTUAL="$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format='value(status.url)')"
+          [ "$ACTUAL" = "$SERVICE_URL" ] || { echo "Service URL $ACTUAL differs from APP_ORIGIN $SERVICE_URL"; exit 1; }
+          URL="$SERVICE_URL"
           for i in $(seq 1 12); do
             if curl -fsS "$URL/api/health" && echo && curl -fsS "$URL/api/ready" && echo && curl -fsS "$URL/" | grep -q 'id="root"'; then echo; echo 'Smoke test passed'; exit 0; fi
             echo "Attempt $i failed, retrying in 10s"; sleep 10

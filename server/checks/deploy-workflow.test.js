@@ -32,3 +32,9 @@ test('no Google Cloud authentication or mutation happens outside the gated deplo
 test('smoke test also checks the built UI root, read-only', () => {
   assert.match(jobBlock('deploy'), /curl -fsS "\$URL\/" \| grep -q 'id="root"'/);
 });
+
+test('production env vars are set by gcloud run deploy; the deployer cannot run services update', () => {
+  const deploy = jobBlock('deploy');
+  assert.doesNotMatch(deploy, /gcloud run services update/);
+  assert.match(deploy, /gcloud run deploy [^\n]*--update-env-vars "COOKIE_SECURE=true,APP_ORIGIN=\$URL"/);
+});

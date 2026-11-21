@@ -7,11 +7,22 @@ import { validateTestDatabaseUrl } from '../server/tests/helpers/index.js';
 validateTestDatabaseUrl();
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const origin = 'http://localhost:5173';
+function port(name, fallback) {
+  const value = Number(process.env[name] || fallback);
+  if (!Number.isInteger(value) || value < 1 || value > 65535) {
+    throw new Error(`${name} must be an integer between 1 and 65535`);
+  }
+  return value;
+}
+const apiPort = port('E2E_API_PORT', 3100);
+const webPort = port('E2E_WEB_PORT', 5273);
+if (apiPort === webPort) throw new Error('E2E_API_PORT and E2E_WEB_PORT must differ');
+const apiOrigin = `http://localhost:${apiPort}`;
+const origin = `http://localhost:${webPort}`;
 
 // The API must run against the TEST database; the dev database is never touched.
-// Ports are fixed (Vite proxies /api to :3000, strictPort) and servers are never
-// reused, so a running dev stack makes this fail loudly instead of hitting dev data.
+// E2E uses separate, configurable ports. Never reuse an existing server: it may
+// target a development database. Vite proxy and allowed Origin follow these ports.
 export default defineConfig({
   testDir: './e2e',
   outputDir: '../.local/e2e-results',
@@ -31,12 +42,12 @@ export default defineConfig({
     {
       command: 'node server/src/server.js',
       cwd: root,
-      url: 'http://localhost:3000/api/health',
+      url: `${apiOrigin}/api/health`,
       reuseExistingServer: false,
       timeout: 60_000,
       env: {
         DATABASE_URL: process.env.TEST_DATABASE_URL,
-        PORT: '3000',
+        PORT: String(apiPort),
         APP_ORIGIN: origin,
         COOKIE_SECURE: 'false',
         NODE_ENV: 'test',
@@ -46,6 +57,7 @@ export default defineConfig({
       command: 'npm run dev:client',
       cwd: root,
       url: origin,
+      env: { VITE_DEV_PORT: String(webPort), API_PROXY_TARGET: apiOrigin },
       reuseExistingServer: false,
       timeout: 60_000,
     },

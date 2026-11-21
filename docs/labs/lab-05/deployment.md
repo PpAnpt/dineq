@@ -190,7 +190,7 @@ The file starts from the portal-generated `deploy.yml` (WIF keyless sign-in, env
 | Addition | Why |
 | --- | --- |
 | `APP_PORT` defaults to `3000`, `MIGRATE_COMMAND` defaults to `node database/migrate.js` | Matches the Dockerfile (`PORT=3000`) and the plain-SQL migrator; no extra GitHub variables are required |
-| Step "Configure production settings and smoke test" | Sets `COOKIE_SECURE=true` and `APP_ORIGIN=<service URL>` with `--update-env-vars` (only those keys change), then polls `/api/health` and `/api/ready` for up to 2 minutes and fails the run if either is not 200 |
+| Production env vars and smoke test | `COOKIE_SECURE=true` and `APP_ORIGIN=<service URL>` passed to `gcloud run deploy --update-env-vars`; step "Smoke test" polls `/api/health` and `/api/ready` for up to 2 minutes and fails the run if either is not 200 | Only those keys change. The URL is derived as `https://<service>-<project number>.<region>.run.app` (project number from `WIF_PROVIDER`) and the smoke step fails if Cloud Run reports a different URL |
 | Summary step lists commit SHA, image, revision and URL | Evidence for "running revision matches the commit" |
 
 Order per push to `main`: run the full CI for the same commit (reusable `ci-docker.yml` as job `test`), then build and push the image tagged with the full commit SHA, run the migrate job with `--wait`, deploy the service, set production env vars, smoke test. `deploy` has `needs: test`, so a failed or skipped `test` job skips every Google Cloud step; a manual run on any other branch is skipped by the `main` guard. A failed migration stops before the service update. The smoke test checks `/api/health`, `/api/ready` and that `/` serves the built UI (`id="root"`), all read-only.
@@ -206,3 +206,7 @@ Status: workflow written and YAML-parsed locally only; it has not run yet. Cloud
 ### Update 21 November 2026: ruleset
 
 Ruleset `protect-main` was applied by the owner and is active (review plus `test-and-docker`); this supersedes the earlier statements above that no ruleset is active. The intentional failing PR that proves the merge block (C-02) has not been run yet.
+
+### First deploy run (21 November 2026): findings
+
+Run 44884767549 (push of release PR #25, commit d48edb1): job `test` (reusable CI) succeeded; in job `deploy` the Google Cloud sign-in, image build/push, **migrate job with `--wait`** and `gcloud run deploy` all succeeded. The next step failed: `gcloud run services update` was denied for the deployer service account (`run.revisions.list` denied), so the smoke test never ran and that run is not a successful deployment. Fix: pass `COOKIE_SECURE`/`APP_ORIGIN` to `gcloud run deploy` itself (that call is permitted) and compute the URL deterministically. No IAM change was made. The first successful run, public URL and persistence proof are still to be recorded.

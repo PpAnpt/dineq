@@ -182,3 +182,19 @@ Gitleaks v8.30.1 (official gitleaks/gitleaks release) was run with `git . --log-
 
 - `GET /api/health`: process is up; no database access.
 - `GET /api/ready` (added for Cloud Run/CI smoke checks): public and read-only. `200 { data: { status: "ready", db: "connected" } }` when `SELECT 1` succeeds; `503 { error: { code: "NOT_READY", message: "Database is not reachable" } }` otherwise, without exposing the driver error. Covered by INFRA-09..11 in `server/tests/infra.test.js` (infrastructure checks, not Sprint 1 AC).
+
+## Deploy workflow (`.github/workflows/deploy.yml`)
+
+The file starts from the portal-generated `deploy.yml` (WIF keyless sign-in, environment `demo`, file name and `main` branch unchanged) and adds only DineQ-specific parts:
+
+| Addition | Why |
+| --- | --- |
+| `APP_PORT` defaults to `3000`, `MIGRATE_COMMAND` defaults to `node database/migrate.js` | Matches the Dockerfile (`PORT=3000`) and the plain-SQL migrator; no extra GitHub variables are required |
+| Step "Configure production settings and smoke test" | Sets `COOKIE_SECURE=true` and `APP_ORIGIN=<service URL>` with `--update-env-vars` (only those keys change), then polls `/api/health` and `/api/ready` for up to 2 minutes and fails the run if either is not 200 |
+| Summary step lists commit SHA, image, revision and URL | Evidence for "running revision matches the commit" |
+
+Order per push to `main`: build and push image tagged with the commit SHA, run the migrate job with `--wait`, deploy the service, set production env vars, smoke test. A failed migration stops before the service update.
+
+Not done by the workflow: seeding demo accounts (needs `SEED_DEMO_PASSWORD`, a secret) and any secret value. The workflow contains no password or key; the four `demo` environment variables are identifiers only. Deployment is limited to branch `main` by an environment branch rule, and `main` requires a reviewed PR (ruleset `protect-main`).
+
+Status: workflow written and YAML-parsed locally only; it has not run yet. Cloud evidence (first run, URL, persistence across redeploy) is still pending.

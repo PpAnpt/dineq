@@ -165,3 +165,26 @@ describe('P2 infrastructure (not feature AC results)', () => {
     }
   });
 });
+
+describe('Lab 5 readiness endpoint (infrastructure, not a Sprint 1 AC)', () => {
+  test('INFRA-09: /api/ready is public and reports the database as connected', async () => {
+    const response = await request(app).get('/api/ready');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ data: { status: 'ready', db: 'connected' } });
+  });
+
+  test('INFRA-10: /api/ready returns 503 without leaking the database error when the DB is down', async () => {
+    const failing = { query: async () => { throw new Error('connect ECONNREFUSED db.internal.example:5432'); } };
+    const response = await request(createTestApp({ pool: failing })).get('/api/ready');
+    expect(response.status).toBe(503);
+    expect(response.body).toEqual({ error: { code: 'NOT_READY', message: 'Database is not reachable' } });
+    expect(JSON.stringify(response.body)).not.toContain('ECONNREFUSED');
+    expect(JSON.stringify(response.body)).not.toContain('db.internal.example');
+  });
+
+  test('INFRA-11: /api/ready only answers GET/HEAD; POST without a session stays 401', async () => {
+    const response = await request(app).post('/api/ready').set('Origin', 'http://localhost:5173');
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe('UNAUTHENTICATED');
+  });
+});

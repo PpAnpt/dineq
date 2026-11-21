@@ -28,6 +28,15 @@ export function createRoutes({ pool, config }) {
   // No global body parser: a route that must check its resource before the body
   // (SDS C.6.3 steps 4-5) parses JSON itself; /auth parses it here.
   router.get('/health', (_req, res) => res.json({ data: { status: 'ok' } }));
+  // Readiness for Cloud Run/CI smoke tests: public, read-only, never leaks DB errors.
+  router.get('/ready', async (_req, res) => {
+    try {
+      await pool.query('SELECT 1');
+      res.json({ data: { status: 'ready', db: 'connected' } });
+    } catch {
+      res.status(503).json({ error: { code: 'NOT_READY', message: 'Database is not reachable' } });
+    }
+  });
   router.use('/auth', json(), createAuthRoutes({ authService, config }));
   router.use(createQueueRoutes({ queueService: createQueueService({ pool }) }));
   router.use(createHostRoutes({ hostService: createHostService({ pool }) }));

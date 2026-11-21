@@ -7,7 +7,7 @@ export function authenticate(authService) {
     // Match the router's case-insensitive, non-strict static paths, but only
     // exempt the documented public methods (GET /auth/login is protected).
     const path = req.path.toLowerCase().replace(/\/+$/, '') || '/';
-    if ((['GET', 'HEAD'].includes(req.method) && path === '/health')
+    if ((['GET', 'HEAD'].includes(req.method) && (path === '/health' || path === '/ready'))
       || (req.method === 'POST' && path === '/auth/login')) return next();
 
     const token = req.cookies?.[SESSION_COOKIE];

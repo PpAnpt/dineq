@@ -106,18 +106,13 @@ jobs:
             --command=sh --args="^@@^-c@@$MIGRATE_COMMAND" --quiet
           gcloud run jobs execute "$MIGRATE_JOB_NAME" --region "$REGION" --project "$PROJECT_ID" --wait
 
-      # DineQ addition: COOKIE_SECURE and APP_ORIGIN are passed to `gcloud run deploy` itself.
-      # The first run showed the deployer account is not allowed to update the service in a separate step
-      # (run.revisions.list denied), so the public URL is derived instead of read back before deploying:
-      # https://<service>-<project number>.<region>.run.app, with the project number taken from WIF_PROVIDER.
-      # The smoke step then checks that this matches the URL Cloud Run reports.
-      # --update-env-vars only adds/changes these two keys; DATABASE_URL and other portal settings are kept.
+      # Use the existing service's canonical URL; deterministic aliases can differ
+      # from status.url. This read succeeded in run 44890711350 and needs no IAM expansion.
+      # Update only these env keys in the deploy call, preserving portal secrets.
       - name: Deploy to Cloud Run
-        env:
-          WIF_PROVIDER: ${{ vars.WIF_PROVIDER }}
         run: |
-          PROJECT_NUMBER="${WIF_PROVIDER#projects/}"; PROJECT_NUMBER="${PROJECT_NUMBER%%/*}"
-          URL="https://$SERVICE_NAME-$PROJECT_NUMBER.$REGION.run.app"
+          URL="$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format='value(status.url)')"
+          [[ "$URL" == https://* ]] || { echo 'Cloud Run did not return an HTTPS service URL'; exit 1; }
           echo "SERVICE_URL=$URL" >> "$GITHUB_ENV"
           PORT_ARGS=()
           if [ -n "$APP_PORT" ]; then PORT_ARGS=(--port "$APP_PORT"); fi

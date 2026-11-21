@@ -38,3 +38,12 @@ test('production env vars are set by gcloud run deploy; the deployer cannot run 
   assert.doesNotMatch(deploy, /gcloud run services update/);
   assert.match(deploy, /gcloud run deploy [^\n]*--update-env-vars "COOKIE_SECURE=true,APP_ORIGIN=\$URL"/);
 });
+
+
+test('production origin uses the existing canonical service URL before deployment', () => {
+  const deploy = jobBlock('deploy');
+  const lookup = deploy.indexOf('URL="$(gcloud run services describe');
+  const update = deploy.indexOf('gcloud run deploy ');
+  assert.ok(lookup >= 0 && lookup < update, 'read actual status.url before deploying with APP_ORIGIN');
+  assert.doesNotMatch(deploy, /URL="https:\/\/\$SERVICE_NAME-\$PROJECT_NUMBER/);
+});

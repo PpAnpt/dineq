@@ -4,9 +4,9 @@ Reply to the user in **Thai**. Code, identifiers, commit messages and docs stay 
 
 ## Project
 CPE334 group project, Theme 9 "Queue and Service Management" (restaurant walk-in queue, name DineQ). Pair of two students.
-**Current target: Deliverable 1 = Sprint 1 only**, due **2026-11-08 23:59 (Asia/Bangkok)**. AI assists; the two students own correctness and must be able to explain everything.
+**Current target: Lab 5 delivery infrastructure on the accepted Sprint 1 baseline**. AI assists; the two students own correctness and must be able to explain everything.
 Sprint 1 = F-01 Auth & roles, F-02 Customer joins queue, F-03 Host FIFO call-next + complete.
-Out of scope now: cancel, no-show, tables, multiple queues, reports, Docker/CI/GCP (Lab 5). Do not build them.
+Lab 5 scope: Docker packaging, local PostgreSQL persistence, automated CI and deployment preparation. GCP setup/deployment, billing and IAM require explicit user authorization before execution. Business features beyond Sprint 1 (cancel, no-show, tables, multiple queues, reports) remain out of scope.
 
 ## Source of truth (read before coding)
 - `docs/srs.md`, `docs/features.md`, `docs/traceability.md`, `docs/system-sds.md`, `docs/sprints/plan.md`
@@ -30,7 +30,7 @@ database/{migrations/*.sql,migrate.js,seed/}     client/     docs/     docs/evid
 
 ## Git rules (course workflow — evidence depends on it)
 - Never commit or push to `main`. Never force-push. Never rewrite pushed history. Don't change git identity/config.
-- Branch from `sprint-1-staging`: `feature/f-0X-name`, `docs/...`, `chore/...`. Small conventional commits (`feat(F-02): ...`, `test(F-02): ...`, `docs: ...`). You may push your feature branch; I open the PR and my teammate reviews. **You never approve or merge PRs.**
+- For Lab 5 branch from `staging`; `sprint-1-staging` is the preserved Sprint 1 integration branch. Branch names: `feature/f-0X-name`, `docs/...`, `chore/...`. Small conventional commits (`feat(F-02): ...`, `test(F-02): ...`, `docs: ...`). You may push your feature branch; I open the PR and my teammate reviews. **You never approve or merge PRs.**
 - Spec/contract/test-design commits come **before** the implementation they describe.
 
 ## TDD and test integrity
@@ -52,3 +52,5 @@ database/{migrations/*.sql,migrate.js,seed/}     client/     docs/     docs/evid
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.3 | 2026-11-06 | Align 404 guidance and public-login/check-order rules with the PR #1 contract fixes |
+
+| v0.4 | 2026-11-17 | Set Lab 5 infrastructure scope and staging baseline; retain explicit cloud authorization and Sprint 1 business contracts |

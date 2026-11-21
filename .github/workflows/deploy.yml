@@ -37,7 +37,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # DineQ addition: run the full CI (API tests, production checks, E2E, Docker build) for this same commit.
+  # `deploy` lists this job in `needs`, so a failed test job skips every Google Cloud step.
+  # The called workflow's concurrency group uses the caller's workflow name, so it cannot collide with the push CI run.
+  test:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/ci-docker.yml
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: github.ref == 'refs/heads/main'
@@ -113,10 +121,10 @@ jobs:
           gcloud run services update "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" \
             --update-env-vars "COOKIE_SECURE=true,APP_ORIGIN=$URL" --quiet
           for i in $(seq 1 12); do
-            if curl -fsS "$URL/api/health" && echo && curl -fsS "$URL/api/ready"; then echo; echo 'Smoke test passed'; exit 0; fi
+            if curl -fsS "$URL/api/health" && echo && curl -fsS "$URL/api/ready" && echo && curl -fsS "$URL/" | grep -q 'id="root"'; then echo; echo 'Smoke test passed'; exit 0; fi
             echo "Attempt $i failed, retrying in 10s"; sleep 10
           done
-          echo 'Smoke test failed: /api/health or /api/ready did not return 200'; exit 1
+          echo 'Smoke test failed: /api/health, /api/ready or the UI root did not respond as expected'; exit 1
 
       - name: Summary
         run: |

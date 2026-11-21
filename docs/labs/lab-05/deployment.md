@@ -177,3 +177,8 @@ The prepared ruleset targets main and staging, requires one approval (including 
 ### History credential audit
 
 Gitleaks v8.30.1 (official gitleaks/gitleaks release) was run with `git . --log-opts=--all --redact` against all locally available Git refs, not only the current tree: 59 scanned non-merge commits, approximately 1.21 MB, no leaks found. The redacted JSON report is kept locally under .local/lab5/review-audit/history.json. This is pattern-based detection, not a guarantee that all possible credentials or personal information are absent. No secret values are printed or copied into committed evidence. Historical course documents and local paths remain a separate publication/privacy decision; Public visibility was explicitly authorized and applied by the owner.
+
+## Health and readiness endpoints
+
+- `GET /api/health`: process is up; no database access.
+- `GET /api/ready` (added for Cloud Run/CI smoke checks): public and read-only. `200 { data: { status: "ready", db: "connected" } }` when `SELECT 1` succeeds; `503 { error: { code: "NOT_READY", message: "Database is not reachable" } }` otherwise, without exposing the driver error. Covered by INFRA-09..11 in `server/tests/infra.test.js` (infrastructure checks, not Sprint 1 AC).

@@ -142,7 +142,8 @@ test('E2E-6 / LAB5: evidence helper sees the Customer 403 on the Host page witho
   page.on('request', request => {
     if (new URL(request.url()).pathname === `/api/queues/${seedIds.queue}/entries`) hostListRequests.push(request.method());
   });
-  const text = await assertCustomerBlockedOnHostPage(page, { base: 'http://localhost:5173', hostPath });
+  const base = new URL(page.url()).origin; // the harness web port can be overridden (E2E_WEB_PORT)
+  const text = await assertCustomerBlockedOnHostPage(page, { base, hostPath });
   expect(text).toContain('403');
   expect(text).toContain('FORBIDDEN');
   expect(hostListRequests).toEqual([]);

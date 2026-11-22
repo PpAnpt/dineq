@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resetAndSeed, closeTestPool } from '../../server/tests/helpers/index.js';
 import { seedIds } from '../../database/seed/seedData.js';
+import { assertCustomerBlockedOnHostPage } from './live-evidence-lib.mjs';
 
 // Sprint 1 browser journeys (DEMO-01..05) against the real API + PostgreSQL TEST database.
 // Each test starts from a freshly reset and seeded database.
@@ -136,4 +137,20 @@ test('E2E-4 / DEMO-05: after logout the old session cookie is rejected', async (
 test('E2E-5 / LAB5-C06: login page shows the Lab 5 release label', async ({ page }) => {
   await page.goto('/login');
   await expect(page.getByTestId('release-label')).toContainText('Lab 5 release');
+});
+
+test('E2E-6 / LAB5: evidence helper sees the Customer 403 on the Host page without a Host API request', async ({ browser }) => {
+  // The React app renders its own access-denied view for a Customer, so the page never calls the Host list API.
+  // The live-evidence script must therefore assert the rendered 403/FORBIDDEN and not wait for that request.
+  const { context, page } = await newUser(browser, 'customer01@dineq.test');
+  const hostListRequests = [];
+  page.on('request', request => {
+    if (new URL(request.url()).pathname === `/api/queues/${seedIds.queue}/entries`) hostListRequests.push(request.method());
+  });
+  const base = new URL(page.url()).origin; // the harness web port can be overridden (E2E_WEB_PORT)
+  const text = await assertCustomerBlockedOnHostPage(page, { base, hostPath });
+  expect(text).toContain('403');
+  expect(text).toContain('FORBIDDEN');
+  expect(hostListRequests).toEqual([]);
+  await context.close();
 });

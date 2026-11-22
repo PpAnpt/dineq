@@ -53,7 +53,7 @@ jobs:
       - name: Build client and check production serving
         run: |
           npm run build:client
-          node --test server/checks/production.test.js server/checks/deploy-workflow.test.js
+          node --test server/checks/production.test.js server/checks/deploy-workflow.test.js client/tests/live-evidence-lib.test.js
       - run: npx playwright install --with-deps chromium
       - name: Browser journeys
         run: npm run test:e2e

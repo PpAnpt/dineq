@@ -31,10 +31,16 @@ The course portal assigned these resources in the shared project. This replaces 
 | C-02 | Failed required check and historical BLOCKED state recorded in [PR #38](https://github.com/PpAnpt/dineq/pull/38), [run 44916079400](https://github.com/PpAnpt/dineq/actions/runs/44916079400), head `821ef45b59193ee0cca72cf2fdcf9a1c8c478f0d`. Closed unmerged; today's closed-PR view is not its earlier blocked merge panel |
 | C-03 | PASS locally on 22 November: fresh remote clone of `17c8b90` outside the workspace; only private values filled into `.env.example`; Compose built, migrated, seeded and ran the UI/API/database; runtime uid 1000 |
 | C-04 | Supplied live screenshots show ticket #1 WAITING -> CALLED -> COMPLETED, duplicate rejection and Customer access denial before release #42. Captured with the earlier script; final rewritten live `c04` has NOT EXECUTED end to end |
-| C-05 | Cloud redeploy leg PASS from supplied UUID-bound baseline/results. Separate cloud restart NOT EXECUTED. Local app restart PASS at `17c8b90` with identical completed/waiting records. The whole cloud check is not complete |
+| C-05 | PASS. Redeploy leg: supplied UUID-bound baseline/results around deploy run 44986245220. Restart leg (22 November, below): after about 17 idle minutes a different Cloud Run instance of the same revision served the same UUIDs and states. Local app restart also PASS at `17c8b90`. Limits: application container only (Cloud SQL not restarted); the idle stop of the earlier instance is inferred from the gap |
 | C-06 | Reviewed #41 -> staging, reviewed #42 -> main, successful run 44986245220; live login label independently captured on 22 November; deploy log identifies revision/image SHA |
 
 Raw local artifacts are ignored under `.local/lab5/handoff-v3/`. The supplied baseline at `2026-11-22T04:42:08.764Z` precedes deploy job 04:44:02Z-04:45:29Z. The `c05` result at 04:56:01Z reports `ok: true` with the same base/queue: customer01 `a722cfb3-bc05-4849-88da-7a50805eb29c` COMPLETED; customer02 `a6200829-41ae-48bd-83ea-054d3c87ad9a` WAITING. Keep the original files. Two supplied `snapshot` images show only "Checking session..." and are not ticket proof; use the earlier visible before-images plus the API baseline. Automated captures identify their method, URL and time; they are not manual address-bar screenshots.
+
+### Cloud restart check (C-05, 22 November 2026)
+
+Cloud Shell showed the service `minScale` as 0, so Cloud Run may stop an idle instance. A read-only `snapshot` at 08:48:09Z recorded customer01 `a722cfb3-bc05-4849-88da-7a50805eb29c` COMPLETED and customer02 `a6200829-41ae-48bd-83ea-054d3c87ad9a` WAITING in queue `22222222-2222-4222-8222-222222222222` (file `2026-11-22T08-48-05-209Z-c04-baseline.json`). No request was sent for about 17 minutes. `c05` ran at 09:05:09Z and reported `ok: true` with the same ids, queue and states.
+
+The Cloud Run request log (read in Cloud Shell) shows revision `s21271a0d-00005-rdp` in both periods but different instance ids: `00e8a408bd9a1375db30…` for 08:42:24Z-08:48:11Z and `00e8a408bde89a6e907e…` for 09:05:12Z-09:05:15Z, with no request in between. No deployment occurred. The log names the instance that served each request and has no shutdown event, so the stop of the earlier instance is inferred. Only the application container restarted; Cloud SQL did not. The customer01 capture of this `c05` run shows only "Loading..." and is not used as ticket proof; its result is the script's API assertion. Raw files stay in `.local/live-evidence/` (ignored).
 
 ## Reproduce the current image (PowerShell)
 
@@ -97,7 +103,7 @@ Other deliberate adaptations: plain SQL instead of Prisma, one Express image ins
 
 Preserved failures: run 44884767549 denied `run.revisions.list` on `services update`; fixed by configuring production env in `run deploy`. Run 44890711350 failed URL equality before smoke because a derived alias differed from status.url; fixed by reading canonical URL before deployment. Run 44896342414 was the first full success; run 44986245220 delivered the visible label. No IAM widening fixed these failures.
 
-Pending: separate cloud restart evidence; final rewritten live c04 execution if desired; original blocked-merge UI capture if available; optional owner check for secret push protection; final PDF review/submission. Lab 5 Issues #27-#33 were added retrospectively on 21 November; disclose that fact. Leave service/repository available until grading ends. No billing/IAM change or teardown is part of evidence collection.
+Pending: final rewritten live c04 execution if desired; original blocked-merge UI capture if available; optional owner check for secret push protection; final PDF review/submission. Lab 5 Issues #27-#33 were added retrospectively on 21 November; disclose that fact. Leave service/repository available until grading ends. No billing/IAM change or teardown is part of evidence collection.
 
 Security verification on 22 November: no tracked `.env`; Gitleaks v8.30.1 scanned 96 locally available commits/all refs (~1.30 MB) with redaction, no leaks found (pattern-based, not an absolute guarantee). Native screenshot control was unavailable (native pipe missing); public pages were captured read-only in Chromium with actual URL/time annotations.
 

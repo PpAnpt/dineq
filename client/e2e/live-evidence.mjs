@@ -29,6 +29,7 @@ mkdirSync(outDir, { recursive: true });
 const statePath = `${outDir}state.json`;
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const results = [];
+let lastPage = null;
 
 function fail(message) { console.error(message); process.exit(2); }
 function note(step, detail) { results.push({ step, detail }); console.log(`${step}: ${detail}`); }
@@ -51,12 +52,30 @@ async function shot(page, name) {
 async function login(browser, email) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
+  lastPage = page;
   await page.goto(`${base}/login`);
   await page.getByLabel('Email', { exact: true }).fill(email);
   await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByTestId('login-submit').click();
   await page.waitForURL(url => url.pathname !== '/login', { timeout: 20_000 });
   return { context, page };
+}
+
+// Joins the queue and reports whether the server accepted it or the user already had an active ticket
+// (DUPLICATE_ACTIVE). Any other rejection is a real failure and stops the run.
+async function joinQueue(page, size) {
+  await page.getByRole('link', { name: 'Queues', exact: true }).click();
+  await page.getByLabel('Party size (1–8)').fill(String(size));
+  await page.getByTestId('join-queue').click();
+  const outcome = await Promise.race([
+    page.waitForURL('**/my-queue', { timeout: 15_000 }).then(() => 'joined'),
+    page.getByTestId('error-message').waitFor({ timeout: 15_000 }).then(() => 'error'),
+  ]);
+  if (outcome === 'joined') return { already: false };
+  const message = (await page.getByTestId('error-message').innerText()).replace(/\s+/g, ' ');
+  if (!message.includes('DUPLICATE_ACTIVE')) throw new Error(`join was rejected: ${message}`);
+  await page.goto(`${base}/my-queue`);
+  return { already: true, message };
 }
 
 async function ticketText(page) {
@@ -76,10 +95,8 @@ try {
 
     // 1. Customer signs in and joins the queue (main business action).
     const c1 = await login(browser, 'customer01@dineq.test');
-    await c1.page.getByRole('link', { name: 'Queues', exact: true }).click();
-    await c1.page.getByLabel('Party size (1–8)').fill('4');
-    await c1.page.getByTestId('join-queue').click();
-    await c1.page.waitForURL('**/my-queue');
+    const first = await joinQueue(c1.page, 4);
+    if (first.already) note('C-04 join', `customer01 already had an active ticket (${first.message}); using it`);
     const status = await c1.page.getByTestId('ticket-status').innerText();
     state.customer01Joined = await ticketText(c1.page);
     note('C-04 join', `customer01 ${state.customer01Joined}; status=${status}`);
@@ -126,10 +143,8 @@ try {
 
     // 5. Leave a WAITING ticket as the "before" data for C-05 (customer02; FIFO order is unaffected).
     const c2 = await login(browser, 'customer02@dineq.test');
-    await c2.page.getByRole('link', { name: 'Queues', exact: true }).click();
-    await c2.page.getByLabel('Party size (1–8)').fill('2');
-    await c2.page.getByTestId('join-queue').click();
-    await c2.page.waitForURL('**/my-queue');
+    const second = await joinQueue(c2.page, 2);
+    if (second.already) note('C-05 before', 'customer02 already had an active ticket; using it');
     state.customer02Before = await ticketText(c2.page);
     state.customer02Status = await c2.page.getByTestId('ticket-status').innerText();
     state.capturedAt = new Date().toISOString();
@@ -161,6 +176,10 @@ try {
   console.log(`Done. Results: ${outDir}${stamp}-${mode}-results.json`);
 } catch (error) {
   console.error(`FAILED (${mode}): ${error.message.split('\n')[0]}`);
+  try {
+    // Diagnostic screenshot of where it stopped (never of the login form).
+    if (lastPage && !new URL(lastPage.url()).pathname.startsWith('/login')) await shot(lastPage, 'FAILURE-state');
+  } catch { /* best effort only */ }
   process.exitCode = 1;
 } finally {
   await browser.close();

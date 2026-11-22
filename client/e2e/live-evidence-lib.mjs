@@ -122,3 +122,6 @@ export function pickBaselineFile(names) {
 export function resultFileName(stamp, mode, ok) {
   return `${stamp}-${mode}-${ok ? 'results' : 'FAILED'}.json`;
 }
+
+// STUB (red phase for the PR #39 re-review): implemented in the next commit.
+export async function assertCustomerBlockedOnHostPage() { return undefined; }

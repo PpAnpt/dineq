@@ -9,6 +9,7 @@
 // Write scope: customer01 / customer02 / host1 only. The script never deletes or resets anything. Host actions
 // are limited to customer01's own ticket: before any Host mutation it reads the Host queue and STOPS (exit 3)
 // if another ticket is the FIFO head or is already CALLED. Run it on a quiet queue; do not drain other tickets.
+// A fresh Customer join may already have happened before that check; that ticket is then left in place.
 //
 // Usage (PowerShell, from the repository root; the password stays in your shell, never in a file or chat):
 //   $env:DEMO_PASSWORD = Read-Host -MaskInput 'Demo password'
@@ -21,13 +22,15 @@
 //                                                      already ran earlier; the file says source=snapshot and its time
 //
 // Output goes to .local/live-evidence/ (git-ignored). Keep every run's files: a c05 run states which baseline it used.
-// Exit codes: 0 ok, 1 wrong outcome or error, 2 bad usage, 3 prerequisite not met (nothing was changed).
+// Exit codes: 0 ok, 1 wrong outcome or error, 2 bad usage, 3 prerequisite not met (no Host action was performed;
+// an earlier Customer join may remain).
 import { chromium } from 'playwright';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
   EvidenceError, PrerequisiteError, activeEntry, assertHostPrerequisites, assertResponse, assertCallNextTarget,
   assertCompleted, assertEntryState, buildBaseline, validateBaseline, compareC05, pickBaselineFile, resultFileName,
+  assertCustomerBlockedOnHostPage,
 } from './live-evidence-lib.mjs';
 
 const mode = process.argv[2];
@@ -152,13 +155,9 @@ async function runC04(browser) {
   assertResponse('customer reads Host list', listAsCustomer, 403, 'FORBIDDEN');
   const callAsCustomer = await api(c1.page, 'POST', `/api/queues/${queueId}/call-next`);
   assertResponse('customer calls next', callAsCustomer, 403, 'FORBIDDEN');
-  const [hostPageResponse] = await Promise.all([
-    c1.page.waitForResponse(res => res.request().method() === 'GET' && new URL(res.url()).pathname === `/api/queues/${queueId}/entries`),
-    c1.page.goto(`${base}${hostPath}`),
-  ]);
-  assertResponse('customer opens Host page (API call made by the page)', { status: hostPageResponse.status(), body: await hostPageResponse.json().catch(() => null) }, 403, 'FORBIDDEN');
-  const forbiddenText = squash(await c1.page.getByTestId('error-message').innerText());
-  note('access restriction', `customer -> Host list HTTP 403 FORBIDDEN, call-next HTTP 403 FORBIDDEN; Host page shows: ${forbiddenText}`);
+  // The app shows its own access-denied view and makes no Host API request, so only the rendered message is asserted here.
+  const forbiddenText = await assertCustomerBlockedOnHostPage(c1.page, { base, hostPath });
+  note('access restriction', `customer -> Host list HTTP 403 FORBIDDEN, call-next HTTP 403 FORBIDDEN (direct API); Host page renders: ${forbiddenText}`);
   await shot(c1.page, '03-customer-forbidden-on-host-page');
 
   // 4. Host: verify the target is safe BEFORE mutating, then Call Next and Complete only customer01's entry.
@@ -268,7 +267,7 @@ try {
   ok = true;
 } catch (error) {
   failure = error;
-  console.error(`${error instanceof PrerequisiteError ? 'PREREQUISITE NOT MET (nothing was changed)' : 'FAILED'} (${mode}): ${squash(error.message).slice(0, 400)}`);
+  console.error(`${error instanceof PrerequisiteError ? 'PREREQUISITE NOT MET (no Host action was performed; an earlier Customer join may remain)' : 'FAILED'} (${mode}): ${squash(error.message).slice(0, 400)}`);
   try {
     // Diagnostic screenshot of where it stopped (never of the login form).
     if (lastPage && !new URL(lastPage.url()).pathname.startsWith('/login')) await shot(lastPage, 'FAILURE-state');

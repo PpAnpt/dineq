@@ -2,7 +2,8 @@
 // be tested offline (client/tests/live-evidence-lib.test.js). A wrong outcome throws; the caller exits non-zero.
 
 export class EvidenceError extends Error {}
-// The live queue is not in a state where the script may write safely. Nothing has been changed when this is thrown.
+// The live queue is not in a state where the script may act safely. No Host action has been performed when this is
+// thrown (an earlier Customer join in the same run may remain).
 export class PrerequisiteError extends EvidenceError {}
 
 const ACTIVE = ['WAITING', 'CALLED'];
@@ -123,5 +124,19 @@ export function resultFileName(stamp, mode, ok) {
   return `${stamp}-${mode}-${ok ? 'results' : 'FAILED'}.json`;
 }
 
-// STUB (red phase for the PR #39 re-review): implemented in the next commit.
-export async function assertCustomerBlockedOnHostPage() { return undefined; }
+/**
+ * Browser step: a signed-in Customer opens the Host page. The React app renders its own access-denied view
+ * ("403 FORBIDDEN ...") and never mounts the Host page, so NO Host API request is made here; do not wait for one.
+ * The backend 403 is asserted separately with direct API calls. Takes a Playwright page (no import needed here).
+ */
+export async function assertCustomerBlockedOnHostPage(page, { base, hostPath }) {
+  await page.goto(`${base}${hostPath}`);
+  const message = page.getByTestId('error-message');
+  await message.waitFor({ timeout: 15_000 });
+  const text = (await message.innerText()).replace(/\s+/g, ' ').trim();
+  if (!text.includes('403') || !text.includes('FORBIDDEN')) {
+    throw new EvidenceError(`Host page did not render 403 FORBIDDEN for a Customer: ${text}`);
+  }
+  if (await page.getByTestId('call-next').count() !== 0) throw new EvidenceError('A Customer can see the Call Next control on the Host page');
+  return text;
+}

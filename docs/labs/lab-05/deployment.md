@@ -7,17 +7,19 @@ This current-state section supersedes the dated preparation notes in the histori
 | Item | Verified value / source |
 | --- | --- |
 | Public repository | <https://github.com/PpAnpt/dineq>; keep public until grading ends |
-| Deployed release | `17c8b90642ecb742b4f8b7e8c55da7fd34ddd620`, reviewed release [PR #42](https://github.com/PpAnpt/dineq/pull/42) |
-| Successful deployment | [Run 44986245220](https://github.com/PpAnpt/dineq/actions/runs/44986245220); same-commit CI gate and deploy both succeeded |
+| Release of record for the Lab 5 evidence | `17c8b90642ecb742b4f8b7e8c55da7fd34ddd620`, reviewed release [PR #42](https://github.com/PpAnpt/dineq/pull/42) |
+| Successful deployment of record | [Run 44986245220](https://github.com/PpAnpt/dineq/actions/runs/44986245220); same-commit CI gate and deploy both succeeded |
 | Canonical URL / APP_ORIGIN | <https://s21271a0d-4d7hbszvwq-as.a.run.app> |
-| Revision at deployment | `s21271a0d-00005-rdp`, 100% traffic in deploy log |
-| Full-SHA image | `asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d:17c8b90642ecb742b4f8b7e8c55da7fd34ddd620` |
+| Revision at the recorded deployment | `s21271a0d-00005-rdp`, 100% traffic in deploy log |
+| Full-SHA image of record | `asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d:17c8b90642ecb742b4f8b7e8c55da7fd34ddd620` |
 | Project / region | `cpe-se-course-2026` / `asia-southeast1` |
 | Cloud Run service / migration job | `s21271a0d` / `s21271a0d-migrate` |
 | Artifact Registry repository / image | `s21271a0d` / `s21271a0d` |
 | Cloud SQL connection name | `cpe-se-course-2026:asia-southeast1:s21271a0d-pg` (portal resources file) |
 | Runtime identity | `s21271a0d-runner@cpe-se-course-2026.iam.gserviceaccount.com` |
 | Demo password reference | `s21271a0d-app-secret-1:latest`; reference only, never its value |
+
+These release identifiers are the Lab 5 evidence record, not a claim that they remain the running revision after later releases. A docs-only release to main also triggers a new deployment. To identify the running commit afterward, inspect the newest `deploy.yml` run on main (`gh run list` below) and confirm its SHA against the service image returned by `gcloud run services describe` (commands below).
 
 The course portal assigned these resources in the shared project. This replaces the original guide's personal Free Trial provisioning route. Do not create another project, billing account, SQL instance or IAM setup to repeat the old instructions. The project-number Run URL is an alias; use canonical status.url to match APP_ORIGIN.
 
@@ -95,7 +97,7 @@ Other deliberate adaptations: plain SQL instead of Prisma, one Express image ins
 
 Preserved failures: run 44884767549 denied `run.revisions.list` on `services update`; fixed by configuring production env in `run deploy`. Run 44890711350 failed URL equality before smoke because a derived alias differed from status.url; fixed by reading canonical URL before deployment. Run 44896342414 was the first full success; run 44986245220 delivered the visible label. No IAM widening fixed these failures.
 
-Pending: separate cloud restart evidence; final rewritten live c04 execution if desired; original blocked-merge UI capture if available; optional owner check for secret push protection; teammate review of this documentation; final PDF review/submission. Lab 5 Issues #27-#33 were added retrospectively on 21 November; disclose that fact. Leave service/repository available until grading ends. No billing/IAM change or teardown is part of evidence collection.
+Pending: separate cloud restart evidence; final rewritten live c04 execution if desired; original blocked-merge UI capture if available; optional owner check for secret push protection; final PDF review/submission. Lab 5 Issues #27-#33 were added retrospectively on 21 November; disclose that fact. Leave service/repository available until grading ends. No billing/IAM change or teardown is part of evidence collection.
 
 Security verification on 22 November: no tracked `.env`; Gitleaks v8.30.1 scanned 96 locally available commits/all refs (~1.30 MB) with redaction, no leaks found (pattern-based, not an absolute guarantee). Native screenshot control was unavailable (native pipe missing); public pages were captured read-only in Chromium with actual URL/time annotations.
 

@@ -31,6 +31,7 @@ export function LoginPage({ signedIn, initialError }) {
   return <section className="login">
     <h1>Sign in to DineQ</h1>
     <p>Use your Customer or Host account.</p>
+    <p data-testid="release-label">Lab 5 release: deployed through the staging to main pipeline.</p>
     {signedIn && <p>You are already signed in. <a href="/queues">Continue to queues</a></p>}
     <ErrorMessage error={error} />
     <form onSubmit={submit} aria-busy={pending}>

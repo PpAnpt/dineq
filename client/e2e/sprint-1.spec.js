@@ -134,6 +134,11 @@ test('E2E-4 / DEMO-05: after logout the old session cookie is rejected', async (
   await context.close();
 });
 
+test('E2E-5 / LAB5-C06: login page shows the Lab 5 release label', async ({ page }) => {
+  await page.goto('/login');
+  await expect(page.getByTestId('release-label')).toContainText('Lab 5 release');
+});
+
 test('E2E-6 / LAB5: evidence helper sees the Customer 403 on the Host page without a Host API request', async ({ browser }) => {
   // The React app renders its own access-denied view for a Customer, so the page never calls the Host list API.
   // The live-evidence script must therefore assert the rendered 403/FORBIDDEN and not wait for that request.

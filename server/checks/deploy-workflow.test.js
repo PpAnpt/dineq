@@ -46,3 +46,21 @@ test('production origin uses the existing canonical service URL before deploymen
   assert.ok(lookup >= 0 && lookup < update, 'read actual status.url before deploying with APP_ORIGIN');
   assert.doesNotMatch(deploy, /URL="https:\/\/\$SERVICE_NAME-\$PROJECT_NUMBER/);
 });
+
+// Integration PRs must run CI even though this branch never deploys to Cloud Run.
+const ci = readFileSync(new URL('../../.github/workflows/ci-docker.yml', import.meta.url), 'utf8')
+  .split('\r\n').join('\n');
+for (const event of ['pull_request', 'push']) {
+  test(`INFRA-L6-CI: ${event} checks lab6-staging and preserves existing integration/release triggers`, () => {
+    const block = ci.match(new RegExp(`^  ${event}:\\n(?: {4}[^\\n]*\\n)*`, 'm'));
+    assert.ok(block, `CI ${event} trigger is missing`);
+    const branchList = block[0].match(/^    branches: \[([^\]]+)\]$/m);
+    assert.ok(branchList, `CI ${event} branch filter is missing`);
+    const branches = branchList[1].split(',').map(value => value.trim());
+    const required = ['lab6-staging', 'staging', 'main'];
+    if (event === 'pull_request') required.push('sprint-1-staging');
+    for (const branch of required) {
+      assert.ok(branches.includes(branch), `CI ${event} must include ${branch}`);
+    }
+  });
+}

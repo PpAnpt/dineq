@@ -1,0 +1,66 @@
+Command: node --test --test-reporter=tap server/checks/deploy-workflow.test.js
+Git commit: edf330788a8fcafceb0ce1fe569f4c09d4a026f3
+UTC date: 2026-11-24T01:26:24.460Z
+Node: v24.14.0
+Purpose: L6-1 CI integration-branch guard; not independent UAT or a product-defect exercise.
+Source: tracked files at the recorded commit; the user's unrelated untracked ZIP is preserved.
+Exit code: 0
+
+TAP version 13
+# Subtest: deploy workflow calls the reusable CI workflow as a test job
+ok 1 - deploy workflow calls the reusable CI workflow as a test job
+  ---
+  duration_ms: 1.7107
+  type: 'test'
+  ...
+# Subtest: deploy job needs the test job and keeps the main-only guard
+ok 2 - deploy job needs the test job and keeps the main-only guard
+  ---
+  duration_ms: 0.2735
+  type: 'test'
+  ...
+# Subtest: no Google Cloud authentication or mutation happens outside the gated deploy job
+ok 3 - no Google Cloud authentication or mutation happens outside the gated deploy job
+  ---
+  duration_ms: 0.2153
+  type: 'test'
+  ...
+# Subtest: smoke test also checks the built UI root, read-only
+ok 4 - smoke test also checks the built UI root, read-only
+  ---
+  duration_ms: 0.1595
+  type: 'test'
+  ...
+# Subtest: production env vars are set by gcloud run deploy; the deployer cannot run services update
+ok 5 - production env vars are set by gcloud run deploy; the deployer cannot run services update
+  ---
+  duration_ms: 0.2061
+  type: 'test'
+  ...
+# Subtest: production origin uses the existing canonical service URL before deployment
+ok 6 - production origin uses the existing canonical service URL before deployment
+  ---
+  duration_ms: 0.1624
+  type: 'test'
+  ...
+# Subtest: INFRA-L6-CI: pull_request checks lab6-staging and preserves existing integration/release triggers
+ok 7 - INFRA-L6-CI: pull_request checks lab6-staging and preserves existing integration/release triggers
+  ---
+  duration_ms: 0.286
+  type: 'test'
+  ...
+# Subtest: INFRA-L6-CI: push checks lab6-staging and preserves existing integration/release triggers
+ok 8 - INFRA-L6-CI: push checks lab6-staging and preserves existing integration/release triggers
+  ---
+  duration_ms: 0.1452
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 86.2214

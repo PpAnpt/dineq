@@ -174,3 +174,102 @@ Evidence: both 409/code outcomes, before/after own-ticket list and the original 
 | C3 | Re-read C3 entries and H1's list, then wait for owner-confirmed OPEN restoration before any later join | No new entry/state change from the rejected request; owner records preparation/restoration. If no CLOSED fixture/window is available, record 04C BLOCKED, not PASS |
 
 Evidence: native UI rejection versus real 400 responses, accepted 1/8 tickets, recorded consecutive numbers under quiet-window conditions, CLOSED UI/409 if performed. Cleanup: B4 retains completed records; owner restores only the agreed fixture. Exact raw counter/event invariants and CLOSED-counter handling have separate TEST-12 support. Record 04A/04B/04C separately; do not claim full AC-12 coverage if 04C was not run.
+
+### DQ-UAT-05 - Forbidden roles and unassigned Host
+
+| Field | Definition |
+| --- | --- |
+| Purpose / category | Hiding a UI control is backed by rejection of unauthorized operations; protected state/data remain protected. Forbidden role/assignment |
+| Requirements | BR-03/08; F-01 AC-05/06, F-02 AC-13, F-03 AC-14/19/20 |
+| Roles | C2 creates fixture; ANON, C1, H2 attempt restricted actions; H1 provides positive control |
+| Preconditions | OPEN quiet Q with no active entries; C2 has none active. Use one isolated session for C2 and another that explicitly logs out/in between ANON/C1/H2/H1 |
+| Synthetic input | C2 joins with partySize=2; known existing Q and the resulting T05B/N05B |
+
+| Step | Independent tester action | Specific expected result |
+| --- | --- | --- |
+| 1 | As C2 join Q through the UI; **API** GET /me/entries and /entries/T05B. Save the UUID, number and full ticket JSON | New fixture T05B is WAITING, size 2. Keep the C2 session for before/after owner checks |
+| 2 | As H1 **API** GET /queues/Q/entries; save active-list before-data, then Logout | 200; T05B exists as the only WAITING entry and is visible to the assigned Host. Positive control prevents a false permission PASS on a missing fixture |
+| 3 | As ANON open /host/queues/Q; **API** GET /queues/Q/entries | UI presents sign-in with no Host ticket data; API returns 401 UNAUTHENTICATED. C2 re-reads T05B: unchanged |
+| 4 | Sign in as C1 and open /host/queues/Q | Local Access denied view shows 403 FORBIDDEN; no Call Next/Complete control or protected ticket details. This local view may make no Host-list request and is UI evidence only |
+| 5 | **API as C1:** GET /queues/Q/entries; POST /queues/Q/call-next; POST /entries/T05B/complete (no body needed) | All three return 403 FORBIDDEN, error JSON without protected data. After each rejection C2 re-reads T05B: same UUID, WAITING, size and timestamps |
+| 6 | Logout C1; sign in as H2. Inspect Assigned queues, then directly open /host/queues/Q | Unassigned notice/no Open Host queue link. Direct Host page shows backend 403 FORBIDDEN and no tickets. Its action buttons may be present but disabled; hidden controls are not the expected assignment proof |
+| 7 | **API as H2:** repeat the three requests from step 5 | Each returns 403 FORBIDDEN; no ticket/customer data. C2's known fixture stays unchanged after each request |
+| 8 | Logout H2; sign in as H1. **API** POST /queues/Q/entries with {partySize:2}, then GET /queues/Q/entries | Join returns 403 FORBIDDEN because joining is Customer-only. The authorized Host list remains equal to the saved before-list, with no extra ticket; C2's fixture is unchanged |
+
+Evidence: UI role/assignment observations, individual 401/403 responses, positive control and owner before/after ticket/list snapshots. API rejections do not necessarily render an error in the UI when sent directly from Console. Cleanup: **leave T05B WAITING for 06**. If 06 will not run, record the fixture and arrange H1 completion only after checking that T05B is still the FIFO target; never silently discard it.
+
+### DQ-UAT-06 - Customer ownership and no disclosure
+
+| Field | Definition |
+| --- | --- |
+| Purpose / category | One Customer cannot read another Customer's known existing ticket. Ownership/access |
+| Requirements | FR-04, BR-08; F-02 AC-11 |
+| Roles | C2 owner of T05B; C1 unauthorized reader; H1 for normal cleanup |
+| Preconditions | 05 fixture T05B still exists and is WAITING; C2 is available in its isolated session. C1 owns T02 from 02 as positive control (or an explicitly recorded equivalent own ticket) |
+| Synthetic inputs | Existing T05B UUID from C2's own response; existing C1 ticket T02; no guessed third-party UUIDs |
+
+| Step | Independent tester action | Specific expected result |
+| --- | --- | --- |
+| 1 | **API as C2:** GET /entries/T05B and /me/entries; save the owner before-result | 200; known fixture ID/number/queue/size/WAITING fields are present to its owner |
+| 2 | Sign in as C1. Open My queue; **API** GET /me/entries and /entries/T02 | C1 sees its own cards only; T05B absent from the own-entry array. Known own ticket T02 is 200, proving valid authentication/resource access |
+| 3 | **API as C1:** GET /entries/T05B using the exact existing UUID | HTTP 403 FORBIDDEN under the DineQ contract. No data object or B ticket fields/customer data; not a 200, not a missing-resource result |
+| 4 | As C2 Refresh and **API** GET /entries/T05B again | Owner still gets 200; same UUID/Q/number/party size/WAITING/timestamps as before. The rejected read neither exposes nor changes the ticket |
+| 5 | As H1 refresh; if T05B is the only FIFO target, Call Next, verify returned id=T05B, then Complete | Normal authorized workflow completes only this fixture. C2 Refresh shows the same T05B/N05B COMPLETED |
+
+Evidence: owner 200, C1's own positive-control 200, unauthorized 403/error-only response and unchanged owner state before cleanup. There is no arbitrary Customer ticket-detail UI route in this release: steps 2/3 are explicitly manual API checks alongside the My queue observation. Cleanup: step 5; retain completed data and evidence.
+
+### DQ-UAT-07 - FIFO, unresolved call and invalid transitions
+
+| Field | Definition |
+| --- | --- |
+| Purpose / category | Lowest ticket number is called first, only one is CALLED, and only CALLED -> COMPLETED is allowed. Business/state rules |
+| Requirements | BR-04/05/06; F-03 AC-14/15/16/17/18; empty Call Next subcase AC-24a |
+| Roles | C1, C2, H1 |
+| Preconditions | OPEN Q, no unrelated WAITING/CALLED; C1 and C2 have no active entries. 06 cleanup is complete if that sequence was used |
+| Synthetic inputs | C1 size 3; C2 size 5. Actual ticket numbers are recorded, not assumed to be 1/2 |
+
+| Step | Independent tester action | Specific expected result |
+| --- | --- | --- |
+| 1 | As C1 join with 3, record T07A/N07A. Then as C2 join with 5, record T07B/N07B | Both are 201/WAITING, own party sizes correct; N07A<N07B |
+| 2 | As H1 Refresh Host queue and **API** GET /queues/Q/entries | Both WAITING, sorted N07A then N07B, correct party sizes, no CALLED entry or exposed Customer emails |
+| 3 | As H1 choose Call Next and verify returned ID | 200, T07A becomes CALLED; T07B stays WAITING. Selection follows ticket number, not party size |
+| 4 | **API as H1:** POST /entries/T07B/complete while B is WAITING | 409 INVALID_TRANSITION; C2's before/after GET /entries/T07B is unchanged, still WAITING |
+| 5 | As H1 choose Call Next again while A remains CALLED | Visible 409 UNRESOLVED_CALLED; after loading finishes the Host list still has only A CALLED and B WAITING; both owners confirm unchanged ticket states |
+| 6 | As H1 Complete A through the UI; C1 Refresh and save its completed JSON | 200, same T07A COMPLETED; B remains WAITING |
+| 7 | **API as H1:** POST /entries/T07A/complete again | 409 INVALID_TRANSITION; C1's completed ticket fields, including completedAt, remain identical to step 6 |
+| 8 | As H1 choose Call Next; verify returned id=T07B before Complete, then Complete | B alone transitions CALLED -> COMPLETED, correct size 5; C2 sees the same completed UUID/number |
+| 9 | With authorized Host GET /queues/Q/entries now returning data=[], choose Call Next | 404 NO_WAITING_ENTRY, no ticket added/changed; UI message is visible. If another entry arrived, the empty-queue precondition is not met: do not call it to finish this check |
+
+Evidence: FIFO list, returned IDs and per-owner states, 409 results, unchanged rejected-transition snapshots, empty-queue 404 if executed. There is no UI Complete button for WAITING/already-completed entries; steps 4/7 are supporting manual API checks. Cleanup: both test tickets are completed normally. Internal event counts are corroborated by TEST-15..18/24a, not claimed from the UI alone.
+
+### DQ-UAT-08 - Recorded state in new sessions and after an agreed app restart
+
+| Field | Definition |
+| --- | --- |
+| Purpose / category | The same persisted ticket survives reload/new session and an owner-coordinated application restart using the same database. State/persistence |
+| Requirements | FR-04, NFR-02; F-03 AC-17 and F-02 AC-21 (the internal JOINED-event requirement has separate DB-test support) |
+| Roles | C1 owns completed T02; C2 creates a WAITING fixture T08; Product Team coordinates app operation; HairRoot independently observes/compares |
+| Preconditions | Recorded T02 from 02/equivalent still exists. Q OPEN and empty of active tickets, C2 has none active. For 08B only: agreed owner-controlled restart window, actual version metadata before/after, and no ticket mutations during the window |
+| Synthetic inputs | Retained completed T02/N02, plus C2 join partySize=2 to obtain T08/N08 |
+
+**08A - user-facing state and new sessions.**
+
+| Step | Independent tester action | Specific expected result |
+| --- | --- | --- |
+| A1 | As C1 find the recorded T02/N02 card in My queue, not just the newest card. **API** GET /entries/T02; save JSON | 200, same completed UUID/Q/number/partySize=4 and recorded timestamps |
+| A2 | As C2 join through UI with 2; record T08/N08. **API** GET /entries/T08; save JSON | 201, WAITING, correct Q/number/size; createdAt present, calledAt/completedAt null. Do not call this ticket yet |
+| A3 | Reload each Customer page and find the respective recorded card; repeat the two GET requests | COMPLETED T02 and WAITING T08 remain; all ticket fields equal their respective before-data |
+| A4 | Logout each Customer; sign in again in a fresh isolated session, find the recorded card and repeat the GET | Same UUID/Q/number/partySize/state/timestamps after a new session; signing out did not remove the ticket |
+
+**08B - actual app restart; reload alone does not satisfy AC-21.**
+
+| Step | Independent tester action | Specific expected result |
+| --- | --- | --- |
+| B1 | Save fresh before screenshots/API snapshots for T02/T08 and actual full commit/revision/time; obtain Product Team announcement of the agreed operation | Complete before-record exists before the operation. Without an agreed operation/version record, mark 08B BLOCKED; 08A may have its own result |
+| B2 | Product Team performs/records the approved application restart with the same DB, then announces readiness. Testers wait; they do not run cloud/DB commands | Owner supplies actual operation/time and relevant revision/instance evidence, stating any inference/limits. No data reset or Cloud SQL restart is needed. If a code redeploy occurs, record its new tested version and agreed affected retests |
+| B3 | Independently sign in again as C1/C2 if needed, Refresh, locate T02/T08 and repeat owner GET /entries requests | Same UUIDs, queue, numbers, sizes, COMPLETED/WAITING and timestamps as B1; no missing or replaced record |
+| B4 | Compare the selected full ticket JSON and screenshots before/after; record the actual after-version and each result | Matching state supports persistence across the documented operation. A changed instance/revision alone or an old Lab5 result does not prove this new UAT run; a page refresh alone is not a restart |
+
+Evidence: separate 08A/08B results, both before/after IDs/fields/UI and owner's real operation/version record. No JOINED/CALLED/COMPLETED event-log screen exists, so raw event persistence is TEST-21 support rather than a manual observation. Do not mark overall 08/AC-21 PASS from 08A alone if the agreed scope requires 08B. Required BLOCKED work prevents an unsupported acceptance decision.
+
+Cleanup: only after all before/after evidence is saved, H1 may Call/Complete T08 if it is still the intended FIFO target. If 08B is postponed, record BLOCKED and coordinate this cleanup; a later restart check needs a new recorded WAITING fixture/baseline, not an invented comparison to the now-completed one. Preserve T02 and all completed records. Cleanup must not rewrite the result of the original run.

@@ -1,0 +1,98 @@
+Command: node --test --test-reporter=tap server/checks/deploy-workflow.test.js
+Git commit: 2f1f5b33ba067f3e055a21f937bd320d54eec944
+UTC date: 2026-11-24T01:26:08.910Z
+Node: v24.14.0
+Purpose: L6-1 CI integration-branch guard; not independent UAT or a product-defect exercise.
+Source: tracked files at the recorded commit; the user's unrelated untracked ZIP is preserved.
+Exit code: 1
+
+TAP version 13
+# Subtest: deploy workflow calls the reusable CI workflow as a test job
+ok 1 - deploy workflow calls the reusable CI workflow as a test job
+  ---
+  duration_ms: 2.1142
+  type: 'test'
+  ...
+# Subtest: deploy job needs the test job and keeps the main-only guard
+ok 2 - deploy job needs the test job and keeps the main-only guard
+  ---
+  duration_ms: 0.2369
+  type: 'test'
+  ...
+# Subtest: no Google Cloud authentication or mutation happens outside the gated deploy job
+ok 3 - no Google Cloud authentication or mutation happens outside the gated deploy job
+  ---
+  duration_ms: 0.173
+  type: 'test'
+  ...
+# Subtest: smoke test also checks the built UI root, read-only
+ok 4 - smoke test also checks the built UI root, read-only
+  ---
+  duration_ms: 0.4322
+  type: 'test'
+  ...
+# Subtest: production env vars are set by gcloud run deploy; the deployer cannot run services update
+ok 5 - production env vars are set by gcloud run deploy; the deployer cannot run services update
+  ---
+  duration_ms: 0.4586
+  type: 'test'
+  ...
+# Subtest: production origin uses the existing canonical service URL before deployment
+ok 6 - production origin uses the existing canonical service URL before deployment
+  ---
+  duration_ms: 0.1488
+  type: 'test'
+  ...
+# Subtest: INFRA-L6-CI: pull_request checks lab6-staging and preserves existing integration/release triggers
+not ok 7 - INFRA-L6-CI: pull_request checks lab6-staging and preserves existing integration/release triggers
+  ---
+  duration_ms: 0.6035
+  type: 'test'
+  location: 'B:\\ProjectBingo\\CPE\\Year3\\term1\\CPE334_SoftEN\\dineq\\server\\checks\\deploy-workflow.test.js:54:3'
+  failureType: 'testCodeFailure'
+  error: 'CI pull_request must include lab6-staging'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server/checks/deploy-workflow.test.js:63:14)
+    Test.runInAsyncScope (node:async_hooks:228:14)
+    Test.run (node:internal/test_runner/test:1118:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+    Test.postRun (node:internal/test_runner/test:1247:19)
+    Test.run (node:internal/test_runner/test:1175:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:787:7)
+  ...
+# Subtest: INFRA-L6-CI: push checks lab6-staging and preserves existing integration/release triggers
+not ok 8 - INFRA-L6-CI: push checks lab6-staging and preserves existing integration/release triggers
+  ---
+  duration_ms: 0.1973
+  type: 'test'
+  location: 'B:\\ProjectBingo\\CPE\\Year3\\term1\\CPE334_SoftEN\\dineq\\server\\checks\\deploy-workflow.test.js:54:3'
+  failureType: 'testCodeFailure'
+  error: 'CI push must include lab6-staging'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/server/checks/deploy-workflow.test.js:63:14)
+    Test.runInAsyncScope (node:async_hooks:228:14)
+    Test.run (node:internal/test_runner/test:1118:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+    Test.postRun (node:internal/test_runner/test:1247:19)
+    Test.run (node:internal/test_runner/test:1175:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:787:7)
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 6
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.2676

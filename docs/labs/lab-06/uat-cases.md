@@ -15,7 +15,7 @@ All cases/subcases are **NOT EXECUTED**. This document prepares independent test
 | Actual session version | PENDING owner/UAT-team confirmation immediately before execution; record full commit, revision and time in each run |
 | In scope | F-01 login/logout/current user/roles; F-02 queue list, Customer join and own tickets; F-03 assigned-Host FIFO call/complete and persisted ticket state |
 | Out of scope | Cancellation, no-show, table assignment, queue administration/multiple-queue UI, reporting, and unfinished Sprint 2/3 features |
-| Contracts | [F-01](../../sprints/sprint-1/F-01-auth.md), [F-02](../../sprints/sprint-1/F-02-join-queue.md), [F-03](../../sprints/sprint-1/F-03-host-queue.md), [SDS C.6](../../system-sds.md#c6-api-specification--endpoint-inventory) |
+| Contracts | [F-01](../../sprints/sprint-1/F-01-auth.md), [F-02](../../sprints/sprint-1/F-02-join-queue.md), [F-03](../../sprints/sprint-1/F-03-host-queue.md), [SDS C.6](../../system-sds.md) |
 
 The recorded release is a candidate, not a live-version query. If the running version changes during a case, record that run and the interruption; agree which cases to repeat on the new version. Never mix versions into one PASS or silently replace an earlier actual result.
 
@@ -35,6 +35,8 @@ Passwords are supplied privately through the agreed course handoff. The labels b
 
 `Q` is the actual queue item's **id**, not restaurant.id, selected from `GET /api/queues` -> `body.data`. H1's post-login address is `/host/queues/Q`. The seed normally uses queue `22222222-2222-4222-8222-222222222222` and DineQ Demo Restaurant; verify and record the actual item. Ticket variables such as `T02` mean entry UUIDs; `N02` means the associated numeric ticketNo. Record both and partySize. Ticket numbers keep increasing and are not assumed to start at 1. When there are several cards in My queue, locate the recorded ticket, not simply the first card.
 
+COMPLETED means the Host has admitted/seated the group; it does not mean their meal has ended. FIFO uses ticket number regardless of party size. No daily counter reset is assumed.
+
 Before execution, the Product and UAT Teams confirm:
 
 1. Actual version/scope and private account access are agreed; both independent testers are named in the run record.
@@ -46,6 +48,8 @@ Before execution, the Product and UAT Teams confirm:
 Recommended order: **01 -> 04A/04B -> 02 -> 03 -> 05 -> 06 -> 07 -> agreed 04C -> 08**. Case 06 uses the WAITING fixture from 05; 08 uses the recorded COMPLETED ticket from 02 and creates its own WAITING before-data. These dependencies are intentional. Independently rerunning 06 requires rerunning the fixture step of 05 first; rerunning 08 requires a recorded completed fixture equivalent to 02. Case 04C needs separately announced CLOSED-state preparation and restoration to OPEN before 08.
 
 Cleanup means completing only the case's own tickets through valid H1 Call Next -> Complete after evidence is saved and the FIFO guard passes. Completed tickets/events stay in the database. There is no cancel/delete/reset UI in Sprint 1. If the guard fails or a case stops early, record the remaining test UUIDs/statuses and ask the Product Team to coordinate; do not invent cleanup success.
+
+If a request unexpectedly mutates protected state, a target disappears or the actor/returned ticket is wrong, record the actual FAIL and stop the remaining mutation steps. Preserve the failed run and remaining fixture IDs; obtain clarification/re-preparation before rerunning. Do not silently restore data, change the expected result or continue with invalid fixtures just to finish the case.
 
 ### Supporting manual API checks
 
@@ -84,7 +88,7 @@ For example, `await dqRequest('GET', '/me/entries')` returns `{status, body}`; s
 | --- | --- | --- |
 | 1 | Open BASE/login in a fresh signed-out session. Open BASE/my-queue, then return to /login | Sign-in page is presented; no ticket/private account data is shown |
 | 2 | **API as ANON:** `await dqRequest('GET', '/auth/me')` | HTTP 401, error code UNAUTHENTICATED, no user/ticket data |
-| 3 | At /login, submit C1 email with WRONG. Repeat using the unknown email with WRONG | Both stay on sign-in and show 401 INVALID_CREDENTIALS with the same generic message; no authenticated session is obtained |
+| 3 | At /login, submit C1 email with WRONG. Repeat using the unknown email with WRONG. After each attempt **API** GET /auth/me | Both stay on sign-in and show 401 INVALID_CREDENTIALS with the same generic message; subsequent /auth/me remains 401 UNAUTHENTICATED, with no authenticated session |
 | 4 | Sign in as C1 using the private correct credential | Restaurant queues at /queues; header identifies C1 and CUSTOMER. **API** GET /auth/me returns 200 with C1 email and role CUSTOMER |
 | 5 | Choose Logout. Use Back and reload a protected page; **API** GET /auth/me again | Logout request is 204, sign-in is shown after protected reload, API is 401 UNAUTHENTICATED; C1 data is not available. This does not by itself prove reuse of an old token is rejected |
 | 6 | In a fresh signed-out session sign in as H1 | Host queue at /host/queues/Q; header is H1/HOST; **API** GET /queues returns the same Q with isAssigned=true |
@@ -223,7 +227,7 @@ Evidence: owner 200, C1's own positive-control 200, unauthorized 403/error-only 
 | Field | Definition |
 | --- | --- |
 | Purpose / category | Lowest ticket number is called first, only one is CALLED, and only CALLED -> COMPLETED is allowed. Business/state rules |
-| Requirements | BR-04/05/06; F-03 AC-14/15/16/17/18; empty Call Next subcase AC-24a |
+| Requirements | BR-04/05/06; F-03 AC-14/15/16/17/18; empty Call Next AC-24 (TEST-24a) |
 | Roles | C1, C2, H1 |
 | Preconditions | OPEN Q, no unrelated WAITING/CALLED; C1 and C2 have no active entries. 06 cleanup is complete if that sequence was used |
 | Synthetic inputs | C1 size 3; C2 size 5. Actual ticket numbers are recorded, not assumed to be 1/2 |
@@ -238,7 +242,7 @@ Evidence: owner 200, C1's own positive-control 200, unauthorized 403/error-only 
 | 6 | As H1 Complete A through the UI; C1 Refresh and save its completed JSON | 200, same T07A COMPLETED; B remains WAITING |
 | 7 | **API as H1:** POST /entries/T07A/complete again | 409 INVALID_TRANSITION; C1's completed ticket fields, including completedAt, remain identical to step 6 |
 | 8 | As H1 choose Call Next; verify returned id=T07B before Complete, then Complete | B alone transitions CALLED -> COMPLETED, correct size 5; C2 sees the same completed UUID/number |
-| 9 | With authorized Host GET /queues/Q/entries now returning data=[], choose Call Next | 404 NO_WAITING_ENTRY, no ticket added/changed; UI message is visible. If another entry arrived, the empty-queue precondition is not met: do not call it to finish this check |
+| 9 | With authorized Host GET /queues/Q/entries now returning data=[], choose Call Next; afterward re-read the Host list and both owners' completed entries | 404 NO_WAITING_ENTRY, UI message visible, active list still empty and both completed records unchanged. If another entry arrived, the empty-queue precondition is not met: do not call it to finish this check |
 
 Evidence: FIFO list, returned IDs and per-owner states, 409 results, unchanged rejected-transition snapshots, empty-queue 404 if executed. There is no UI Complete button for WAITING/already-completed entries; steps 4/7 are supporting manual API checks. Cleanup: both test tickets are completed normally. Internal event counts are corroborated by TEST-15..18/24a, not claimed from the UI alone.
 
@@ -273,3 +277,99 @@ Evidence: FIFO list, returned IDs and per-owner states, 409 results, unchanged r
 Evidence: separate 08A/08B results, both before/after IDs/fields/UI and owner's real operation/version record. No JOINED/CALLED/COMPLETED event-log screen exists, so raw event persistence is TEST-21 support rather than a manual observation. Do not mark overall 08/AC-21 PASS from 08A alone if the agreed scope requires 08B. Required BLOCKED work prevents an unsupported acceptance decision.
 
 Cleanup: only after all before/after evidence is saved, H1 may Call/Complete T08 if it is still the intended FIFO target. If 08B is postponed, record BLOCKED and coordinate this cleanup; a later restart check needs a new recorded WAITING fixture/baseline, not an invented comparison to the now-completed one. Preserve T02 and all completed records. Cleanup must not rewrite the result of the original run.
+
+## 4. Coverage and limits of observation
+
+| Lab 6 minimum category | Delivered draft case |
+| --- | --- |
+| Normal domain journey | DQ-UAT-02, visible Customer -> assigned Host -> Customer flow |
+| Business rule/boundary | DQ-UAT-03/04/07 |
+| Forbidden role/ownership | DQ-UAT-05/06, UI observations plus independently performed manual API denials |
+| State/history/persistence | DQ-UAT-08, with new-session and actual-restart results recorded separately |
+| Additional authentication | DQ-UAT-01 |
+
+The table below describes planned coverage, not execution results. Developer test references provide supporting checks for internal or non-UI behavior; this document does not assert those tests were rerun while drafting. They do not replace the HairRoot team's independent user-facing execution.
+
+| DineQ AC | Independent case / observation planned | Supporting scope or limit |
+| --- | --- | --- |
+| AC-01 | 01 correct Customer/Host login with a fresh session | TEST-01 also checks stored hashes/session internals |
+| AC-02 | 01 wrong/unknown login, generic 401 | Full negative-input variants in TEST-02 |
+| AC-03 | 01 current-user role/email | Session expiry is TEST-03 support; do not change live session expiry/DB for this pack |
+| AC-04 | 01 logout and protected reload | Reusing the old revoked token is TEST-04 support; a signed-out reload alone is partial coverage |
+| AC-05 | 01/05 anonymous denial/no private data | Malformed-UUID authentication precedence additionally in TEST-05 |
+| AC-06 | 05 Customer Host-only requests, unchanged known fixture | TEST-06 supports raw DB invariants |
+| AC-07 | 01/02/05 queue data/id/assignment roles | Empty queue-list result requires a separate owner fixture or TEST-07; this pack does not remove queues |
+| AC-08 | 02 real join/WAITING/read-back | JOINED event row is TEST-08 support |
+| AC-09 | 03 duplicate WAITING and CALLED, no extra own entry | Counter/event invariants in TEST-09 |
+| AC-10 | Automated support only | TEST-10 real 30-Customer concurrency; sequential manual joins are not that concurrency test |
+| AC-11 | 06 known other-owner entry returns 403, owner still reads it | TEST-11 support |
+| AC-12 | 04A native validation, 04A/B manual API rejection, valid 1/8 and quiet-window number check; 04C CLOSED rejection if actually prepared | Record subcases separately; full AC coverage cannot be claimed without the required CLOSED check. Raw event/counter checks in TEST-12 |
+| AC-13 | 05 Host join rejected | TEST-13 support |
+| AC-14 | 02/07 assigned list/FIFO, 05 unassigned denial | TEST-14 support |
+| AC-15 | 07 two-ticket FIFO and returned target UUID | TEST-15 also checks event/timestamp transaction details |
+| AC-16 | 07 unresolved CALLED -> 409 and unchanged states | TEST-16 support |
+| AC-17 | 02/07/08 same completed ticket read back | COMPLETED event row in TEST-17 |
+| AC-18 | 07 supporting manual API completion of WAITING/already-COMPLETED -> 409 | Those invalid transitions have no UI button; TEST-18 checks raw DB invariants |
+| AC-19 | 05 H2 list/call/complete denial on existing resources | TEST-19 support |
+| AC-20 | 05 Customer call/complete denial | TEST-20 support |
+| AC-21 | 08B actual app restart with the same recorded tickets/DB | 08A refresh/login alone is insufficient; internal JOINED-event persistence is TEST-21 support |
+| AC-22 | Automated support only | TEST-22 foreign-Origin rejection; this same-origin browser helper does not spoof Origin or disable protections |
+| AC-23 | Automated support only | TEST-23 malformed/missing resource and auth precedence; no arbitrary UUID probing in this pack |
+| AC-24 | 07 step 9 empty Call Next (24a) | TEST-24b..d cover malformed/missing Host resources and role/auth precedence; not claimed as independent UI execution |
+
+Supporting source files: [F-01 tests](../../../server/tests/f01-auth.test.js), [F-02 tests](../../../server/tests/f02-join.test.js), [F-03 tests](../../../server/tests/f03-host.test.js), [STS](../../sprints/sprint-1/test-spec.md). Report any unexecuted supporting evidence as such; do not copy historical green counts into a new run record.
+
+## 5. Independent execution and evidence record
+
+HairRoot records actual DineQ observations here or in an equivalent copied execution sheet retaining these IDs. Both independent team members participate, with names attached to actual actions/cases. DineQ authors may help explain setup but cannot fill in an independent PASS/acceptance on the testers' behalf. DineQ's later execution of HairRoot uses a separate product record under #48.
+
+| Case/subcase | Initial status | Actual run-record reference |
+| --- | --- | --- |
+| DQ-UAT-01 | NOT EXECUTED | Not recorded |
+| DQ-UAT-02 | NOT EXECUTED | Not recorded |
+| DQ-UAT-03 | NOT EXECUTED | Not recorded |
+| DQ-UAT-04A | NOT EXECUTED | Not recorded |
+| DQ-UAT-04B | NOT EXECUTED | Not recorded |
+| DQ-UAT-04C | NOT EXECUTED | Not recorded |
+| DQ-UAT-05 | NOT EXECUTED | Not recorded |
+| DQ-UAT-06 | NOT EXECUTED | Not recorded |
+| DQ-UAT-07 | NOT EXECUTED | Not recorded; identify the empty-queue substep outcome explicitly |
+| DQ-UAT-08A | NOT EXECUTED | Not recorded |
+| DQ-UAT-08B | NOT EXECUTED | Not recorded |
+
+Copy this record for every actual run; retain earlier FAIL/BLOCKED runs when retesting:
+
+| Field | To be completed from actual execution |
+| --- | --- |
+| Run ID / case/subcase / attempt | Not recorded |
+| Tester name and team / second participant's actual contribution | Not recorded |
+| Start/end date-time and timezone | Not recorded; use Asia/Bangkok or explicit UTC offset |
+| Actual product URL, full commit/tag, deployed revision | Not recorded; confirm with Product Team at session start |
+| Actual role/account labels, Q, entry UUIDs/numbers, party sizes | Not recorded; credentials excluded |
+| Preconditions and before-state/version evidence | Not recorded; state whether each gate was met |
+| Actions performed and actual inputs | Not recorded; distinguish UI steps and supporting manual API requests |
+| Actual observed result per step/subcase | Not recorded; write what happened, including codes/status/state, not copied expected results |
+| After-state comparison | Not recorded; for negative cases show no protected-state change/disclosure |
+| Execution result | Once run: PASS / FAIL / BLOCKED with reason; preparation starts NOT EXECUTED |
+| Evidence IDs / files / time / version | Not recorded |
+| Finding Issue / reported owner / notification outcome | Not recorded, or explicit no finding for this actual run |
+| Cleanup action / remaining fixtures / interruption | Not recorded; retain IDs/statuses and owner agreement |
+
+Give each selected capture/log an ID such as `DQ-E02-05-R01`, naming the case/step/attempt. Its caption must identify action, expected and actual result, time, relevant commit/revision and URL. Capture the visible UI after Loading/Checking session has finished; a loading-only picture is not ticket proof. Record the specific ticket number/UUID match, not just matching display text from another record. Supporting API captures show sanitized status/JSON, not cookies or login payloads.
+
+At minimum retain the normal journey's WAITING/CALLED/COMPLETED observations and a negative/access outcome with before/after protected state. Add the other captures/results needed to substantiate every executed case. The Lab6 PDF later embeds the cases, selected readable observations and findings/decisions directly; links alone are not the assessed material.
+
+## 6. Results, findings and next handoff
+
+- Missing access, version lock, account/queue preparation, CLOSED fixture or agreed restart before execution is **BLOCKED**, with the unmet precondition recorded. It is not a PASS. Agree required subcases before testing; do not drop a failing contract requirement afterward to obtain acceptance.
+- With verified preconditions, an observed mismatch is **FAIL** and needs a reproducible finding: case/AC, owner/reporter, version/time, inputs, steps, expected/actual, user-impact severity and evidence. Record any actual external interference; do not erase the run or silently substitute another successful attempt.
+- A valid run is PASS only for the steps/subcases actually completed with their expected observations. Conditional/incomplete subcases stay separately visible. An old CI result or Lab5 screenshot is supporting history, not a new independent UAT run.
+- The Product Team classifies received findings under #49 and fixes accepted defects under #50 with genuine regression RED/GREEN, teammate review, CI and a coordinated release. No finding is fabricated by this pack. If no legitimate defect is found, the TA-approved isolated exercise remains a separate requirement.
+- Only the independent UAT team gives the final version-bound Accepted / Accepted with explicit minor limitations / Not Accepted decision under #51. Required BLOCKED cases and unresolved critical/major defects must not be hidden by a sign-off.
+- After this case draft passes peer review in #46, L6-3 / #47 provides the safe handoff, agreed data preparation/cleanup responsibilities and private credential acknowledgement. This draft does not claim those steps have already happened.
+
+## Revision history
+
+| Version | Date | Change / execution status |
+| --- | --- | --- |
+| 0.1 | 2026-11-24 | First DineQ-specific executable draft from F-01/F-02/F-03 and the delivered UI/API; eight cases, declared dependencies, coverage limits and blank execution records. All cases NOT EXECUTED; peer review pending |

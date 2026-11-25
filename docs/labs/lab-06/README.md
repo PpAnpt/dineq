@@ -1,6 +1,6 @@
 # Lab 6: DineQ Sprint 1 independent UAT
 
-Preparation started 24 November 2026. Current work is **L6-1 / #45**: partner/baseline registration and the Lab 6 integration workflow. No independent UAT execution, finding, partner acknowledgement or acceptance is claimed by this preparation PR.
+Preparation started 24 November 2026. L6-1 baseline/CI preparation merged in [PR #53](https://github.com/PpAnpt/dineq/pull/53); joint coordination remains pending in #45. Current authoring work is **L6-2 / #46**, the [DineQ UAT case draft](uat-cases.md). No independent UAT execution, finding, partner acknowledgement or acceptance is claimed by these preparation documents.
 
 ## Two products and two responsibilities
 
@@ -44,7 +44,7 @@ Work one issue at a time. Commit meaningful steps separately. Code fixes need a 
 | Work item | Tracking | Planned artifact / completion evidence |
 | --- | --- | --- |
 | L6-1 Partner, baseline and integration workflow | [#45](https://github.com/PpAnpt/dineq/issues/45) | This README, coordination record, reviewed CI preparation; joint schedule/version confirmation still pending |
-| L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | Planned `uat-cases.md`: complete executable cases; not created or executed yet |
+| L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | [uat-cases.md](uat-cases.md): eight executable draft cases plus coverage/execution sheet; peer review pending, NOT EXECUTED |
 | L6-3 Safe DineQ handoff | [#47](https://github.com/PpAnpt/dineq/issues/47) | Planned `handoff.md`: account labels, private credential delivery, setup/sequence/cleanup and partner receipt |
 | L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | Actual HairRoot execution record with both DineQ testers and findings |
 | L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | All received findings/dispositions; distinguish none received from a completed clean test |
@@ -52,11 +52,11 @@ Work one issue at a time. Commit meaningful steps separately. Code fixes need a 
 | L6-7 Independent retest/acceptance | [#51](https://github.com/PpAnpt/dineq/issues/51) | Version-bound decisions by the independent team for each product |
 | L6-8 Submission evidence | [#52](https://github.com/PpAnpt/dineq/issues/52) | One self-contained Parts A-D PDF with cases, actual evidence, contributions, AI use and limitations |
 
-Only #45 is active during this bootstrap. The remaining items stay Todo until their work is actually started. This register does not mark the Lab 6 assignment complete.
+The merged technical preparation in #45 is complete, but that issue stays open with `waiting-on-coordination` for the outstanding joint arrangements. #46 is the only active authoring work item; #47-52 remain Todo. Drafting does not require inventing a testing date or prematurely closing coordination. This register does not mark the Lab 6 assignment complete.
 
 ## Candidate DineQ case outline for L6-2
 
-This is a scope outline, not the executable UAT pack. Expected results and AC mappings will be peer-reviewed in #46; all results are **NOT EXECUTED**.
+This original scope outline now has a complete [executable case draft](uat-cases.md) for peer review in #46. The draft separates UI/API observations, declares the FIFO/data dependencies and records unexecuted/conditional subcases explicitly. All results are **NOT EXECUTED**.
 
 | Draft ID | DineQ behavior to exercise | Contract references / coverage note |
 | --- | --- | --- |

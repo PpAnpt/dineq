@@ -2,7 +2,7 @@
 
 Version 0.2 - preparation metadata updated 25 November 2026; case steps/expected results unchanged from version 0.1, approved by PpAnpt at `1a9d04388c1773152908dfbf28a7b809f9188f86` and merged in [PR #54](https://github.com/PpAnpt/dineq/pull/54). Tracking: [L6-2 / #46](https://github.com/PpAnpt/dineq/issues/46), completed case preparation; [L6-3 / #47](https://github.com/PpAnpt/dineq/issues/47), handoff preparation. Product Team: **DineQ** (Anapat Banjerdsilp / PpAnpt and Siwarak Chatvichai / BBINGOAL). Independent UAT Team: **HairRoot**. Their HairRoot product has separate cases and execution records; no HairRoot booking behavior or AC number is imported here.
 
-All cases/subcases are **NOT EXECUTED**. This document prepares independent testing; source inspection and green developer CI are not independent UAT results or acceptance. Student-reported initial UAT is 25 November 2026 and correction/retest is 26 November by availability. Confirm actual session versions/hours, per-account access and handoff receipt using [coordination](coordination.md) and L6-3 / #47.
+All cases/subcases are **NOT EXECUTED**. This document prepares independent testing; source inspection and green developer CI are not independent UAT results or acceptance. Student-reported initial UAT is 25 November 2026 and correction/retest is 26 November by availability. Confirm actual session versions/hours, per-account access and handoff receipt using [coordination](coordination.md) and the [L6-3 / #47 handoff](handoff.md).
 
 ## 1. Product, version and scope
 

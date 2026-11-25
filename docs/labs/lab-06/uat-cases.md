@@ -1,8 +1,8 @@
 # DineQ - Sprint 1 UAT cases for the HairRoot team
 
-Version 0.1 - DRAFT for peer review, 24 November 2026. Tracking: [L6-2 / #46](https://github.com/PpAnpt/dineq/issues/46). Product Team: **DineQ** (Anapat Banjerdsilp / PpAnpt and Siwarak Chatvichai / BBINGOAL). Independent UAT Team: **HairRoot**. Their HairRoot product has separate cases and execution records; no HairRoot booking behavior or AC number is imported here.
+Version 0.2 - preparation metadata updated 25 November 2026; case steps/expected results unchanged from version 0.1, approved by PpAnpt at `1a9d04388c1773152908dfbf28a7b809f9188f86` and merged in [PR #54](https://github.com/PpAnpt/dineq/pull/54). Tracking: [L6-2 / #46](https://github.com/PpAnpt/dineq/issues/46), completed case preparation; [L6-3 / #47](https://github.com/PpAnpt/dineq/issues/47), handoff preparation. Product Team: **DineQ** (Anapat Banjerdsilp / PpAnpt and Siwarak Chatvichai / BBINGOAL). Independent UAT Team: **HairRoot**. Their HairRoot product has separate cases and execution records; no HairRoot booking behavior or AC number is imported here.
 
-All cases/subcases are **NOT EXECUTED**. This document prepares independent testing; source inspection and green developer CI are not independent UAT results or acceptance. The session version, dates, credential acknowledgement and final handoff remain subject to [coordination](coordination.md) and L6-3 / #47.
+All cases/subcases are **NOT EXECUTED**. This document prepares independent testing; source inspection and green developer CI are not independent UAT results or acceptance. Student-reported initial UAT is 25 November 2026 and correction/retest is 26 November by availability. Confirm actual session versions/hours, per-account access and handoff receipt using [coordination](coordination.md) and L6-3 / #47.
 
 ## 1. Product, version and scope
 
@@ -366,10 +366,11 @@ At minimum retain the normal journey's WAITING/CALLED/COMPLETED observations and
 - A valid run is PASS only for the steps/subcases actually completed with their expected observations. Conditional/incomplete subcases stay separately visible. An old CI result or Lab5 screenshot is supporting history, not a new independent UAT run.
 - The Product Team classifies received findings under #49 and fixes accepted defects under #50 with genuine regression RED/GREEN, teammate review, CI and a coordinated release. No finding is fabricated by this pack. If no legitimate defect is found, the TA-approved isolated exercise remains a separate requirement.
 - Only the independent UAT team gives the final version-bound Accepted / Accepted with explicit minor limitations / Not Accepted decision under #51. Required BLOCKED cases and unresolved critical/major defects must not be hidden by a sign-off.
-- After this case draft passes peer review in #46, L6-3 / #47 provides the safe handoff, agreed data preparation/cleanup responsibilities and private credential acknowledgement. This draft does not claim those steps have already happened.
+- Case preparation passed peer review in #46/PR #54. L6-3 / #47 provides the safe handoff, data preparation/cleanup responsibilities and private credential acknowledgement; those actual readiness confirmations are separate from case approval.
 
 ## Revision history
 
 | Version | Date | Change / execution status |
 | --- | --- | --- |
 | 0.1 | 2026-11-24 | First DineQ-specific executable draft from F-01/F-02/F-03 and the delivered UI/API; eight cases, declared dependencies, coverage limits and blank execution records. All cases NOT EXECUTED; peer review pending |
+| 0.2 | 2026-11-25 | Record completed v0.1 case review/PR #54 integration and student-reported UAT dates for #47 handoff; no case steps, expected outcomes, AC coverage or execution results changed. All results NOT EXECUTED |

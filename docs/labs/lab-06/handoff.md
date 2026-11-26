@@ -46,7 +46,7 @@ The supplied message about retaining DineQ `17c8b90` and HairRoot `ac0a57b` asks
 | HairRoot actual full commit/revision and confirmation reference for our separate run | PENDING |
 | Both teams' notice-before-deploy agreement | PENDING |
 | Private DineQ account delivery/access for C1-C4/H1/H2 | PENDING per-account receipt/access; record labels only |
-| Actual Q and shared-queue readiness | PENDING read-only check at session start |
+| Actual Q and shared-queue readiness | Product Team cleanup of the leftover Lab 5 ticket recorded in [section 10](#10-pre-session-preparation-record-product-team); PENDING read-only re-check of the Host list immediately before the session |
 | 04C CLOSED fixture and 08B restart operator/method/authorization/window | NOT PREPARED / NOT AUTHORIZED by this handoff; separate owner agreement required |
 
 Read this handoff/cases and agree these gates before mutations. Normal/UI cases can run after their own gates pass while 04C/08B remain separately blocked. A missing required subcase still prevents an unsupported overall acceptance; it must not be silently dropped.
@@ -126,4 +126,23 @@ Only HairRoot can record the independent DineQ decision under #51 for the exact 
 
 ## 9. Preparation status
 
-Reviewed DineQ case content is available on `lab6-staging`; this new handoff and coordination metadata require teammate review. Account/queue checks, final joint version confirmation, exact hours, packet receipt, conditional owner operations and actual independent execution have not been performed by this preparation. No live request or data/cloud mutation was made to create these documents. #47 remains open until its actual review/receipt requirements are met; #45 retains final joint coordination. Do not mark #48-52 Done from document preparation.
+Reviewed DineQ case content is available on `lab6-staging`; this new handoff and coordination metadata require teammate review. A pre-session queue cleanup by the Product Team is recorded in [section 10](#10-pre-session-preparation-record-product-team). Per-account access checks, final joint version confirmation, exact hours, packet receipt, conditional owner operations and actual independent execution have not been performed by this preparation. No live request or data/cloud mutation was made to create these documents; the section 10 operation was a separate Product Team action. #47 remains open until its actual review/receipt requirements are met; #45 retains final joint coordination. Do not mark #48-52 Done from document preparation.
+
+## 10. Pre-session preparation record (Product Team)
+
+Added 25 November 2026 for [L6-3 / #47](https://github.com/PpAnpt/dineq/issues/47). This is Product Team preparation of the shared queue, **not a UAT result** and not performed by or with HairRoot. It supports the shared-queue gates in sections 2 and 5: no unrelated WAITING/CALLED entry may precede the test tickets.
+
+| Time (UTC, 25 Nov) | Observation or action | Result |
+| --- | --- | --- |
+| 07:04:09 | Read-only snapshot with the Lab 5 evidence script | customer01 `a722cfb3-bc05-4849-88da-7a50805eb29c` COMPLETED; customer02 `a6200829-41ae-48bd-83ea-054d3c87ad9a` still WAITING |
+| 07:13:04 | Read-only Host list as H1 (GET only; no Host action) | Queue `22222222-2222-4222-8222-222222222222` OPEN; exactly one active entry: ticket #2, WAITING, partySize 2, id `a6200829-41ae-48bd-83ea-054d3c87ad9a`; no CALLED entry |
+| 07:23:01 | Dry run of the guarded cleanup script | Guard satisfied; no mutation |
+| 07:23:27 | Guarded cleanup through the normal Host UI buttons | Call Next HTTP 200 returned ticket #2 CALLED with the expected id; Complete HTTP 200 returned the same id COMPLETED |
+| 07:23:27 | Read-back of the Host list | 0 active entries; no WAITING or CALLED ticket remained |
+
+The leftover entry is the Lab 5 persistence-evidence ticket of customer02 (the Lab 5 report states it was WAITING at 09:05 UTC on 22 November 2026; that statement is historical and unchanged). It was the only ticket ahead of every UAT fixture and would have been selected by the first Call Next, so it was finished normally rather than ignored.
+
+- **Guard:** the script made no change unless the queue contained exactly that one WAITING ticket #2 with that id and no CALLED entry, would have stopped before Complete if Call Next returned any other id, and read the list back afterwards. It used only the product's Host UI actions: no SQL, no deletion, no reset of `next_ticket_no`, no reseed. The completed ticket and its history remain in the database.
+- **Operator and authorization:** performed by the DineQ Product Team operator (PpAnpt) at the student's explicit instruction, using the operator's own Host credentials, which are not recorded anywhere. Agreement from the second DineQ student is not recorded in this file. The script was written with AI assistance (see the AI-use log) and is kept locally, not in git.
+- **Evidence kept locally** (ignored `.local/live-evidence/`, SHA-256): before screenshot `ce2d60f3c44599ba729386590cb8743b8ddbf73d0fba688e047304620bd24aa5`; called screenshot `135b2a056a5b401ad2d9fcc7047268bb8437d075e9e487a3cfe331dd1eb17210`; completed screenshot `6db92a8809ff12270c13a35633466501b2d300ecb05236d2c53eef81adcf0cdc`; run log `d67c91b2d9bd664206504cabc0965386f6ea5fe14b5eaf0cf78a42ba658f7dd1`; read-only Host list `83e293869bdab10173b53bb4c125f858a0447569a5b70c463192f717ad03d4aa`. A sanitized text excerpt is in [legacy-ticket-completion.txt](../../evidence/lab6/legacy-ticket-completion.txt).
+- **Still required at the session start:** the queue was clean at 07:23 UTC only. Someone else may have used the service since, so repeat the read-only Host list check (section 5, steps 2-3) and record the actual state before the first mutation. This record neither authorizes nor performs 04C (CLOSED queue) or 08B (restart).

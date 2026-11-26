@@ -1,0 +1,17 @@
+Lab 6 pre-session queue preparation (Product Team) - sanitized excerpt
+Date: 2026-11-25 (UTC). Service: https://s21271a0d-4d7hbszvwq-as.a.run.app
+Queue: 22222222-2222-4222-8222-222222222222 (DineQ Demo Restaurant, OPEN)
+Purpose: finish the one leftover Lab 5 evidence ticket so no unrelated WAITING/CALLED entry precedes the UAT fixtures.
+Not a UAT result. Host credentials and passwords are not recorded. Raw screenshots/logs are local (ignored); hashes are in docs/labs/lab-06/handoff.md section 10.
+
+07:04:09Z  read-only snapshot: customer01 a722cfb3-bc05-4849-88da-7a50805eb29c COMPLETED; customer02 a6200829-41ae-48bd-83ea-054d3c87ad9a WAITING
+07:13:04Z  read-only Host list (GET only): 1 entry {ticketNo 2, WAITING, partySize 2, id a6200829-41ae-48bd-83ea-054d3c87ad9a}; no CALLED
+07:23:01Z  dry run: guard satisfied (exactly that one WAITING ticket #2, no CALLED); no mutation
+07:23:26Z  before: 1 entry {ticketNo 2, WAITING, partySize 2, id a6200829-41ae-48bd-83ea-054d3c87ad9a}
+07:23:27Z  guard satisfied
+07:23:27Z  call-next (Host UI button): HTTP 200, ticketNo 2, status CALLED, id a6200829-41ae-48bd-83ea-054d3c87ad9a
+07:23:27Z  complete (Host UI button): HTTP 200, ticketNo 2, status COMPLETED, id a6200829-41ae-48bd-83ea-054d3c87ad9a
+07:23:27Z  after: HTTP 200, 0 entries (no WAITING or CALLED ticket)
+
+Screenshots (local): 1-before (ticket #2 in Waiting list), 2-called (Currently called: Ticket #2, Party size 2, CALLED, Complete button), 3-completed ("Ticket #2: COMPLETED.", "No active tickets in this queue.").
+Rules kept: only the product's Host UI actions; no SQL, deletion, next_ticket_no reset or reseed; the completed ticket and its history remain.

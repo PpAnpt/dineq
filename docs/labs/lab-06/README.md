@@ -46,7 +46,7 @@ Work one issue at a time. Commit meaningful steps separately. Code fixes need a 
 | L6-1 Partner, baseline and integration workflow | [#45](https://github.com/PpAnpt/dineq/issues/45) | Reviewed CI preparation and updated date-level coordination; final session details/version confirmation pending |
 | L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | DONE: [uat-cases.md](uat-cases.md), eight executable cases reviewed by PpAnpt, PR #54 merged; execution NOT EXECUTED |
 | L6-3 Safe DineQ handoff | [#47](https://github.com/PpAnpt/dineq/issues/47) | [handoff.md](handoff.md): account labels, release/scope, private access, ordered setup/cleanup and owner-only conditional operations; review/actual receipt pending |
-| L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | Actual HairRoot execution record with both DineQ testers and findings |
+| L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | [hairroot-execution.md](hairroot-execution.md): blank record for HairRoot's six cases (all NOT EXECUTED); actual execution with both DineQ testers and findings still to be recorded |
 | L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | All received findings/dispositions; distinguish none received from a completed clean test |
 | L6-6 Corrections and reviewed release | [#50](https://github.com/PpAnpt/dineq/issues/50) | Additional issue per real defect; RED/GREEN/regression/PR/release/deploy chain, or TA-approved isolated exercise |
 | L6-7 Independent retest/acceptance | [#51](https://github.com/PpAnpt/dineq/issues/51) | Version-bound decisions by the independent team for each product |

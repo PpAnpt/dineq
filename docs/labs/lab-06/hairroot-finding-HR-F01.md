@@ -21,7 +21,7 @@ Status: **observed finding, awaiting HairRoot triage**. No external Issue/notifi
 
 **Actual:** confirmation page opened at **`/bookings/2`**, displayed the exact topic `🙂🙂`, Status **Confirmed**, and 13 December 16:27-16:57. My bookings listed it after fresh navigation. Reopening `/bookings/2` still showed Confirmed. T7A disappeared from the available-time choices; the untouched T7B 17:27-17:57 was still selectable. The rejection message did not appear.
 
-Positive control from the supplied case: the separate T7B was submitted with `🙂🙂🙂`; **`/bookings/3`** confirmed and displayed all three symbols unchanged, including after reload. This is evidence for that positive booking action; the source's final Specialist check remains to be executed.
+Positive control from the supplied case: the separate T7B was submitted with `🙂🙂🙂`; **`/bookings/3`** confirmed and displayed all three symbols unchanged, including after reload. In the final private S1 login, the Specialist schedule showed **both T7A and T7B Booked under Krit**, including the two-symbol and three-symbol topics respectively. Thus source steps 2, 3 and 5 fail for the same underlying HR-F01; step 4's positive booking/logout succeeds.
 
 ## Evidence
 
@@ -35,6 +35,7 @@ Positive control from the supplied case: the separate T7B was submitted with `�
 | HR-E07-02-AVAILABILITY-R01 | T7A absent, T7B still selectable after the invalid request |
 | HR-E07-02-PERSISTED-R01 | Fresh read of `/bookings/2`: same date/time/topic, Confirmed |
 | HR-E07-04-INPUT-R01 / HR-E07-04-AFTER-R01 / HR-E07-04-RELOAD-R01 | Separate three-symbol positive control, booking 3 and unchanged detail after reload |
+| HR-E01-07-R01 | Final S1 read-back also supports UAT-07 step 5: both Unicode slots Booked; T7A should have remained Available |
 
 Selected screenshots and sanitized machine-readable records are in [the evidence directory](../../evidence/lab6/hairroot-20261126/finding-HR-F01.json). That record identifies exact UTC times, URLs, observed text and original screenshot/observation SHA-256 values. No correct password, token, cookie, authentication header or private Cloud Shell output is included.
 
@@ -54,4 +55,4 @@ HairRoot should reproduce with an automated test first, confirm the agreed Unico
 
 Bookings **2** (invalid two-symbol input) and **3** (valid three-symbol control) remain as synthetic evidence under C3. No deletion, cancellation, reseed, counter reset or partner cloud action was performed. The source provides no cancellation workflow. Coordinate any fixture handling/retest with HairRoot; a corrected test needs a fresh unbooked fixture and a new attempt ID. Retain the original FAIL evidence.
 
-Partner notification/Issue link, acknowledgement, classification, owner/fix version and independent retest are **PENDING**. Do not invent notification or a sign-off. This is a finding about **HairRoot**, not a DineQ defect or DineQ RED/GREEN exercise. Overall independent acceptance remains pending the complete agreed test run, findings disposition, actual student contributions and any required owner-announced persistence operation.
+Partner notification/Issue link, acknowledgement, classification, owner/fix version and independent retest are **PENDING**. Do not invent notification or a sign-off. This is a finding about **HairRoot**, not a DineQ defect or DineQ RED/GREEN exercise. The [full assisted run](hairroot-run-2026-11-26-R01.md) records 5 PASS / 1 FAIL / 1 BLOCKED cases; overall independent acceptance remains pending disposition, actual student contributions and the required owner-announced persistence operation.

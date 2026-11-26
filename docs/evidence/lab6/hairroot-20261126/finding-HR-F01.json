@@ -114,6 +114,18 @@
       "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nYour booking is confirmed.\nYour appointment\nWhen\nSun 13 Dec, 17:27 to 17:57\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\n🙂🙂🙂\nStatus\nConfirmed\nBack to my bookings\nVersion ac0a57b",
       "screenshotSha256": "fee98c1d21710f6c0cbb0eb01fa59ed5a71b2ea023364d282d806c11f00b4124",
       "rawObservationSha256": "a0b4064a9bd68c6aa01f606597ade946511f18f2f7ad08bc9043213e43460448"
+    },
+    {
+      "id": "HR-E01-07-R01",
+      "timeUtc": "2026-11-26T11:24:57.410Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/schedule",
+      "case": "UAT-07",
+      "step": 5,
+      "actor": "S1",
+      "result": "FAIL",
+      "visibleTestSlotExcerpt": "Thu 10 Dec\n16:07 to 16:37\nBookedAnan Suksan: UAT hairline review\nFri 11 Dec\n16:17 to 16:47\nBookedMali Rattana: UAT race C2\nSat 12 Dec\n17:00 to 18:00\nAvailable\n18:00 to 18:30\nBookedAnan Suksan: 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789\n19:00 to 19:15\nBookedAnan Suksan: abc\n20:00 to 22:00\nAvailable\nSun 13 Dec\n16:27 to 16:57\nBookedKrit Boonmee: 🙂🙂\n17:27 to 17:57\nBookedKrit Boonmee: 🙂🙂🙂\nVersion ac0a57b",
+      "screenshotSha256": "780d56907589c5a227f24af17bbe6ff5c5c86e9313bb31204579898cbcae92e9",
+      "rawObservationSha256": "024a8b433fb8801b6e104699e4f53c431c2a39d83313dda7aa7380aee7534490"
     }
   ]
 }

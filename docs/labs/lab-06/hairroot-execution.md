@@ -2,6 +2,8 @@
 
 Version 0.2 preparation, updated 26 November 2026 for [L6-4 / #48](https://github.com/PpAnpt/dineq/issues/48), aligned to the student's newly supplied HairRoot v0.2 case pack. **The template case/step rows below start NOT EXECUTED; independent acceptance is PENDING.** Record actual attempts separately without replacing expected outcomes or inventing student participation.
 
+Actual attempt: [26 November 2026 R01 assisted run](hairroot-run-2026-11-26-R01.md), with a complete 43-step actual-result/evidence table: **5 cases PASS / 1 FAIL / 1 BLOCKED**. The rows in this file remain reusable blank templates, not the aggregate result. The Unicode failure is [HR-F01](hairroot-finding-HR-F01.md); no independent acceptance has been given.
+
 Product under test: **HairRoot**, hair-transplant consultation booking (team หัวล้านได้หวี). Independent UAT Team: **DineQ**, Anapat Banjerdsilp (PpAnpt, 67070501049) and Siwarak Chatvichai (BBINGOAL, 67070501086). The cases belong to HairRoot: [received v0.2 source](reference/hairroot-uat-cases-v0.2.md), draft dated 26 November 2026, supplied by the student for this run; SHA-256 `82e9981d1aca88f0a31c830279b45aaa8431befc1aaebcd88377e6ccdfb29938`. The earlier v0.1 source/hash remains historical provenance in [coordination](coordination.md). HairRoot case IDs, AC numbers and booking rules are not DineQ requirements, and this record must not be mixed with the [DineQ cases](uat-cases.md) that HairRoot executes.
 
 ## How to use this record

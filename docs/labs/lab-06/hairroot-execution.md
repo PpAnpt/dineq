@@ -151,6 +151,8 @@ Create a finding only for an observed, reproducible mismatch against HairRoot's 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | None recorded | | | | | | | | | | |
 
+Actual finding from the separately recorded 26 November assisted attempt: [HR-F01](hairroot-finding-HR-F01.md), UAT-07 two-symbol Unicode topic accepted and persisted. Partner triage/notification and the final independent decision remain pending. The blank row above is a reusable report template; it is not a claim that no finding exists.
+
 Severity is explained by user impact. Critical and major findings block acceptance; a minor finding must be corrected, or explicitly accepted by the independent UAT Team (here DineQ) as a documented known limitation, with that decision recorded; HairRoot's own acknowledgement or documentation of the limitation is not sufficient. An enhancement outside Sprint 1 is not a defect.
 
 ## 5. Evidence log and fixture ledger

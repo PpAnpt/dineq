@@ -1,6 +1,6 @@
 # Lab 6: DineQ Sprint 1 independent UAT
 
-Updated 25 November 2026. L6-1 baseline/CI preparation merged in [PR #53](https://github.com/PpAnpt/dineq/pull/53); the [DineQ UAT cases](uat-cases.md) passed teammate review and merged in [PR #54](https://github.com/PpAnpt/dineq/pull/54). #46 is complete and **L6-3 / #47 safe handoff** is the active authoring task. Date-level coordination is recorded; final session-version confirmation remains open in #45. All independent UAT results are NOT EXECUTED; no acceptance is claimed.
+Updated 26 November 2026. L6-1 baseline/CI preparation merged in [PR #53](https://github.com/PpAnpt/dineq/pull/53); the [DineQ UAT cases](uat-cases.md) merged in [PR #54](https://github.com/PpAnpt/dineq/pull/54). Handoff/preparation documents merged in PR #55/#56 and the HairRoot execution template in PR #57. **L6-4 / #48** is now the active task at the student's request, using newly supplied HairRoot v0.2. Final joint coordination and actual DineQ packet/access confirmations remain visible in #45/#47; no independent acceptance or completed seven-case run is claimed.
 
 ## Two products and two responsibilities
 
@@ -45,14 +45,14 @@ Work one issue at a time. Commit meaningful steps separately. Code fixes need a 
 | --- | --- | --- |
 | L6-1 Partner, baseline and integration workflow | [#45](https://github.com/PpAnpt/dineq/issues/45) | Reviewed CI preparation and updated date-level coordination; final session details/version confirmation pending |
 | L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | DONE: [uat-cases.md](uat-cases.md), eight executable cases reviewed by PpAnpt, PR #54 merged; execution NOT EXECUTED |
-| L6-3 Safe DineQ handoff | [#47](https://github.com/PpAnpt/dineq/issues/47) | [handoff.md](handoff.md): account labels, release/scope, private access, ordered setup/cleanup and owner-only conditional operations; review/actual receipt pending |
-| L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | [hairroot-execution.md](hairroot-execution.md): blank record for HairRoot's six cases (all NOT EXECUTED); actual execution with both DineQ testers and findings still to be recorded |
+| L6-3 Safe DineQ handoff | [#47](https://github.com/PpAnpt/dineq/issues/47) | [handoff.md](handoff.md): reviewed/merged in PR #55/#56; actual partner packet receipt/access/session confirmations remain separate |
+| L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | [hairroot-execution.md](hairroot-execution.md): seven-case / 43-step template aligned to received HairRoot v0.2, including Unicode; actual attempts, observations and student participation recorded separately |
 | L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | All received findings/dispositions; distinguish none received from a completed clean test |
 | L6-6 Corrections and reviewed release | [#50](https://github.com/PpAnpt/dineq/issues/50) | Additional issue per real defect; RED/GREEN/regression/PR/release/deploy chain, or TA-approved isolated exercise |
 | L6-7 Independent retest/acceptance | [#51](https://github.com/PpAnpt/dineq/issues/51) | Version-bound decisions by the independent team for each product |
 | L6-8 Submission evidence | [#52](https://github.com/PpAnpt/dineq/issues/52) | One self-contained Parts A-D PDF with cases, actual evidence, contributions, AI use and limitations |
 
-The merged technical preparation in #45 is complete, but that issue stays open with `waiting-on-coordination` for final session arrangements/version confirmation. #46 is Done; #47 is the only active authoring work item; #48-52 remain Todo. This register does not mark Lab 6 or independent UAT complete.
+The merged technical preparation in #45 is complete, but final session arrangements/version confirmation remain external coordination. #46 is Done; #47 has reviewed handoff/preparation documents with actual receipt/readiness still separate. #48 is the active authoring/execution task at the student's request; #49-52 remain later work. This register does not mark Lab 6 or independent UAT complete.
 
 ## Candidate DineQ case outline for L6-2
 

@@ -1,8 +1,8 @@
 # DineQ team - independent UAT execution record for HairRoot
 
-Version 0.1 template, prepared 25 November 2026 for [L6-4 / #48](https://github.com/PpAnpt/dineq/issues/48). **Every case, step and decision below is NOT EXECUTED / PENDING.** This file is a blank record. It contains no test result, finding or acceptance, and nothing may be filled in unless the stated DineQ student actually performed and observed it.
+Version 0.2 preparation, updated 26 November 2026 for [L6-4 / #48](https://github.com/PpAnpt/dineq/issues/48), aligned to the student's newly supplied HairRoot v0.2 case pack. **The template case/step rows below start NOT EXECUTED; independent acceptance is PENDING.** Record actual attempts separately without replacing expected outcomes or inventing student participation.
 
-Product under test: **HairRoot**, hair-transplant consultation booking (team หัวล้านได้หวี). Independent UAT Team: **DineQ**, Anapat Banjerdsilp (PpAnpt, 67070501049) and Siwarak Chatvichai (BBINGOAL, 67070501086). The cases belong to HairRoot: `uat-cases_HairRoot.md` v0.1 (draft dated 21 November 2026), received through the student; its SHA-256 is `81bb05b121c68454b475ed75b1b0fb2731eaacd4c6e1fd0b9608d2c8906f64a3` (see [coordination](coordination.md)). On 25 November 2026 the file was not published in HairRoot's repository at `ac0a57b`, so confirm with HairRoot that this v0.1 text is still their agreed executable pack before starting. HairRoot case IDs, AC numbers and booking rules are not DineQ requirements, and this record must not be mixed with the [DineQ cases](uat-cases.md) that HairRoot executes.
+Product under test: **HairRoot**, hair-transplant consultation booking (team หัวล้านได้หวี). Independent UAT Team: **DineQ**, Anapat Banjerdsilp (PpAnpt, 67070501049) and Siwarak Chatvichai (BBINGOAL, 67070501086). The cases belong to HairRoot: [received v0.2 source](reference/hairroot-uat-cases-v0.2.md), draft dated 26 November 2026, supplied by the student for this run; SHA-256 `82e9981d1aca88f0a31c830279b45aaa8431befc1aaebcd88377e6ccdfb29938`. The earlier v0.1 source/hash remains historical provenance in [coordination](coordination.md). HairRoot case IDs, AC numbers and booking rules are not DineQ requirements, and this record must not be mixed with the [DineQ cases](uat-cases.md) that HairRoot executes.
 
 ## How to use this record
 
@@ -49,7 +49,7 @@ Product under test: **HairRoot**, hair-transplant consultation booking (team ห
 
 ## 3. Cases
 
-Each step table lists the expected result **as written in HairRoot's v0.1 source**, for judging the outcome; setup steps for which the source states no expected result are marked as such. Dates D, D2, D3 are 10 to 30 days after the execution day; compute them on the day, choose a start minute unique to our team (for example 16:07), and record the real values in the run sheet.
+Each step table lists the expected result from the supplied HairRoot source for judging the outcome; setup steps for which the source states no expected result are marked as such. Cases 01-06 retain their reviewed actions/expected outcomes; v0.2 adds case 07. Dates D, D2, D3 and D7 are 10 to 30 days after the execution day; compute them on the day, choose unused team-specific times and record the real values in the run sheet.
 
 ### UAT-01 - Normal journey: add a time, book it, retrieve it
 
@@ -131,6 +131,18 @@ Category: authentication. HairRoot refs: FR-01 to FR-03; AC-01 to AC-03. Roles: 
 | 3 | Sign in with C1's correct password | The booking page opens; the header shows the Customer name and role | | NOT EXECUTED | |
 | 4 | Log out; press Back; reload | The sign-in page, not C1's data | | NOT EXECUTED | |
 
+### UAT-07 - Topic length with Unicode characters
+
+Category: business rule / boundary. HairRoot refs: BR-08; AC-15b. Roles: S1, then C3, then S1. Preconditions: signed out; choose D7 10 to 30 days ahead and two unused non-overlapping S1 consultation times T7A/T7B, each 30 minutes. Inputs: `🙂🙂` (two displayed characters) and `🙂🙂🙂` (three displayed characters), copied from the supplied v0.2 source. Overall result: **NOT EXECUTED**. These are partner-supplied expectations, not a change to DineQ's contract.
+
+| Step | Action (summary of source) | Expected (HairRoot source) | Actual (tester) | Result | Evidence ID |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Sign in as S1; add T7A and T7B on D7 to Hair transplant consultation, each 30 minutes; log out | "Time added." for each; both Available | | NOT EXECUTED | |
+| 2 | Sign in as C3; select the same service, D7, T7A; enter `🙂🙂`; Confirm booking | "Enter a topic of 3 to 200 characters."; confirmation page does not open; T7A stays available | | NOT EXECUTED | |
+| 3 | Open My bookings, then return to Book | No booking for D7/T7A | | NOT EXECUTED | |
+| 4 | Choose the same service, D7, T7B; enter `🙂🙂🙂`; confirm; log out | Booking confirmed; detail shows the three symbols unchanged | | NOT EXECUTED | |
+| 5 | Sign in as S1; open D7 on My schedule | T7A Available; T7B Booked with C3 and the three-symbol topic | | NOT EXECUTED | |
+
 ## 4. Findings register
 
 Create a finding only for an observed, reproducible mismatch against HairRoot's declared Sprint 1 scope, after re-running the step to confirm it. Report it through the channel agreed with HairRoot (GitHub Issue with label `uat` in their repository, or the agreed chat) and record the actual notification and the answer. Do not invent findings; "none" is a valid result.
@@ -161,6 +173,7 @@ Severity is explained by user impact. Critical and major findings block acceptan
 | UAT-04 | Forbidden role / ownership | NOT EXECUTED | None |
 | UAT-05 | State / persistence (step 4 needs HairRoot's announced redeployment) | NOT EXECUTED | None |
 | UAT-06 | Authentication | NOT EXECUTED | None |
+| UAT-07 | Unicode topic-length boundary | NOT EXECUTED | None |
 
 ## 7. Independent decision on HairRoot (DineQ team as UAT Team)
 
@@ -188,3 +201,4 @@ PENDING. Record one decision only after every required case has an actual result
 | Version | Date | Change / execution status |
 | --- | --- | --- |
 | 0.1 | 2026-11-25 | Blank execution record created from HairRoot's v0.1 cases for #48. All cases NOT EXECUTED; no finding or decision recorded |
+| 0.2 | 2026-11-26 | Align preparation to newly received HairRoot v0.2/hash and append its five-step UAT-07 Unicode case. Seven cases / 43 template steps; actual execution and student contributions must be recorded separately |

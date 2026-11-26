@@ -49,7 +49,7 @@ Product under test: **HairRoot**, hair-transplant consultation booking (team ห
 
 ## 3. Cases
 
-Each step table lists the expected result **as written in HairRoot's v0.1 source**, for judging the outcome. Dates D, D2, D3 are 10 to 30 days after the execution day; compute them on the day, choose a start minute unique to our team (for example 16:07), and record the real values in the run sheet.
+Each step table lists the expected result **as written in HairRoot's v0.1 source**, for judging the outcome; setup steps for which the source states no expected result are marked as such. Dates D, D2, D3 are 10 to 30 days after the execution day; compute them on the day, choose a start minute unique to our team (for example 16:07), and record the real values in the run sheet.
 
 ### UAT-01 - Normal journey: add a time, book it, retrieve it
 
@@ -71,8 +71,8 @@ Category: business rule. HairRoot refs: BR-01; AC-16. Roles: S1, C2 and C3 in tw
 
 | Step | Action (summary of source) | Expected (HairRoot source) | Actual (tester) | Result | Evidence ID |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Window A: sign in as C2. Window B: sign in as C3 | Both signed in | | NOT EXECUTED | |
-| 2 | In both windows choose the S1 consultation service, day D2, time T2 and enter that window's topic; do not confirm yet | Both windows are ready to confirm | | NOT EXECUTED | |
+| 1 | Window A: sign in as C2. Window B: sign in as C3 | (setup step; no expected result stated in HairRoot's source) | | NOT EXECUTED | |
+| 2 | In both windows choose the S1 consultation service, day D2, time T2 and enter that window's topic; do not confirm yet | (setup step; no expected result stated in HairRoot's source) | | NOT EXECUTED | |
 | 3 | Window A: Confirm booking | C2's booking is confirmed | | NOT EXECUTED | |
 | 4 | Window B: Confirm booking | "Another customer has just taken this time. Please choose another."; T2 is no longer offered for D2 | | NOT EXECUTED | |
 | 5 | Window B: My bookings | No booking for D2, T2 | | NOT EXECUTED | |
@@ -103,7 +103,7 @@ Category: forbidden role / ownership (negative and access case). HairRoot refs: 
 
 | Step | Action (summary of source) | Expected (HairRoot source) | Actual (tester) | Result | Evidence ID |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Sign in as C1, open one of C1's bookings, copy its address, log out | Address copied | | NOT EXECUTED | |
+| 1 | Sign in as C1, open one of C1's bookings, copy its address, log out | (setup step; no expected result stated in HairRoot's source) | | NOT EXECUTED | |
 | 2 | Sign in as C2 and open the copied address | "Booking not found."; no topic, time or name of C1 shown | | NOT EXECUTED | |
 | 3 | As C2 open `<URL>/schedule` | C2 is sent to the booking page; no specialist schedule or other customers' bookings shown | | NOT EXECUTED | |
 | 4 | Log out; without signing in open `<URL>/bookings` | The sign-in page is shown | | NOT EXECUTED | |

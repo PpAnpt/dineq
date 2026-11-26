@@ -139,7 +139,7 @@ Create a finding only for an observed, reproducible mismatch against HairRoot's 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | None recorded | | | | | | | | | | |
 
-Severity is explained by user impact. Critical and major findings block acceptance; a minor finding needs a correction or the product team's explicit documented limitation. An enhancement outside Sprint 1 is not a defect.
+Severity is explained by user impact. Critical and major findings block acceptance; a minor finding must be corrected, or explicitly accepted by the independent UAT Team (here DineQ) as a documented known limitation, with that decision recorded; HairRoot's own acknowledgement or documentation of the limitation is not sufficient. An enhancement outside Sprint 1 is not a defect.
 
 ## 5. Evidence log and fixture ledger
 
@@ -172,7 +172,7 @@ PENDING. Record one decision only after every required case has an actual result
 | Exact release tested (full commit and revision) | PENDING |
 | Independent testers (both DineQ students) and date | PENDING |
 | Evidence IDs and run-sheet references | PENDING |
-| Conditions / documented minor limitations | PENDING |
+| Conditions / documented minor limitations (each one explicitly accepted by the DineQ UAT Team, with the acceptance recorded) | PENDING |
 | Retest of corrected findings (if any): version, tester, actual result | PENDING |
 
 ## 8. Contributions, AI use and limitations

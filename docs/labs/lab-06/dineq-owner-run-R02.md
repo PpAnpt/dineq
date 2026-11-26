@@ -8,7 +8,7 @@ Operator: Siwarak / BBINGOAL with assisted Cloud Shell commands. Original JSON o
 | --- | --- |
 | Fresh before snapshot | 22:35:28.413 Bangkok (15:35:28.413Z); execution s21271a0d-migrate-tf2wf; revision s21271a0d-00005-rdp; Q OPEN; counter 18; 49 events; only active ticket T08/#17 WAITING |
 | Guarded close | 22:36:19.094 Bangkok (15:36:19.094Z); execution s21271a0d-migrate-kk2dh; Q CLOSED; counter 18; unchanged=true |
-| Restore OPEN | PENDING - HairRoot reports testing in progress; operator remains available |
+| Restore OPEN | 22:44:17.887 Bangkok (15:44:17.887Z); execution s21271a0d-migrate-9qjhl; Q OPEN; counter 18; unchanged=true; same data hash |
 | 08B fresh before-data | PENDING |
 | Same-image revision replacement | NOT EXECUTED |
 | Independent 04C outcome | PENDING actual tester result and evidence; not inferred from successful closure |
@@ -23,3 +23,9 @@ python3 cloud-owner.py restore --baseline evidence/R02/04C-before.json --output 
 ```
 
 No code release/main merge, seed/reset, database restart or IAM/billing change was performed by these two phases. A successful owner operation is not independent acceptance.
+
+## Received second ZIP and current disposition
+
+The student supplied `UAT-DinoQ-Pic-2.zip`, SHA-256 `91a4aa5ce089ab637546c8589fa21ba476662addd734e3cb30b7817f976b3c77`. This archive contains prep attempts only, with a stopped navigation attempt and two PREPARED records; no closed-join request, restoration observation or after-restart result. Latest prep JSON at 22:36:58.682 Bangkok says CLOSED, confirmed by the C3 image at 22:37:06.523, with Join disabled. Its summary Markdown incorrectly says OPEN. Original bytes are preserved locally and not silently edited. C3 entries, Host list and full T02/T08 data match between the OPEN and CLOSED preparation snapshots. This supports the preparation/UI observation but does not supply the required HTTP 409 response.
+
+After receiving the file, the operator restored OPEN promptly as recorded above. 04C remains incomplete pending the actual closed-mode API attempt and independent restored-mode check. A new bounded CLOSED window will use a fresh owner snapshot after the tester confirms readiness for that specific step. No restart has been performed; no independent PASS or acceptance is inferred.

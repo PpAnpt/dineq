@@ -50,9 +50,70 @@ on this PC. It refuses an unsupported job command, a different job image,
 split traffic, or a queue snapshot mismatch. All generated evidence stays
 under an ignored/local output directory until reviewed for publication.
 
-Read the exact commands and prerequisites below after implementation. A missing
+The per-execution override follows the official
+[gcloud run jobs execute reference](https://docs.cloud.google.com/sdk/gcloud/reference/run/jobs/execute).
+A missing
 Cloud Shell login/permission or unavailable independent tester remains a real
 dependency; do not broaden IAM or invent a completed run.
+
+### Cloud Shell commands
+
+Copy `tools/cloud-owner.py` and `tools/queue-owner-operation.mjs` together to a
+private Cloud Shell working directory. No password is needed by these tools;
+they use the existing job's binding. From that directory:
+
+```bash
+python3 cloud-owner.py inspect --output evidence/inspect.json
+python3 cloud-owner.py snapshot --output evidence/04C-before.json
+```
+
+Confirm the named independent testers are present, C3 has no active ticket and
+the queue is quiet. The next command refuses an older-than-30-minute baseline.
+Do not run close until HairRoot is ready to exercise 04C immediately:
+
+```bash
+python3 cloud-owner.py close --baseline evidence/04C-before.json --testers-ready --output evidence/04C-closed.json
+# HairRoot now independently executes 04C C1-C3 and saves UI/API evidence.
+python3 cloud-owner.py restore --baseline evidence/04C-before.json --output evidence/04C-restored.json
+```
+
+Run restore even if the test fails or an unexpected ticket mutation is seen.
+It restores OPEN while reporting a changed data hash as a failure, preserving
+the changed record for investigation. Do not retry a completed command using
+the same output filename. If a job/log read fails after close, restore promptly
+with a new output filename and inspect the actual operation; never assume it
+rolled back merely because the CLI failed.
+
+Before 08B, independently read T02/T08 again and preserve the exact JSON fields
+and screenshots. If the historical fixtures no longer match, agree replacements
+and record the new identifiers. Take a fresh owner snapshot, announce the exact
+same-image revision replacement, then run:
+
+```bash
+python3 cloud-owner.py snapshot --output evidence/08B-before.json
+python3 cloud-owner.py restart --baseline evidence/08B-before.json --testers-ready --output evidence/08B-owner-after.json
+# HairRoot independently executes 08B B3-B4 against the same recorded tickets.
+```
+
+The restart result includes old/new revision, immutable image digest, command,
+health/readiness and a DB comparison. It is an application process replacement
+through a new revision of the same image, not an OS or database restart. A
+successful owner command is supporting evidence, not a replacement for the
+independent tester's result. Retain the evidence privately until sanitized.
+
+### Local tool verification
+
+From the repository root in PowerShell, with the separate TEST_DATABASE_URL in
+the ignored local `.env` and PostgreSQL running:
+
+```powershell
+node --test docs/labs/lab-06/tools/queue-owner-operation.test.mjs
+python docs/labs/lab-06/tools/cloud-owner.py --help
+```
+
+The test creates one uniquely named schema in the test database, exercises the
+guarded close/restore and mismatch recovery against real PostgreSQL, then drops
+only that schema. It never resets the existing test data or touches GCP.
 
 ## Current execution record
 

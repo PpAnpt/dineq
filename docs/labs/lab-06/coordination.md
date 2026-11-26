@@ -42,7 +42,9 @@ If partner access or availability blocks independent testing, record BLOCKED and
 
 ## Provenance and next issue
 
-The received `uat-cases_HairRoot.md` identifies itself as HairRoot version 0.1 draft dated 21 November 2026. Received through the student on 24 November. Source-file SHA-256: `81BB05B121C68454B475ED75B1B0FB2731EAACD4C6E1FD0B9608D2C8906F64A3`. It contains six HairRoot cases and a blank execution table. Its instructions and scope apply to HairRoot's proposed handoff, not to DineQ's contract. No partner execution result was copied into our records.
+The originally received `uat-cases_HairRoot.md` identifies itself as HairRoot version 0.1 draft dated 21 November 2026. Received through the student on 24 November. Original source-file SHA-256: `81BB05B121C68454B475ED75B1B0FB2731EAACD4C6E1FD0B9608D2C8906F64A3`. It contains six HairRoot cases and a blank execution table. Its instructions and scope apply to HairRoot's proposed handoff, not to DineQ's contract. No partner execution result was copied into our records.
+
+On 26 November the student supplied [HairRoot v0.2](reference/hairroot-uat-cases-v0.2.md), dated 26 November, and requested testing with Playwright. Source SHA-256: `82E9981D1ACA88F0A31C830279B45AAA8431BEFC1AAEBCD88377E6CCDFB29938`. It adds UAT-07 for two- versus three-symbol Unicode topics and now contains seven cases. The source still declares candidate commit ac0a57b/revision hairroot-sha-ac0a57b9eb87-44992339630-1. Actual runs must distinguish that partner-declared revision from the observed page version; receipt of a revised case pack is not proof of a new deployment or an independent acceptance result.
 
 The later student message supplies the team name, preferred Latin name spellings, repeated HairRoot commit/revision, 25/26 November arrangements, Discord contact, credential-receipt report and revised 29 November deadline recorded above. These are attributed student reports; no chat screenshot, affirmative version-freeze reply, per-account access check or independent execution was supplied.
 

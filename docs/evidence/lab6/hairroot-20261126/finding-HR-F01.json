@@ -1,0 +1,131 @@
+{
+  "finding": "HR-F01",
+  "status": "observed, pending partner triage/notification",
+  "product": "HairRoot",
+  "observedFooter": "ac0a57b",
+  "declaredRevisionNotQueried": "hairroot-sha-ac0a57b9eb87-44992339630-1",
+  "records": [
+    {
+      "id": "HR-E07-01B-R01",
+      "timeUtc": "2026-11-26T10:56:48.357Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/schedule",
+      "case": "UAT-07",
+      "actor": "S1",
+      "topic": null,
+      "visibleText": "S1 showed both new 13 Dec fixtures Available; unrelated pre-existing schedule text omitted",
+      "screenshotSha256": "7e906a01123e30719202d4fa3d8211bea4fbb32a36f620043635de200a61f9cb",
+      "rawObservationSha256": "791583511387ead3a35722b8ca66c13c80dc1088d28ef0b489b65fc7c3d5e3c7"
+    },
+    {
+      "id": "HR-E07-BEFORE-R01",
+      "timeUtc": "2026-11-26T11:02:27.556Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings",
+      "case": "UAT-07",
+      "actor": "C3 Krit Boonmee",
+      "topic": null,
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nMy bookings\n\nYou have no bookings yet. Find an available time.\n\nVersion ac0a57b",
+      "screenshotSha256": "acd5ba4fe83e73e4a201c666a55f7ccd1787924a2521da57e40b8e09c8f3297e",
+      "rawObservationSha256": "40680bdc3adc9949c36fee44a4feb1a6e4d22ddf937349fc072b9b59fb7e3a86"
+    },
+    {
+      "id": "HR-E07-02-INPUT-R01",
+      "timeUtc": "2026-11-26T11:03:12.050Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/slots",
+      "case": "UAT-07",
+      "actor": "C3 Krit Boonmee",
+      "topic": "🙂🙂",
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nBook an appointment\n1. Choose a service\nHair transplant consultation\nDr. Somchai Prasert\n17 times available\nHair transplant consultation\nDr. Nida Wongsa\n9 times available\nPost-procedure follow-up\nDr. Somchai Prasert\n3 times available\n2. Choose a day\nFri 27 Nov\nSat 28 Nov\nSun 29 Nov\nThu 10 Dec\nFri 11 Dec\nSat 12 Dec\nSun 13 Dec\n3. Choose a time\n16:27\n17:27\n4. Confirm your appointment\n\nHair transplant consultation with Dr. Somchai Prasert\nSun 13 Dec, 16:27 to 16:57\n\nWhat would you like to discuss?\nConfirm booking\nVersion ac0a57b",
+      "screenshotSha256": "2e399601d01057cd5575f4461911437326857bc6fb8bc99de0cc70bbeee165d7",
+      "rawObservationSha256": "8dffdd9bd47a8176642f8c6a0e78af79432e0f2407e8ef5140023cf1ca4a9f5f"
+    },
+    {
+      "id": "HR-E07-02-AFTER-R01",
+      "timeUtc": "2026-11-26T11:03:39.945Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings/2",
+      "case": "UAT-07",
+      "actor": "C3 Krit Boonmee",
+      "topic": "🙂🙂",
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nYour booking is confirmed.\nYour appointment\nWhen\nSun 13 Dec, 16:27 to 16:57\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\n🙂🙂\nStatus\nConfirmed\nBack to my bookings\nVersion ac0a57b",
+      "screenshotSha256": "2c2f2d64d3687459bae559d78a6da7e1f2bd85ca1cf0770ef2eaadbf9e98c5ed",
+      "rawObservationSha256": "c4a9395e8282cb1760650cd303bb829d69a789d1ac952ef33ffc0e68eb323ecc"
+    },
+    {
+      "id": "HR-E07-03-R01",
+      "timeUtc": "2026-11-26T11:04:12.956Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings",
+      "case": "UAT-07",
+      "actor": "C3 Krit Boonmee",
+      "topic": "🙂🙂",
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nMy bookings\nSun 13 Dec, 16:27 to 16:57\nDr. Somchai Prasert · 🙂🙂\nVersion ac0a57b",
+      "screenshotSha256": "26749b3968b681e5ed8954a251da08354aa9f39800e40c553b586f7f7b542615",
+      "rawObservationSha256": "67a5ed825c91779904d3d642e32796e7c26d1f6e2ab872fd02c86067b9fba9f8"
+    },
+    {
+      "id": "HR-E07-02-AVAILABILITY-R01",
+      "timeUtc": "2026-11-26T11:04:51.018Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/slots",
+      "case": "UAT-07",
+      "actor": "C3",
+      "topic": null,
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nBook an appointment\n1. Choose a service\nHair transplant consultation\nDr. Somchai Prasert\n16 times available\nHair transplant consultation\nDr. Nida Wongsa\n9 times available\nPost-procedure follow-up\nDr. Somchai Prasert\n3 times available\n2. Choose a day\nFri 27 Nov\nSat 28 Nov\nSun 29 Nov\nThu 10 Dec\nFri 11 Dec\nSat 12 Dec\nSun 13 Dec\n3. Choose a time\n17:27\nVersion ac0a57b",
+      "screenshotSha256": "4ae6d8b3d355ce5510d992617bd363ba105634acd8f800ed49e78fd7453a691d",
+      "rawObservationSha256": "1cbee14ce4e38bc29b6a99952ed7d214a9bb2bec865e668a6864cd46459b72e8"
+    },
+    {
+      "id": "HR-E07-02-PERSISTED-R01",
+      "timeUtc": "2026-11-26T11:06:04.703Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings/2",
+      "case": "UAT-07",
+      "actor": "C3",
+      "topic": null,
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nYour appointment\nWhen\nSun 13 Dec, 16:27 to 16:57\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\n🙂🙂\nStatus\nConfirmed\nBack to my bookings\nVersion ac0a57b",
+      "screenshotSha256": "bbff95879e7d53050bbe1894e458f94f6508017d054d05ba5d2089f25a1b0575",
+      "rawObservationSha256": "116fccc2c9d750f850be08dc971d225ef3ba151d8d7b191387c2d0d970e49156"
+    },
+    {
+      "id": "HR-E07-04-INPUT-R01",
+      "timeUtc": "2026-11-26T11:04:51.148Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/slots",
+      "case": "UAT-07",
+      "actor": "C3",
+      "topic": "🙂🙂🙂",
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nBook an appointment\n1. Choose a service\nHair transplant consultation\nDr. Somchai Prasert\n16 times available\nHair transplant consultation\nDr. Nida Wongsa\n9 times available\nPost-procedure follow-up\nDr. Somchai Prasert\n3 times available\n2. Choose a day\nFri 27 Nov\nSat 28 Nov\nSun 29 Nov\nThu 10 Dec\nFri 11 Dec\nSat 12 Dec\nSun 13 Dec\n3. Choose a time\n17:27\n4. Confirm your appointment\n\nHair transplant consultation with Dr. Somchai Prasert\nSun 13 Dec, 17:27 to 17:57\n\nWhat would you like to discuss?\nConfirm booking\nVersion ac0a57b",
+      "screenshotSha256": "63d0742aa30614353586f126fc7836ececb4cffc491ac17e7dfb2f750171961f",
+      "rawObservationSha256": "e468b3beddbeee3f774874b9693080c1f0dc715a7b78d3329950523d6fb570ae"
+    },
+    {
+      "id": "HR-E07-04-AFTER-R01",
+      "timeUtc": "2026-11-26T11:05:42.749Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings/3",
+      "case": "UAT-07",
+      "actor": "C3 Krit Boonmee",
+      "topic": "🙂🙂🙂",
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nYour booking is confirmed.\nYour appointment\nWhen\nSun 13 Dec, 17:27 to 17:57\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\n🙂🙂🙂\nStatus\nConfirmed\nBack to my bookings\nVersion ac0a57b",
+      "screenshotSha256": "fee98c1d21710f6c0cbb0eb01fa59ed5a71b2ea023364d282d806c11f00b4124",
+      "rawObservationSha256": "5c020d58deec44f4e8fc71b38c5f4d89a2bf153768680d97900913cef79559b9"
+    },
+    {
+      "id": "HR-E07-04-RELOAD-R01",
+      "timeUtc": "2026-11-26T11:05:53.904Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings/3",
+      "case": "UAT-07",
+      "actor": "C3",
+      "topic": null,
+      "visibleText": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nYour booking is confirmed.\nYour appointment\nWhen\nSun 13 Dec, 17:27 to 17:57\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\n🙂🙂🙂\nStatus\nConfirmed\nBack to my bookings\nVersion ac0a57b",
+      "screenshotSha256": "fee98c1d21710f6c0cbb0eb01fa59ed5a71b2ea023364d282d806c11f00b4124",
+      "rawObservationSha256": "a0b4064a9bd68c6aa01f606597ade946511f18f2f7ad08bc9043213e43460448"
+    },
+    {
+      "id": "HR-E01-07-R01",
+      "timeUtc": "2026-11-26T11:24:57.410Z",
+      "url": "https://hairroot-368003298307.asia-southeast1.run.app/schedule",
+      "case": "UAT-07",
+      "step": 5,
+      "actor": "S1",
+      "result": "FAIL",
+      "visibleTestSlotExcerpt": "Thu 10 Dec\n16:07 to 16:37\nBookedAnan Suksan: UAT hairline review\nFri 11 Dec\n16:17 to 16:47\nBookedMali Rattana: UAT race C2\nSat 12 Dec\n17:00 to 18:00\nAvailable\n18:00 to 18:30\nBookedAnan Suksan: 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789\n19:00 to 19:15\nBookedAnan Suksan: abc\n20:00 to 22:00\nAvailable\nSun 13 Dec\n16:27 to 16:57\nBookedKrit Boonmee: 🙂🙂\n17:27 to 17:57\nBookedKrit Boonmee: 🙂🙂🙂\nVersion ac0a57b",
+      "screenshotSha256": "780d56907589c5a227f24af17bbe6ff5c5c86e9313bb31204579898cbcae92e9",
+      "rawObservationSha256": "024a8b433fb8801b6e104699e4f53c431c2a39d83313dda7aa7380aee7534490"
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 {
   "finding": "HR-F01",
-  "status": "observed, pending partner triage/notification",
   "product": "HairRoot",
   "observedFooter": "ac0a57b",
   "declaredRevisionNotQueried": "hairroot-sha-ac0a57b9eb87-44992339630-1",
@@ -127,5 +126,18 @@
       "screenshotSha256": "780d56907589c5a227f24af17bbe6ff5c5c86e9313bb31204579898cbcae92e9",
       "rawObservationSha256": "024a8b433fb8801b6e104699e4f53c431c2a39d83313dda7aa7380aee7534490"
     }
-  ]
+  ],
+  "statusAtOriginalReport": "observed, pending partner triage/notification",
+  "followUp": {
+    "source": "https://github.com/alvin777777/hairroot/pull/56",
+    "sourceHead": "a71e28990d6a8ea2ae35198070068cd072737c11",
+    "sourceStateAtCheck": "OPEN report PR, not a merged fix",
+    "classificationInPartnerDraft": "Accepted defect",
+    "severityInPartnerDraft": "Minor",
+    "ownerInPartnerDraft": "Tithinan",
+    "canonicalIssue": "PENDING",
+    "fixedVersion": "PENDING",
+    "independentRetest": "PENDING",
+    "directMessageSentByThisAgent": false
+  }
 }

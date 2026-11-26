@@ -115,13 +115,17 @@ The test creates one uniquely named schema in the test database, exercises the
 guarded close/restore and mismatch recovery against real PostgreSQL, then drops
 only that schema. It never resets the existing test data or touches GCP.
 
+## Agreed availability
+
+The student reports on 26 November that HairRoot will be ready **by 22:00 Asia/Bangkok**. This is availability, not confirmation that its testers are already observing. Keep Q OPEN until their actual ready message. Tooling is available in Cloud Shell under `~/dineq-lab6-owner-v2`; the uploaded v2 ZIP SHA-256 is `265ba19bba2fff48085b54a2c82c2c95e4511439feb9ff0e6c04f600fcb5a614`. Run a fresh baseline for the actual session rather than reusing an older preparation snapshot.
+
 ## Current execution record
 
 | Item | Actual state |
 | --- | --- |
 | Received final partner execution | 9 PASS / 2 BLOCKED / 0 FAIL, 25 November |
-| Authenticated live service/image verification in this task | NOT EXECUTED |
-| Fresh owner DB snapshot | NOT EXECUTED |
+| Authenticated live service/image verification in this task | Verified 26 November at 21:47:38 Bangkok: revision s21271a0d-00005-rdp, 100% traffic; existing job DB binding matches service; linux/amd64 image digest matches |
+| Fresh owner DB snapshot | Completed at 21:48:59 Bangkok; job execution s21271a0d-migrate-bpt96; Q OPEN, next ticket 18, 17 entries / 49 events; T02 ticket #12 COMPLETED and T08 ticket #17 WAITING retained |
 | CLOSED preparation / OPEN restoration | NOT EXECUTED |
 | Same-image new revision / readiness | NOT EXECUTED |
 | HairRoot independent 04C / 08B results | BLOCKED pending preparation/session |
@@ -130,3 +134,9 @@ only that schema. It never resets the existing test data or touches GCP.
 Keep the original blocked record and add a dated new attempt. Preparation,
 operator database comparisons and an automated health response do not change
 the independent result to PASS.
+
+## Actual preparation evidence
+
+See [selected authenticated preparation fields](../../evidence/lab6/dineq-owner-20261126/preparation.json). The full original snapshot remains in Cloud Shell at `~/dineq-lab6-owner-v2/evidence/preparation-before.json`. This is an owner read/short queue-row lock, with no ticket/queue status write. A local download of the full original was not verified; do not claim that the transcribed subset is the raw export. The existing migration job definition was preserved; its one-off execution ran only the snapshot helper, not a migration or seed.
+
+Next live command, only after HairRoot confirms actual readiness: take a fresh snapshot as `evidence/04C-before.json`, close with that baseline, obtain independent 04C observations, restore OPEN, then take a separate fresh 08B baseline before the announced same-image revision replacement. Both independent subcase outcomes remain BLOCKED until the testers supply their actual new attempt.

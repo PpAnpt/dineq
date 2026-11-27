@@ -1,7 +1,7 @@
 # Controlled FIFO release and retest handoff - 27 November 2026
 
 Tracking: [#63](https://github.com/PpAnpt/dineq/issues/63), [#50](https://github.com/PpAnpt/dineq/issues/50), [#51](https://github.com/PpAnpt/dineq/issues/51).
-**Release deployed; later HairRoot-reported DQ-UAT-07 PASS 9/9 and partner-relayed Accepted received.** See the [received retest and evidence qualifications](dineq-controlled-retest-received-20261127.md); this does not rewrite the original readiness record.
+**Release deployed; HairRoot reports DQ-UAT-07 PASS 9/9. Latest clarification keeps Accepted on original baseline 17c8b90 only; new-release acceptance is pending.** See the [received retest and evidence qualifications](dineq-controlled-retest-received-20261127.md); this does not rewrite the original readiness record.
 
 ## Actual version chain
 
@@ -41,4 +41,4 @@ The local READY handoff contains the canonical URL, full main SHA/revision/runti
 
 ## Later result received
 
-[Incoming retest record](dineq-controlled-retest-received-20261127.md): selected run 22:54:04-22:54:15 Bangkok, correct release, partner-reported 9/9 steps and findings none. Siwarak relayed Accepted in response to the new-release question. Raw/consolidated fixture-summary mismatch, partial Loading images, the missing completed-owner comparison after step 9, authored-decision details and missing contribution evidence remain explicitly qualified. No source result is fabricated or silently corrected.
+[Incoming retest record](dineq-controlled-retest-received-20261127.md): selected run 22:54:04-22:54:15 Bangkok, correct release, partner-reported 9/9 steps and findings none. The earlier new-release Accepted interpretation is superseded by the [latest partner clarification](partner-clarification-20261127.md): the decision covers baseline 17c8b90 only. Raw/consolidated fixture-summary mismatch, partial Loading images, the missing completed-owner comparison after step 9, authored-decision details and missing contribution evidence remain explicitly qualified. No source result is fabricated or silently corrected.

@@ -1,8 +1,8 @@
 # Lab 6 independent acceptance records
 
 Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51).
-**DineQ: partner-declared Accepted received on 27 November 2026; supporting
-digest/Iivo details remain incomplete. HairRoot: final DineQ decision PENDING.**
+**DineQ: partner-declared Accepted for the original release received on 27 November 2026.
+The original digest link is recorded and Iivo participation is source-qualified below. New controlled-release acceptance is NOT CONFIRMED. HairRoot: final DineQ decision PENDING in this register.**
 Only the independent UAT team records its own decision. A product team's PR
 approval is not independent acceptance. The [received-message record](dineq-acceptance-received-20261127.md)
 identifies the source and distinguishes a received decision from missing proof.
@@ -15,8 +15,9 @@ The [latest received-result reconciliation, PR #60](https://github.com/PpAnpt/di
 preserves the original 25 November 9 PASS / 2 BLOCKED / 0 FAIL run and adds the
 26 November 04C OBSERVATION PASS plus partner-reported 08B PASS. Existing R03
 close/OPEN records corroborate setup; 08B owner verification is partner-relayed.
-HairRoot's later decision is recorded below from the student's relay. Digest
-verification and the missing second tester's contribution are still required.
+HairRoot's later decision is recorded below from the student's relay. The
+[release record](controlled-fifo-release-20261127.md) supplies subsequent digest
+verification; the latest clarification supplies second-tester contribution statements.
 
 | Field | Prepared value / independent team to complete |
 | --- | --- |
@@ -25,17 +26,21 @@ verification and the missing second tester's contribution are still required.
 | Scope | Sprint 1 F-01 authentication, F-02 joining/own entries, F-03 assigned Host FIFO/completion; DQ-UAT-01..08 including 04A/B/C and 08A/B |
 | Application | https://s21271a0d-4d7hbszvwq-as.a.run.app |
 | Source commit reference | 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620; handoff-declared, not reverified by the partner follow-up |
-| Operation revision before / after | s21271a0d-00005-rdp / s21271a0d-l6-1126161809, confirmed by the relayed 27 Nov response; image-digest equality remains PENDING, not technically verified here |
-| Exact version accepted by UAT Team | Original Sprint 1 UAT on confirmed revision s21271a0d-00005-rdp, with restart follow-up on s21271a0d-l6-1126161809; baseline reference 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 reused from handoff, pending digest-to-commit verification |
+| Operation revision before / after | s21271a0d-00005-rdp / s21271a0d-l6-1126161809; subsequent authenticated Cloud Shell evidence in the release record confirms equal image digest |
+| Exact version accepted by UAT Team | Original Sprint 1 UAT on s21271a0d-00005-rdp with restart follow-up on s21271a0d-l6-1126161809; baseline 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620. Subsequent release evidence records digest-to-commit verification |
 | Initial / follow-up evidence | 25 Nov initial run; 26 Nov CLOSED/restored and restart observations, source-qualified in PR #60 |
 | Tithinan contribution | Partner declares Tithinan Sobking wrote and ran the Playwright script and made the original-release decision; exact script revision/per-case times not newly supplied |
-| Iivo contribution | PENDING actual case/actions, time and evidence; do not infer participation from membership |
+| Iivo contribution | Latest partner clarification: DQ-UAT-01 steps 1/3, 26 Nov 2026 at 19:33 on 17c8b90, E-B7-E-B9 cited but not inspected here. Siwarak additionally reports review of retest results/images; review time/items/evidence not supplied. No new retest execution claimed |
 | Finding disposition | None, explicitly confirmed in the received partner response; no natural DineQ finding invented |
-| Required cases / remaining conditions | Preserve original/follow-up provenance; obtain actual baseline/restart image-digest comparison and Iivo's role/cases/actions/time/evidence before final PDF completion |
+| Required cases / remaining conditions | Preserve original/follow-up provenance and recorded baseline digest proof; verify cited Iivo E-B7-E-B9 and supplementary review details. Receive promised owner read-back for the separately recorded new retest |
 | Final decision | **Accepted**, partner-declared for the original release; received through Siwarak's relay, not a Product Team-authored signature |
 | Reasons / limitations accepted | Findings explicitly none; no further rationale or specific minor limitation supplied in this response. Source-qualified run evidence retained |
 | Decision made by / team / date and time | Tithinan Sobking / HairRoot TH-060_P1 / 27 November 2026; exact clock time not supplied |
 | Decision evidence | [27 Nov received-message record](dineq-acceptance-received-20261127.md), student-relayed partner statement; no separate authored artefact/direct-channel metadata supplied |
+
+### New controlled-release retest is separate
+
+[Latest partner clarification](partner-clarification-20261127.md) explicitly restricts Accepted to original baseline 17c8b90 / 00005-rdp. The new 1ffb8b0 / 00007-pnb has reported DQ-UAT-07 PASS 9/9 only; final new-release decision remains unconfirmed. Owner Refresh/GET supplement is promised, not received. Iivo's original execution and later user-reported review are separate contributions with the source limits above.
 
 ### Preserved return template for future independent responses
 

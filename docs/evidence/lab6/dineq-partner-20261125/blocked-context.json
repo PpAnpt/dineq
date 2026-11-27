@@ -1,0 +1,21 @@
+{
+  "startedAt": "2026-11-25T14:24:51.049Z",
+  "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+  "mode": "blocked-evidence",
+  "reportedCommit": null,
+  "reportedRevision": null,
+  "versionSource": "unverified handoff candidate/reference",
+  "testers": [
+    null,
+    null
+  ],
+  "bothIndependentTestersConfirmed": false,
+  "results": [
+    {
+      "id": "BLOCKED-EVIDENCE",
+      "status": "PASS",
+      "detail": "Captured explicitly pre-restart/open-state context screenshots only; no restart or queue-state change performed.",
+      "at": "2026-11-25T14:24:51.048Z"
+    }
+  ]
+}

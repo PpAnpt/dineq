@@ -1,9 +1,28 @@
 # Lab 6: DineQ Sprint 1 independent UAT
 
+Updated 27 November 2026. Preparation/cases/handoff merged through PR #53–#57,
+HairRoot R01 through #58, and the reviewed follow-up #59 merged into
+lab6-staging as da7fe9ff0b69ba9156ceca61ab166e86067274d7 at 08:22:52 Bangkok
+on 27 November. **L6-5 / #49** now reconciles the latest received DineQ evidence:
+[follow-up R02](dineq-received-followup-R02.md). Final contributions and both
+products' independent acceptance remain outstanding. The student has deferred
+HairRoot retest until the partner is ready; no new partner test is started.
+
+## Current recorded results
+
+| Tested product | Who executed / source | Actual recorded outcome | Still needed |
+| --- | --- | --- | --- |
+| HairRoot | Our DineQ team's [R01 assisted report](hairroot-run-2026-11-26-R01.md), integrated through PR #58 | 5 PASS / 1 FAIL / 1 BLOCKED cases; one underlying Unicode finding HR-F01 | Partner fix/independent retest, announced redeployment check, genuine second-student execution contribution and final decision |
+| DineQ | HairRoot's [original run](dineq-received-triage.md) plus [26 Nov follow-up](dineq-received-followup-R02.md) | Original 9 PASS / 2 BLOCKED / 0 FAIL retained; later 04C OBSERVATION PASS with linked R03 owner records and 08B partner-reported PASS with relayed owner comparison; no submitted defect | Independent acknowledgement/decision, actual second-student contribution, exact accepted version and original owner JSON corroboration |
+
+PR #59 is merged; its approval/CI is separate from review of the new
+incoming-result/owner-operation work. Integration into lab6-staging does not
+deploy. A reviewable #49 change is still required before closing that issue.
+
 27 November preparation under #51: [independent acceptance records](acceptance-records.md)
 and [contributions / remaining evidence](contributions-and-gaps.md). These remain
 PENDING where no actual student/team record exists. Latest incoming DineQ results
-are prepared separately in [PR #60](https://github.com/PpAnpt/dineq/pull/60);
+were reviewed and merged in [PR #60](https://github.com/PpAnpt/dineq/pull/60) as `603beb1` on 27 November;
 HairRoot retest is deferred until the partner is ready. The historical progress
 notes below retain their original context.
 
@@ -51,19 +70,19 @@ Work one issue at a time. Commit meaningful steps separately. Code fixes need a 
 | Work item | Tracking | Planned artifact / completion evidence |
 | --- | --- | --- |
 | L6-1 Partner, baseline and integration workflow | [#45](https://github.com/PpAnpt/dineq/issues/45) | Reviewed CI preparation and updated date-level coordination; final session details/version confirmation pending |
-| L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | DONE: [uat-cases.md](uat-cases.md), eight executable cases reviewed by PpAnpt, PR #54 merged; execution NOT EXECUTED |
+| L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | DONE: [uat-cases.md](uat-cases.md), eight executable cases reviewed by PpAnpt, PR #54 merged; the original case sheet remains a reusable template, actual received results are separate |
 | L6-3 Safe DineQ handoff | [#47](https://github.com/PpAnpt/dineq/issues/47) | [handoff.md](handoff.md): reviewed/merged in PR #55/#56; actual partner packet receipt/access/session confirmations remain separate |
-| L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | [v0.2 template](hairroot-execution.md) and [actual R01 assisted run](hairroot-run-2026-11-26-R01.md): 5 PASS / 1 FAIL / 1 BLOCKED cases; [HR-F01](hairroot-finding-HR-F01.md) awaits partner triage; no final independent acceptance |
-| L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | All received findings/dispositions; distinguish none received from a completed clean test |
+| L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | [v0.2 template](hairroot-execution.md) and [actual R01 assisted run](hairroot-run-2026-11-26-R01.md): 5 PASS / 1 FAIL / 1 BLOCKED cases; HairRoot's open report PR #56 records HR-F01 as Accepted defect / Minor, with fix/retest and independent acceptance still pending |
+| L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | [R01 register](dineq-received-triage.md) preserved and [R02 reconciliation](dineq-received-followup-R02.md) added; CLOSED/restart observations now supplied, no submitted defect; teammate review pending |
 | L6-6 Corrections and reviewed release | [#50](https://github.com/PpAnpt/dineq/issues/50) | Additional issue per real defect; RED/GREEN/regression/PR/release/deploy chain, or TA-approved isolated exercise |
 | L6-7 Independent retest/acceptance | [#51](https://github.com/PpAnpt/dineq/issues/51) | Version-bound decisions by the independent team for each product |
 | L6-8 Submission evidence | [#52](https://github.com/PpAnpt/dineq/issues/52) | One self-contained Parts A-D PDF with cases, actual evidence, contributions, AI use and limitations |
 
-The merged technical preparation in #45 is complete, but final session arrangements/version confirmation remain external coordination. #46 is Done; #47 has reviewed handoff/preparation documents with actual receipt/readiness still separate. #48 is the active authoring/execution task at the student's request; #49-52 remain later work. This register does not mark Lab 6 or independent UAT complete.
+The merged technical preparation in #45 is complete, but final session arrangements/version confirmation remain external coordination. #46 is Done; #47 has reviewed handoff/preparation documents and received partner execution, with remaining conditional setup/readiness still separate. #48 remains in review/follow-up; #49 is active under the student's instruction to progress while waiting, and #50-52 retain their dependencies. This register does not mark Lab 6 or independent UAT complete.
 
 ## Candidate DineQ case outline for L6-2
 
-This original scope outline now has complete [executable cases](uat-cases.md), reviewed under #46/PR #54. The cases separate UI/API observations, declare the FIFO/data dependencies and record unexecuted/conditional subcases explicitly. All results are **NOT EXECUTED**.
+This original scope outline now has complete [executable cases](uat-cases.md), reviewed under #46/PR #54. The cases separate UI/API observations, declare the FIFO/data dependencies and record unexecuted/conditional subcases explicitly. The original template's empty result cells remain **NOT EXECUTED**; consult the separate [received execution record](dineq-received-triage.md) for actual partner outcomes.
 
 | Draft ID | DineQ behavior to exercise | Contract references / coverage note |
 | --- | --- | --- |

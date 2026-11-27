@@ -1,0 +1,38 @@
+{
+  "mode": "after-restart",
+  "startedAt": "2026-11-26T16:20:42.924Z",
+  "bangkokTime": "26/11/2026, 23:20:42",
+  "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+  "queueId": "22222222-2222-4222-8222-222222222222",
+  "status": "OBSERVATION_PASS",
+  "detail": "08B ticket comparison recorded. Require DineQ owner proof of distinct same-image revision and unchanged DB before final PASS.",
+  "screenshots": [
+    "screenshots/2026-11-26T16-20-42-923Z/08B-after-restart-C1-ticket12.png",
+    "screenshots/2026-11-26T16-20-42-923Z/08B-after-restart-C2-ticket17.png"
+  ],
+  "data": {
+    "t02": {
+      "id": "37696ade-6374-46bb-b603-4e19e5f48af4",
+      "queueId": "22222222-2222-4222-8222-222222222222",
+      "ticketNo": 12,
+      "partySize": 4,
+      "status": "COMPLETED",
+      "createdAt": "2026-11-25T14:19:43.026Z",
+      "calledAt": "2026-11-25T14:19:43.910Z",
+      "completedAt": "2026-11-25T14:19:44.606Z"
+    },
+    "t08": {
+      "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+      "queueId": "22222222-2222-4222-8222-222222222222",
+      "ticketNo": 17,
+      "partySize": 2,
+      "status": "WAITING",
+      "createdAt": "2026-11-25T14:19:55.446Z",
+      "calledAt": null,
+      "completedAt": null
+    },
+    "t02Matches": true,
+    "t08Matches": true
+  },
+  "endedAt": "2026-11-26T16:20:49.824Z"
+}

@@ -1,0 +1,81 @@
+{
+  "startedAt": "2026-11-25T14:19:59.131Z",
+  "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+  "mode": "run",
+  "reportedCommit": "17c8b90642ecb742b4f8b7e8c55da7fd34ddd620",
+  "reportedRevision": "s21271a0d-00005-rdp",
+  "versionSource": "unverified handoff candidate/reference",
+  "testers": [
+    "Tithinan Sobking (automated Playwright session)",
+    "Not independently confirmed"
+  ],
+  "bothIndependentTestersConfirmed": false,
+  "results": [
+    {
+      "id": "DQ-UAT-01",
+      "status": "PASS",
+      "detail": "Anonymous, wrong credentials, Customer/Host roles, logout and unassigned Host checks passed.",
+      "at": "2026-11-25T14:19:29.027Z"
+    },
+    {
+      "id": "DQ-UAT-04A",
+      "status": "PASS",
+      "detail": "UI rejects 0/9/1.5; API rejects 0/9/1.5/string four; state unchanged.",
+      "at": "2026-11-25T14:19:39.635Z"
+    },
+    {
+      "id": "DQ-UAT-04B",
+      "status": "PASS",
+      "detail": "Party size boundaries accepted: 1 (#10) then 8 (#11); both test tickets completed.",
+      "at": "2026-11-25T14:19:42.756Z"
+    },
+    {
+      "id": "DQ-UAT-02",
+      "status": "PASS",
+      "detail": "Same ticket 37696ade-6374-46bb-b603-4e19e5f48af4 / #12: WAITING -> CALLED -> COMPLETED. Retained for DQ-UAT-08.",
+      "at": "2026-11-25T14:19:45.192Z"
+    },
+    {
+      "id": "DQ-UAT-03",
+      "status": "PASS",
+      "detail": "Duplicate joins rejected in WAITING and CALLED; only original ticket #13 completed.",
+      "at": "2026-11-25T14:19:47.578Z"
+    },
+    {
+      "id": "DQ-UAT-05",
+      "status": "PASS",
+      "detail": "Unauthorized requests returned 401/403; C2 fixture d4c8d7fa-2c21-4217-b7fe-a7c532e8ca8f preserved WAITING for 06.",
+      "at": "2026-11-25T14:19:50.160Z"
+    },
+    {
+      "id": "DQ-UAT-06",
+      "status": "PASS",
+      "detail": "C1 denied access to C2 ticket d4c8d7fa-2c21-4217-b7fe-a7c532e8ca8f; owner state unchanged; own fixture then completed.",
+      "at": "2026-11-25T14:19:51.356Z"
+    },
+    {
+      "id": "DQ-UAT-07",
+      "status": "PASS",
+      "detail": "FIFO, unresolved-call and invalid-transition checks passed; empty queue returned 404.",
+      "at": "2026-11-25T14:19:55.058Z"
+    },
+    {
+      "id": "DQ-UAT-04C",
+      "status": "BLOCKED",
+      "detail": "Requires the DineQ owner to prepare/authorize CLOSED Q and later restore OPEN; script will not change queue status.",
+      "at": "2026-11-25T14:19:55.058Z"
+    },
+    {
+      "id": "DQ-UAT-08A",
+      "status": "PASS",
+      "detail": "Reload and fresh-session persistence verified for T02 37696ade-6374-46bb-b603-4e19e5f48af4 COMPLETED and T08 922aad64-621e-402b-b926-20d0c1fef4ce WAITING.",
+      "at": "2026-11-25T14:19:59.110Z"
+    },
+    {
+      "id": "DQ-UAT-08B",
+      "status": "BLOCKED",
+      "detail": "Requires a separately authorized DineQ owner restart with same DB plus operation/revision evidence. Run after-restart mode only after owner confirms it happened.",
+      "at": "2026-11-25T14:19:59.110Z"
+    }
+  ]
+}

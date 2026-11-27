@@ -1,0 +1,123 @@
+{
+  "archiveName": "UAT-DinoQ-Pic.zip",
+  "archiveSha256": "1760da3a3375db247396793f5bdc5451d7e37ed1aba8764468e5383f9d761466",
+  "receivedVia": "User-supplied ZIP on 26 November 2026; exact delivery time not supplied",
+  "product": "DineQ",
+  "executionTeam": "HairRoot",
+  "preservation": "Selected original bytes copied; executable/password-bearing helper, cleanup runs and unrelated files are not published",
+  "files": [
+    {
+      "path": "final-run.json",
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-19-21-222Z-run-report.json",
+      "sha256": "8e4c59a1f6697ef6badeda7177b452ad4afc0755faeb1b61cd5dea3eafab7460",
+      "bytes": 2984
+    },
+    {
+      "path": "blocked-context.json",
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-24-44-991Z-blocked-evidence-report.json",
+      "sha256": "4dc0497f59ace3d60c93b6dc8a8155c9810bb2b17e55e492c841c3b4cd6eb494",
+      "bytes": 587
+    },
+    {
+      "path": "04C-blocked-open.png",
+      "sourcePath": "UAT-DinoQ-Pic/screenshots/2026-11-25T14-24-44-991Z/04C-BLOCKED-queue-open-owner-setup-required.png",
+      "sha256": "4e38a3c7d5a03bac63a4c5588b5112a49ffea08f1d72c571f285a367efaed532",
+      "bytes": 25150
+    },
+    {
+      "path": "08B-blocked-before.png",
+      "sourcePath": "UAT-DinoQ-Pic/screenshots/2026-11-25T14-24-44-991Z/08B-BLOCKED-C2-before-restart.png",
+      "sha256": "6a6d88eb29fd030a6e415b5d8d708a0c2ca770dc622c289f7ccb05071778e5d7",
+      "bytes": 32356
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/UAT-Results-2026-11-25.md",
+      "sha256": "dc5c26fc6e8c5f57b66ad1f89a85b18dcd4ba1f76f3e8291f8430b1d0da9e530",
+      "bytes": 5102,
+      "published": false
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/run-dineq-uat.mjs",
+      "sha256": "1cd432941af9861202a4dc6d30f2108ca1204fdc406a6c6c57291be3acf7d31f",
+      "bytes": 33872,
+      "published": false
+    }
+  ],
+  "earlierAttempts": [
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-03-58-954Z-run-report.json",
+      "sha256": "5ba4eb36f715bd6dcfd37051d3ca296b67f597e6f83b11877efaf760df016f14",
+      "counts": {
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "Missing DQ_PASSWORD_[object Object] in process environment."
+      ]
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-06-17-913Z-run-report.json",
+      "sha256": "53d419553a87e472d0e1bc6bc15777b184a5b84b0254b601a62d3b780d65ee68",
+      "counts": {
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "C1 identity not visible after sign-in."
+      ]
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-08-54-071Z-run-report.json",
+      "sha256": "0fadb978eccc23b5d8a0e57f8132da583047d6542d6908689d56819c52ee7b5d",
+      "counts": {
+        "PASS": 2,
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "Cannot access 'list' before initialization"
+      ]
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-10-14-043Z-run-report.json",
+      "sha256": "492f1ca9961478aa9e988fc43f3d40769f8339e95b19ccb52a4c45f38b988ed8",
+      "counts": {
+        "PASS": 2,
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "04B-C3 join response unexpected."
+      ]
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-14-02-303Z-run-report.json",
+      "sha256": "6ed84fd0123ca6f9b8d81e87c681a146adc0493411ce1ba476d49f2e24c993d3",
+      "counts": {
+        "PASS": 2,
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "04B-C3 join response unexpected (HTTP 201; data keys: none; status: none; partySize: none)."
+      ]
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-16-00-507Z-run-report.json",
+      "sha256": "cb36f6c89cc31e6c69c6725d894620e0209df12395d1bd6661620b0b811436a3",
+      "counts": {
+        "PASS": 5,
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "H2 is not defined"
+      ]
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic/results/2026-11-25T14-17-39-290Z-run-report.json",
+      "sha256": "65a5b3ed565b120a2fd79fdaa28750884bf27c6867db846b3ee3bb14c0adf618",
+      "counts": {
+        "PASS": 1,
+        "STOPPED": 1
+      },
+      "stoppedReasons": [
+        "C2 already has active ticket(s): #9 WAITING. Stopping without changing them."
+      ]
+    }
+  ]
+}

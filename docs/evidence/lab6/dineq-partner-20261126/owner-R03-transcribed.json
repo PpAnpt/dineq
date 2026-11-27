@@ -1,0 +1,23 @@
+{
+  "attempt": "R03",
+  "ownerSnapshot": "SUCCESS: guarded closure ran only after the new owner snapshot succeeded; full raw snapshot remains in Cloud Shell",
+  "close": {
+    "observedResult": "SUCCESS",
+    "execution": "s21271a0d-migrate-jb6l9",
+    "at": "2026-11-26T15:58:56.155Z",
+    "queueStatus": "CLOSED",
+    "nextTicketNo": 18,
+    "unchanged": true,
+    "originalJson": "/home/siwarakbingo/dineq-lab6-owner-v2/evidence/R03/04C-closed.json"
+  },
+  "restore": {
+    "observedResult": "SUCCESS",
+    "execution": "s21271a0d-migrate-ll8kb",
+    "at": "2026-11-26T16:09:47.375Z",
+    "queueStatus": "OPEN",
+    "nextTicketNo": 18,
+    "unchanged": true,
+    "originalJson": "/home/siwarakbingo/dineq-lab6-owner-v2/evidence/R03/04C-restored.json"
+  },
+  "provenance": "Existing local R03 authenticated-output transcription; original full JSON remains in Cloud Shell. Not a fresh cloud query."
+}

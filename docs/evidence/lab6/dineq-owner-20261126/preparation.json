@@ -1,0 +1,51 @@
+{
+  "kind": "owner-preparation",
+  "independentUatResult": null,
+  "checkedAt": "2026-11-26T14:47:38.729379+00:00",
+  "observationSource": "Authenticated Cloud Shell command output observed through Computer Use",
+  "command": "python3 cloud-owner.py inspect --output evidence/inspect.json",
+  "project": "cpe-se-course-2026",
+  "region": "asia-southeast1",
+  "service": "s21271a0d",
+  "revision": "s21271a0d-00005-rdp",
+  "trafficPercent": 100,
+  "imageDigest": "sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8",
+  "jobDatabaseBindingMatches": true,
+  "jobOciIndexRunnableManifestMatches": true,
+  "partnerAvailability": "Student reports partner ready by 2026-11-26 22:00 Asia/Bangkok; actual readiness pending",
+  "closedOperation": "NOT EXECUTED",
+  "restartOperation": "NOT EXECUTED",
+  "ownerSnapshot": {
+    "captureType": "Selected fields transcribed from authenticated Cloud Shell JSON output; full original retained at cloudShellPath",
+    "cloudShellPath": "/home/siwarakbingo/dineq-lab6-owner-v2/evidence/preparation-before.json",
+    "serviceCheckedAt": "2026-11-26T14:48:41.988697+00:00",
+    "at": "2026-11-26T14:48:59.337Z",
+    "execution": "s21271a0d-migrate-bpt96",
+    "queueId": "22222222-2222-4222-8222-222222222222",
+    "queueStatus": "OPEN",
+    "nextTicketNo": 18,
+    "entryCount": 17,
+    "eventCount": 49,
+    "dataHash": "1c6c296bf941a8d8ae256ee428004cb0b0899a88cbb58c60069750b4e87bae59",
+    "retainedFixtures": [
+      {
+        "id": "37696ade-6374-46bb-b603-4e19e5f48af4",
+        "ticketNo": 12,
+        "partySize": 4,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:19:43.026Z",
+        "calledAt": "2026-11-25T14:19:43.910Z",
+        "completedAt": "2026-11-25T14:19:44.606Z"
+      },
+      {
+        "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+        "ticketNo": 17,
+        "partySize": 2,
+        "status": "WAITING",
+        "createdAt": "2026-11-25T14:19:55.446Z",
+        "calledAt": null,
+        "completedAt": null
+      }
+    ]
+  }
+}

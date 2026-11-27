@@ -1,0 +1,245 @@
+{
+  "product": "DineQ",
+  "case": "DQ-UAT-07",
+  "tester": "Tithinan Sobking",
+  "scriptAuthor": "OpenAI Codex (GPT-6), at Tithinan Sobking’s request",
+  "runner": "Playwright automation executed by OpenAI Codex on the user’s behalf",
+  "startedAt": "2026-11-27T15:54:04.261Z",
+  "endedAt": "2026-11-27T15:54:15.373Z",
+  "timezone": "Asia/Bangkok",
+  "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+  "revision": "s21271a0d-00007-pnb",
+  "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+  "runConclusion": "PASS",
+  "error": null,
+  "evidence": {
+    "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+    "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+    "revision": "s21271a0d-00007-pnb",
+    "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+    "queue": {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "name": "DineQ Demo Restaurant",
+      "status": "OPEN"
+    },
+    "tickets": {
+      "T07A": {
+        "id": "1a395b36-4731-4273-8e1a-f72a5243ea40",
+        "ticketNo": 22,
+        "partySize": 3,
+        "status": "COMPLETED",
+        "completedAt": "2026-11-27T15:54:12.441Z"
+      },
+      "T07B": {
+        "id": "92858610-677e-417e-921a-5f53ab566e27",
+        "ticketNo": 23,
+        "partySize": 5,
+        "status": "COMPLETED",
+        "completedAt": "2026-11-27T15:54:13.440Z"
+      }
+    },
+    "steps": [
+      {
+        "step": "PRECONDITIONS",
+        "status": "PASS",
+        "expected": "Queue OPEN, active list empty, C1/C2 have no active tickets",
+        "actual": "Q 22222222-2222-4222-8222-222222222222; zero active entries; verified immediately before Join",
+        "evidenceId": null,
+        "at": "2026-11-27T15:54:09.34Z"
+      },
+      {
+        "step": 1,
+        "status": "PASS",
+        "expected": "Join returns 201; ticket WAITING, partySize 3",
+        "actual": "ticketNo 22, UUID 1a395b36-4731-4273-8e1a-f72a5243ea40, WAITING",
+        "evidenceId": "T07A-waiting",
+        "at": "2026-11-27T15:54:10.164Z"
+      },
+      {
+        "step": 1,
+        "status": "PASS",
+        "expected": "Join returns 201; ticket WAITING, partySize 5",
+        "actual": "ticketNo 23, UUID 92858610-677e-417e-921a-5f53ab566e27, WAITING",
+        "evidenceId": "T07B-waiting",
+        "at": "2026-11-27T15:54:10.76Z"
+      },
+      {
+        "step": 2,
+        "status": "PASS",
+        "expected": "A then B are WAITING in FIFO order; no CALLED; no customer email exposed",
+        "actual": "Host API returned #22 then #23; both WAITING",
+        "evidenceId": "step2-fifo-waiting",
+        "at": "2026-11-27T15:54:11.147Z"
+      },
+      {
+        "step": 3,
+        "status": "PASS",
+        "expected": "Call Next returns FIFO head A as CALLED; B stays WAITING",
+        "actual": "A #22 CALLED, B #23 WAITING",
+        "evidenceId": "step3-A-called-B-waiting",
+        "at": "2026-11-27T15:54:11.644Z"
+      },
+      {
+        "step": 4,
+        "status": "PASS",
+        "expected": "409 INVALID_TRANSITION; B unchanged",
+        "actual": "409 INVALID_TRANSITION; B remains WAITING, same owner record",
+        "evidenceId": null,
+        "at": "2026-11-27T15:54:11.808Z"
+      },
+      {
+        "step": 5,
+        "status": "PASS",
+        "expected": "409 UNRESOLVED_CALLED; only A CALLED and B WAITING remain",
+        "actual": "409 UNRESOLVED_CALLED; owner/queue snapshots unchanged",
+        "evidenceId": null,
+        "at": "2026-11-27T15:54:12.035Z"
+      },
+      {
+        "step": 6,
+        "status": "PASS",
+        "expected": "Complete A; C1 sees the same UUID as COMPLETED while B remains WAITING",
+        "actual": "A #22 COMPLETED; B #23 WAITING",
+        "evidenceId": "step6-A-completed",
+        "at": "2026-11-27T15:54:12.477Z"
+      },
+      {
+        "step": 7,
+        "status": "PASS",
+        "expected": "409 INVALID_TRANSITION; completed A unchanged",
+        "actual": "409 INVALID_TRANSITION; A completedAt unchanged",
+        "evidenceId": null,
+        "at": "2026-11-27T15:54:12.576Z"
+      },
+      {
+        "step": 8,
+        "status": "PASS",
+        "expected": "B completed and C2 sees same ticket; queue has no active entries",
+        "actual": "B #23 partySize 5 COMPLETED; active count 0",
+        "evidenceId": "step8-B-completed",
+        "at": "2026-11-27T15:54:13.575Z"
+      },
+      {
+        "step": 9,
+        "status": "PASS",
+        "expected": "404 NO_WAITING_ENTRY; active list remains empty; completed tickets unchanged",
+        "actual": "404 NO_WAITING_ENTRY",
+        "evidenceId": "step9-empty-queue",
+        "at": "2026-11-27T15:54:14.077Z"
+      }
+    ],
+    "smokePrecheck": {
+      "at": "2026-11-27T15:54:04.698Z",
+      "health": 200,
+      "ready": 200
+    },
+    "preconditions": {
+      "checkedAt": "2026-11-27T15:54:09.34Z",
+      "queueOpen": true,
+      "activeQueueCount": 0,
+      "c1ActiveCount": 0,
+      "c2ActiveCount": 0,
+      "productReportedT08_17Completed": true
+    }
+  },
+  "results": [
+    {
+      "step": "PRECONDITIONS",
+      "status": "PASS",
+      "expected": "Queue OPEN, active list empty, C1/C2 have no active tickets",
+      "actual": "Q 22222222-2222-4222-8222-222222222222; zero active entries; verified immediately before Join",
+      "evidenceId": null,
+      "at": "2026-11-27T15:54:09.34Z"
+    },
+    {
+      "step": 1,
+      "status": "PASS",
+      "expected": "Join returns 201; ticket WAITING, partySize 3",
+      "actual": "ticketNo 22, UUID 1a395b36-4731-4273-8e1a-f72a5243ea40, WAITING",
+      "evidenceId": "T07A-waiting",
+      "at": "2026-11-27T15:54:10.164Z"
+    },
+    {
+      "step": 1,
+      "status": "PASS",
+      "expected": "Join returns 201; ticket WAITING, partySize 5",
+      "actual": "ticketNo 23, UUID 92858610-677e-417e-921a-5f53ab566e27, WAITING",
+      "evidenceId": "T07B-waiting",
+      "at": "2026-11-27T15:54:10.76Z"
+    },
+    {
+      "step": 2,
+      "status": "PASS",
+      "expected": "A then B are WAITING in FIFO order; no CALLED; no customer email exposed",
+      "actual": "Host API returned #22 then #23; both WAITING",
+      "evidenceId": "step2-fifo-waiting",
+      "at": "2026-11-27T15:54:11.147Z"
+    },
+    {
+      "step": 3,
+      "status": "PASS",
+      "expected": "Call Next returns FIFO head A as CALLED; B stays WAITING",
+      "actual": "A #22 CALLED, B #23 WAITING",
+      "evidenceId": "step3-A-called-B-waiting",
+      "at": "2026-11-27T15:54:11.644Z"
+    },
+    {
+      "step": 4,
+      "status": "PASS",
+      "expected": "409 INVALID_TRANSITION; B unchanged",
+      "actual": "409 INVALID_TRANSITION; B remains WAITING, same owner record",
+      "evidenceId": null,
+      "at": "2026-11-27T15:54:11.808Z"
+    },
+    {
+      "step": 5,
+      "status": "PASS",
+      "expected": "409 UNRESOLVED_CALLED; only A CALLED and B WAITING remain",
+      "actual": "409 UNRESOLVED_CALLED; owner/queue snapshots unchanged",
+      "evidenceId": null,
+      "at": "2026-11-27T15:54:12.035Z"
+    },
+    {
+      "step": 6,
+      "status": "PASS",
+      "expected": "Complete A; C1 sees the same UUID as COMPLETED while B remains WAITING",
+      "actual": "A #22 COMPLETED; B #23 WAITING",
+      "evidenceId": "step6-A-completed",
+      "at": "2026-11-27T15:54:12.477Z"
+    },
+    {
+      "step": 7,
+      "status": "PASS",
+      "expected": "409 INVALID_TRANSITION; completed A unchanged",
+      "actual": "409 INVALID_TRANSITION; A completedAt unchanged",
+      "evidenceId": null,
+      "at": "2026-11-27T15:54:12.576Z"
+    },
+    {
+      "step": 8,
+      "status": "PASS",
+      "expected": "B completed and C2 sees same ticket; queue has no active entries",
+      "actual": "B #23 partySize 5 COMPLETED; active count 0",
+      "evidenceId": "step8-B-completed",
+      "at": "2026-11-27T15:54:13.575Z"
+    },
+    {
+      "step": 9,
+      "status": "PASS",
+      "expected": "404 NO_WAITING_ENTRY; active list remains empty; completed tickets unchanged",
+      "actual": "404 NO_WAITING_ENTRY",
+      "evidenceId": "step9-empty-queue",
+      "at": "2026-11-27T15:54:14.077Z"
+    }
+  ],
+  "findings": "None observed within this DQ-UAT-07 final run.",
+  "actionExecutor": "OpenAI Codex Playwright automation",
+  "digestSource": "DineQ deploy build log; not independently queried from Cloud Run",
+  "observationStartBangkok": "2026-11-27T22:54:04+07:00",
+  "observationEndBangkok": "2026-11-27T22:54:15+07:00",
+  "finalRunScreenshotFolder": "screenshots/2026-11-27T15-54-04-260Z/",
+  "runnerInterruptions": [
+    "Earlier run stopped after first Join because the original parser expected a ticket number in the POST response. Read-only owner/Host inspection found only T07A #18 active; it was later completed.",
+    "A subsequent run stopped before step 8 due to an overstrict active-count guard; no unexpected Host action was sent. Read-only inspection confirmed the exact remaining ticket before resuming. Final clean run passed all nine steps."
+  ]
+}

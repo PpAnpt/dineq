@@ -1,0 +1,43 @@
+test / test-and-docker	UNKNOWN STEP	2026-11-27T15:26:38.9012564Z ✔ smoke test also checks the built UI root, read-only (0.256616ms)
+test / test-and-docker	UNKNOWN STEP	2026-11-27T15:27:21.2859648Z #24 exporting manifest sha256:e389e2daccbd06386d6528caac077af2a14accedec00d37965c77b0522b4600b done
+deploy	Build and push the image	2026-11-27T15:27:48.9706583Z #24 exporting manifest sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47 done
+deploy	Build and push the image	2026-11-27T15:27:48.9712808Z #24 naming to asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d:1ffb8b09b8df7f6b6954047ccdef4c2ccc113931 done
+deploy	Run database migration (optional)	2026-11-27T15:28:38.3721774Z Execution [s21271a0d-migrate-dprmj] has successfully completed.
+deploy	Deploy to Cloud Run	2026-11-27T15:28:57.7376149Z Service [s21271a0d] revision [s21271a0d-00007-pnb] has been deployed and is serving 100 percent of traffic.
+deploy	Deploy to Cloud Run	2026-11-27T15:28:57.7377195Z Service URL: https://s21271a0d-670075229477.asia-southeast1.run.app
+deploy	Smoke test	﻿2026-11-27T15:28:57.9175980Z ##[group]Run ACTUAL="$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format='value(status.url)')"
+deploy	Smoke test	2026-11-27T15:28:57.9177841Z ^[[36;1mACTUAL="$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format='value(status.url)')"^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9179344Z ^[[36;1m[ "$ACTUAL" = "$SERVICE_URL" ] || { echo "Service URL $ACTUAL differs from APP_ORIGIN $SERVICE_URL"; exit 1; }^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9180304Z ^[[36;1mURL="$SERVICE_URL"^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9180761Z ^[[36;1mfor i in $(seq 1 12); do^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9182134Z ^[[36;1m  if curl -fsS "$URL/api/health" && echo && curl -fsS "$URL/api/ready" && echo && curl -fsS "$URL/" | grep -q 'id="root"'; then echo; echo 'Smoke test passed'; exit 0; fi^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9183412Z ^[[36;1m  echo "Attempt $i failed, retrying in 10s"; sleep 10^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9184011Z ^[[36;1mdone^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9184797Z ^[[36;1mecho 'Smoke test failed: /api/health, /api/ready or the UI root did not respond as expected'; exit 1^[[0m
+deploy	Smoke test	2026-11-27T15:28:57.9232122Z shell: /usr/bin/bash -e {0}
+deploy	Smoke test	2026-11-27T15:28:57.9232395Z env:
+deploy	Smoke test	2026-11-27T15:28:57.9232607Z   PROJECT_ID: cpe-se-course-2026
+deploy	Smoke test	2026-11-27T15:28:57.9232880Z   REGION: asia-southeast1
+deploy	Smoke test	2026-11-27T15:28:57.9233127Z   SERVICE_NAME: s21271a0d
+deploy	Smoke test	2026-11-27T15:28:57.9233361Z   MIGRATE_JOB_NAME: s21271a0d-migrate
+deploy	Smoke test	2026-11-27T15:28:57.9233666Z   AR_REPOSITORY: s21271a0d
+deploy	Smoke test	2026-11-27T15:28:57.9233894Z   IMAGE_NAME: s21271a0d
+deploy	Smoke test	2026-11-27T15:28:57.9234106Z   APP_PORT: 3000
+deploy	Smoke test	2026-11-27T15:28:57.9234338Z   MIGRATE_COMMAND: node database/migrate.js
+deploy	Smoke test	2026-11-27T15:28:57.9234850Z   CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: /home/runner/work/dineq/dineq/gha-creds-9de3ee4f0904a1aa.json
+deploy	Smoke test	2026-11-27T15:28:57.9235519Z   GOOGLE_APPLICATION_CREDENTIALS: /home/runner/work/dineq/dineq/gha-creds-9de3ee4f0904a1aa.json
+deploy	Smoke test	2026-11-27T15:28:57.9236114Z   GOOGLE_GHA_CREDS_PATH: /home/runner/work/dineq/dineq/gha-creds-9de3ee4f0904a1aa.json
+deploy	Smoke test	2026-11-27T15:28:57.9236565Z   CLOUDSDK_CORE_PROJECT: cpe-se-course-2026
+deploy	Smoke test	2026-11-27T15:28:57.9236867Z   CLOUDSDK_PROJECT: cpe-se-course-2026
+deploy	Smoke test	2026-11-27T15:28:57.9237137Z   GCLOUD_PROJECT: cpe-se-course-2026
+deploy	Smoke test	2026-11-27T15:28:57.9237401Z   GCP_PROJECT: cpe-se-course-2026
+deploy	Smoke test	2026-11-27T15:28:57.9237676Z   GOOGLE_CLOUD_PROJECT: cpe-se-course-2026
+deploy	Smoke test	2026-11-27T15:28:57.9238017Z   CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
+deploy	Smoke test	2026-11-27T15:28:57.9238379Z   CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 3.0.1
+deploy	Smoke test	2026-11-27T15:28:57.9238944Z   IMAGE: asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d:1ffb8b09b8df7f6b6954047ccdef4c2ccc113931
+deploy	Smoke test	2026-11-27T15:28:57.9239572Z   SERVICE_URL: https://s21271a0d-4d7hbszvwq-as.a.run.app
+deploy	Smoke test	2026-11-27T15:28:57.9239895Z ##[endgroup]
+deploy	Smoke test	2026-11-27T15:29:00.5019100Z {"data":{"status":"ok"}}
+deploy	Smoke test	2026-11-27T15:29:00.8202355Z {"data":{"status":"ready","db":"connected"}}
+deploy	Smoke test	2026-11-27T15:29:01.1097654Z 
+deploy	Smoke test	2026-11-27T15:29:01.1098207Z Smoke test passed

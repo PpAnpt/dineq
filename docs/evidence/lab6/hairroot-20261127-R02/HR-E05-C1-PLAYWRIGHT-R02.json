@@ -1,0 +1,19 @@
+{
+  "id": "HR-E05-C1-PLAYWRIGHT-R02",
+  "time": "2026-11-27T10:24:08.584Z",
+  "actor": "C1",
+  "case": "UAT-05 step 4 / repeat step 1; Playwright capture",
+  "method": "Playwright full-page screenshot after private student login",
+  "bookingId": 4,
+  "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings/4",
+  "title": "HairRoot",
+  "text": "HairRoot\nBook\nMy bookings\nAnan Suksan (Customer)\nLog out\nYour appointment\nWhen\nThu 10 Dec, 16:07 to 16:37\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\nUAT hairline review\nStatus\nConfirmed\nBack to my bookings\nVersion cbaf1ba",
+  "version": {
+    "status": 200,
+    "body": {
+      "commit": "cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d"
+    }
+  },
+  "originalFieldsUnchanged": true,
+  "noBookingWrite": true
+}

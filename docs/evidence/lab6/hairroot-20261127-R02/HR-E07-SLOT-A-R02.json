@@ -1,0 +1,95 @@
+{
+  "id": "HR-E07-SLOT-A-R02",
+  "time": "2026-11-27T10:05:27.363Z",
+  "actor": "S1",
+  "case": "UAT-07-R02 preparation",
+  "date": "2026-12-16",
+  "start": "16:43",
+  "durationMinutes": 30,
+  "expected": "Time added and fresh negative slot Available",
+  "url": "https://hairroot-368003298307.asia-southeast1.run.app/schedule",
+  "title": "HairRoot",
+  "text": "HairRoot\nMy schedule\nDr. Somchai Prasert (Specialist)\nLog out\nMy schedule\nService\nHair transplant consultation\nPost-procedure follow-up\nAdd an available time\nTime added.\nDate\nStart time (Bangkok)\nDuration\n15 minutes\n30 minutes\n45 minutes\n60 minutes\n90 minutes\n120 minutes\nAdd time\nTimes and bookings\nSun 22 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nMon 23 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nTue 24 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nBookedAnan Suksan: ผมร่วงตลอดเลย\nWed 25 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nThu 26 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nFri 27 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nBookedKrit Boonmee: 🙂🙂🙂\n11:00 to 11:30\nAvailable\nSat 28 Nov\n09:00 to 09:30\nBookedKrit Boonmee: 🙂🙂\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nSun 29 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nMon 30 Nov\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nTue 1 Dec\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nWed 2 Dec\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nThu 3 Dec\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nFri 4 Dec\n09:00 to 09:30\nAvailable\n10:00 to 10:30\nAvailable\n11:00 to 11:30\nAvailable\nThu 10 Dec\n16:07 to 16:37\nBookedAnan Suksan: UAT hairline review\nFri 11 Dec\n16:17 to 16:47\nBookedMali Rattana: UAT race C2\nSat 12 Dec\n17:00 to 18:00\nBookedAnan Suksan: UAT hairline review\n18:00 to 18:30\nBookedAnan Suksan: 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789\n19:00 to 19:15\nBookedAnan Suksan: abc\n20:00 to 22:00\nAvailable\nSun 13 Dec\n16:27 to 16:57\nBookedKrit Boonmee: 🙂🙂\n17:27 to 17:57\nBookedKrit Boonmee: 🙂🙂🙂\nWed 16 Dec\n16:43 to 17:13\nAvailable\nFri 1 Jan\n17:00 to 18:00\nAvailable\n18:00 to 18:30\nAvailable\n19:00 to 19:15\nAvailable\n20:00 to 22:00\nAvailable\nTue 2 Feb\n12:12 to 12:42\nAvailable\nWed 3 Mar\n18:00 to 18:30\nBookedMali Rattana: UAT hairline review\nVersion cbaf1ba",
+  "inputs": [
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Log out"
+    },
+    {
+      "tag": "SELECT",
+      "type": "select-one",
+      "name": "",
+      "id": "schedule",
+      "label": null,
+      "options": [
+        {
+          "text": "Hair transplant consultation",
+          "value": "1"
+        },
+        {
+          "text": "Post-procedure follow-up",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "type": "date",
+      "name": "",
+      "id": "date",
+      "label": null
+    },
+    {
+      "tag": "INPUT",
+      "type": "time",
+      "name": "",
+      "id": "time",
+      "label": null
+    },
+    {
+      "tag": "SELECT",
+      "type": "select-one",
+      "name": "",
+      "id": "duration",
+      "label": null,
+      "options": [
+        {
+          "text": "15 minutes",
+          "value": "15"
+        },
+        {
+          "text": "30 minutes",
+          "value": "30"
+        },
+        {
+          "text": "45 minutes",
+          "value": "45"
+        },
+        {
+          "text": "60 minutes",
+          "value": "60"
+        },
+        {
+          "text": "90 minutes",
+          "value": "90"
+        },
+        {
+          "text": "120 minutes",
+          "value": "120"
+        }
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Add time"
+    }
+  ]
+}

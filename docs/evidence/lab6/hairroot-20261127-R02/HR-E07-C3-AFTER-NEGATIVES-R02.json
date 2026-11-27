@@ -1,0 +1,20 @@
+{
+  "id": "HR-E07-C3-AFTER-NEGATIVES-R02",
+  "time": "2026-11-27T10:12:01.858Z",
+  "actor": "C3",
+  "case": "UAT-07-R02 step 3",
+  "expected": "No new booking after all nine rejected inputs; My bookings matches before",
+  "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings",
+  "title": "HairRoot",
+  "text": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nMy bookings\nFri 27 Nov, 10:00 to 10:30\nDr. Somchai Prasert · 🙂🙂🙂\nSat 28 Nov, 09:00 to 09:30\nDr. Somchai Prasert · 🙂🙂\nSun 13 Dec, 16:27 to 16:57\nDr. Somchai Prasert · 🙂🙂\nSun 13 Dec, 17:27 to 17:57\nDr. Somchai Prasert · 🙂🙂🙂\nVersion cbaf1ba",
+  "inputs": [
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Log out"
+    }
+  ]
+}

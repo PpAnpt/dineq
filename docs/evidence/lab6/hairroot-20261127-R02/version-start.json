@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-27T10:00:09.567Z",
+  "url": "https://hairroot-368003298307.asia-southeast1.run.app/api/version",
+  "status": 200,
+  "body": {
+    "commit": "cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d"
+  }
+}

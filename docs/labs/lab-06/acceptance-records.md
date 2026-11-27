@@ -1,40 +1,43 @@
 # Lab 6 independent acceptance records
 
 Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51).
-**Both records are PENDING.** Prepared fields are source references, not a
-tester signature or a completed decision. Only the independent UAT team records
-its own decision. A product team's PR approval is not independent acceptance.
+**DineQ: partner-declared Accepted received on 27 November 2026; supporting
+digest/Iivo details remain incomplete. HairRoot: final DineQ decision PENDING.**
+Only the independent UAT team records its own decision. A product team's PR
+approval is not independent acceptance. The [received-message record](dineq-acceptance-received-20261127.md)
+identifies the source and distinguishes a received decision from missing proof.
 See [contributions and remaining evidence](contributions-and-gaps.md) for actual
 known work, the supplementary-execution return sheet and missing fields.
 
-## DineQ acceptance to be completed by HairRoot
+## DineQ acceptance received from HairRoot
 
 The [latest received-result reconciliation, PR #60](https://github.com/PpAnpt/dineq/pull/60)
 preserves the original 25 November 9 PASS / 2 BLOCKED / 0 FAIL run and adds the
 26 November 04C OBSERVATION PASS plus partner-reported 08B PASS. Existing R03
 close/OPEN records corroborate setup; 08B owner verification is partner-relayed.
-HairRoot must confirm the linked evidence and record its actual decision.
+HairRoot's later decision is recorded below from the student's relay. Digest
+verification and the missing second tester's contribution are still required.
 
 | Field | Prepared value / independent team to complete |
 | --- | --- |
 | Product / Product Team | DineQ / Anapat Banjerdsilp and Siwarak Chatvichai |
-| Independent UAT Team | HairRoot / หัวล้านได้หวี |
+| Independent UAT Team | HairRoot / TH-060_P1 / หัวล้านได้หวี |
 | Scope | Sprint 1 F-01 authentication, F-02 joining/own entries, F-03 assigned Host FIFO/completion; DQ-UAT-01..08 including 04A/B/C and 08A/B |
 | Application | https://s21271a0d-4d7hbszvwq-as.a.run.app |
 | Source commit reference | 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620; handoff-declared, not reverified by the partner follow-up |
-| Operation revision before / after | s21271a0d-00005-rdp / s21271a0d-l6-1126161809; reported same-image replacement, see PR #60 provenance |
-| Exact version accepted by UAT Team | PENDING independent confirmation; identify full commit/revision and source of verification |
+| Operation revision before / after | s21271a0d-00005-rdp / s21271a0d-l6-1126161809, confirmed by the relayed 27 Nov response; image-digest equality remains PENDING, not technically verified here |
+| Exact version accepted by UAT Team | Original Sprint 1 UAT on confirmed revision s21271a0d-00005-rdp, with restart follow-up on s21271a0d-l6-1126161809; baseline reference 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 reused from handoff, pending digest-to-commit verification |
 | Initial / follow-up evidence | 25 Nov initial run; 26 Nov CLOSED/restored and restart observations, source-qualified in PR #60 |
-| Tithinan contribution | Source attributes automated Playwright observations to Tithinan's request; confirm actual case/actions and time |
+| Tithinan contribution | Partner declares Tithinan Sobking wrote and ran the Playwright script and made the original-release decision; exact script revision/per-case times not newly supplied |
 | Iivo contribution | PENDING actual case/actions, time and evidence; do not infer participation from membership |
-| Finding disposition | No product defect submitted in supplied runs; confirm any additional findings or explicitly none |
-| Required cases / remaining conditions | Confirm 04C owner evidence and 08B provenance, then list any remaining required BLOCKED work |
-| Final decision | PENDING — independent team chooses Accepted / Accepted with explicitly documented minor limitations / Not Accepted |
-| Reasons / limitations accepted | PENDING; list Issue, impact and explicit independent agreement for each minor limitation, or state none |
-| Decision made by / team / date and time | PENDING actual names and Asia/Bangkok time |
-| Decision evidence | PENDING actual authored message/document/Issue URL or retained original, with receipt time |
+| Finding disposition | None, explicitly confirmed in the received partner response; no natural DineQ finding invented |
+| Required cases / remaining conditions | Preserve original/follow-up provenance; obtain actual baseline/restart image-digest comparison and Iivo's role/cases/actions/time/evidence before final PDF completion |
+| Final decision | **Accepted**, partner-declared for the original release; received through Siwarak's relay, not a Product Team-authored signature |
+| Reasons / limitations accepted | Findings explicitly none; no further rationale or specific minor limitation supplied in this response. Source-qualified run evidence retained |
+| Decision made by / team / date and time | Tithinan Sobking / HairRoot TH-060_P1 / 27 November 2026; exact clock time not supplied |
+| Decision evidence | [27 Nov received-message record](dineq-acceptance-received-20261127.md), student-relayed partner statement; no separate authored artefact/direct-channel metadata supplied |
 
-### Return format for the independent team
+### Preserved return template for future independent responses
 
 Copy the fields below and replace PENDING with actual facts. Do not paste a
 password, cookie, token or private connection string.
@@ -55,8 +58,9 @@ Decision authors and date/time Asia/Bangkok: PENDING
 An actual response can be retained in an Issue, an authored Markdown file, or
 a dated message through the agreed Discord handoff. Do not fabricate a response
 or count a Product Team-authored copy of this blank form as independent approval.
-The TA exercise, if approved, stays separate from the healthy release accepted
-here. This preparation sends no message to the partner.
+The TA-authorized [controlled exercise, PR #64](https://github.com/PpAnpt/dineq/pull/64),
+stays separate from this original-release decision and requires its own later
+deployed retest. This receipt task sends no message to the partner.
 
 ## HairRoot acceptance to be completed by DineQ after independent retest
 

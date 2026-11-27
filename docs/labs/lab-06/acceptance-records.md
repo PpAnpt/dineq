@@ -2,7 +2,7 @@
 
 Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51).
 **DineQ: partner-declared Accepted for the original release received on 27 November 2026.
-The original digest link is recorded and Iivo participation is source-qualified below. New controlled-release acceptance is NOT CONFIRMED. HairRoot: final DineQ decision PENDING in this register.**
+The original digest link is recorded and Iivo participation is source-qualified below. New controlled-release acceptance is NOT CONFIRMED. HairRoot: Siwarak declared Accepted for cbaf1ba, as recorded below.**
 Only the independent UAT team records its own decision. A product team's PR
 approval is not independent acceptance. The [received-message record](dineq-acceptance-received-20261127.md)
 identifies the source and distinguishes a received decision from missing proof.
@@ -67,12 +67,14 @@ The TA-authorized [controlled exercise, PR #64](https://github.com/PpAnpt/dineq/
 stays separate from this original-release decision and requires its own later
 deployed retest. This receipt task sends no message to the partner.
 
-## HairRoot acceptance to be completed by DineQ after independent retest
+## HairRoot acceptance declared by DineQ after independent retest
 
 After HairRoot's readiness notice, Siwarak requested the targeted
 [27 November R02 retest](hairroot-retest-2026-11-27-R02.md). Both requested checks
-passed. These observations support a later independent decision; they do not
-supply a team signature or unrecorded student participation.
+passed. Siwarak subsequently explicitly selected Accepted for this corrected
+version. The [decision declaration](hairroot-acceptance-declared-20261127.md)
+retains his name/date/version and source limits; no unrecorded participation or
+handwritten signature is supplied by that selection.
 
 | Field | Current record / still required |
 | --- | --- |
@@ -87,7 +89,7 @@ supply a team signature or unrecorded student participation.
 | Required retest | Original HR-F01 reproduction against the agreed corrected contract, affected valid-input controls, unchanged state after rejection, UAT-05 step 4 with actual announced redeployment |
 | Both students' actual actions | Siwarak privately authenticated C1/S1/C3 and requested assisted R02 actions; actual times/evidence in R02. Anapat execution remains PENDING; no inference from review |
 | Retest results / findings | R02: UAT-07-R02 PASS (9 negatives / 1 positive plus unchanged-state reads); UAT-05 step 4 PASS (C1/C3/S1 after actual announced deploy). No new defect observed within this scope. Full seven-case suite not rerun; original FAIL/BLOCKED history retained |
-| Final independent decision | PENDING actual DineQ decision, exact version, authors, date/time, reasons and any accepted minor limitations |
+| Final independent decision | **Accepted**, declared by Siwarak Chatvichai / DineQ TH-007_P9 on 27 Nov 2026 for cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d / partner-declared revision hairroot-sha-cbaf1baa38a5-45975306714-2. Exact clock time not supplied. Basis: HR-F01 amended-policy retest and UAT-05 step 4 PASS; historical/full-suite and participation limits retained |
 
 ## Completion gate
 

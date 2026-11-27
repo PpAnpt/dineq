@@ -16,7 +16,7 @@ Tracking: [#63](https://github.com/PpAnpt/dineq/issues/63), [#50](https://github
 | Successful pipeline | [46024849737](https://github.com/PpAnpt/dineq/actions/runs/46024849737), same-main-commit CI, build/push, migration, deploy and smoke succeeded |
 | New revision | s21271a0d-00007-pnb, 100% traffic in authenticated deploy response at 15:28:57 UTC / 22:28:57 Bangkok |
 | New runtime manifest | sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47, exported by the deploy build under the full main-SHA tag; not a separate status.imageDigest query |
-| Independent retest operator | Tithinan Sobking, HairRoot TH-060_P1, planned/confirmed assignment; actual execution/result still awaited |
+| Independent retest operator / received result | Tithinan Sobking, HairRoot TH-060_P1, requested the run; source attributes script/action execution to Codex at his request. Selected 27 Nov 22:54 Bangkok run reports DQ-UAT-07 PASS 9/9; see received-result qualifications and pending owner read-back |
 
 The reviewed [exercise record on the released main commit](https://github.com/PpAnpt/dineq/blob/1ffb8b09b8df7f6b6954047ccdef4c2ccc113931/docs/labs/lab-06/controlled-fifo-exercise.md) retains original RED/GREEN history. No final runtime source/workflow difference from healthy baseline was introduced; the deliberate change was fully reverted. The rebuilt image digest differs; it is not assumed equal to the old release.
 

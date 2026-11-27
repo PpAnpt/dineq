@@ -1,7 +1,7 @@
 # Controlled FIFO release and retest handoff - 27 November 2026
 
 Tracking: [#63](https://github.com/PpAnpt/dineq/issues/63), [#50](https://github.com/PpAnpt/dineq/issues/50), [#51](https://github.com/PpAnpt/dineq/issues/51).
-**Release deployed; independent DQ-UAT-07 retest remains NOT EXECUTED.**
+**Release deployed; later HairRoot-reported DQ-UAT-07 PASS 9/9 and partner-relayed Accepted received.** See the [received retest and evidence qualifications](dineq-controlled-retest-received-20261127.md); this does not rewrite the original readiness record.
 
 ## Actual version chain
 
@@ -37,3 +37,8 @@ Authenticated read-only Cloud Shell queries observed both s21271a0d-00005-rdp an
 [Raw records, narrow logs and original images](../../evidence/lab6/controlled-release-20261127) are indexed by the [SHA-256 manifest](../../evidence/lab6/controlled-release-20261127/sha256-manifest.json). The raw deployment excerpt contains a different image from the CI-only build as well as the actual deploy build; use only the deploy job's runtime manifest for the release.
 
 The local READY handoff contains the canonical URL, full main SHA/revision/runtime manifest source, original DQ-UAT-07 nine steps, private-account guidance and blank actual/result/evidence fields. Tithinan must verify queue/account prerequisites again and return real execution time, actual states/IDs, screenshots, script authorship/operator if used, findings and a version-bound conclusion. No agent-generated independent PASS or new-release acceptance is supplied. Iivo is not credited with unconfirmed retest/review work. Keep #63/#50 open for this independent retest and final reporting; the earlier original-release Accepted is not automatically acceptance of this release. Final DOCX/PDF is not updated by this source-record task.
+
+
+## Later result received
+
+[Incoming retest record](dineq-controlled-retest-received-20261127.md): selected run 22:54:04-22:54:15 Bangkok, correct release, partner-reported 9/9 steps and findings none. Siwarak relayed Accepted in response to the new-release question. Raw/consolidated fixture-summary mismatch, partial Loading images, the missing completed-owner comparison after step 9, authored-decision details and missing contribution evidence remain explicitly qualified. No source result is fabricated or silently corrected.

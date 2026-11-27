@@ -42,8 +42,9 @@ full ticket equality and timestamps; a screenshot alone cannot prove these.
   supply the actual ticket baseline; a context image is not automatically a
   ready-state ticket-detail image.
 - `08B-after-restart-C2-ticket17.png`: retained #17 WAITING UI context.
-  `08B-after-restart-C1-ticket12.png` actually displays the queues page, so it is
-  **not** a visual proof of ticket #12. Its retained body is evidenced by the JSON.
+  `08B-after-restart-C1-ticket12.png`: My queue shows #12 COMPLETED / size 4
+  alongside older completed tickets. Use these images for visible state and
+  the JSON for complete field/timestamp equality.
 
 The partner attributes automated Playwright observations to Tithinan Sobking's
 request. Iivo's execution is not confirmed by this source. The summary reports

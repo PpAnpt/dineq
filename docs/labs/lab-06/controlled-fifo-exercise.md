@@ -78,10 +78,10 @@ message or cloud operation is performed by this preparation.
 | --- | --- | --- |
 | Healthy Sprint 1 main baseline | 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 | Existing release; final independent decision still to be supplied by HairRoot |
 | Exercise staging base | 6f1d31f6f82808ef9e8d611b305ede20d63e96e3 | Branch created; runtime Host code matches healthy main |
-| Baseline automated suite | NOT EXECUTED | Record before introducing defect |
-| Controlled defect commit | PENDING | Local exercise only; never deploy |
-| New reproducing test commit / RED | PENDING | Must fail for wrong FIFO selection/state |
-| Corrected commit / GREEN + regression | PENDING | Same test/assertions and original suite |
+| Baseline automated suite | 8e01a953fbef08b2c40f42a32648ea7092f47ce7; [record](../../evidence/ce-fifo-baseline.txt) | 111 PASS / 0 FAIL / 0 SKIPPED |
+| Controlled defect commit | 513e6599cc39b73579c3a3caf9a8bf9571b84c06 | Explicit controlled newest-first change; never deploy |
+| New reproducing test commit / RED | ea646a970d04323d10b954f21a8ee13b859692b7; [RED record](../../evidence/ce-fifo-red.txt) | 109 PASS / 3 FAIL / 0 SKIPPED; behavior reproduced |
+| Corrected commit / GREEN + regression | 58c5b779e71817b69ce3c1030278bff457134e21; [GREEN](../../evidence/ce-fifo-green.txt), [production checks](../../evidence/ce-fifo-production-checks.txt), [Playwright](../../evidence/ce-fifo-e2e.txt) | 112/112 API tests, 22/22 checks, 6/6 E2E; none skipped |
 | Reviewed corrected staging PR / CI | PENDING | Substantive PpAnpt review; squash only GREEN head |
 | Fixed release commit on main | PENDING | Reviewed release PR after staging integration |
 | Deployed revision / image digest / smoke | PENDING | Pipeline deploy of corrected main only |
@@ -99,10 +99,10 @@ message or cloud operation is performed by this preparation.
 | Reproduction | Join three Customers in order, then assigned Host POST /api/queues/:queueId/call-next; inspect response plus persisted statuses/events |
 | Expected | Oldest/lowest ticket CALLED with timestamp/event; every later ticket WAITING with no CALLED event |
 | Controlled change / intended failure | Reverse only Call Next selection from ticket_no ASC to DESC; newest ticket selected and oldest remains waiting |
-| Actual reproduction | NOT EXECUTED; fill only from recorded RED output |
+| Actual reproduction | RED returned ticketNo 3 / partySize 4 instead of ticketNo 1 / partySize 8; oldest remained WAITING without its CALLED event, newest was incorrectly CALLED. TEST-15 and TEST-16b also failed. Ten assertion messages belong to three failing tests and one controlled defect |
 | Severity / rationale | Major within the isolated defective version: normal queue servicing violates its central fairness/ordering rule; no live incident is claimed |
 | Triage | Accepted controlled-exercise defect under TA authorization; in Sprint 1 scope, not an enhancement/duplicate and not a natural incoming UAT finding |
-| Status | Preparation; correction, CI/review, release, deploy and independent retest not yet completed |
+| Status | Corrected locally with recorded RED/GREEN/regression; peer review/hosted CI, integration, release, deploy and independent retest remain pending |
 
 ## Parallel PDF requirements from the TA reply
 
@@ -116,3 +116,56 @@ image digests for baseline revisions `s21271a0d-00005-rdp` and
 These records remain separate from this exercise and are not prerequisites for
 the TA-authorized local RED/GREEN work. Final report/PDF remains local until
 prepared and checked; no final acceptance, contribution or digest is invented.
+
+## Local execution results
+
+| Finding category | Received / recorded findings | Disposition |
+| --- | --- | --- |
+| Natural DineQ UAT findings | None submitted in the supplied partner runs; [source-qualified reconciliation, PR #60](https://github.com/PpAnpt/dineq/pull/60) | No natural production defect is invented; independent acceptance remains the partner's decision |
+| Controlled exercise | CE-FIFO-01, expressly assigned by the TA | Accepted exercise defect / Major on the isolated defective version; corrected locally, release/retest pending |
+
+| Run | Passed | Failed | Skipped | Evidence |
+| --- | --- | --- | --- | --- |
+| Healthy original API/database suite | 111 | 0 | 0 | [Text](../../evidence/ce-fifo-baseline.txt) / [Vitest JSON](../../evidence/ce-fifo-baseline.json) |
+| Controlled defect plus new regression: RED | 109 | 3 | 0 | [Text](../../evidence/ce-fifo-red.txt) / [Vitest JSON](../../evidence/ce-fifo-red.json) |
+| Corrected implementation, identical tests: GREEN | 112 | 0 | 0 | [Text](../../evidence/ce-fifo-green.txt) / [Vitest JSON](../../evidence/ce-fifo-green.json) |
+| Production serving, deploy guard and existing evidence-library checks | 22 | 0 | 0 | [Recorded output](../../evidence/ce-fifo-production-checks.txt) |
+| Original Playwright browser journeys | 6 | 0 | 0 | [Text](../../evidence/ce-fifo-e2e.txt) / [Playwright JSON](../../evidence/ce-fifo-e2e.json) |
+
+The [machine-readable ledger](../../evidence/ce-fifo-summary.json) retains full
+tested SHAs and original UTC times. Text headers include command, full commit,
+ISO date, Node version and exit code. The new regression file is byte-identical
+between RED/GREEN; every original test file is unchanged. Final runtime source,
+including Host Call Next, matches the healthy staging/main baseline: the deliberate
+change was fully corrected, not retained as an exercise toggle or release mode.
+
+Playwright used dedicated local API/client ports **33115/33116**, the separately
+guarded local test database, and six existing browser cases. Its nine newly
+captured [screenshots and manifest](../../evidence/lab6/ce-fifo-e2e) are retained
+separately; original Sprint 1 screenshots are restored unchanged. These developer
+browser results do not substitute for HairRoot's independent deployed DQ-UAT-07
+retest. No correct password, cookie, session token or private DB URL is included.
+
+Setup interruptions are disclosed in the ledger: missing isolated dependencies
+before the first baseline attempt, and loopback permission denial in an initial
+production-check attempt. Both were resolved without changing assertions and
+are not counted as the intended defect reproduction.
+
+### Review and release checklist
+
+1. Review the actual new test, intended RED failure, correction and unchanged-test
+   GREEN evidence. Confirm the final Host code has no defect/toggle and all
+   original tests remain intact. Require passing hosted CI on the final PR head.
+2. Squash only the corrected PR into staging after PpAnpt's substantive review.
+   Keep historical defective SHAs on this exercise branch as evidence; do not
+   cherry-pick the defect/test-RED commits into integration or main.
+3. Open a reviewed staging-to-main release PR. Announce the version-change window
+   to HairRoot; only the corrected main release may deploy through the existing
+   gated pipeline. Record the resulting main SHA, image digest, revision and
+   actual smoke output in the still-pending ledger rows.
+4. Ask HairRoot TH-060_P1 to independently run DQ-UAT-07 on that exact new release,
+   preserving tester identities, actual steps/results/time and Playwright/manual
+   evidence. The partner authors its own acceptance decision.
+5. Add this isolated exercise to the local PDF, keeping the healthy original UAT
+   and version chain distinct. Never fill deployment/retest/decision fields
+   from an unexecuted plan or local developer test.

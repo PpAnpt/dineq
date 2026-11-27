@@ -4,6 +4,8 @@ Tracking: [L6-4 / #48](https://github.com/PpAnpt/dineq/issues/48). Source: [part
 
 ## Result and participation
 
+Later status/provenance is in the [26 November follow-up](follow-up-2026-11-26.md): reviewed integration, partner-draft HR-F01 triage and a later public full-commit check. The R01 observations/counts below are unchanged. Use the [caption register](evidence-captions.md) for actual time, URL, actor and version beside every selected image in the PDF.
+
 **Seven cases: 5 PASS, 1 FAIL, 1 BLOCKED. Forty-three steps: 39 PASS, 3 FAIL, 1 BLOCKED.** The three failing steps are manifestations of one finding, [HR-F01](hairroot-finding-HR-F01.md), not three defects. These are browser-assisted functional outcomes; they are not a final independent acceptance or a claim that both students executed every case.
 
 Siwarak / BBINGOAL requested testing, privately entered the S1/C1/C2/C3/S2 credentials and confirmed successful logins. Playwright drove the recorded actions and observations. The actual account operator is identified per step/evidence. Anapat execution participation is not recorded; teammate review is still required. No correct password, cookie, token, storage state or authentication header was read into this evidence.

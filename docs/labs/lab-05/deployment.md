@@ -1,4 +1,117 @@
-# Lab 5: local deployment and CI preparation
+# Lab 5: current deployment and evidence (22 November 2026)
+
+This current-state section supersedes the dated preparation notes in the historical appendix below. Earlier failed runs and instructions remain in Git history. Do not substitute current results into old Sprint 1 evidence headers.
+
+## Release and resources
+
+| Item | Verified value / source |
+| --- | --- |
+| Public repository | <https://github.com/PpAnpt/dineq>; keep public until grading ends |
+| Release of record for the Lab 5 evidence | `17c8b90642ecb742b4f8b7e8c55da7fd34ddd620`, reviewed release [PR #42](https://github.com/PpAnpt/dineq/pull/42) |
+| Successful deployment of record | [Run 44986245220](https://github.com/PpAnpt/dineq/actions/runs/44986245220); same-commit CI gate and deploy both succeeded |
+| Canonical URL / APP_ORIGIN | <https://s21271a0d-4d7hbszvwq-as.a.run.app> |
+| Revision at the recorded deployment | `s21271a0d-00005-rdp`, 100% traffic in deploy log |
+| Full-SHA image of record | `asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d:17c8b90642ecb742b4f8b7e8c55da7fd34ddd620` |
+| Project / region | `cpe-se-course-2026` / `asia-southeast1` |
+| Cloud Run service / migration job | `s21271a0d` / `s21271a0d-migrate` |
+| Artifact Registry repository / image | `s21271a0d` / `s21271a0d` |
+| Cloud SQL connection name | `cpe-se-course-2026:asia-southeast1:s21271a0d-pg` (portal resources file) |
+| Runtime identity | `s21271a0d-runner@cpe-se-course-2026.iam.gserviceaccount.com` |
+| Demo password reference | `s21271a0d-app-secret-1:latest`; reference only, never its value |
+
+These release identifiers are the Lab 5 evidence record, not a claim that they remain the running revision after later releases. A docs-only release to main also triggers a new deployment. To identify the running commit afterward, inspect the newest `deploy.yml` run on main (`gh run list` below) and confirm its SHA against the service image returned by `gcloud run services describe` (commands below).
+
+The course portal assigned these resources in the shared project. This replaces the original guide's personal Free Trial provisioning route. Do not create another project, billing account, SQL instance or IAM setup to repeat the old instructions. The project-number Run URL is an alias; use canonical status.url to match APP_ORIGIN.
+
+## Required-check evidence and limits
+
+| Check | Result and evidence |
+| --- | --- |
+| C-01 | PASS: [PR #42 CI run 44985662549](https://github.com/PpAnpt/dineq/actions/runs/44985662549), 111 API tests, 22 Node checks, 6 Chromium journeys, SPA build and Docker build |
+| C-02 | Failed required check and historical BLOCKED state recorded in [PR #38](https://github.com/PpAnpt/dineq/pull/38), [run 44916079400](https://github.com/PpAnpt/dineq/actions/runs/44916079400), head `821ef45b59193ee0cca72cf2fdcf9a1c8c478f0d`. Closed unmerged; today's closed-PR view is not its earlier blocked merge panel |
+| C-03 | PASS locally on 22 November: fresh remote clone of `17c8b90` outside the workspace; only private values filled into `.env.example`; Compose built, migrated, seeded and ran the UI/API/database; runtime uid 1000 |
+| C-04 | Supplied live screenshots show ticket #1 WAITING -> CALLED -> COMPLETED, duplicate rejection and Customer access denial before release #42. Captured with the earlier script; final rewritten live `c04` has NOT EXECUTED end to end |
+| C-05 | PASS. Redeploy leg: supplied UUID-bound baseline/results around deploy run 44986245220. Restart leg (22 November, below): after about 17 idle minutes a different Cloud Run instance of the same revision served the same UUIDs and states. Local app restart also PASS at `17c8b90`. Limits: application container only (Cloud SQL not restarted); the idle stop of the earlier instance is inferred from the gap |
+| C-06 | Reviewed #41 -> staging, reviewed #42 -> main, successful run 44986245220; live login label independently captured on 22 November; deploy log identifies revision/image SHA |
+
+Raw local artifacts are ignored under `.local/lab5/handoff-v3/`. The supplied baseline at `2026-11-22T04:42:08.764Z` precedes deploy job 04:44:02Z-04:45:29Z. The `c05` result at 04:56:01Z reports `ok: true` with the same base/queue: customer01 `a722cfb3-bc05-4849-88da-7a50805eb29c` COMPLETED; customer02 `a6200829-41ae-48bd-83ea-054d3c87ad9a` WAITING. Keep the original files. Two supplied `snapshot` images show only "Checking session..." and are not ticket proof; use the earlier visible before-images plus the API baseline. Automated captures identify their method, URL and time; they are not manual address-bar screenshots.
+
+### Cloud restart check (C-05, 22 November 2026)
+
+Cloud Shell showed the service `minScale` as 0, so Cloud Run may stop an idle instance. A read-only `snapshot` at 08:48:09Z recorded customer01 `a722cfb3-bc05-4849-88da-7a50805eb29c` COMPLETED and customer02 `a6200829-41ae-48bd-83ea-054d3c87ad9a` WAITING in queue `22222222-2222-4222-8222-222222222222` (file `2026-11-22T08-48-05-209Z-c04-baseline.json`). No request was sent for about 17 minutes. `c05` ran at 09:05:09Z and reported `ok: true` with the same ids, queue and states.
+
+The Cloud Run request log (read in Cloud Shell) shows revision `s21271a0d-00005-rdp` in both periods but different instance ids: `00e8a408bd9a1375db30…` for 08:42:24Z-08:48:11Z and `00e8a408bde89a6e907e…` for 09:05:12Z-09:05:15Z, with no request in between. No deployment occurred. The log names the instance that served each request and has no shutdown event, so the stop of the earlier instance is inferred. Only the application container restarted; Cloud SQL did not. The customer01 capture of this `c05` run shows only "Loading..." and is not used as ticket proof; its result is the script's API assertion. Raw files stay in `.local/live-evidence/` (ignored).
+
+## Reproduce the current image (PowerShell)
+
+Prerequisites: Git and Docker Desktop running Linux containers with Compose v2. No host Node modules, built client or local PostgreSQL is needed for this path.
+
+```powershell
+git clone https://github.com/PpAnpt/dineq.git dineq-lab5-check
+Set-Location dineq-lab5-check
+git checkout 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620
+Copy-Item .env.example .env
+notepad .env
+# Privately fill POSTGRES_PASSWORD (URL-safe) and SEED_DEMO_PASSWORD.
+# Set COMPOSE_PORT=18081 and COMPOSE_APP_ORIGIN=http://localhost:18081.
+docker compose --project-name dineq-lab5-check config --quiet
+docker compose --project-name dineq-lab5-check up --build -d --wait
+docker compose --project-name dineq-lab5-check run --rm seed
+docker compose --project-name dineq-lab5-check ps -a
+Invoke-RestMethod http://localhost:18081/api/health
+Invoke-RestMethod http://localhost:18081/api/ready
+# Open http://localhost:18081/login.
+docker compose --project-name dineq-lab5-check restart app
+# Stop while preserving the database volume:
+docker compose --project-name dineq-lab5-check down
+```
+
+Never print resolved Compose configuration or use `down -v` for persistence. The actual fresh-clone verification used project name `dineq-lab5-c03` in a new Windows temporary folder. Normal Docker cache was reused; no source patch, existing `.env`, host `node_modules` or `dist` was supplied. The clone stayed clean and `.env` was ignored. The build/start exited 0; migrate exited 0; seed reported 30 Customers, 2 Hosts, 1 restaurant and 1 queue; app/database became healthy. Health was `ok`, readiness was `ready/connected`. Customer login/join/duplicate 409 and Host call/complete passed. Local completed entry `1ad7263d-c26e-4105-8609-118158553678` and waiting entry `234769b3-a0f5-4a3b-89b6-90249b7d3f04` were identical, including timestamps, after app restart. These local IDs are distinct from cloud evidence.
+
+Native prerequisites/commands and the complete application environment-variable table remain below. Current CI additionally runs `node --test server/checks/production.test.js server/checks/deploy-workflow.test.js client/tests/live-evidence-lib.test.js`. The operator script alone reads `DEMO_PASSWORD` (hidden shell input, secret) and `LIVE_URL` (canonical URL, not secret); neither is a frontend build setting. GitHub environment `demo` has identifier variables GCP_PROJECT_ID, GCP_REGION, WIF_PROVIDER and WIF_SERVICE_ACCOUNT. Optional APP_PORT/MIGRATE_COMMAND default to 3000/`node database/migrate.js`. Seeding remains separate from deployment. Changing a Secret Manager password alone does not update existing users' stored Argon2id hashes; do not reseed live data just for screenshots.
+
+## Actual merge gate and repeatable release
+
+Active owner-created [protect-main ruleset](https://github.com/PpAnpt/dineq/rules/27783911), id 27783911: one approving review plus GitHub Actions `test-and-docker`; no bypass, deletion or force push. **Actual target is the default branch (main), not staging.** Strict up-to-date checks, stale-review dismissal, final-push approval and thread-resolution requirements are not enabled. `ruleset.json` is an earlier proposal, not the deployed settings. Team workflow still requires feature PR review into staging. The `demo` environment permits deployment only from main.
+
+1. Track the bounded change in a `lab5` Issue and feature/fix branch from staging. Keep RED before GREEN for code; do not weaken assertions or rewrite pushed history.
+2. Push a PR into staging, label `lab5`, request the other teammate's specific review and pass CI. Authors never self-approve. Merge after review.
+3. Capture persistence before-data **before** release. Open staging -> main release PR, label `lab5`, obtain teammate approval and required green checks.
+4. Merge the reviewed release. Only main deploys. The workflow runs full same-commit CI as `test`; `deploy` has `needs: test`. Then WIF sign-in, full-SHA image build/push, migration job `--wait`, `gcloud run deploy`, and read-only health/ready/UI smoke.
+5. Match the run Summary/job-log image tag to the resulting **main merge commit**, not the feature/staging head. Open the canonical URL and confirm the visible change. Compare saved records and retain both captures.
+
+```powershell
+gh run list --repo PpAnpt/dineq --workflow deploy.yml --branch main --limit 5
+gh run view 44986245220 --repo PpAnpt/dineq
+gh run view 44986245220 --repo PpAnpt/dineq --log
+```
+
+Cloud Shell read-only metadata checks (human reviews cloud commands first):
+
+```bash
+gcloud run services describe s21271a0d --project=cpe-se-course-2026 --region=asia-southeast1 --format="value(spec.template.spec.containers[0].image)"
+gcloud run services describe s21271a0d --project=cpe-se-course-2026 --region=asia-southeast1 --format="value(status.latestReadyRevisionName,status.url)"
+```
+
+The app has no version endpoint. Its static login label proves the visible change; revision/image metadata binds the release to the full SHA. The label alone does not identify the commit.
+
+## Recovery, deviations and outstanding work
+
+The course-portal workflow deploys a full-SHA **tag**, not a digest. It has no image_tag rollback input or automated rollback; do not use the starter's rollback dispatch against it. Recovery is an operator-reviewed redeployment of an already-built previous SHA image while preserving origin/env/secret/SQL bindings, followed by smoke/persistence checks. Keep migrations additive; do not truncate data or run a down migration to roll back. No rollback has been executed for this submission.
+
+Other deliberate adaptations: plain SQL instead of Prisma, one Express image instead of separate nginx/client images, portal-assigned shared resources instead of personal provisioning, and explicit seed rather than automatic reseeding on every deployment. These retain the required Docker/CI/review/persistence behavior.
+
+Preserved failures: run 44884767549 denied `run.revisions.list` on `services update`; fixed by configuring production env in `run deploy`. Run 44890711350 failed URL equality before smoke because a derived alias differed from status.url; fixed by reading canonical URL before deployment. Run 44896342414 was the first full success; run 44986245220 delivered the visible label. No IAM widening fixed these failures.
+
+Pending: final rewritten live c04 execution if desired; original blocked-merge UI capture if available; optional owner check for secret push protection; final PDF review/submission. Lab 5 Issues #27-#33 were added retrospectively on 21 November; disclose that fact. Leave service/repository available until grading ends. No billing/IAM change or teardown is part of evidence collection.
+
+Security verification on 22 November: no tracked `.env`; Gitleaks v8.30.1 scanned 96 locally available commits/all refs (~1.30 MB) with redaction, no leaks found (pattern-based, not an absolute guarantee). Native screenshot control was unavailable (native pipe missing); public pages were captured read-only in Chromium with actual URL/time annotations.
+
+## Historical appendix: preparation notes
+
+Everything below records the original dated preparation and review history. Its earlier NOT EXECUTED/pending/no-ruleset statements are superseded by the current-state section above.
+
+### Local deployment and CI preparation
 
 Status: local implementation verified, 13 November 2026; review follow-up 17 November 2026. Follow-up authorized preparation publishes a Lab 5 review PR and CI; no merge, GCP deployment, billing or IAM changes are authorized. Cloud deployment is NOT EXECUTED.
 

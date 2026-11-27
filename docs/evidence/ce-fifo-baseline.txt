@@ -1,0 +1,25 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/ce-fifo-baseline.json"
+Working directory: server
+Commit: 8e01a953fbef08b2c40f42a32648ea7092f47ce7
+Date: 2026-11-27T12:46:34.490Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/lab6-controlled-fifo/server
+
+ ✓ tests/f02-join.test.js (39 tests) 7682ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  337ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1869ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  310ms
+ ✓ tests/f01-auth.test.js (40 tests) 3921ms
+ ✓ tests/f03-host.test.js (21 tests) 2936ms
+ ✓ tests/infra.test.js (11 tests) 493ms
+
+ Test Files  4 passed (4)
+      Tests  111 passed (111)
+   Start at  19:46:34
+   Duration  17.40s (transform 176ms, setup 0ms, import 1.47s, tests 15.03s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/lab6-controlled-fifo/docs/evidence/ce-fifo-baseline.json
+
+Exit code: 0

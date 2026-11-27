@@ -1,0 +1,273 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/ce-fifo-red.json"
+Working directory: server
+Commit: ea646a970d04323d10b954f21a8ee13b859692b7
+Date: 2026-11-27T12:48:35.961Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/lab6-controlled-fifo/server
+
+ ✓ tests/f02-join.test.js (39 tests) 7073ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1733ms
+ ✓ tests/f01-auth.test.js (40 tests) 3716ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  352ms
+ ❯ tests/f03-host.test.js (21 tests | 2 failed) 2920ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data 268ms
+     ✓ TEST-14 / AC-14: assigned Host gets { "data": [] } for an empty queue 118ms
+     ✓ TEST-14 / AC-14: unassigned Host gets 403 FORBIDDEN and no ticket data 120ms
+     × TEST-15 / AC-15: Call Next calls the lowest ticket (FIFO); the next one stays WAITING 130ms
+     ✓ TEST-16 / AC-16: Call Next while a CALLED ticket is unresolved -> 409 UNRESOLVED_CALLED 128ms
+     ✓ TEST-16 / AC-16: CALLED with no WAITING still returns 409 UNRESOLVED_CALLED (not 404) 124ms
+     × TEST-16b / AC-16: two simultaneous Call Next requests -> exactly one 200 and one 409 150ms
+     ✓ TEST-17 / AC-17: Complete a CALLED ticket -> COMPLETED in DB and visible to the owner 184ms
+     ✓ TEST-18 / AC-18: Complete a WAITING ticket -> 409 INVALID_TRANSITION, row and events unchanged 128ms
+     ✓ TEST-18 / AC-18: Complete a COMPLETED ticket -> 409 INVALID_TRANSITION, row and events unchanged 123ms
+     ✓ TEST-19 / AC-19: unassigned Host cannot list / call-next / complete; DB unchanged 150ms
+     ✓ TEST-19 / AC-19: assigned Host cannot act on another existing queue it is not assigned to 142ms
+     ✓ TEST-20 / AC-20: Customer cannot list / call-next / complete; no state changes 131ms
+     ✓ TEST-24a / AC-24: Call Next on an assigned queue with neither WAITING nor CALLED ('no entries at all') -> 404 NO_WAITING_ENTRY 115ms
+     ✓ TEST-24a / AC-24: Call Next on an assigned queue with neither WAITING nor CALLED ('only a COMPLETED entry') -> 404 NO_WAITING_ENTRY 116ms
+     ✓ TEST-24b / AC-24: host1@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403) 109ms
+     ✓ TEST-24b / AC-24: host2@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403) 109ms
+     ✓ TEST-24c / AC-24: host1@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints 117ms
+     ✓ TEST-24c / AC-24: host2@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints 141ms
+     ✓ TEST-24d / AC-24: anonymous -> 401 UNAUTHENTICATED and Customer -> 403 FORBIDDEN before UUID/resource checks (00000000-0000-4000-8000-000000000000) 158ms
+     ✓ TEST-24d / AC-24: anonymous -> 401 UNAUTHENTICATED and Customer -> 403 FORBIDDEN before UUID/resource checks (not-a-uuid) 154ms
+ ✓ tests/infra.test.js (11 tests) 466ms
+ ❯ tests/controlled-fifo.test.js (1 test | 1 failed) 514ms
+   × TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING 511ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected { …(8) } to match object { …(4) }
+(4 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "id": "fad694f0-3441-4a35-b96c-67233ed089a6",
+-   "partySize": 8,
++   "id": "977687d6-7a92-47c1-b4d2-cb1e29a8e22b",
++   "partySize": 4,
+    "status": "CALLED",
+-   "ticketNo": 1,
++   "ticketNo": 3,
+  }
+
+ ❯ tests/controlled-fifo.test.js:49:35
+     47|     .set('Cookie', hostCookie);
+     48|   expect(response.status).toBe(200);
+     49|   expect.soft(response.body.data).toMatchObject({
+       |                                   ^
+     50|     id: tickets[0].id, ticketNo: tickets[0].ticketNo, partySize: 8, st…
+     51|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected 'WAITING' to be 'CALLED' // Object.is equality
+
+Expected: "CALLED"
+Received: "WAITING"
+
+ ❯ tests/controlled-fifo.test.js:56:29
+     54|   for (const [index, ticket] of tickets.entries()) {
+     55|     const row = await entryRow(pool, ticket.id);
+     56|     expect.soft(row.status).toBe(index === 0 ? 'CALLED' : 'WAITING');
+       |                             ^
+     57|     expect.soft(row.completed_at).toBeNull();
+     58|     if (index === 0) expect.soft(row.called_at).toBeInstanceOf(Date);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected null to be an instance of Date
+ ❯ tests/controlled-fifo.test.js:58:49
+     56|     expect.soft(row.status).toBe(index === 0 ? 'CALLED' : 'WAITING');
+     57|     expect.soft(row.completed_at).toBeNull();
+     58|     if (index === 0) expect.soft(row.called_at).toBeInstanceOf(Date);
+       |                                                 ^
+     59|     else expect.soft(row.called_at).toBeNull();
+     60|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected [] to deeply equal [ { …(3) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "actorId": "f777cdd7-8c82-4371-8a66-137f3d58befc",
+-     "from": "WAITING",
+-     "to": "CALLED",
+-   },
+- ]
++ []
+
+ ❯ tests/controlled-fifo.test.js:65:10
+     63|     expect.soft(events.filter(event => event.event_type === 'CALLED').…
+     64|       actorId: event.actor_id, from: event.from_status, to: event.to_s…
+     65|     }))).toEqual(index === 0 ? [{ actorId: hostId, from: 'WAITING', to…
+       |          ^
+     66|   }
+     67|   const active = await request(app).get(`/api/queues/${seedIds.queue}/…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected 'CALLED' to be 'WAITING' // Object.is equality
+
+Expected: "WAITING"
+Received: "CALLED"
+
+ ❯ tests/controlled-fifo.test.js:56:29
+     54|   for (const [index, ticket] of tickets.entries()) {
+     55|     const row = await entryRow(pool, ticket.id);
+     56|     expect.soft(row.status).toBe(index === 0 ? 'CALLED' : 'WAITING');
+       |                             ^
+     57|     expect.soft(row.completed_at).toBeNull();
+     58|     if (index === 0) expect.soft(row.called_at).toBeInstanceOf(Date);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected 2026-11-27T12:48:53.790Z to be null
+
+- Expected:
+null
+
++ Received:
+2026-11-27T12:48:53.790Z
+
+ ❯ tests/controlled-fifo.test.js:59:37
+     57|     expect.soft(row.completed_at).toBeNull();
+     58|     if (index === 0) expect.soft(row.called_at).toBeInstanceOf(Date);
+     59|     else expect.soft(row.called_at).toBeNull();
+       |                                     ^
+     60|
+     61|     const events = await eventsFor(pool, ticket.id);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "actorId": "f777cdd7-8c82-4371-8a66-137f3d58befc",
++     "from": "WAITING",
++     "to": "CALLED",
++   },
++ ]
+
+ ❯ tests/controlled-fifo.test.js:65:10
+     63|     expect.soft(events.filter(event => event.event_type === 'CALLED').…
+     64|       actorId: event.actor_id, from: event.from_status, to: event.to_s…
+     65|     }))).toEqual(index === 0 ? [{ actorId: hostId, from: 'WAITING', to…
+       |          ^
+     66|   }
+     67|   const active = await request(app).get(`/api/queues/${seedIds.queue}/…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  tests/controlled-fifo.test.js > TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING
+AssertionError: expected [ [ …(2) ], [ …(2) ], [ …(2) ] ] to deeply equal [ [ …(2) ], [ …(2) ], [ …(2) ] ]
+
+- Expected
++ Received
+
+  [
+    [
+      "fad694f0-3441-4a35-b96c-67233ed089a6",
+-     "CALLED",
++     "WAITING",
+    ],
+    [
+      "bef9db08-ac47-41e5-9560-f72375c68bb1",
+      "WAITING",
+    ],
+    [
+      "977687d6-7a92-47c1-b4d2-cb1e29a8e22b",
+-     "WAITING",
++     "CALLED",
+    ],
+  ]
+
+ ❯ tests/controlled-fifo.test.js:70:6
+     68|   expect(active.status).toBe(200);
+     69|   expect.soft(active.body.data.map(ticket => [ticket.id, ticket.status…
+     70|     .toEqual(tickets.map((ticket, index) => [ticket.id, index === 0 ? …
+       |      ^
+     71| });
+     72|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Call Next > TEST-15 / AC-15: Call Next calls the lowest ticket (FIFO); the next one stays WAITING
+AssertionError: expected { …(8) } to match object { …(4) }
+(4 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "id": "bdb66c4a-6b0a-4e8e-9ed8-1ae86f37ed32",
+-   "partySize": 5,
++   "id": "f69c1e98-196c-46bf-9faf-6cdb5dec79a3",
++   "partySize": 3,
+    "status": "CALLED",
+-   "ticketNo": 1,
++   "ticketNo": 2,
+  }
+
+ ❯ tests/f03-host.test.js:90:32
+     88|     expect(response.status).toBe(200);
+     89|     expect(Object.keys(response.body.data).sort()).toEqual(TICKET_KEYS…
+     90|     expect(response.body.data).toMatchObject({ id: t1.id, ticketNo: 1,…
+       |                                ^
+     91|     expect(response.body.data.calledAt).toEqual(expect.any(String));
+     92|     expect(response.body.data.completedAt).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL  tests/f03-host.test.js > F-03 Call Next > TEST-16b / AC-16: two simultaneous Call Next requests -> exactly one 200 and one 409
+AssertionError: expected [ { ticket_no: 3 } ] to deeply equal [ { ticket_no: 1 } ]
+
+- Expected
++ Received
+
+  [
+    {
+-     "ticket_no": 1,
++     "ticket_no": 3,
+    },
+  ]
+
+ ❯ tests/f03-host.test.js:137:20
+    135|
+    136|     const called = (await pool.query("SELECT ticket_no FROM queue_entr…
+    137|     expect(called).toEqual([{ ticket_no: 1 }]);
+       |                    ^
+    138|     const calledEvents = (await pool.query("SELECT 1 FROM queue_events…
+    139|     expect(calledEvents).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  3 failed | 109 passed (112)
+   Start at  19:48:36
+   Duration  17.52s (transform 177ms, setup 0ms, import 1.76s, tests 14.69s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/lab6-controlled-fifo/docs/evidence/ce-fifo-red.json
+
+Exit code: 1

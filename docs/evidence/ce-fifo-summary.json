@@ -1,0 +1,70 @@
+{
+  "exercise": "CE-FIFO-01",
+  "trackingIssue": 63,
+  "authority": "TA reply supplied and implementation authorized by student on 27 November 2026",
+  "product": "DineQ",
+  "partnerTeam": "HairRoot TH-060_P1",
+  "healthyMain": "17c8b90642ecb742b4f8b7e8c55da7fd34ddd620",
+  "stagingBase": "6f1d31f6f82808ef9e8d611b305ede20d63e96e3",
+  "controlledDefectCommit": "513e6599cc39b73579c3a3caf9a8bf9571b84c06",
+  "runs": {
+    "baseline": {
+      "testedCommit": "8e01a953fbef08b2c40f42a32648ea7092f47ce7",
+      "dateUtc": "2026-11-27T12:46:34.490Z",
+      "passed": 111,
+      "failed": 0,
+      "skipped": 0,
+      "failedTests": []
+    },
+    "red": {
+      "testedCommit": "ea646a970d04323d10b954f21a8ee13b859692b7",
+      "dateUtc": "2026-11-27T12:48:35.961Z",
+      "passed": 109,
+      "failed": 3,
+      "skipped": 0,
+      "failedTests": [
+        "TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING",
+        "F-03 Call Next TEST-15 / AC-15: Call Next calls the lowest ticket (FIFO); the next one stays WAITING",
+        "F-03 Call Next TEST-16b / AC-16: two simultaneous Call Next requests -> exactly one 200 and one 409"
+      ]
+    },
+    "green": {
+      "testedCommit": "58c5b779e71817b69ce3c1030278bff457134e21",
+      "dateUtc": "2026-11-27T12:49:19.138Z",
+      "passed": 112,
+      "failed": 0,
+      "skipped": 0,
+      "failedTests": []
+    }
+  },
+  "newTestSha256UnchangedBetweenRedAndGreen": "2134ffeb524079490883c7037e03ec068dd405dc155bcc8d3edbc3b8e2dda10d",
+  "originalTestsUnchanged": true,
+  "finalRuntimeMatchesHealthyBaseline": true,
+  "productionChecks": {
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0,
+    "evidence": "ce-fifo-production-checks.txt"
+  },
+  "playwright": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "screenshots": 9,
+    "evidence": "ce-fifo-e2e.txt"
+  },
+  "localSetupNotes": [
+    "First baseline attempt stopped before tests because isolated dependencies were missing; npm ci resolved it. This is not RED.",
+    "First production-check attempt hit local loopback EACCES; repeated unchanged checks with local networking allowed passed. This is not a product defect."
+  ],
+  "pending": [
+    "Substantive teammate review and final-head hosted CI",
+    "Squash corrected PR into staging",
+    "Reviewed release PR into main",
+    "Corrected pipeline deployment, exact revision/image and smoke",
+    "HairRoot independent DQ-UAT-07 retest and version-bound acceptance",
+    "Actual missing student contribution/Playwright attribution and baseline revision digest comparison for final PDF"
+  ],
+  "noCloudMutationOrPartnerMessage": true
+}

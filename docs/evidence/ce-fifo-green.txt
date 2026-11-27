@@ -1,0 +1,26 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/ce-fifo-green.json"
+Working directory: server
+Commit: 58c5b779e71817b69ce3c1030278bff457134e21
+Date: 2026-11-27T12:49:19.138Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/lab6-controlled-fifo/server
+
+ ✓ tests/f03-host.test.js (21 tests) 2984ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  357ms
+ ✓ tests/controlled-fifo.test.js (1 test) 485ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  483ms
+ ✓ tests/f02-join.test.js (39 tests) 7249ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1832ms
+ ✓ tests/f01-auth.test.js (40 tests) 3575ms
+ ✓ tests/infra.test.js (11 tests) 454ms
+
+ Test Files  5 passed (5)
+      Tests  112 passed (112)
+   Start at  19:49:19
+   Duration  17.47s (transform 171ms, setup 0ms, import 1.71s, tests 14.75s, environment 0ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/lab6-controlled-fifo/docs/evidence/ce-fifo-green.json
+
+Exit code: 0

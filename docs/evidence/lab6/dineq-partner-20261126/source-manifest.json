@@ -1,0 +1,178 @@
+{
+  "archive": "UAT-DinoQ-Pic-2 (2).zip",
+  "archiveSha256": "77cc56a568662cb97c03f9f54f98b0fa55795a871bcc66aeb5f8a338304efbdf",
+  "receivedThrough": "Student attachment; reviewed 27 November 2026 Asia/Bangkok; exact delivery time not recorded",
+  "copies": [
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/08B-owner-before-after-comparison.md",
+      "path": "results/08B-owner-before-after-comparison.md",
+      "sha256": "6e0a0c292f3f1d9ececce79d2086c1579a5be6564a65f982c84b7ec79ac46061",
+      "bytes": 1183
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/08B-owner-inspect-relayed.md",
+      "path": "results/08B-owner-inspect-relayed.md",
+      "sha256": "663ee33930fbbc4b1dbe71335966c85c1a9ec3f3fe560666c2557bb2078323e5",
+      "bytes": 911
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T15-53-41-810Z-prep.json",
+      "path": "results/2026-11-26T15-53-41-810Z-prep.json",
+      "sha256": "5583cbf38e927bcf0855bc86d38e6b209c1d2896afc7da6666df02fc8a405e5f",
+      "bytes": 3118
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T16-07-36-406Z-closed.json",
+      "path": "results/2026-11-26T16-07-36-406Z-closed.json",
+      "sha256": "3cdd2400c452b8f7534fc26f050790ba47faeddf2f59f4a4724b737b0deab06d",
+      "bytes": 4556
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T16-11-36-096Z-restored.json",
+      "path": "results/2026-11-26T16-11-36-096Z-restored.json",
+      "sha256": "9de22e0c2a3316d9d7bcc4a4e50414ba0bea6f88c01feb18259f2b47724b78db",
+      "bytes": 2436
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T16-12-36-455Z-prep.json",
+      "path": "results/2026-11-26T16-12-36-455Z-prep.json",
+      "sha256": "98676f53cf889ccf78c6e2ab0ef1e2d0b3a44fc9dad69242442366c09a3d05b7",
+      "bytes": 3118
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T16-20-42-923Z-after-restart.json",
+      "path": "results/2026-11-26T16-20-42-923Z-after-restart.json",
+      "sha256": "8953f6b71007327502ea3ba448ce3cba94d711f0fe0c380911d1a3032fc770fa",
+      "bytes": 1319
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T15-53-41-810Z/before-C1-ticket12.png",
+      "path": "screenshots/2026-11-26T15-53-41-810Z/before-C1-ticket12.png",
+      "sha256": "00811b9badc2ecb2d5f1b6bcf789f73ee71aaae423df7709d05d3afaaa68d79c",
+      "bytes": 34111
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T15-53-41-810Z/before-C2-ticket17.png",
+      "path": "screenshots/2026-11-26T15-53-41-810Z/before-C2-ticket17.png",
+      "sha256": "780400089025d9209fa0fd78869a38142032c295fba193156f7ce2a7bed0ad0d",
+      "bytes": 31856
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T15-53-41-810Z/before-C3-queue.png",
+      "path": "screenshots/2026-11-26T15-53-41-810Z/before-C3-queue.png",
+      "sha256": "bfd9c14d7f52d358ed26f643c5a11f75eca172b9971b9244d9aab7145903968a",
+      "bytes": 29232
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T15-53-41-810Z/before-H1-host-list.png",
+      "path": "screenshots/2026-11-26T15-53-41-810Z/before-H1-host-list.png",
+      "sha256": "4aba81946593512016b22b5f988773b0b684f25e2890847df998836a4bda6ea1",
+      "bytes": 28669
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-07-36-406Z/04C-closed-after-post-C3-queue.png",
+      "path": "screenshots/2026-11-26T16-07-36-406Z/04C-closed-after-post-C3-queue.png",
+      "sha256": "2d54142775aa162c52141dbb53d153579ff57136b16b6cfb4a01ef2c577d9abd",
+      "bytes": 32372
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-07-36-406Z/04C-closed-after-post-H1-host-list.png",
+      "path": "screenshots/2026-11-26T16-07-36-406Z/04C-closed-after-post-H1-host-list.png",
+      "sha256": "2264ceba0f536f08e471b84f0547ff14164bde196f0035e31dc8f02e15342edf",
+      "bytes": 29383
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-07-36-406Z/04C-closed-before-post-C3-queue.png",
+      "path": "screenshots/2026-11-26T16-07-36-406Z/04C-closed-before-post-C3-queue.png",
+      "sha256": "1b6716d7ba0b33c7073bffed9a3ec3a08c106c1357d9050dab599100a1747f39",
+      "bytes": 32293
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-07-36-406Z/04C-closed-before-post-H1-host-list.png",
+      "path": "screenshots/2026-11-26T16-07-36-406Z/04C-closed-before-post-H1-host-list.png",
+      "sha256": "d940002e1a17431d4289ba7f9ba5cc8f65062dde97420997ab76f375cbfda3ad",
+      "bytes": 29235
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-11-36-096Z/04C-restored-C3-queue.png",
+      "path": "screenshots/2026-11-26T16-11-36-096Z/04C-restored-C3-queue.png",
+      "sha256": "9abc249accea52684cf1db0cb29850d199ea4f2cf0d6d480f5f788e67eaad0ea",
+      "bytes": 29457
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-11-36-096Z/04C-restored-H1-host-list.png",
+      "path": "screenshots/2026-11-26T16-11-36-096Z/04C-restored-H1-host-list.png",
+      "sha256": "b7e9b1fefcf1e33246fee8c28b124ae170bfb85cbbd20dd49748226e61953a9b",
+      "bytes": 29057
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-12-36-455Z/before-C1-ticket12.png",
+      "path": "screenshots/2026-11-26T16-12-36-455Z/before-C1-ticket12.png",
+      "sha256": "7547df89bcadc258d36f94096f785f296575297ae650687640b8a066fd33f20b",
+      "bytes": 34192
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-12-36-455Z/before-C2-ticket17.png",
+      "path": "screenshots/2026-11-26T16-12-36-455Z/before-C2-ticket17.png",
+      "sha256": "0e20eb2cfa6f32128e6006e14da4b5e9c51ea2e206445ba4743df62798df9ba9",
+      "bytes": 31913
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-12-36-455Z/before-C3-queue.png",
+      "path": "screenshots/2026-11-26T16-12-36-455Z/before-C3-queue.png",
+      "sha256": "259374a3c8a52a741f9e5b9baf13dda1c0c7a67d5825ed59cf613c435dfc7dea",
+      "bytes": 29356
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-12-36-455Z/before-H1-host-list.png",
+      "path": "screenshots/2026-11-26T16-12-36-455Z/before-H1-host-list.png",
+      "sha256": "92c31f96263efb1adafa4e68288c6a3d3d46c84c249e5f7f382ecbeb86de1047",
+      "bytes": 28667
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-20-42-923Z/08B-after-restart-C1-ticket12.png",
+      "path": "screenshots/2026-11-26T16-20-42-923Z/08B-after-restart-C1-ticket12.png",
+      "sha256": "6905f9b13acee14a12180077de91e5718896e700d7ee92f608a51c7c7562eff9",
+      "bytes": 34662
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/screenshots/2026-11-26T16-20-42-923Z/08B-after-restart-C2-ticket17.png",
+      "path": "screenshots/2026-11-26T16-20-42-923Z/08B-after-restart-C2-ticket17.png",
+      "sha256": "ef60b18c1df55b72aedc7767cc4af898481497f37107e9de6a379a2bf48eb854",
+      "bytes": 32343
+    }
+  ],
+  "omittedAttempts": [
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T15-34-34-652Z-prep.json",
+      "sha256": "0b99c5b4c7bbbb2f5f00a5fb5cbcd24b8770f0f9032dd94b3747a85058599447",
+      "status": "STOPPED",
+      "reason": "Earlier prep only; retained in source archive, excluded from case outcomes"
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T15-35-31-231Z-prep.json",
+      "sha256": "2b7ea888cfea43956e4587c1c4b5d6d3608579d7edf1771ff8dd1e6d9d61efba",
+      "status": "PREPARED",
+      "reason": "Earlier prep only; retained in source archive, excluded from case outcomes"
+    },
+    {
+      "sourcePath": "UAT-DinoQ-Pic-2/results/2026-11-26T15-36-58-666Z-prep.json",
+      "sha256": "becc057d8d0cbbe381fcae7d7a14f7eecdcbeb8253dbc802cfba111de74259b8",
+      "status": "PREPARED",
+      "reason": "Earlier prep only; retained in source archive, excluded from case outcomes"
+    }
+  ],
+  "limits": [
+    "Original bytes preserved; selected files only.",
+    "Partner-relayed owner metadata is not a fresh authenticated GCP read.",
+    "No final independent acceptance or second tester participation is inferred."
+  ],
+  "partnerSummary": {
+    "sourcePath": "UAT-DinoQ-Pic-2/UAT-Remaining-Results-2026-11-26.md",
+    "sha256": "13395a6b89e88d60cd3ad235b63d9026579dba9a5a817377c12d74d1ce2f3433",
+    "reported04C": "OBSERVATION PASS; owner evidence pending",
+    "reported08B": "PASS",
+    "actualNamedRequester": "Tithinan Sobking",
+    "secondTester": "Iivo participation not observed in supplied attempt"
+  }
+}

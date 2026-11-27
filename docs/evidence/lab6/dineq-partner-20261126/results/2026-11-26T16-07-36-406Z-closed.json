@@ -1,0 +1,137 @@
+{
+  "mode": "closed",
+  "startedAt": "2026-11-26T16:07:36.407Z",
+  "bangkokTime": "26/11/2026, 23:07:36",
+  "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+  "queueId": "22222222-2222-4222-8222-222222222222",
+  "status": "OBSERVATION_PASS",
+  "detail": "04C CLOSED observation recorded. DineQ owner must restore OPEN and supply close/restore records.",
+  "screenshots": [
+    "screenshots/2026-11-26T16-07-36-406Z/04C-closed-before-post-C3-queue.png",
+    "screenshots/2026-11-26T16-07-36-406Z/04C-closed-before-post-H1-host-list.png",
+    "screenshots/2026-11-26T16-07-36-406Z/04C-closed-after-post-C3-queue.png",
+    "screenshots/2026-11-26T16-07-36-406Z/04C-closed-after-post-H1-host-list.png"
+  ],
+  "data": {
+    "queueStatus": "CLOSED",
+    "joinDisabled": true,
+    "attempt": {
+      "status": 409,
+      "body": {
+        "error": {
+          "code": "QUEUE_CLOSED",
+          "message": "This queue is closed"
+        }
+      }
+    },
+    "c3Before": [
+      {
+        "id": "235123af-e8c6-4bbd-a025-f39e8efcbb5c",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 10,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:19:39.961Z",
+        "calledAt": "2026-11-25T14:19:41.170Z",
+        "completedAt": "2026-11-25T14:19:41.611Z"
+      },
+      {
+        "id": "77df5097-87f6-45d5-a933-44d17ee3e28a",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 5,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:16:19.025Z",
+        "calledAt": "2026-11-25T14:16:20.388Z",
+        "completedAt": "2026-11-25T14:16:20.919Z"
+      },
+      {
+        "id": "a7fbc732-133d-4a77-aa27-e3792103fa94",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 3,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:10:33.102Z",
+        "calledAt": "2026-11-25T14:13:22.487Z",
+        "completedAt": "2026-11-25T14:13:22.943Z"
+      },
+      {
+        "id": "fb6f1c64-cfa5-4cf0-8893-50a899573f03",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 4,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:14:21.759Z",
+        "calledAt": "2026-11-25T14:15:16.241Z",
+        "completedAt": "2026-11-25T14:15:16.706Z"
+      }
+    ],
+    "c3After": [
+      {
+        "id": "235123af-e8c6-4bbd-a025-f39e8efcbb5c",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 10,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:19:39.961Z",
+        "calledAt": "2026-11-25T14:19:41.170Z",
+        "completedAt": "2026-11-25T14:19:41.611Z"
+      },
+      {
+        "id": "77df5097-87f6-45d5-a933-44d17ee3e28a",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 5,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:16:19.025Z",
+        "calledAt": "2026-11-25T14:16:20.388Z",
+        "completedAt": "2026-11-25T14:16:20.919Z"
+      },
+      {
+        "id": "a7fbc732-133d-4a77-aa27-e3792103fa94",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 3,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:10:33.102Z",
+        "calledAt": "2026-11-25T14:13:22.487Z",
+        "completedAt": "2026-11-25T14:13:22.943Z"
+      },
+      {
+        "id": "fb6f1c64-cfa5-4cf0-8893-50a899573f03",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 4,
+        "partySize": 1,
+        "status": "COMPLETED",
+        "createdAt": "2026-11-25T14:14:21.759Z",
+        "calledAt": "2026-11-25T14:15:16.241Z",
+        "completedAt": "2026-11-25T14:15:16.706Z"
+      }
+    ],
+    "hostBefore": [
+      {
+        "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 17,
+        "partySize": 2,
+        "status": "WAITING",
+        "createdAt": "2026-11-25T14:19:55.446Z",
+        "calledAt": null,
+        "completedAt": null
+      }
+    ],
+    "hostAfter": [
+      {
+        "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+        "queueId": "22222222-2222-4222-8222-222222222222",
+        "ticketNo": 17,
+        "partySize": 2,
+        "status": "WAITING",
+        "createdAt": "2026-11-25T14:19:55.446Z",
+        "calledAt": null,
+        "completedAt": null
+      }
+    ]
+  },
+  "endedAt": "2026-11-26T16:07:45.055Z"
+}

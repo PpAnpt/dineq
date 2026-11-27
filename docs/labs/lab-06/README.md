@@ -19,6 +19,15 @@ PR #59 is merged; its approval/CI is separate from review of the new
 incoming-result/owner-operation work. Integration into lab6-staging does not
 deploy. A reviewable #49 change is still required before closing that issue.
 
+27 November preparation under #51: [independent acceptance records](acceptance-records.md)
+and [contributions / remaining evidence](contributions-and-gaps.md). These remain
+PENDING where no actual student/team record exists. Latest incoming DineQ results
+were reviewed and merged in [PR #60](https://github.com/PpAnpt/dineq/pull/60) as `603beb1` on 27 November;
+HairRoot retest is deferred until the partner is ready. The historical progress
+notes below retain their original context.
+
+Updated 26 November 2026. L6-1 baseline/CI preparation merged in [PR #53](https://github.com/PpAnpt/dineq/pull/53); the [DineQ UAT cases](uat-cases.md) merged in [PR #54](https://github.com/PpAnpt/dineq/pull/54). Handoff/preparation documents merged in PR #55/#56 and the HairRoot execution template in PR #57. **L6-4 / #48** is now the active task at the student's request, using newly supplied HairRoot v0.2. Final joint coordination and actual DineQ packet/access confirmations remain visible in #45/#47; no independent acceptance or completed seven-case run is claimed.
+
 ## Two products and two responsibilities
 
 | Product | Product Team | Independent UAT Team | Material |

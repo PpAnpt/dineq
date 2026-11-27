@@ -4,6 +4,8 @@ Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51).
 **Both records are PENDING.** Prepared fields are source references, not a
 tester signature or a completed decision. Only the independent UAT team records
 its own decision. A product team's PR approval is not independent acceptance.
+See [contributions and remaining evidence](contributions-and-gaps.md) for actual
+known work, the supplementary-execution return sheet and missing fields.
 
 ## DineQ acceptance to be completed by HairRoot
 

@@ -64,10 +64,9 @@ export function createHostService({ pool }) {
             throw httpError(409, 'UNRESOLVED_CALLED', 'A called ticket must be completed first');
           }
 
-          // CE-FIFO-01: TA-authorized controlled defect, local branch/CI only; never deploy.
           const next = await client.query(
             `SELECT id FROM queue_entries WHERE queue_id = $1 AND status = 'WAITING'
-              ORDER BY ticket_no DESC LIMIT 1 FOR UPDATE`, [queueId]);
+              ORDER BY ticket_no ASC LIMIT 1 FOR UPDATE`, [queueId]);
           if (!next.rows[0]) throw httpError(404, 'NO_WAITING_ENTRY', 'No waiting ticket to call');
 
           const updated = await client.query(

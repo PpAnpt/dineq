@@ -1,5 +1,11 @@
 # DineQ received UAT results and triage - 26 November 2026
 
+**Historical R01 record.** The original results below stay unchanged. For the
+subsequently received CLOSED/restoration and restart observations, see the
+[27 November reconciliation of follow-up R02](dineq-received-followup-R02.md).
+Its current dispositions supersede the pending-operation statements below;
+final independent participation/acceptance is still pending.
+
 Tracking: [L6-5 / #49](https://github.com/PpAnpt/dineq/issues/49). Product Team:
 Anapat Banjerdsilp and Siwarak Chatvichai. Independent UAT Team: HairRoot,
 team หัวล้านได้หวี. This record covers findings **received about DineQ**;

@@ -1,18 +1,23 @@
 # Lab 6: DineQ Sprint 1 independent UAT
 
-Updated 26 November 2026. L6-1 baseline/CI preparation merged in [PR #53](https://github.com/PpAnpt/dineq/pull/53); the [DineQ UAT cases](uat-cases.md) merged in [PR #54](https://github.com/PpAnpt/dineq/pull/54). Handoff/preparation documents merged in PR #55/#56, the HairRoot execution template in PR #57 and the actual assisted HairRoot R01 report in PR #58. **L6-5 / #49** is the active preparation/triage task while the teams arrange remaining independent observations. See [received DineQ results and triage](dineq-received-triage.md) and [owner preparation](dineq-owner-operations.md). Final coordination/contributions and both products' independent acceptance remain outstanding; the two products' results below are separate.
+Updated 27 November 2026. Preparation/cases/handoff merged through PR #53–#57,
+HairRoot R01 through #58, and the reviewed follow-up #59 merged into
+lab6-staging as da7fe9ff0b69ba9156ceca61ab166e86067274d7 at 08:22:52 Bangkok
+on 27 November. **L6-5 / #49** now reconciles the latest received DineQ evidence:
+[follow-up R02](dineq-received-followup-R02.md). Final contributions and both
+products' independent acceptance remain outstanding. The student has deferred
+HairRoot retest until the partner is ready; no new partner test is started.
 
 ## Current recorded results
 
 | Tested product | Who executed / source | Actual recorded outcome | Still needed |
 | --- | --- | --- | --- |
 | HairRoot | Our DineQ team's [R01 assisted report](hairroot-run-2026-11-26-R01.md), integrated through PR #58 | 5 PASS / 1 FAIL / 1 BLOCKED cases; one underlying Unicode finding HR-F01 | Partner fix/independent retest, announced redeployment check, genuine second-student execution contribution and final decision |
-| DineQ | HairRoot's received final ZIP / [triage register](dineq-received-triage.md) | 9 PASS / 2 BLOCKED / 0 FAIL case/subcase rows; no submitted product defect | Independent CLOSED/restart observations, version/contribution confirmation and HairRoot's final decision |
+| DineQ | HairRoot's [original run](dineq-received-triage.md) plus [26 Nov follow-up](dineq-received-followup-R02.md) | Original 9 PASS / 2 BLOCKED / 0 FAIL retained; later 04C OBSERVATION PASS with linked R03 owner records and 08B partner-reported PASS with relayed owner comparison; no submitted defect | Independent acknowledgement/decision, actual second-student contribution, exact accepted version and original owner JSON corroboration |
 
-The [follow-up PR #59](https://github.com/PpAnpt/dineq/pull/59) has an exact-head
-approval and passing CI at f4f8ba6 when checked for this task; it is still open.
-That review is separate from review of the new incoming-result/owner-operation
-work. No integration or deployment is inferred from an approval.
+PR #59 is merged; its approval/CI is separate from review of the new
+incoming-result/owner-operation work. Integration into lab6-staging does not
+deploy. A reviewable #49 change is still required before closing that issue.
 
 ## Two products and two responsibilities
 
@@ -59,7 +64,7 @@ Work one issue at a time. Commit meaningful steps separately. Code fixes need a 
 | L6-2 DineQ UAT cases | [#46](https://github.com/PpAnpt/dineq/issues/46) | DONE: [uat-cases.md](uat-cases.md), eight executable cases reviewed by PpAnpt, PR #54 merged; the original case sheet remains a reusable template, actual received results are separate |
 | L6-3 Safe DineQ handoff | [#47](https://github.com/PpAnpt/dineq/issues/47) | [handoff.md](handoff.md): reviewed/merged in PR #55/#56; actual partner packet receipt/access/session confirmations remain separate |
 | L6-4 DineQ independently tests HairRoot | [#48](https://github.com/PpAnpt/dineq/issues/48) | [v0.2 template](hairroot-execution.md) and [actual R01 assisted run](hairroot-run-2026-11-26-R01.md): 5 PASS / 1 FAIL / 1 BLOCKED cases; HairRoot's open report PR #56 records HR-F01 as Accepted defect / Minor, with fix/retest and independent acceptance still pending |
-| L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | [Received result/disposition register](dineq-received-triage.md): 9 PASS / 2 BLOCKED / 0 FAIL; no submitted DineQ defect; owner tools/live baseline prepared, independent observations and review pending |
+| L6-5 Triage incoming DineQ findings | [#49](https://github.com/PpAnpt/dineq/issues/49) | [R01 register](dineq-received-triage.md) preserved and [R02 reconciliation](dineq-received-followup-R02.md) added; CLOSED/restart observations now supplied, no submitted defect; teammate review pending |
 | L6-6 Corrections and reviewed release | [#50](https://github.com/PpAnpt/dineq/issues/50) | Additional issue per real defect; RED/GREEN/regression/PR/release/deploy chain, or TA-approved isolated exercise |
 | L6-7 Independent retest/acceptance | [#51](https://github.com/PpAnpt/dineq/issues/51) | Version-bound decisions by the independent team for each product |
 | L6-8 Submission evidence | [#52](https://github.com/PpAnpt/dineq/issues/52) | One self-contained Parts A-D PDF with cases, actual evidence, contributions, AI use and limitations |

@@ -1,5 +1,12 @@
 # DineQ owner operation R03 - 26 November 2026
 
+Follow-up received and reconciled on 27 November:
+[R02 independent observations and source limits](dineq-received-followup-R02.md).
+The original operator chronology below is preserved. CLOSED/OPEN evidence has
+now been linked to the actual partner 409/restoration results; the later 08B
+operation is supported by partner-relayed comparison, not retroactively executed
+by this R03 record.
+
 Product operator: Siwarak / BBINGOAL, assisted Cloud Shell commands. Independent tester identities/results remain to be supplied by HairRoot. Original JSON stays under `/home/siwarakbingo/dineq-lab6-owner-v2/evidence/R03`. These fields were transcribed from authenticated command output, not exported as full raw files.
 
 | Operation | Actual time Asia/Bangkok | Execution | Actual state |

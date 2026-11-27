@@ -60,8 +60,10 @@ here. This preparation sends no message to the partner.
 
 ## HairRoot acceptance to be completed by DineQ after independent retest
 
-The student has deferred this retest until HairRoot is ready. Preparing this
-record authorizes no booking, deployment or partner source change.
+After HairRoot's readiness notice, Siwarak requested the targeted
+[27 November R02 retest](hairroot-retest-2026-11-27-R02.md). Both requested checks
+passed. These observations support a later independent decision; they do not
+supply a team signature or unrecorded student participation.
 
 | Field | Current record / still required |
 | --- | --- |
@@ -69,13 +71,13 @@ record authorizes no booking, deployment or partner source change.
 | Independent team | DineQ / Anapat Banjerdsilp and Siwarak Chatvichai |
 | Original evidence | [R01](hairroot-run-2026-11-26-R01.md): 5 PASS / 1 FAIL / 1 BLOCKED cases; 39 PASS / 3 FAIL / 1 BLOCKED steps; HR-F01 is one defect |
 | Original version | Observed footer ac0a57b; full handoff commit ac0a57b9eb871128807733a0e9d75d77a662b477; declared revision hairroot-sha-ac0a57b9eb87-44992339630-1 |
-| Partner fix chain checked 27 Nov | [Issue #57](https://github.com/alvin777777/hairroot/issues/57), merged [fix PR #58](https://github.com/alvin777777/hairroot/pull/58); [release PR #59](https://github.com/alvin777777/hairroot/pull/59) was still open when checked |
-| Changed expectations | Partner proposes rejecting all emoji/emoji-capable symbols; original R01 allowed the three-symbol control. Review and agree the dated amendment before retest; never rewrite the old FAIL |
-| Corrected deployed commit/revision | PENDING actual release and readiness notice; a merged fix PR is not a deployed version |
-| Fresh fixtures / original baseline | PENDING quiet window and unused slots; preserve original bookings 2/3/4 and other R01 evidence, no reset/deletion |
+| Partner fix chain checked 27 Nov | [Issue #57](https://github.com/alvin777777/hairroot/issues/57), [fix PR #58](https://github.com/alvin777777/hairroot/pull/58), [release PR #59](https://github.com/alvin777777/hairroot/pull/59); later readiness notice states deployed 27 Nov 16:44 Bangkok |
+| Changed expectations | Student requested retest under the agreed amended emoji prohibition, including the three-emoji negative. Source preserved with R02; original R01 expectation/results unchanged |
+| Corrected deployed commit/revision | Public version responses before/after R02 report cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d; observed footer cbaf1ba. Revision hairroot-sha-cbaf1baa38a5-45975306714-2 remains partner-declared, not authenticated GCP verification |
+| Fresh fixtures / original baseline | Two fresh 16 Dec slots, 16:43/17:43 Bangkok; positive booking 14 retained. Original bookings 2/3/4 unchanged; no reset/deletion |
 | Required retest | Original HR-F01 reproduction against the agreed corrected contract, affected valid-input controls, unchanged state after rejection, UAT-05 step 4 with actual announced redeployment |
-| Both students' actual actions | PENDING fresh case/action/time/evidence attribution; original R01 does not establish Anapat execution |
-| Retest results / findings | NOT EXECUTED for the corrected release; retain original FAIL/BLOCKED history |
+| Both students' actual actions | Siwarak privately authenticated C1/S1/C3 and requested assisted R02 actions; actual times/evidence in R02. Anapat execution remains PENDING; no inference from review |
+| Retest results / findings | R02: UAT-07-R02 PASS (9 negatives / 1 positive plus unchanged-state reads); UAT-05 step 4 PASS (C1/C3/S1 after actual announced deploy). No new defect observed within this scope. Full seven-case suite not rerun; original FAIL/BLOCKED history retained |
 | Final independent decision | PENDING actual DineQ decision, exact version, authors, date/time, reasons and any accepted minor limitations |
 
 ## Completion gate

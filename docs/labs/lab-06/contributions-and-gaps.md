@@ -42,15 +42,17 @@ agreed release. Read-only version/own-record checks or normal role/UI checks may
 be appropriate if they meet the agreed case; record only the steps actually
 executed. Do not claim that a short supplementary session reran every case, and
 do not modify shared bookings/tickets without the agreed fixture prerequisites.
-HairRoot execution remains deferred until the partner is ready, as instructed.
+The later [27 November R02 retest](hairroot-retest-2026-11-27-R02.md) records
+Siwarak's confirmed private C1/S1/C3 logins and the assisted actions/evidence.
+It does not establish Anapat's execution contribution.
 
 ## Remaining assessed dependencies
 
 | Work | State at preparation | Evidence required to complete |
 | --- | --- | --- |
-| Latest DineQ results / #49 | PR #60 In Review | Teammate review, hosted CI and integration; original sources and qualifications retained |
+| Latest DineQ results / #49 | PR #60 merged as 603beb1 on 27 Nov | Original sources/qualifications retained; independent decision and missing actual participation remain separate |
 | DineQ independent decision / #51 | PENDING | HairRoot-authored decision on the exact accepted version with actual participation and conditions |
-| HairRoot retest / #48 and #51 | Deferred by student; corrected release not confirmed | Partner readiness, agreed revised expectations, deployed SHA/revision, fresh fixtures, actual retest and DineQ decision |
+| HairRoot retest / #48 and #51 | Targeted R02 checks PASS on cbaf1ba; source/full commit/times/evidence recorded, revision partner-declared | Anapat actual execution contribution and DineQ-authored version-bound final decision still required; original R01 history preserved |
 | DineQ isolated exercise / #50 | No approval recorded | Actual TA request/response and approved isolated scope, then genuine RED/GREEN/review/release/retest evidence |
 | One self-contained PDF / #52 | Draftable, not final | Parts A–D, internal evidence/pages, cases, both products' results, triage, exercise or disclosed dependency, decisions, contributions, AI use and limitations |
 

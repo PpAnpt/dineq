@@ -1,0 +1,38 @@
+Command: node --test server/checks/production.test.js server/checks/deploy-workflow.test.js client/tests/live-evidence-lib.test.js
+Commit: 58c5b779e71817b69ce3c1030278bff457134e21
+Date: 2026-11-27T12:50:25.492Z
+Node: v24.14.0
+Prerequisite: npm run build:client completed successfully
+
+✔ activeEntry returns the single WAITING/CALLED entry and ignores COMPLETED (2.2227ms)
+✔ assertHostPrerequisites passes only when the customer ticket is the FIFO head and nothing is CALLED (0.5262ms)
+✔ assertHostPrerequisites stops when another customer has an older WAITING ticket (0.5644ms)
+✔ assertHostPrerequisites stops when an unrelated CALLED ticket exists (0.2431ms)
+✔ assertHostPrerequisites stops when the customer ticket is missing or not WAITING (0.29ms)
+✔ assertResponse accepts the exact status and error code and rejects anything else (0.3214ms)
+✔ assertCallNextTarget requires the intended entry id in CALLED state (0.2286ms)
+✔ assertCompleted requires the same entry id and COMPLETED (0.1768ms)
+✔ assertEntryState finds the entry by id and checks its status (0.2318ms)
+✔ buildBaseline stores the base URL, queue id and both entry ids with expected states (0.9008ms)
+✔ validateBaseline rejects another environment, a stale or incomplete baseline (0.3937ms)
+✔ compareC05 passes only when both records keep id, queue and expected status (0.3227ms)
+✔ pickBaselineFile chooses the newest c04 baseline and reports none explicitly (0.1368ms)
+✔ resultFileName never gives a failed run a success-named results file (0.0991ms)
+✔ deploy workflow calls the reusable CI workflow as a test job (1.4188ms)
+✔ deploy job needs the test job and keeps the main-only guard (1.344ms)
+✔ no Google Cloud authentication or mutation happens outside the gated deploy job (0.3643ms)
+✔ smoke test also checks the built UI root, read-only (0.2877ms)
+✔ production env vars are set by gcloud run deploy; the deployer cannot run services update (0.6464ms)
+✔ production origin uses the existing canonical service URL before deployment (0.7175ms)
+✔ production image serves the built SPA and deep links (64.5932ms)
+✔ SPA fallback cannot hide unknown API routes or missing assets (8.9508ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 476.4712
+
+Exit code: 0

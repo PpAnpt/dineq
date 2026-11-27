@@ -1,0 +1,169 @@
+{
+  "product": "HairRoot",
+  "attempt": "R02",
+  "dateBangkok": "2026-11-27",
+  "independentTeam": "DineQ / TH-007_P9",
+  "operator": "Siwarak Chatvichai, 67070501086 / BBINGOAL; private role logins confirmed by student",
+  "assistance": "Codex drove browser actions and recorded evidence; Anapat execution not recorded",
+  "fullCommit": "cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d",
+  "footer": "cbaf1ba",
+  "revisionPartnerDeclared": "hairroot-sha-cbaf1baa38a5-45975306714-2",
+  "versionStart": {
+    "at": "2026-11-27T10:00:09.567Z",
+    "url": "https://hairroot-368003298307.asia-southeast1.run.app/api/version",
+    "status": 200,
+    "body": {
+      "commit": "cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d"
+    }
+  },
+  "versionEnd": {
+    "at": "2026-11-27T10:13:45.094Z",
+    "url": "https://hairroot-368003298307.asia-southeast1.run.app/api/version",
+    "status": 200,
+    "body": {
+      "commit": "cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d"
+    }
+  },
+  "firstObservationUtc": "2026-11-27T10:00:09.567Z",
+  "lastObservationUtc": "2026-11-27T10:24:08.584Z",
+  "C1PlaywrightRecaptureVersion": {
+    "status": 200,
+    "body": {
+      "commit": "cbaf1baa38a5b20c98b006f6f6effbe0f2e3f39d"
+    }
+  },
+  "requestedCaseResults": {
+    "UAT-07-R02": "PASS",
+    "UAT-05 step 4": "PASS"
+  },
+  "negativeInputs": [
+    {
+      "input": "🙂🙂",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-01-R02",
+      "timeUtc": "2026-11-27T10:09:40.830Z",
+      "timeBangkok": "2026-11-27T17:09:40.830+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "🙂🙂🙂",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-02-R02",
+      "timeUtc": "2026-11-27T10:10:09.151Z",
+      "timeBangkok": "2026-11-27T17:10:09.151+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "ก🙂ข",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-03-R02",
+      "timeUtc": "2026-11-27T10:10:18.149Z",
+      "timeBangkok": "2026-11-27T17:10:18.149+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "ก❤ข",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-04-R02",
+      "timeUtc": "2026-11-27T10:10:26.665Z",
+      "timeBangkok": "2026-11-27T17:10:26.665+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "ก☀ข",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-05-R02",
+      "timeUtc": "2026-11-27T10:10:48.612Z",
+      "timeBangkok": "2026-11-27T17:10:48.612+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "ก©ข",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-06-R02",
+      "timeUtc": "2026-11-27T10:10:57.097Z",
+      "timeBangkok": "2026-11-27T17:10:57.097+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "🇹🇭",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-07-R02",
+      "timeUtc": "2026-11-27T10:11:05.474Z",
+      "timeBangkok": "2026-11-27T17:11:05.474+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "1️⃣",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-08-R02",
+      "timeUtc": "2026-11-27T10:11:27.141Z",
+      "timeBangkok": "2026-11-27T17:11:27.141+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    },
+    {
+      "input": "👨‍👩‍👧",
+      "result": "PASS",
+      "evidence": "HR-E07-NEG-09-R02",
+      "timeUtc": "2026-11-27T10:11:35.515Z",
+      "timeBangkok": "2026-11-27T17:11:35.515+07:00",
+      "actual": "Topics cannot contain emoji.; stayed on booking form"
+    }
+  ],
+  "positiveControl": {
+    "inputIncludingSpaces": "  123 # *  ",
+    "displayedTopic": "123 # *",
+    "bookingId": 14,
+    "result": "PASS",
+    "evidence": [
+      "HR-E07-POSITIVE-INPUT-R02",
+      "HR-E07-POSITIVE-CONFIRMED-R02",
+      "HR-E07-POSITIVE-PERSISTED-R02",
+      "HR-E07-S1-FINAL-R02"
+    ]
+  },
+  "stateAfterRejections": {
+    "result": "PASS",
+    "customerBookingListUnchanged": true,
+    "customerSlotStillOffered": true,
+    "specialistSlotStillAvailable": true
+  },
+  "persistence": {
+    "case": "UAT-05 step 4",
+    "result": "PASS",
+    "bookingId": 4,
+    "beforeEvidence": "HR-E05-01-DETAIL-R01",
+    "beforeTimeUtc": "2026-11-26T11:26:54.534Z",
+    "afterEvidence": [
+      "HR-E05-C1-PLAYWRIGHT-R02",
+      "HR-E05-C3-AFTER-R02",
+      "HR-E05-S1-AFTER-R02"
+    ],
+    "visibleFieldsUnchanged": {
+      "when": "Thu 10 Dec, 16:07 to 16:37",
+      "specialist": "Dr. Somchai Prasert",
+      "service": "Hair transplant consultation",
+      "topic": "UAT hairline review",
+      "status": "Confirmed"
+    },
+    "C1": "PASS: same five detail fields",
+    "C3": "PASS: retained booked day/slot not selectable for S1 consultation",
+    "S1": "PASS: original booked time/customer/topic retained",
+    "oldFooter": "ac0a57b",
+    "newFooter": "cbaf1ba",
+    "noOriginalBookingWrite": true
+  },
+  "newFixturesRetained": {
+    "date": "2026-12-16",
+    "negativeSlot": "16:43-17:13 Bangkok; Available",
+    "positiveSlot": "17:43-18:13 Bangkok; booking 14 Confirmed"
+  },
+  "historicalResultsUnchanged": "R01: 5 PASS / 1 FAIL / 1 BLOCKED cases; 39 PASS / 3 FAIL / 1 BLOCKED steps",
+  "limitations": [
+    "UI outcomes, not captured booking HTTP status or raw DB proof",
+    "Cloud Run revision partner-declared, not authenticated GCP verification",
+    "No rerun of the full seven-case R01 suite",
+    "Anapat execution and final independent acceptance remain pending"
+  ],
+  "cleanup": "C1, S1 and C3 logged out and test browser processes closed; bookings not deleted"
+}

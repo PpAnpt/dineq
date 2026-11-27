@@ -1,0 +1,25 @@
+{
+  "case": "UAT-05 step 4",
+  "result": "PASS",
+  "bookingId": 4,
+  "beforeEvidence": "HR-E05-01-DETAIL-R01",
+  "beforeTimeUtc": "2026-11-26T11:26:54.534Z",
+  "afterEvidence": [
+    "HR-E05-C1-PLAYWRIGHT-R02",
+    "HR-E05-C3-AFTER-R02",
+    "HR-E05-S1-AFTER-R02"
+  ],
+  "visibleFieldsUnchanged": {
+    "when": "Thu 10 Dec, 16:07 to 16:37",
+    "specialist": "Dr. Somchai Prasert",
+    "service": "Hair transplant consultation",
+    "topic": "UAT hairline review",
+    "status": "Confirmed"
+  },
+  "C1": "PASS: same five detail fields",
+  "C3": "PASS: retained booked day/slot not selectable for S1 consultation",
+  "S1": "PASS: original booked time/customer/topic retained",
+  "oldFooter": "ac0a57b",
+  "newFooter": "cbaf1ba",
+  "noOriginalBookingWrite": true
+}

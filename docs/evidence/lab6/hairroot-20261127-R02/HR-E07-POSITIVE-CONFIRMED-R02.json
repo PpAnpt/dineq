@@ -1,0 +1,21 @@
+{
+  "id": "HR-E07-POSITIVE-CONFIRMED-R02",
+  "time": "2026-11-27T10:13:02.953Z",
+  "actor": "C3",
+  "case": "UAT-07-R02 step 4",
+  "input": "  123 # *  ",
+  "expected": "Confirmation for 16 Dec 17:43–18:13, trimmed topic 123 # *, Confirmed",
+  "url": "https://hairroot-368003298307.asia-southeast1.run.app/bookings/14",
+  "title": "HairRoot",
+  "text": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nYour booking is confirmed.\nYour appointment\nWhen\nWed 16 Dec, 17:43 to 18:13\nSpecialist\nDr. Somchai Prasert\nService\nHair transplant consultation\nTopic\n123 # *\nStatus\nConfirmed\nBack to my bookings\nVersion cbaf1ba",
+  "inputs": [
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Log out"
+    }
+  ]
+}

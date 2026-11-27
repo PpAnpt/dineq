@@ -1,5 +1,15 @@
 # HR-F01 - two-symbol Unicode topic creates a confirmed booking
 
+**27 November follow-up:** [R02 on corrected cbaf1ba](hairroot-retest-2026-11-27-R02.md)
+passes the agreed amended policy: all nine emoji negatives rejected without a
+new booking or consumed slot; a separate non-emoji control succeeds. UAT-05
+step 4 also passes after the announced deployment. HairRoot's chain is
+[Issue #57](https://github.com/alvin777777/hairroot/issues/57),
+[fix PR #58](https://github.com/alvin777777/hairroot/pull/58),
+[release PR #59](https://github.com/alvin777777/hairroot/pull/59).
+This is a dated disposition update; the R01 observations and counts below remain
+unchanged. Final independent acceptance/student participation remain separate.
+
 Status at the original R01 report: **observed finding, awaiting HairRoot triage**. Later on 26 November the Product Team's [open report PR #56](https://github.com/alvin777777/hairroot/pull/56) recorded it as **Accepted defect / Minor**; see the source-qualified [follow-up](follow-up-2026-11-26.md). A canonical Issue number, corrected release and independent retest remain pending. No direct message by this agent or final acceptance is inferred. Tracking: DineQ [L6-4 / #48](https://github.com/PpAnpt/dineq/issues/48). Product owner: HairRoot, team หัวล้านได้หวี. Reporter: DineQ; Playwright-assisted observation requested by Siwarak Chatvichai / BBINGOAL, who performed the private test logins. Anapat's execution contribution is not yet recorded.
 
 ## Requirement, version and impact

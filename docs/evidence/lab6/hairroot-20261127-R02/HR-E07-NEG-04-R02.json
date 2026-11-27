@@ -1,0 +1,164 @@
+{
+  "id": "HR-E07-NEG-04-R02",
+  "time": "2026-11-27T10:10:26.665Z",
+  "actor": "C3",
+  "case": "UAT-07-R02",
+  "input": "ก❤ข",
+  "expected": "Topics cannot contain emoji.; no confirmation or booking; retain negative slot",
+  "url": "https://hairroot-368003298307.asia-southeast1.run.app/slots",
+  "title": "HairRoot",
+  "text": "HairRoot\nBook\nMy bookings\nKrit Boonmee (Customer)\nLog out\nBook an appointment\n1. Choose a service\nHair transplant consultation\nDr. Somchai Prasert\n28 times available\nHair transplant consultation\nDr. Nida Wongsa\n21 times available\nPost-procedure follow-up\nDr. Somchai Prasert\n7 times available\n2. Choose a day\nSat 28 Nov\nSun 29 Nov\nMon 30 Nov\nTue 1 Dec\nWed 2 Dec\nThu 3 Dec\nFri 4 Dec\nSat 12 Dec\nWed 16 Dec\nFri 1 Jan\nTue 2 Feb\n3. Choose a time\n16:43\n17:43\n4. Confirm your appointment\n\nHair transplant consultation with Dr. Somchai Prasert\nWed 16 Dec, 16:43 to 17:13\n\nWhat would you like to discuss?\nTopics cannot contain emoji.\nConfirm booking\nVersion cbaf1ba",
+  "inputs": [
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Log out"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Hair transplant consultation\nDr. Somchai Prasert\n28 times available"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Hair transplant consultation\nDr. Nida Wongsa\n21 times available"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Post-procedure follow-up\nDr. Somchai Prasert\n7 times available"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Sat 28 Nov"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Sun 29 Nov"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Mon 30 Nov"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Tue 1 Dec"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Wed 2 Dec"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Thu 3 Dec"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Fri 4 Dec"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Sat 12 Dec"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Wed 16 Dec"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Fri 1 Jan"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Tue 2 Feb"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "16:43"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "17:43"
+    },
+    {
+      "tag": "INPUT",
+      "type": "text",
+      "name": "",
+      "id": "topic",
+      "label": null
+    },
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": "",
+      "id": "",
+      "label": null,
+      "text": "Confirm booking"
+    }
+  ]
+}

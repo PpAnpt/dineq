@@ -1,0 +1,5 @@
+# Preserve captured and derived evidence bytes for SHA-256 verification.
+*.json -text
+*.md -text
+# The verbatim partner policy includes a final blank line.
+source-topic-policy.md whitespace=-blank-at-eof

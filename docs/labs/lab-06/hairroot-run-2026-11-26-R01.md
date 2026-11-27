@@ -1,5 +1,10 @@
 # HairRoot UAT assisted run - 26 November 2026, R01
 
+Later corrected-release observations are recorded separately in
+[27 November R02](hairroot-retest-2026-11-27-R02.md): UAT-07-R02 and UAT-05 step 4
+PASS on cbaf1ba. That follow-up does not rewrite the original run below or claim
+a full-suite rerun.
+
 Tracking: [L6-4 / #48](https://github.com/PpAnpt/dineq/issues/48). Source: [partner v0.2](reference/hairroot-uat-cases-v0.2.md), SHA-256 `82e9981d1aca88f0a31c830279b45aaa8431befc1aaebcd88377e6ccdfb29938`. Expected actions below are taken from the [execution template](hairroot-execution.md); Actual records are generated from captured observations, not copied from Expected.
 
 ## Result and participation

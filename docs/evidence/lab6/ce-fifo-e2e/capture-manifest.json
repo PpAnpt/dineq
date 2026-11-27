@@ -1,0 +1,46 @@
+{
+  "method": "Original Playwright full-page screenshots; supporting developer E2E, not independent partner UAT",
+  "testedCommit": "58c5b779e71817b69ce3c1030278bff457134e21",
+  "apiPort": 33115,
+  "webPort": 33116,
+  "runStartUtc": "2026-11-27T12:50:28.382Z",
+  "runDurationMs": 9313.862000000001,
+  "files": [
+    {
+      "file": "DEMO-01-step-1.png",
+      "sha256": "bf957951e1b6cd2fd024bc068477f303490fc91bbbb8dc8df7516c95efc5d004"
+    },
+    {
+      "file": "DEMO-01-step-2.png",
+      "sha256": "2362725f0dc1cbd20f6d74e78d73d8dd4351d97485ff0dd7a4006e24e7ee2fd0"
+    },
+    {
+      "file": "DEMO-01-step-3.png",
+      "sha256": "005c23df17a75269d823d96f3d722a4f7391e0d64a916a25ea4b05e401839b93"
+    },
+    {
+      "file": "DEMO-01-step-4.png",
+      "sha256": "bf94324a85ae937d20edc220c99ef30e6b148d4560a9959077cc7a72690703d8"
+    },
+    {
+      "file": "DEMO-02-step-1.png",
+      "sha256": "0e9c04fa88c93e36d41efbef20c89b47d76cb043f01db1a0a1ae090c09efdec3"
+    },
+    {
+      "file": "DEMO-03-step-1.png",
+      "sha256": "1c886df8f0acfe12c5564e2991a236de90e21d6082109c7c792fc389fdcd5f24"
+    },
+    {
+      "file": "DEMO-04-step-1.png",
+      "sha256": "6d54b3de515a80d0759585d508417a218fffc33cd231d19e0bc3b31df99d0b9e"
+    },
+    {
+      "file": "DEMO-05-step-1.png",
+      "sha256": "1425c4c1255f98541b8d84f2881b22544b014d4980651cead30209cddfe49012"
+    },
+    {
+      "file": "DEMO-05-step-2.png",
+      "sha256": "96a4ef5409a83fcf6720834e845b9116f9d3ecf5d1046115bf4d3401c178c74c"
+    }
+  ]
+}

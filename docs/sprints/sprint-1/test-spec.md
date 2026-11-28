@@ -28,6 +28,7 @@
 | AC-12 / TEST-12 (v0.5) | Join Queue CLOSED หรือ partySize=0,-1,1.5/ข้อความ/null/ไม่ส่ง หรือมากกว่า maxPartySize ของ Queue นั้น (Queue หลัก = 10 จึงใช้ 11); ขอบที่ต้องรับ 1 และ 10 บน Queue หลัก (เดิม 0, 9, 1.5 และขอบ 1, 8) | 409 QUEUE_CLOSED หรือ 400 INVALID_PARTY_SIZE; ไม่ Insert และไม่กินเลขคิว; ค่าผิดรายงานก่อน CLOSED | API + DB Boundary |
 | AC-25 / TEST-25 | ดูแถว AC-25 ใน F-02 v0.4: Queue limit 4/8/10 ขอบรับ/ปฏิเสธ, message ระบุ limit, เปลี่ยน limit แล้วมีผลทันที | 201 หรือ 400 INVALID_PARTY_SIZE ตาม limit; ไม่กินเลขคิว | API + DB Boundary |
 | AC-26 / TEST-26 | ดูแถว AC-26 ใน F-02 v0.4: Seed Queue หลัก = 10, ค่าเริ่มต้น 8, ข้อมูลเดิมไม่เสียหลัง Migration 002 | maxPartySize ถูกต้อง; Ticket/Event เดิมไม่เปลี่ยน | API + DB (Migration/Seed) |
+| AC-26b / TEST-26b | ดูแถว AC-26b ใน F-02 v0.5: Migration 006 ตั้ง Queue หลักที่ยังเป็น 8 เป็น 10 เท่านั้น | ค่าอื่นไม่เปลี่ยน; รันซ้ำ/ไม่มีคิวไม่ Error; ข้อมูลเดิมไม่เปลี่ยน | DB Migration (PLANNED) |
 | AC-27 / TEST-27 | ดูแถว AC-27 ใน F-02 v0.4: DB ปฏิเสธ max_party_size และ party_size นอก 1–10 | 23514 | DB Constraint |
 | AC-13 / TEST-13 | Host เรียก Join Endpoint ที่อนุญาตเฉพาะ Customer | 403 ไม่เกิด Ticket ใหม่ | API + Role |
 | AC-21 / TEST-21 | Customer Join สำเร็จ แล้วสร้าง App Instance ใหม่พร้อม DB Pool ใหม่ต่อ DB เดิม (จำลอง Restart) | Ticket และ JOINED Event ที่สร้างไว้ก่อนหน้ายังอ่านได้ครบ (ticketNo/partySize/status ตรงเดิม) | API + DB (Restart Persistence) |
@@ -136,3 +137,4 @@ Changed Sprint 1 tests (INFRA-04/05/07, E2E-2/DEMO-03) follow `docs/labs/lab-07/
 | v0.4 | 2026-11-07 | P8: add actual results for all 24 AC from release-full-run, full test-name ledger and honest DoD/manual/release statuses; preserve original AC/design |
 | v0.5 | 2026-11-28 | Lab 7 (L7-CR-01): add TEST-25..27, revise TEST-07/TEST-12 for per-queue party size limits (old TEST-12: partySize=0,9,1.5/text, boundaries 1 and 8). New tests are PLANNED; the earlier Sprint 1 results above stay valid for the v0.4 rows they ran |
 | v0.6 | 2026-11-28 | Lab 7: add actual results for AC-07/12 (revised) and AC-25..27 from the recorded l7-red / l7-green runs at `680e8aa`; earlier Sprint 1 results unchanged |
+| v0.7 | 2026-11-28 | Lab 7 change request v0.2: add TEST-26b (PLANNED) for migration `006`; earlier results unchanged |

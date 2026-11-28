@@ -1,8 +1,8 @@
 # F-09 Error/UX, Security, Performance and Final Regression - Sprint 3 Contract
 
-> **Status:** Draft v0.1 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-15, NFR-01, NFR-02, NFR-04, NFR-06, NFR-07 · **F-09a Implement ใน Deliverable 2; ส่วนอื่น PLANNED**
+> **Status:** Draft v0.1 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-15, NFR-01, NFR-02, NFR-04, NFR-06, NFR-07 · **F-09a วางแผน Implement ใน Deliverable 2; ส่วนอื่น PLANNED**
 
-## 1. F-09a: Oversized Request Body returns 413 PAYLOAD_TOO_LARGE (Implement)
+## 1. F-09a: Oversized Request Body returns 413 PAYLOAD_TOO_LARGE (วางแผน Implement)
 
 ปัญหาที่ยืนยันแล้ว (`docs/known-limitations.md`): Body JSON เกิน 100 KB ได้ HTTP 413 แต่ Code เป็น `INTERNAL_ERROR` และข้อความ `request entity too large` ซึ่งไม่ตรงความหมายและไม่อยู่ใน Catalog
 

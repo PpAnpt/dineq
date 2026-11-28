@@ -2,9 +2,9 @@
 
 > **Status:** Draft v0.1 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-04, FR-13, FR-16, BR-08, BR-12, NFR-01, NFR-04, NFR-06
 
-เป้าหมาย: ผู้ใช้ดูประวัติของคิวที่ตนมีสิทธิ์เท่านั้น และกรองตามสถานะและช่วงเวลาได้ แบ่งเป็นสองส่วนตาม Checkpoint: **F-07a (Implement ใน Deliverable 2)** คือตัวกรองประวัติตั๋วของ Customer และ **F-07b (PLANNED)** คือประวัติของ Host และประวัติการเปลี่ยนสถานะของตั๋ว
+เป้าหมาย: ผู้ใช้ดูประวัติของคิวที่ตนมีสิทธิ์เท่านั้น และกรองตามสถานะและช่วงเวลาได้ แบ่งเป็นสองส่วนตาม Checkpoint: **F-07a (วางแผน Implement ใน Deliverable 2)** คือตัวกรองประวัติตั๋วของ Customer และ **F-07b (PLANNED)** คือประวัติของ Host และประวัติการเปลี่ยนสถานะของตั๋ว
 
-## 1. F-07a: Customer History Filter (Implement)
+## 1. F-07a: Customer History Filter (วางแผน Implement)
 
 API: `GET /api/me/entries` เดิม เพิ่ม Query Parameter ที่ไม่บังคับ (ไม่ส่ง = พฤติกรรม Sprint 1 เหมือนเดิมทุกประการ)
 

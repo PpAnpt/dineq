@@ -185,13 +185,13 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 
 | Method | Endpoint | บทบาท | ฟีเจอร์ | สถานะ |
 | :---- | :---- | :---- | :---- | :---- |
-| POST | `/api/entries/:entryId/cancel` | Customer เจ้าของ | F-04 | Implement ใน D2 |
-| PATCH | `/api/queues/:queueId` `{ status }` | Host ที่ Assigned | F-06 | Implement ใน D2 |
-| GET | `/api/queues` (เพิ่ม `name`, `maxPartySize`) | Login แล้ว | F-06, Lab 7 | Implement ใน D2 |
-| GET | `/api/me/entries?status&from&to` | Customer | F-07a | Implement ใน D2 |
+| POST | `/api/entries/:entryId/cancel` | Customer เจ้าของ | F-04 | วางแผน Implement ใน D2 |
+| PATCH | `/api/queues/:queueId` `{ status }` | Host ที่ Assigned | F-06 | วางแผน Implement ใน D2 |
+| GET | `/api/queues` (เพิ่ม `name`, `maxPartySize`) | Login แล้ว | F-06, Lab 7 | วางแผน Implement ใน D2 |
+| GET | `/api/me/entries?status&from&to` | Customer | F-07a | วางแผน Implement ใน D2 |
 | GET | `/api/queues/:queueId/history`, `/api/entries/:entryId/events` | Host ที่ Assigned / เจ้าของ | F-07b | PLANNED |
 | GET | `/api/queues/:queueId/summary` | Host ที่ Assigned | F-08 | PLANNED |
-| (No-show และจัดสรรโต๊ะ) | ตาม Contract F-05 | Host ที่ Assigned | F-05 | Implement ใน D2 (Contract กำลังร่างโดยเจ้าของ F-05) |
+| (No-show และจัดสรรโต๊ะ) | ตาม Contract F-05 | Host ที่ Assigned | F-05 | วางแผน Implement ใน D2 (Contract กำลังร่างโดยเจ้าของ F-05) |
 
 **Error Catalog เพิ่มเติม (C.6.2):** `413 PAYLOAD_TOO_LARGE` (Body JSON เกิน 100 KB; F-09a, ไม่สร้าง Session/Row; Endpoint ที่ตรวจสิทธิ์ก่อน Parse Body ยังคืน 401/403/400/404 ก่อน) ไม่มี Code ใหม่อื่นใน Sprint 2: Cancel/ปิดคิวใช้ `INVALID_TRANSITION`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_ERROR` ที่มีอยู่
 

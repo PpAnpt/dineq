@@ -1,0 +1,40 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-review-searchpath.json"
+Working directory: server
+Commit: ed3b57299fc6da3d27235b9e0ba136b011ce7a4f
+Date: 2026-11-28T07:23:29.893Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ✓ tests/f02-join.test.js (44 tests) 11744ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  612ms
+     ✓ TEST-07 / AC-07: a fixture with no queues returns { "data": [] }  345ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE  318ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1990ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response)  313ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  384ms
+     ✓ TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED  305ms
+ ✓ tests/f01-auth.test.js (40 tests) 6181ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  338ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 5701ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  543ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  403ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  455ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  365ms
+ ✓ tests/f05-tables.test.js (31 tests) 5532ms
+ ✓ tests/f03-host.test.js (21 tests) 4517ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  389ms
+ ✓ tests/f09-payload.test.js (11 tests) 1858ms
+ ✓ tests/controlled-fifo.test.js (1 test) 561ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  559ms
+ ✓ tests/infra.test.js (11 tests) 574ms
+
+ Test Files  8 passed (8)
+      Tests  185 passed (185)
+   Start at  14:23:30
+   Duration  41.04s (transform 234ms, setup 0ms, import 2.80s, tests 36.67s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-review-searchpath.json
+
+Exit code: 0

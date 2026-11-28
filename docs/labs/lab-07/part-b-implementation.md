@@ -53,14 +53,14 @@ The Sprint 1 tests that touch the rule (TEST-07 queue list, TEST-12 invalid part
 
 ## B.5 Post-deploy check (28 Nov 2026, deployed URL)
 
-Done by hand in the browser by the owner with a demo Customer account; status codes were not captured, so the evidence is the owner's report and the pipeline smoke test.
+Done by hand in the browser by the owner with the synthetic demo account `customer29@dineq.test`; status codes were not captured and the screenshots show neither the address bar nor a clock (`docs/evidence/deployed-00008-g6r/`, four images), so the evidence is the screenshots, the owner's report and the pipeline smoke test.
 
 | Check | Result |
 | :-- | :-- |
-| New behaviour: the main queue shows a limit of 10 (proves migration 006 on real data) | PASS |
-| New behaviour: party size 11 is rejected and the limit is named | PASS |
-| New behaviour: party size 10 is accepted | PASS |
-| Sprint 1 path that must stay: login works, a WAITING ticket can be cancelled | PASS (cancel is a Sprint 2 feature; login and join are Sprint 1) |
+| New behaviour: the main queue shows a limit of 10 (proves migration 006 on real data) | PASS: the form label reads `Party size (1-10)` (S2, S3) |
+| New behaviour: party size 11 is rejected and the limit is named | PASS in the browser only: the form blocks 11 with "Value must be less than or equal to 10." (S2); the API rule (400 `INVALID_PARTY_SIZE` naming the limit) is shown by TEST-25, not by this check |
+| New behaviour: party size 10 is accepted | PASS: Ticket #25, party size 10, WAITING (S4) |
+| Sprint 1 path that must stay: login works, join works, a WAITING ticket can be cancelled and a new join gets a new number | PASS: login and join as above; Ticket #24 CANCELLED, then Ticket #25 created and cancelled (S4, S5) (cancel is a Sprint 2 feature) |
 | Sprint 1 Host journey (Call Next, Complete) on the deployed service | NOT RUN (shared service); covered by E2E-1 in the recorded Playwright run on the same code |
 | Scripted API check of the same rules | NOT RUN (script `post-deploy-check.mjs`, PR #116, not run against the deployed service) |
 

@@ -61,6 +61,7 @@ These tests assert the old rule literally. They are changed in the RED step, eac
 | TEST-07 queue JSON shape | exact keys without `maxPartySize` | adds `maxPartySize` | AC-07 revised |
 | INFRA-04 schema test (`party_size <= 8`) | CHECK text contains `<= 8` | CHECK text contains `<= 10`, and `service_queues` CHECK for `max_party_size` | Column range widened |
 | INFRA-07 `[0, 9]` rejected | 9 rejected by the DB | `[0, 11]` rejected by the DB | Column range widened |
+| `f05-seating.test.js` TEST-45 migration list | asserts the exact list `001..005` recorded in `schema_migrations` after a fresh run | asserts the list of every `.sql` file in `database/migrations`, so adding `006` does not need another edit | Adding migration `006` changes the list; found when the full suite ran with `006` (run recorded as `l7-activation-chain-red`); the intent (every migration applied once, in order) is unchanged |
 | INFRA-05 `schema_migrations` count | exactly 1 migration recorded | number of `.sql` files in `database/migrations` | Migration `002` is added; the literal 1 would only restate the old file count (found while writing the RED tests) |
 | E2E-2 / DEMO-03 (`client/e2e/sprint-1.spec.js`) | label `Party size (1-8)`, out-of-range example 9 | label `Party size (1-10)` and `max=10` for the seeded main queue, out-of-range example 11 (server still rejects it) | UI label and limit come from `maxPartySize`; found when searching the repo for the hard-coded label |
 | `join()` helper in the E2E spec and `client/e2e/live-evidence.mjs` | label `Party size (1-8)` | label matched for any per-queue limit | Label text now depends on the queue |
@@ -91,3 +92,4 @@ About 6 source files, 1 migration, 2 UI lines, 5 revised tests and about 8 new t
 | v0.3 | 2026-11-28 | Add the E2E label/limit changes (DEMO-03 uses 11 against `max=10`) found while searching for the hard-coded 8 in the client; recorded before the E2E test commit |
 | v0.4 | 2026-11-28 | Add migration `006` as the activation of the main queue limit on existing databases (contract change request v0.2, AC-26b); update the Seed, Deployment and risk rows. Recorded before any test or code for it |
 | v0.5 | 2026-11-28 | Review wording fix (PR #112): the guard `= 8` also raises a deliberate 8; recorded in the Activation and risk rows. Old wording implied a deliberately set value was kept |
+| v0.6 | 2026-11-28 | Add the F-05 TEST-45 migration-list assertion to the tests that change with migration `006`; found by the first full run with `006`, recorded before the test edit |

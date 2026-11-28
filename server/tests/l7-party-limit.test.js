@@ -213,3 +213,61 @@ describe('Lab 7 TEST-27 / AC-27: database constraints', () => {
       .rejects.toMatchObject({ code: '23514' });
   });
 });
+
+// BBINGOAL review of PR #103 (P2): the limit must be read under the queue lock, not before it.
+// A controlled real-DB interleaving: another client holds the queue lock and changes the limit
+// without committing; a Join starts, is observed waiting for that lock, then the change commits.
+describe('Lab 7 TEST-25 / AC-25: the limit is read under the queue lock', () => {
+  async function joinWhileLimitChangesUnderLock(initialLimit, newLimit, partySize) {
+    const queueId = await insertQueue(pool, { maxPartySize: initialLimit });
+    const cookie = await login(customerEmail(1));
+    const before = { queue: await queueRow(queueId), entries: await entryCount(queueId), events: await eventCount() };
+    const holder = await pool.connect();
+    let open = false;
+    try {
+      await holder.query('BEGIN');
+      open = true;
+      await holder.query('SELECT id FROM service_queues WHERE id = $1 FOR UPDATE', [queueId]);
+      await holder.query('UPDATE service_queues SET max_party_size = $2 WHERE id = $1', [queueId, newLimit]);
+
+      const pending = join(cookie, queueId, partySize).then(response => response);
+
+      // Deterministic synchronisation: wait until PostgreSQL reports a backend blocked on a lock
+      // while running the queue-row SELECT ... FOR UPDATE (no sleep-only timing).
+      const deadline = Date.now() + 10000;
+      let waiting = 0;
+      while (Date.now() < deadline) {
+        waiting = Number((await pool.query(
+          `SELECT count(*) FROM pg_stat_activity
+            WHERE datname = current_database() AND pid <> pg_backend_pid()
+              AND wait_event_type = 'Lock' AND query ILIKE '%service_queues%FOR UPDATE%'`)).rows[0].count);
+        if (waiting > 0) break;
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+      expect(waiting, 'the Join must be waiting for the queue lock').toBeGreaterThan(0);
+
+      await holder.query('COMMIT');
+      open = false;
+      return { response: await pending, queueId, before };
+    } finally {
+      if (open) await holder.query('ROLLBACK').catch(() => {});
+      holder.release();
+    }
+  }
+
+  test('TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written', async () => {
+    const { response, queueId, before } = await joinWhileLimitChangesUnderLock(4, 2, 4);
+    expectInvalidParty(response, 2);
+    const { rows } = await pool.query('SELECT max_party_size FROM service_queues WHERE id = $1', [queueId]);
+    expect(rows[0].max_party_size).toBe(2);
+    expect({ queue: await queueRow(queueId), entries: await entryCount(queueId), events: await eventCount() })
+      .toEqual(before);
+  });
+
+  test('TEST-25 / AC-25: limit raised 4 -> 6 while the Join waits: partySize 5 is accepted with ticket 1', async () => {
+    const { response, queueId } = await joinWhileLimitChangesUnderLock(4, 6, 5);
+    expect(response.status).toBe(201);
+    expect(response.body.data).toMatchObject({ queueId, ticketNo: 1, partySize: 5, status: 'WAITING' });
+    expect(await entryCount(queueId)).toBe(1);
+  });
+});

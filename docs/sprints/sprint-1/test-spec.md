@@ -125,6 +125,8 @@ Recorded at commit `680e8aab2c5977ebc14dfee969af29d7bc44645c` on branch `test/l7
 
 Latest recorded API/DB run: [l7-green-lock](../../evidence/l7-green-lock.txt), 143 passed / 0 failed / 0 skipped at `6fa36bf7eac7e3457bb0497763a64c3168b6bb93`. The two under-lock tests were added after the implementation (review request); [l7-lock-mutation](../../evidence/l7-lock-mutation.txt) shows they fail (2 failed) when the code validates an unlocked pre-read.
 
+AC-26b / TEST-26b (migration 006): `server/tests/l7-activation.test.js`, 10 cases PASS. RED [l7-activation-red](../../evidence/l7-activation-red.txt) 10 failed / 279 passed of 289 before the file existed; the first full run with 006 failed one existing test (the hard-coded migration list in f05-seating TEST-45), kept as [l7-activation-chain-red](../../evidence/l7-activation-chain-red.txt); GREEN [l7-activation-green](../../evidence/l7-activation-green.txt) 289 passed / 0 failed / 0 skipped at `34f461a0a66bfbb574ff6537ec57ff4e9c15b52f`; Playwright [l7-activation-e2e](../../evidence/l7-activation-e2e.txt) 11 passed. Two temporary mutations (no `= 8` guard, no id filter) made the tests fail and were reverted. Local runs only; not merged, not deployed.
+
 Changed Sprint 1 tests (INFRA-04/05/07, E2E-2/DEMO-03) follow `docs/labs/lab-07/impact-analysis.md` section 4; no assertion was deleted or skipped.
 
 ## Revision History
@@ -139,3 +141,4 @@ Changed Sprint 1 tests (INFRA-04/05/07, E2E-2/DEMO-03) follow `docs/labs/lab-07/
 | v0.6 | 2026-11-28 | Lab 7: add actual results for AC-07/12 (revised) and AC-25..27 from the recorded l7-red / l7-green runs at `680e8aa`; earlier Sprint 1 results unchanged |
 | v0.7 | 2026-11-28 | Lab 7 change request v0.2: add TEST-26b (PLANNED) for migration `006`; earlier results unchanged |
 | v0.8 | 2026-11-28 | Review wording fix (PR #112): TEST-26b covers a deliberate 8 (raised) and the values 4, 6, 9, 10 (kept); still PLANNED |
+| v0.9 | 2026-11-28 | Record the TEST-26b results from l7-activation-red / chain-red / green at `34f461a`; earlier results unchanged |

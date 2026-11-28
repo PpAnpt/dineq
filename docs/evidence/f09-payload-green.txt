@@ -1,0 +1,31 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f09-payload-green.json"
+Working directory: server
+Commit: e75a5989f909a5ebcf08041085a861a34596dc90
+Date: 2026-11-28T05:48:45.302Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f09-payload/server
+
+ ✓ tests/f09-payload.test.js (11 tests) 1833ms
+ ✓ tests/f02-join.test.js (39 tests) 8592ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1765ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  335ms
+ ✓ tests/f01-auth.test.js (40 tests) 5891ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  308ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  463ms
+ ✓ tests/f03-host.test.js (21 tests) 4667ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  404ms
+     ✓ TEST-17 / AC-17: Complete a CALLED ticket -> COMPLETED in DB and visible to the owner  333ms
+ ✓ tests/controlled-fifo.test.js (1 test) 793ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  791ms
+ ✓ tests/infra.test.js (11 tests) 502ms
+
+ Test Files  6 passed (6)
+      Tests  123 passed (123)
+   Start at  12:48:45
+   Duration  26.02s (transform 192ms, setup 0ms, import 2.38s, tests 22.28s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f09-payload/docs/evidence/f09-payload-green.json
+
+Exit code: 0

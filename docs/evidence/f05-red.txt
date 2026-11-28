@@ -1,0 +1,463 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-red.json"
+Working directory: server
+Commit: 36b150881c4e9b2a879cc82e23b6c1e6ec31f42c
+Date: 2026-11-28T07:57:32.230Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ❯ tests/f05-seating.test.js (37 tests | 37 failed) 7629ms
+   × TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip 326ms
+   × TEST-36 / AC-36: No-show still serves a CALLED ticket on a CLOSED queue 259ms
+   × TEST-37 / AC-37: no-show on WAITING is 409 without mutation 207ms
+   × TEST-37 / AC-37: no-show on COMPLETED is 409 without mutation 185ms
+   × TEST-37 / AC-37: no-show on CANCELLED is 409 without mutation 181ms
+   × TEST-37 / AC-37: no-show on NO_SHOW is 409 without mutation 191ms
+   × TEST-37 / AC-37: repeated no-show is 409 and keeps a single terminal event 182ms
+   × TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body 238ms
+   × TEST-37 / AC-37: seat on WAITING is 409 without mutation 176ms
+   × TEST-37 / AC-37: seat on COMPLETED is 409 without mutation 176ms
+   × TEST-37 / AC-37: seat on CANCELLED is 409 without mutation 177ms
+   × TEST-37 / AC-37: seat on NO_SHOW is 409 without mutation 220ms
+   × TEST-37 / AC-37: repeated seat is 409 and keeps a single terminal event 205ms
+   × TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body 272ms
+   × TEST-40 / AC-40: Seat party 1 at table4 atomically completes ticket on CLOSED queue 192ms
+   × TEST-40 / AC-40: Seat party 4 at table4 atomically completes ticket on CLOSED queue 192ms
+   × TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue 191ms
+   × TEST-41 / AC-41: invalid Seat body null is 400 with no mutation 191ms
+   × TEST-41 / AC-41: invalid Seat body undefined is 400 with no mutation 200ms
+   × TEST-41 / AC-41: invalid Seat body "text" is 400 with no mutation 189ms
+   × TEST-41 / AC-41: invalid Seat body {} is 400 with no mutation 190ms
+   × TEST-41 / AC-41: invalid Seat body {"tableId":1} is 400 with no mutation 191ms
+   × TEST-41 / AC-41: invalid Seat body {"tableId":null} is 400 with no mutation 195ms
+   × TEST-41 / AC-41: invalid Seat body {"tableId":"not-a-uuid"} is 400 with no mutation 198ms
+   × TEST-41 / AC-41: missing/malformed/oversized Seat body retains validation/error contract 206ms
+   × TEST-41 / AC-41: missing/foreign table precedes CALLED state even for Host assigned to both queues 207ms
+   × TEST-41 / AC-41: missing/foreign table precedes WAITING state even for Host assigned to both queues 207ms
+   × TEST-42 / AC-42: available undersized table rejects; occupied takes precedence over capacity 202ms
+   × TEST-43 / AC-43: release permits later seating without erasing the previous historical link 192ms
+   × TEST-44 / AC-44: concurrent Seat at table4/table4 has one terminal event and occupied table 215ms
+   × TEST-44 / AC-44: concurrent Seat at table4/table10 has one terminal event and occupied table 255ms
+   × TEST-44 / AC-44: Seat racing no-show produces one transition/event and no leaked table 196ms
+   × TEST-44 / AC-44: Seat racing complete produces one transition/event and no leaked table 210ms
+   × TEST-44 / AC-44: Seat racing Release matches a serial history and keeps the historical entry link 202ms
+   × TEST-45 / AC-45: event failure rolls back all no-show changes with a generic 500 206ms
+   × TEST-45 / AC-45: event failure rolls back all seat changes with a generic 500 211ms
+   × TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain 192ms
+ ✓ tests/f02-join.test.js (45 tests) 10817ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE  393ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1815ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response)  359ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  357ms
+ ✓ tests/f04-cancel.test.js (18 tests) 7951ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket  396ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  566ms
+     ✓ TEST-31 / AC-31: malformed UUID is 400, absent UUID is 404; anonymous 401 and Host 403 come first; nothing changes  410ms
+     ✓ TEST-32 / AC-32: cancelling a CALLED ticket is 409 INVALID_TRANSITION and changes nothing  589ms
+     ✓ TEST-32 / AC-32: cancelling twice is 409 INVALID_TRANSITION the second time, with one CANCELLED event  397ms
+     ✓ TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds  444ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  3159ms
+ ✓ tests/f06-queues.test.js (16 tests) 7766ms
+     ✓ TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys  308ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  500ms
+     ✓ TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403  427ms
+     ✓ TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering  558ms
+     ✓ TEST-50 / AC-50: a Host of one queue cannot list, call, complete or read tickets of the other queue  317ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  2183ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1457ms
+     ✓ TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash  375ms
+ ✓ tests/f01-auth.test.js (40 tests) 7078ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  313ms
+     ✓ TEST-06 / AC-06: Customer 'post' '/api/entries/00000000-0000-4000-8000-…' is forbidden despite forged Host identity, with DB unchanged  400ms
+ ✓ tests/f05-tables.test.js (31 tests) 7128ms
+     ✓ TEST-43 / AC-43: release on CLOSED queue is idempotent and retains completed entry/event/history  306ms
+     ✓ TEST-43 / AC-43: concurrent Releases both succeed without changing ticket history  323ms
+     ✓ TEST-45 / AC-45: repeat migrations/seed retain occupied tables, counter and historical entry  324ms
+     ✓ TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references  362ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 6571ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  662ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  664ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  507ms
+     ✓ TEST-25 / AC-25: a queue without an explicit limit uses the default 8  324ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  341ms
+     ✓ TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written  347ms
+ ✓ tests/f03-host.test.js (21 tests) 4670ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  446ms
+ ✓ tests/f09-payload.test.js (11 tests) 1842ms
+ ✓ tests/controlled-fifo.test.js (1 test) 551ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  549ms
+ ✓ tests/infra.test.js (11 tests) 474ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 37 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:57:27
+     55|   const before = await snapshot();
+     56|   const response = await call(cookie,'no-show',a.id,{ role:'CUSTOMER',…
+     57|   expect(response.status).toBe(200);
+       |                           ^
+     58|   expect(Object.keys(response.body.data).sort()).toEqual(keys);
+     59|   expect(response.body.data).toMatchObject({ id:a.id, ticketNo:1, part…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-36 / AC-36: No-show still serves a CALLED ticket on a CLOSED queue
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:76:69
+     74|   const entry = await fixture();
+     75|   await pool.query("UPDATE service_queues SET status='CLOSED' WHERE id…
+     76|   expect((await call(await login(host),'no-show',entry.id)).status).to…
+       |                                                                     ^
+     77| });
+     78| for (const operation of ['no-show','seat']) {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: no-show on WAITING is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: no-show on COMPLETED is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: no-show on CANCELLED is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: no-show on NO_SHOW is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: seat on WAITING is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: seat on COMPLETED is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: seat on CANCELLED is 409 without mutation
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: seat on NO_SHOW is 409 without mutation
+AssertionError: expected 404 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:82:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: repeated no-show is 409 and keeps a single terminal event
+ FAIL  tests/f05-seating.test.js > TEST-37 / AC-37: repeated seat is 409 and keeps a single terminal event
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:87:85
+     85|   test(`TEST-37 / AC-37: repeated ${operation} is 409 and keeps a sing…
+     86|     const entry=await fixture(); const cookie=await login(host);
+     87|     expect((await call(cookie,operation,entry.id,{tableId:seedIds.tabl…
+       |                                                                                     ^
+     88|     const before=await snapshot();
+     89|     error(await call(cookie,operation,entry.id,{tableId:seedIds.table1…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body
+ FAIL  tests/f05-seating.test.js > TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:95:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-40 / AC-40: Seat party 1 at table4 atomically completes ticket on CLOSED queue
+ FAIL  tests/f05-seating.test.js > TEST-40 / AC-40: Seat party 4 at table4 atomically completes ticket on CLOSED queue
+ FAIL  tests/f05-seating.test.js > TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:116:27
+    114|   const before=await snapshot();
+    115|   const response=await call(cookie,'seat',entry.id,{tableId:seedIds[ke…
+    116|   expect(response.status).toBe(200);
+       |                           ^
+    117|   expect(Object.keys(response.body.data).sort()).toEqual(['entry','tab…
+    118|   expect(Object.keys(response.body.data.entry).sort()).toEqual(keys);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body null is 400 with no mutation
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body undefined is 400 with no mutation
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body "text" is 400 with no mutation
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body {} is 400 with no mutation
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body {"tableId":1} is 400 with no mutation
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body {"tableId":null} is 400 with no mutation
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: invalid Seat body {"tableId":"not-a-uuid"} is 400 with no mutation
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:133:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: missing/malformed/oversized Seat body retains validation/error contract
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:137:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: missing/foreign table precedes CALLED state even for Host assigned to both queues
+ FAIL  tests/f05-seating.test.js > TEST-41 / AC-41: missing/foreign table precedes WAITING state even for Host assigned to both queues
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:148:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-42 / AC-42: available undersized table rejects; occupied takes precedence over capacity
+AssertionError: expected 404 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:153:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-43 / AC-43: release permits later seating without erasing the previous historical link
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:164:80
+    162| test('TEST-43 / AC-43: release permits later seating without erasing t…
+    163|   const first=await fixture(); const cookie=await login(host);
+    164|   expect((await call(cookie,'seat',first.id,{tableId:seedIds.table4}))…
+       |                                                                                ^
+    165|   expect((await request(app).post(`/api/tables/${seedIds.table4}/relea…
+    166|   const second=await fixture('CALLED',{customer:2,ticketNo:2});
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-44 / AC-44: concurrent Seat at table4/table4 has one terminal event and occupied table
+ FAIL  tests/f05-seating.test.js > TEST-44 / AC-44: concurrent Seat at table4/table10 has one terminal event and occupied table
+AssertionError: expected [ 404, 404 ] to deeply equal [ 200, 409 ]
+
+- Expected
++ Received
+
+  [
+-   200,
+-   409,
++   404,
++   404,
+  ]
+
+ ❯ tests/f05-seating.test.js:175:45
+    173|   const entry=await fixture(); const cookie=await login(host);
+    174|   const responses=await Promise.all([a,b].map(key=>call(cookie,'seat',…
+    175|   expect(responses.map(r=>r.status).sort()).toEqual([200,409]);
+       |                                             ^
+    176|   error(responses.find(r=>r.status===409),409,'INVALID_TRANSITION');
+    177|   expect(await terminalEvents(entry.id)).toHaveLength(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-44 / AC-44: Seat racing no-show produces one transition/event and no leaked table
+AssertionError: expected [ 404, 404 ] to deeply equal [ 200, 409 ]
+
+- Expected
++ Received
+
+  [
+-   200,
+-   409,
++   404,
++   404,
+  ]
+
+ ❯ tests/f05-seating.test.js:184:47
+    182|   const entry=await fixture(); const cookie=await login(host);
+    183|   const [seated,other]=await Promise.all([call(cookie,'seat',entry.id,…
+    184|   expect([seated.status,other.status].sort()).toEqual([200,409]);
+       |                                               ^
+    185|   error(seated.status===409?seated:other,409,'INVALID_TRANSITION');
+    186|   expect(await terminalEvents(entry.id)).toHaveLength(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-44 / AC-44: Seat racing complete produces one transition/event and no leaked table
+AssertionError: expected [ 200, 404 ] to deeply equal [ 200, 409 ]
+
+- Expected
++ Received
+
+  [
+    200,
+-   409,
++   404,
+  ]
+
+ ❯ tests/f05-seating.test.js:184:47
+    182|   const entry=await fixture(); const cookie=await login(host);
+    183|   const [seated,other]=await Promise.all([call(cookie,'seat',entry.id,…
+    184|   expect([seated.status,other.status].sort()).toEqual([200,409]);
+       |                                               ^
+    185|   error(seated.status===409?seated:other,409,'INVALID_TRANSITION');
+    186|   expect(await terminalEvents(entry.id)).toHaveLength(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-44 / AC-44: Seat racing Release matches a serial history and keeps the historical entry link
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:194:25
+    192|   const [seated,released]=await Promise.all([call(cookie,'seat',entry.…
+    193|     request(app).post(`/api/tables/${seedIds.table4}/release`).set('Co…
+    194|   expect(seated.status).toBe(200); expect(released.status).toBe(200);
+       |                         ^
+    195|   expect((await row(entry.id)).table_id).toBe(seedIds.table4); expect(…
+    196|   const final=await table(seedIds.table4);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-45 / AC-45: event failure rolls back all no-show changes with a generic 500
+ FAIL  tests/f05-seating.test.js > TEST-45 / AC-45: event failure rolls back all seat changes with a generic 500
+AssertionError: expected 404 to be 500 // Object.is equality
+
+- Expected
++ Received
+
+- 500
++ 404
+
+ ❯ error tests/f05-seating.test.js:33:27
+     31| }
+     32| function error(response, status, code) {
+     33|   expect(response.status).toBe(status);
+       |                           ^
+     34|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     35| }
+ ❯ tests/f05-seating.test.js:207:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/37]⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-seating.test.js:213:58
+    211| test('TEST-45 / AC-45: No-show and seated history survive new app/pool…
+    212|   const first=await fixture(); const cookie=await login(host);
+    213|   expect((await call(cookie,'no-show',first.id)).status).toBe(200);
+       |                                                          ^
+    214|   const second=await fixture('CALLED',{customer:2,ticketNo:2});
+    215|   expect((await call(cookie,'seat',second.id,{tableId:seedIds.table4})…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/37]⎯
+
+
+ Test Files  1 failed | 10 passed (11)
+      Tests  37 failed | 220 passed (257)
+   Start at  14:57:32
+   Duration  68.63s (transform 281ms, setup 0ms, import 3.93s, tests 62.48s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-red.json
+
+Exit code: 1

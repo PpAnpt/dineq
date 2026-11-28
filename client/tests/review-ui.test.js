@@ -31,6 +31,8 @@ for (const code of ['UNRESOLVED_CALLED', 'INVALID_TRANSITION']) {
         id: queueId, name: 'Main queue', restaurant: { id: '66666666-6666-4666-8666-666666666666', name: 'Demo' },
         status: 'OPEN', maxPartySize: 10, isAssigned: true,
       }] } });
+      // F-05: a table-list read must not trigger the catch-all mutating-conflict fixture.
+      if (path === `/api/queues/${queueId}/tables`) return route.fulfill({ json: { data: [] } });
       if (path === `/api/queues/${queueId}/entries`) {
         reads++;
         const current = code === 'UNRESOLVED_CALLED'

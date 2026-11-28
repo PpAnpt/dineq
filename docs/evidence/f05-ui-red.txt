@@ -1,0 +1,240 @@
+Command: playwright test --reporter=list,json (npm run test:e2e)
+Working directory: client
+Commit: 111527538c514ae41c289ab4aaf9d11d99accd64
+Date: 2026-11-28T08:03:57.131Z
+Node: v24.14.0
+
+
+Running 10 tests using 1 worker
+
+(node:30552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › e2e\sprint-1.spec.js:43:1 › E2E-1 / DEMO-01: join, Host Call Next + Complete, customer sees persisted COMPLETED (1.8s)
+  ok  2 [chromium] › e2e\sprint-1.spec.js:74:1 › E2E-2 / DEMO-02 + DEMO-03: duplicate active join and invalid party size are rejected (1.3s)
+  ok  3 [chromium] › e2e\sprint-1.spec.js:103:1 › E2E-3 / DEMO-04: a Customer cannot use the Host page or call-next API (670ms)
+  ok  4 [chromium] › e2e\sprint-1.spec.js:120:1 › E2E-4 / DEMO-05: after logout the old session cookie is rejected (707ms)
+  ok  5 [chromium] › e2e\sprint-1.spec.js:143:1 › E2E-5 / LAB5-C06: login page shows the Lab 5 release label (370ms)
+  ok  6 [chromium] › e2e\sprint-1.spec.js:148:1 › E2E-6 / LAB5: evidence helper sees the Customer 403 on the Host page without a Host API request (566ms)
+  ok  7 [chromium] › e2e\sprint-2-cancel.spec.js:31:1 › E2E-7 / F-04 AC-28 AC-33: cancel needs a confirmation, shows CANCELLED, and a new join gets a new ticket number (1.4s)
+  ok  8 [chromium] › e2e\sprint-2-queues.spec.js:24:1 › E2E-8 / F-06 AC-46 AC-47 AC-49: Host closes the queue, Customer cannot join, Host reopens, Customer joins (1.6s)
+  x   9 [chromium] › e2e\sprint-2-seating.spec.js:23:1 › E2E-10 / F-05 AC-36 AC-37 AC-38: keyboard No-show confirmation, owner refresh and rejoin retain old history (30.0s)
+(node:11928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  10 [chromium] › e2e\sprint-2-seating.spec.js:51:1 › E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and retained owner completion (30.0s)
+
+
+  1) [chromium] › e2e\sprint-2-seating.spec.js:23:1 › E2E-10 / F-05 AC-36 AC-37 AC-38: keyboard No-show confirmation, owner refresh and rejoin retain old history 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: browserContext.close: Test ended.
+    Browser logs:
+
+    <launching> C:\Users\siwal\AppData\Local\ms-playwright\chromium_headless_shell-1254\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --enable-unsafe-swiftshader --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\siwal\AppData\Local\Temp\playwright_chromiumdev_profile-uN3MXE --remote-debugging-pipe --no-startup-window
+    <launched> pid=28220
+    [pid=28220][err] [1128/150401.770:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150401.801:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150401.835:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150402.064:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150402.068:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150402.070:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150402.177:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150402.181:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150402.183:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150402.298:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150402.302:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150402.304:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150402.513:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150402.517:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150402.562:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150402.760:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150402.766:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150402.767:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150403.097:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150403.101:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150403.102:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150403.432:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150403.435:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150403.479:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150403.701:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150403.705:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150403.721:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150403.812:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150403.815:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150403.818:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150403.939:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150403.945:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150403.947:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150404.076:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150404.084:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150404.085:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150404.767:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150404.771:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150404.815:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150405.039:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150405.044:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150405.047:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150405.074:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150405.080:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150405.081:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150405.426:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150405.433:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150405.475:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150405.682:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150405.686:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150405.688:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150405.824:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150405.828:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150405.829:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150406.207:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150406.213:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150406.257:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150406.531:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150406.537:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150406.578:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150406.804:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150406.810:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150406.828:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150406.843:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150406.848:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150406.849:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150407.204:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150407.210:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150407.248:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150407.464:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150407.469:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150407.471:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150407.577:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150407.588:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150407.589:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150407.707:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150407.714:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150407.717:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150408.016:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150408.020:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150408.021:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150408.112:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150408.119:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150408.119:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150408.231:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150408.236:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150408.238:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150408.613:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150408.620:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150408.659:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150408.862:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150408.867:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150408.868:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150408.995:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.000:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.041:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150409.229:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.235:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.236:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150409.264:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.270:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.271:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150409.356:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.362:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.363:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150409.599:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.602:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.604:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150409.736:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.740:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.742:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150409.880:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150409.884:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150409.885:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150410.232:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150410.237:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150410.278:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150410.480:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150410.484:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150410.485:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150410.594:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150410.599:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150410.600:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150410.719:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150410.730:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150410.731:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150410.899:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150410.905:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150410.943:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220][err] [1128/150411.137:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=28220][err] [1128/150411.141:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=28220][err] [1128/150411.144:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=28220] <gracefully close start>
+
+      47 |     await expect(tickets.filter({hasText:'Ticket #1'}).getByTestId('ticket-status')).toHaveText('NO_SHOW');
+      48 |     await expect(tickets.filter({hasText:'Ticket #2'}).getByTestId('ticket-status')).toHaveText('WAITING');
+    > 49 |   } finally { await c.context.close(); await h?.context.close(); }
+         |               ^
+      50 | });
+      51 | test('E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and retained owner completion', async ({browser})=>{
+      52 |   const c=await signIn(browser,'customer01@dineq.test');
+        at B:\ProjectBingo\CPE\Year3\term1\CPE334_SoftEN\dineq\.local\worktrees\f05-noshow-tables\client\e2e\sprint-2-seating.spec.js:49:15
+
+    Error Context: ..\.local\e2e-results\sprint-2-seating-E2E-10-F--71fa4-d-rejoin-retain-old-history-chromium\error-context.md
+
+    Error Context: ..\.local\e2e-results\sprint-2-seating-E2E-10-F--71fa4-d-rejoin-retain-old-history-chromium\error-context.md
+
+  2) [chromium] › e2e\sprint-2-seating.spec.js:51:1 › E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and retained owner completion 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: browserContext.close: Test ended.
+    Browser logs:
+
+    <launching> C:\Users\siwal\AppData\Local\ms-playwright\chromium_headless_shell-1254\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --enable-unsafe-swiftshader --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\siwal\AppData\Local\Temp\playwright_chromiumdev_profile-hd9fXD --remote-debugging-pipe --no-startup-window
+    <launched> pid=33568
+    [pid=33568][err] [1128/150441.234:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150441.240:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150441.281:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150441.493:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150441.498:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150441.500:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150441.609:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150441.615:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150441.615:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150441.798:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150441.802:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150441.803:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150441.985:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150441.989:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150442.030:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150442.223:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150442.228:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150442.229:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150442.323:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150442.327:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150442.328:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150442.433:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150442.441:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150442.443:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150442.602:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150442.608:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150442.648:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568][err] [1128/150442.856:INFO:CONSOLE:934] "[vite] connecting...", source: http://localhost:5273/@vite/client (934)
+    [pid=33568][err] [1128/150442.861:INFO:CONSOLE:1043] "[vite] connected.", source: http://localhost:5273/@vite/client (1043)
+    [pid=33568][err] [1128/150442.863:INFO:CONSOLE:15802] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:5273/node_modules/.vite/deps/react-dom_client.js?v=5c893db4 (15802)
+    [pid=33568] <gracefully close start>
+
+      74 |     await second.page.getByTestId('refresh-my-queue').click();
+      75 |     await expect(second.page.getByTestId('ticket-status')).toHaveText('COMPLETED');
+    > 76 |   } finally { await c.context.close(); await second?.context.close(); await h?.context.close(); }
+         |               ^
+      77 | });
+      78 |
+        at B:\ProjectBingo\CPE\Year3\term1\CPE334_SoftEN\dineq\.local\worktrees\f05-noshow-tables\client\e2e\sprint-2-seating.spec.js:76:15
+
+    Error Context: ..\.local\e2e-results\sprint-2-seating-E2E-11-F--fb9a7-d-retained-owner-completion-chromium\error-context.md
+
+    Error Context: ..\.local\e2e-results\sprint-2-seating-E2E-11-F--fb9a7-d-retained-owner-completion-chromium\error-context.md
+
+  2 failed
+    [chromium] › e2e\sprint-2-seating.spec.js:23:1 › E2E-10 / F-05 AC-36 AC-37 AC-38: keyboard No-show confirmation, owner refresh and rejoin retain old history 
+    [chromium] › e2e\sprint-2-seating.spec.js:51:1 › E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and retained owner completion 
+  8 passed (1.2m)
+
+Exit code: 1

@@ -1,8 +1,8 @@
 # Lab 7 Metrics
 
 Repository: `PpAnpt/dineq`
-Observation window: 2026-11-22 00:00:00 +07 (2026-11-21T17:00:00.000Z) to 2026-11-28 16:04:49 +07 (2026-11-28T09:04:49.704Z), start inclusive, end exclusive.
-Snapshot taken: 2026-11-28 16:04:49 +07 (2026-11-28T09:04:49.704Z). Counts after this time are not included.
+Observation window: 2026-11-22 00:00:00 +07 (2026-11-21T17:00:00.000Z) to 2026-11-29 00:21:13 +07 (2026-11-28T17:21:13.112Z), start inclusive, end exclusive.
+Snapshot taken: 2026-11-29 00:21:13 +07 (2026-11-28T17:21:13.112Z). Counts after this time are not included.
 
 ## M1 Issues completed
 Definition: issues closed with reason `COMPLETED` whose `closedAt` is in the window. Closed as not planned/duplicate are listed separately and not counted.
@@ -51,7 +51,7 @@ Excluded:
 
 ## M2 Pull requests merged
 Definition: pull requests with `mergedAt` in the window (any base branch).
-Value: **33** merged (5 into staging, 2 into main, 11 into lab6-staging, 15 into sprint-2-staging).
+Value: **42** merged (5 into staging, 3 into main, 11 into lab6-staging, 23 into sprint-2-staging).
 
 | PR | Merged (Bangkok) | Base | Title |
 | :-- | :-- | :-- | :-- |
@@ -86,13 +86,22 @@ Value: **33** merged (5 into staging, 2 into main, 11 into lab6-staging, 15 into
 | #107 | 2026-11-28 15:33:02 +07 | sprint-2-staging | feat(F-05): No-show, capacity-aware seating and table release (AC-36..45) |
 | #108 | 2026-11-28 14:38:54 +07 | sprint-2-staging | feat(F-06): multiple queues, names and open/close by the assigned Host (RED then GREEN, AC-46..51) |
 | #109 | 2026-11-28 15:36:42 +07 | sprint-2-staging | feat(F-07a): Customer history filter by status and date range (RED then GREEN, AC-52..57) |
+| #110 | 2026-11-28 21:26:19 +07 | sprint-2-staging | docs(L7): metrics snapshot and readiness review (Part C and D, draft content) |
+| #111 | 2026-11-28 21:29:13 +07 | sprint-2-staging | docs(REL-1): release checklist for sprint-2-staging to main (draft, nothing executed) |
 | #112 | 2026-11-28 15:39:41 +07 | sprint-2-staging | docs(lab7): contract revision - activate the main queue limit with data migration 006 (AC-26b) |
 | #113 | 2026-11-28 16:02:08 +07 | sprint-2-staging | test(F-05): fix a race in E2E-11 that turned CI on sprint-2-staging red |
+| #114 | 2026-11-28 17:01:55 +07 | sprint-2-staging | feat(L7): migration 006 raises the live main queue limit from 8 to 10 (RED then GREEN, AC-26b) |
+| #115 | 2026-11-28 17:02:13 +07 | sprint-2-staging | docs(D2): Deliverable 2 working papers, parts A-D (draft content, nothing deployed) |
+| #117 | 2026-11-28 17:09:43 +07 | sprint-2-staging | test(s2): record Sprint 2 integration evidence (API 289, E2E 11) |
+| #118 | 2026-11-28 22:13:10 +07 | sprint-2-staging | docs(lab7): M3 and readiness use the integrated s2 runs (289 API, 11 E2E) |
+| #119 | 2026-11-28 21:22:42 +07 | sprint-2-staging | docs: traceability notes the integrated Sprint 2 runs (v0.17) |
+| #120 | 2026-11-28 20:49:13 +07 | main | release: Sprint 2 and Lab 7 candidate (merge triggers production deploy) |
+| #122 | 2026-11-28 22:13:40 +07 | sprint-2-staging | docs: final D2 parts A-E and Lab 7 Part B after the release |
 
 ## M3 Automated test results (one suite, one commit)
-Source: `docs/evidence/s2-integration.txt/.json` (PR #117). Command: `node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/s2-integration.json"` (working directory `server`). Commit: `b05cbd5e2be47fa137dca2b57658b9d9fb1177fb` (the evidence commit on top of `sprint-2-staging` head `5e8c9a7`, CI run 46133241147 green; no code differs). Run date: 2026-11-28T10:04:39.644Z.
-Value: **289 passed, 0 failed, 0 skipped/pending of 289** (13 test files). Pass rate 289/289. Playwright `s2-e2e`: 11 passed.
-This is the recorded run on the integrated Sprint 2 branch, not the deployed commit; re-run on the release commit if it changes. It replaces the earlier `l7-green-lock` value (143/143), which covered the Lab 7 branch only.
+Source: `docs/evidence/s2-integration.txt/.json`. Command: `node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/s2-integration.json"` (working directory `server`). Commit: `5e8c9a7f3a8d3ba19b8c4a942dc5958b659e2f07`. Run date: 2026-11-28T10:04:39.644Z.
+Value: **289 passed, 0 failed, 0 skipped/pending of 289** (13 test files). Pass rate 289/289.
+This is the recorded run at that commit, not necessarily the current head; re-run and replace the evidence label before the final PDF.
 
 ## M4 UAT defect status (DineQ-owned findings)
 Definition of resolved: a finding is RESOLVED only when the fix is merged to main with a RED then GREEN record and the deployed or retested behaviour is confirmed; otherwise OPEN.
@@ -106,7 +115,7 @@ Value: **1 of 1** DineQ-owned findings resolved; 1 listed finding(s) belong to a
 ## M5 CI runs by conclusion
 Definition: workflow runs created in the window, grouped by conclusion (`in_progress`/`queued` shown by status). Skipped or cancelled runs are not successes.
 
-**CI & Docker Build:** 111 runs (104 success, 6 failure, 1 cancelled); success 104/111 completed.
+**CI & Docker Build:** 137 runs (128 success, 6 failure, 3 cancelled); success 128/137 completed.
 
 | Run ID | Created (Bangkok) | Event | Branch | Commit | Result |
 | :-- | :-- | :-- | :-- | :-- | :-- |
@@ -221,13 +230,40 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 | 46127308486 | 2026-11-28 15:45:41 +07 | pull_request | docs/rel1-release-checklist | 6dcef56 | success |
 | 46128226441 | 2026-11-28 15:57:56 +07 | pull_request | feature/l7-activation-migration | 4cb91f0 | success |
 | 46128556773 | 2026-11-28 16:02:11 +07 | push | sprint-2-staging | df5923c | success |
+| 46128769705 | 2026-11-28 16:04:55 +07 | pull_request | feature/l7-activation-migration | aea7348 | success |
+| 46128801923 | 2026-11-28 16:05:16 +07 | pull_request | docs/l7-metrics | dc9792f | success |
+| 46128820917 | 2026-11-28 16:05:30 +07 | pull_request | docs/rel1-release-checklist | ab72ee6 | success |
+| 46129084574 | 2026-11-28 16:08:55 +07 | pull_request | docs/d2-submission | d3baca1 | success |
+| 46131790216 | 2026-11-28 16:43:23 +07 | pull_request | docs/d2-submission | 3ab63ab | success |
+| 46132223099 | 2026-11-28 16:48:57 +07 | pull_request | feature/post-deploy-check | f050523 | success |
+| 46133217646 | 2026-11-28 17:01:58 +07 | push | sprint-2-staging | 60d5004 | cancelled |
+| 46133241147 | 2026-11-28 17:02:16 +07 | push | sprint-2-staging | 5e8c9a7 | success |
+| 46133566353 | 2026-11-28 17:06:18 +07 | pull_request | chore/s2-integration-evidence | fefe352 | success |
+| 46133838057 | 2026-11-28 17:09:45 +07 | push | sprint-2-staging | 52fc897 | success |
+| 46133952044 | 2026-11-28 17:11:07 +07 | pull_request | docs/s2-metrics-update | cdbf55d | success |
+| 46134170678 | 2026-11-28 17:13:49 +07 | pull_request | sprint-2-staging | 52fc897 | success |
+| 46151508309 | 2026-11-28 20:49:17 +07 | push | main | f3e7c63 | success |
+| 46154353358 | 2026-11-28 21:22:45 +07 | push | sprint-2-staging | 0dbb28f | success |
+| 46154408233 | 2026-11-28 21:23:22 +07 | pull_request | docs/l7-metrics | c87817d | success |
+| 46154432843 | 2026-11-28 21:23:40 +07 | pull_request | docs/rel1-release-checklist | 49c7e67 | success |
+| 46154657549 | 2026-11-28 21:26:21 +07 | push | sprint-2-staging | 14bf910 | success |
+| 46154688579 | 2026-11-28 21:26:43 +07 | pull_request | docs/rel1-release-checklist | 93264e7 | success |
+| 46154894653 | 2026-11-28 21:29:15 +07 | push | sprint-2-staging | 70e1bd6 | success |
+| 46154942099 | 2026-11-28 21:29:50 +07 | pull_request | docs/s2-metrics-numbers | d2e183f | success |
+| 46155196689 | 2026-11-28 21:32:33 +07 | pull_request | docs/d2-final-update | 6329bce | success |
+| 46155224526 | 2026-11-28 21:32:52 +07 | pull_request | test/s2-e2e | cd14d41 | success |
+| 46156679537 | 2026-11-28 21:50:04 +07 | pull_request | feature/post-deploy-check | d5f5641 | success |
+| 46158705360 | 2026-11-28 22:13:13 +07 | push | sprint-2-staging | 9d7e817 | cancelled |
+| 46158750239 | 2026-11-28 22:13:43 +07 | push | sprint-2-staging | 40ccf5a | success |
+| 46168893552 | 2026-11-29 00:08:39 +07 | pull_request | docs/deployed-screenshots | 46ae495 | success |
 
-**Deploy to Google Cloud:** 2 runs (2 success); success 2/2 completed.
+**Deploy to Google Cloud:** 3 runs (3 success); success 3/3 completed.
 
 | Run ID | Created (Bangkok) | Event | Branch | Commit | Result |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | 44986245220 | 2026-11-22 11:42:40 +07 | push | main | 17c8b90 | success |
 | 46024849737 | 2026-11-27 22:25:54 +07 | push | main | 1ffb8b0 | success |
+| 46151508392 | 2026-11-28 20:49:17 +07 | push | main | f3e7c63 | success |
 
 ## Commands used (read-only)
 
@@ -235,10 +271,8 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 - `gh pr list --repo PpAnpt/dineq --state merged --limit 1000 --json number,title,mergedAt,baseRefName,headRefName`
 - `gh run list --repo PpAnpt/dineq --workflow "CI & Docker Build" --limit 500 --json databaseId,conclusion,status,createdAt,headSha,headBranch,event`
 - `gh run list --repo PpAnpt/dineq --workflow "Deploy to Google Cloud" --limit 500 --json databaseId,conclusion,status,createdAt,headSha,headBranch,event`
-- `node docs/labs/lab-07/collect-metrics.mjs --from 2026-11-22T00:00:00+07:00 --to <now> --suite docs/evidence/l7-green-lock --defects docs/labs/lab-07/uat-defects.json`
+- `node docs/labs/lab-07/collect-metrics.mjs --from 2026-11-22T00:00:00+07:00 --to <now> --suite docs/evidence/s2-integration --defects docs/labs/lab-07/uat-defects.json`
 
 ## Interpretation (max 100 words)
 
-CI succeeded in 104 of 111 completed runs (93.7%). Four failures were new Lab 5 browser tests fixed before merge; two were a timing race in the F-05 test E2E-11 on sprint-2-staging, fixed in PR #113 (green again on df5923c); one run was superseded. Risk: nothing is deployed, and the live main queue still allows only 8 until migration 006 (merged in PR #114) is released. Action: Siwarak opens the release PR by 29 Nov 15:00; Anapat runs post-deploy checks that evening and replaces M3 with the deployed commit's full-suite record.
-
-(Draft written at the 28 Nov 16:04 snapshot. Regenerate the numbers with the command above at the final snapshot and update this text if a value changes; the limit is 100 words.)
+CI succeeded in 128 of 137 completed runs (93.4%): six failures (four new Lab 5 browser tests; two E2E-11 timing races, fixed in PR #113) and three runs superseded by newer pushes. The release deploy run 46151508392 succeeded and M3 is 289 of 289 locally. Risk: the deployed database was not seeded, so Seat, Release and the second queue are untested there, and the Host and close/reopen checks were not run. Action: Anapat runs the read-only check script on the deployed service after Siwarak re-reviews PR #116, by 6 December.

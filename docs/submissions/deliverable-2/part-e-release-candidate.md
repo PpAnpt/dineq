@@ -1,6 +1,6 @@
 # Part E: Release candidate on main (deployed 28 November 2026)
 
-> Facts below come from recorded evidence files, the GitHub Actions log of the deploy run, and read-only Cloud Shell output sent by the teammate as screenshots. Anything not run is marked NOT RUN. The release tag has **not** been created yet (needs the owner's permission; planned name `v2.0-sprint2-rc1`).
+> Facts below come from recorded evidence files, the GitHub Actions log of the deploy run, and read-only Cloud Shell output sent by the teammate as screenshots. Anything not run is marked NOT RUN. The release tag `v2.0-sprint2-rc1` was created on 29 Nov 2026 (annotated tag object `5f932dd4f219228feac902cab88b9a6e23a480ec`, pointing at `f3e7c637457dd4f1f78e9bfabda513359fbcb538`).
 
 ## E.1 Identity of the candidate
 
@@ -18,7 +18,7 @@
 | Serving revision | `s21271a0d-00008-g6r`, created 2026-11-28T13:52:46Z (20:52 Asia/Bangkok), 100 percent of traffic; before the release: `s21271a0d-00007-pnb` | Cloud Shell |
 | Public URL | https://s21271a0d-4d7hbszvwq-as.a.run.app | deploy configuration |
 | Smoke test in the pipeline | `/api/health`, `/api/ready` (`db: connected`) and the UI root passed | workflow log |
-| Tag | NOT CREATED yet; planned `v2.0-sprint2-rc1` on the `main` merge commit after the post-deploy checks | release checklist D6 |
+| Tag | `v2.0-sprint2-rc1` (annotated), created by the owner's instruction on 29 Nov 2026 after the deploy and the partial post-deploy checks; points at the `main` merge commit above | `git ls-remote --tags origin` |
 
 `main` had no commit that was missing from `sprint-2-staging` when the release PR was checked (0 behind, 202 ahead), so the merge introduced nothing that the integration branch had not tested.
 

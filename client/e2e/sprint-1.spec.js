@@ -30,11 +30,14 @@ async function newUser(browser, email) {
   return { context, page };
 }
 
+// F-06: /queues now lists two queues, so every Join control is scoped to the main queue's card.
+const mainQueue = (page) => page.locator(`[data-queue-id="${seedIds.queue}"]`);
+
 async function join(page, partySize) {
   await page.getByRole('link', { name: 'Queues', exact: true }).click();
   // Lab 7 (L7-CR-01): the label shows the queue's own limit, so match any limit here.
-  await page.getByLabel(/^Party size \(1–\d+\)$/).fill(String(partySize));
-  await page.getByTestId('join-queue').click();
+  await mainQueue(page).getByLabel(/^Party size \(1–\d+\)$/).fill(String(partySize));
+  await mainQueue(page).getByTestId('join-queue').click();
 }
 
 test('E2E-1 / DEMO-01: join, Host Call Next + Complete, customer sees persisted COMPLETED', async ({ browser }) => {
@@ -83,13 +86,13 @@ test('E2E-2 / DEMO-02 + DEMO-03: duplicate active join and invalid party size ar
 
   // DEMO-03: the browser's own range check blocks 11 ...
   // Lab 7 (L7-CR-01, AC-12 revised): the seeded main queue allows up to 10 (was 8, and 9 was the out-of-range example).
-  const size = page.getByLabel('Party size (1–10)');
+  const size = mainQueue(page).getByLabel('Party size (1–10)');
   await expect(size).toHaveAttribute('max', '10');
   await size.fill('11');
   expect(await size.evaluate(el => el.checkValidity())).toBe(false);
   // ... so disable only that client-side constraint to prove the SERVER rejects it.
-  await page.locator('form').evaluate(form => { form.noValidate = true; });
-  await page.getByTestId('join-queue').click();
+  await mainQueue(page).locator('form').evaluate(form => { form.noValidate = true; });
+  await mainQueue(page).getByTestId('join-queue').click();
   await expect(page.getByTestId('error-message')).toContainText('INVALID_PARTY_SIZE');
   await expect(page.getByTestId('error-message')).toContainText('400');
   await shot(page, 'DEMO-03', 1);

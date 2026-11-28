@@ -1,5 +1,5 @@
 import { httpError } from '../errors.js';
-import { toTicket } from './queues.js';
+import { toQueueItem, toTicket } from './queues.js';
 
 const forbidden = () => httpError(403, 'FORBIDDEN', 'This operation is not permitted');
 
@@ -41,6 +41,32 @@ export function createHostService({ pool }) {
           WHERE queue_id = $1 AND status IN ('WAITING', 'CALLED')
           ORDER BY ticket_no ASC`, [queueId]);
       return rows.map(toTicket);
+    },
+
+    // F-06 step 1 (outside the transaction): 404 for a missing queue, then 403 for assignment.
+    // The route runs this before it reads the JSON body (SDS C.6.3).
+    async assertQueueAccess(user, queueId) {
+      const queue = await pool.query('SELECT 1 FROM service_queues WHERE id = $1', [queueId]);
+      if (queue.rowCount === 0) throw httpError(404, 'NOT_FOUND', 'Queue not found');
+      await assertAssigned(pool, queueId, user.id);
+    },
+
+    // F-06 open/close. Same queue row lock as Join and Call Next, so a Join committed after the
+    // change sees the new status. Setting the current status again is a no-op that still returns 200.
+    async setQueueStatus(user, queueId, status) {
+      return inTransaction(pool, async (client) => {
+        const locked = await client.query('SELECT id, status FROM service_queues WHERE id = $1 FOR UPDATE', [queueId]);
+        if (!locked.rows[0]) throw httpError(404, 'NOT_FOUND', 'Queue not found');
+        await assertAssigned(client, queueId, user.id);
+        if (locked.rows[0].status !== status) {
+          await client.query('UPDATE service_queues SET status = $2 WHERE id = $1', [queueId, status]);
+        }
+        const { rows } = await client.query(
+          `SELECT q.id, q.name, q.status, q.max_party_size, r.id AS restaurant_id, r.name AS restaurant_name,
+                  true AS is_assigned
+             FROM service_queues q JOIN restaurants r ON r.id = q.restaurant_id WHERE q.id = $1`, [queueId]);
+        return toQueueItem(rows[0]);
+      });
     },
 
     // Call Next Transaction (SDS C.3).

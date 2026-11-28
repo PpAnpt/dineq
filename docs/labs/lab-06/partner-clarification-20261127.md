@@ -1,5 +1,8 @@
 # Partner clarification: baseline acceptance, retest and Iivo - 27 November 2026
 
+Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
+
+
 Source: Siwarak relayed HairRoot's three-part clarification in the working chat,
 then additionally attributed review of retest results/images to Iivo. These are
 received statements; no new test or independent verification is performed here.

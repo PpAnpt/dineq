@@ -1,5 +1,8 @@
 # Lab 6: DineQ Sprint 1 independent UAT
 
+Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
+
+
 Latest targeted execution: [HairRoot R02, 27 November](hairroot-retest-2026-11-27-R02.md)
 on cbaf1ba passes UAT-07-R02 and UAT-05 step 4. The original R01 FAIL/BLOCKED
 history is retained. [HairRoot's Accepted decision for DineQ](dineq-acceptance-received-20261127.md)

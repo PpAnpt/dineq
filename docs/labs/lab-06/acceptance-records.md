@@ -1,5 +1,8 @@
 # Lab 6 independent acceptance records
 
+Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
+
+
 Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51).
 **DineQ: partner-declared Accepted for the original release received on 27 November 2026.
 The original digest link is recorded and Iivo participation is source-qualified below. New controlled-release acceptance is NOT CONFIRMED. HairRoot: Siwarak declared Accepted for cbaf1ba, as recorded below.**

@@ -1,5 +1,8 @@
 # Lab 6 contributions and remaining evidence
 
+Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
+
+
 Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51)
 and the later #52 report. Group **TH-007_P9**, name supplied by the student:
 **ซวยเเล้วหนูคู่หูพี่่มาเเล้ว**. Both students own the submitted work. The

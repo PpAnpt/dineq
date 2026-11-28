@@ -118,9 +118,11 @@ Recorded at commit `680e8aab2c5977ebc14dfee969af29d7bc44645c` on branch `test/l7
 | --- | --- | --- |
 | AC-07 / TEST-07 (revised) | `server/tests/f02-join.test.js` | PASS (4 cases, `maxPartySize: 10` on the seeded queue) |
 | AC-12 / TEST-12 (revised) | `server/tests/f02-join.test.js` | PASS (invalid shapes, 11 rejected, 1/8/9/10 accepted, 400 before 409 on CLOSED) |
-| AC-25 / TEST-25 | `server/tests/l7-party-limit.test.js` | PASS (limits 4/8/10, default 8, invalid shapes, limit change, CLOSED order) |
+| AC-25 / TEST-25 | `server/tests/l7-party-limit.test.js` | PASS (limits 4/8/10, default 8, invalid shapes, limit change, CLOSED order; plus two under-lock interleaving cases added after the PR #103 review, see l7-green-lock and the mutation check l7-lock-mutation) |
 | AC-26 / TEST-26 | `server/tests/l7-party-limit.test.js` | PASS (seed 10/default 8/explicit 4, migrate+seed rerun, upgrade with existing tickets) |
 | AC-27 / TEST-27 | `server/tests/l7-party-limit.test.js` | PASS (DB constraints 23514 for 0/-1/11, accepted 1/10, party_size 9/10 accepted) |
+
+Latest recorded API/DB run: [l7-green-lock](../../evidence/l7-green-lock.txt), 143 passed / 0 failed / 0 skipped at `6fa36bf7eac7e3457bb0497763a64c3168b6bb93`. The two under-lock tests were added after the implementation (review request); [l7-lock-mutation](../../evidence/l7-lock-mutation.txt) shows they fail (2 failed) when the code validates an unlocked pre-read.
 
 Changed Sprint 1 tests (INFRA-04/05/07, E2E-2/DEMO-03) follow `docs/labs/lab-07/impact-analysis.md` section 4; no assertion was deleted or skipped.
 

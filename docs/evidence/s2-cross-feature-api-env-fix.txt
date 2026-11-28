@@ -1,0 +1,68 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/s2-cross-feature-api-env-fix.json"
+Working directory: server
+Commit: d7f31d4c87e6d98d18da51b1780eae76d9dfd1a8
+Date: 2026-11-28T14:24:56.229Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/s2-cross-feature/server
+
+ ✓ tests/infra.test.js (11 tests) 574ms
+ ✓ tests/f02-join.test.js (45 tests) 10922ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with per-queue isAssigned  312ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1867ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  366ms
+     ✓ TEST-12 / AC-12: partySize -1 is 400 INVALID_PARTY_SIZE and changes nothing  310ms
+     ✓ TEST-12 / AC-12: partySize "ten" is 400 INVALID_PARTY_SIZE and changes nothing  313ms
+ ✓ tests/f05-seating.test.js (37 tests) 9271ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  490ms
+   ✓ TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body  360ms
+   ✓ TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body  438ms
+   ✓ TEST-40 / AC-40: Seat party 1 at table4 atomically completes ticket on CLOSED queue  302ms
+   ✓ TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue  351ms
+   ✓ TEST-44 / AC-44: Seat racing complete produces one transition/event and no leaked table  307ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  431ms
+ ✓ tests/f06-queues.test.js (16 tests) 8279ms
+     ✓ TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys  325ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  592ms
+     ✓ TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403  429ms
+     ✓ TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering  583ms
+     ✓ TEST-50 / AC-50: a Host of one queue cannot list, call, complete or read tickets of the other queue  367ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  2298ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1632ms
+     ✓ TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash  395ms
+ ✓ tests/f01-auth.test.js (40 tests) 7382ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  328ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  337ms
+     ✓ TEST-06 / AC-06: Customer 'get' '/api/queues/not-a-uuid/entries' is forbidden despite forged Host identity, with DB unchanged  308ms
+ ✓ tests/f04-cancel.test.js (18 tests) 6527ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket  341ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  383ms
+     ✓ TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds  319ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  3032ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 5703ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  537ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  499ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  400ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  384ms
+ ✓ tests/f05-tables.test.js (31 tests) 5680ms
+ ✓ tests/f03-host.test.js (21 tests) 4432ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  336ms
+ ✓ tests/f07a-history.test.js (22 tests) 4822ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all  363ms
+     ✓ TEST-55 / AC-55: a Customer never sees another Customer ticket under any filter; Host 403 before the filters; anonymous 401  406ms
+ ✓ tests/l7-activation.test.js (10 tests) 2788ms
+     ✓ TEST-26b / AC-26b: a main queue at the default 8 becomes 10; other queues, tickets, events and counters stay  315ms
+     ✓ TEST-26b / AC-26b: on a new database the whole migration chain, then the seed, ends with the main queue at 10  310ms
+ ✓ tests/f09-payload.test.js (11 tests) 1840ms
+ ✓ tests/controlled-fifo.test.js (1 test) 565ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  563ms
+
+ Test Files  13 passed (13)
+      Tests  289 passed (289)
+   Start at  21:24:56
+   Duration  75.95s (transform 294ms, setup 0ms, import 4.52s, tests 68.79s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/s2-cross-feature/docs/evidence/s2-cross-feature-api-env-fix.json
+
+Exit code: 0

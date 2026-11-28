@@ -1,0 +1,7 @@
+{
+  "resolvedDefinition": "a finding is RESOLVED only when the fix is merged to main with a RED then GREEN record and the deployed or retested behaviour is confirmed; otherwise OPEN.",
+  "items": [
+    { "id": "CE-FIFO-01", "title": "TA-controlled newest-first defect (controlled exercise)", "owner": "DineQ", "status": "RESOLVED", "evidence": "RED ea646a9, GREEN 58c5b77, release 1ffb8b0 (PR #65), issue #63" },
+    { "id": "HR-F01", "title": "HairRoot finding R01 (belongs to HairRoot)", "owner": "HairRoot", "status": "RESOLVED", "evidence": "HairRoot ac0a57b to cbaf1ba (see version ledger)" }
+  ]
+}

@@ -21,13 +21,13 @@ const release = table => `/api/tables/${table}/release`;
 const table = async id => (await pool.query('SELECT * FROM dining_tables WHERE id = $1', [id])).rows[0];
 async function requireSchema() {
   // An explicit missing-feature assertion, never a fixture INSERT/import error in RED.
-  expect((await pool.query("SELECT to_regclass('public.dining_tables') AS name")).rows[0].name,
+  expect((await pool.query("SELECT to_regclass('dining_tables') AS name")).rows[0].name,
     'migration 004 must create dining_tables').toBe('dining_tables');
 }
 async function snapshot() {
   const state = {};
   for (const name of ['service_queues', 'queue_entries', 'queue_events', 'dining_tables']) {
-    const exists = (await pool.query('SELECT to_regclass($1) AS name', [`public.${name}`])).rows[0].name;
+    const exists = (await pool.query('SELECT to_regclass($1) AS name', [name])).rows[0].name;
     state[name] = exists ? (await pool.query(`SELECT to_jsonb(t) AS value FROM ${name} t ORDER BY to_jsonb(t)::text`)).rows : null;
   }
   return state;
@@ -217,6 +217,8 @@ describe('F-05 table slice (No-show/Seat pending F-04 migration 003)', () => {
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
+      const sourceSchema = (await client.query('SELECT current_schema() AS name')).rows[0].name;
+      const source = '"' + sourceSchema.replaceAll('"', '""') + '"';
       await client.query('CREATE SCHEMA f05_upgrade');
       await client.query('SET LOCAL search_path TO f05_upgrade');
       for (const prefix of ['001_', '002_']) {
@@ -224,10 +226,10 @@ describe('F-05 table slice (No-show/Seat pending F-04 migration 003)', () => {
         await client.query(readFileSync(new URL(file, dir), 'utf8'));
       }
       // Real existing ticket/event copied into the legacy schema before adding the relationship.
-      await client.query('INSERT INTO users SELECT * FROM public.users');
-      await client.query('INSERT INTO restaurants SELECT * FROM public.restaurants');
+      await client.query(`INSERT INTO users SELECT * FROM ${source}.users`);
+      await client.query(`INSERT INTO restaurants SELECT * FROM ${source}.restaurants`);
       await client.query(`INSERT INTO service_queues(id,restaurant_id,status,next_ticket_no,max_party_size)
-        SELECT id,restaurant_id,status,next_ticket_no,max_party_size FROM public.service_queues`);
+        SELECT id,restaurant_id,status,next_ticket_no,max_party_size FROM ${source}.service_queues`);
       await client.query(`INSERT INTO queue_entries(queue_id,customer_id,ticket_no,party_size,status)
         SELECT $1,id,1,4,'WAITING' FROM users WHERE email='customer01@dineq.test'`, [seedIds.queue]);
       await client.query("INSERT INTO queue_events(entry_id,actor_id,event_type,to_status) SELECT id,customer_id,'JOINED','WAITING' FROM queue_entries");

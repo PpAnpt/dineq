@@ -41,7 +41,7 @@ export async function resetAndSeed(pool = getTestPool()) {
   try {
     // F-05 contract v0.2: include both sides of the new circular FKs, without CASCADE.
     // Pre-004 RED still resets normally; the missing schema is asserted by its own tests.
-    const hasTables = (await client.query("SELECT to_regclass('public.dining_tables') AS name")).rows[0].name;
+    const hasTables = (await client.query("SELECT to_regclass('dining_tables') AS name")).rows[0].name;
     await client.query(`TRUNCATE ${hasTables ? 'dining_tables, ' : ''}queue_events, queue_entries, queue_operator_assignments,
       service_queues, restaurants, sessions, users RESTART IDENTITY`);
     await seed(client, passwordHash);

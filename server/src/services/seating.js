@@ -8,8 +8,9 @@ export function toTable(row) {
 
 async function assertAssigned(db, queueId, userId) {
   const assigned = await db.query(
-    'SELECT 1 FROM queue_operator_assignments WHERE queue_id=$1 AND host_user_id=$2', [queueId, userId]);
-  if (!assigned.rowCount) throw httpError(403, 'FORBIDDEN', 'Host is not assigned to this queue');
+    `SELECT 1 FROM queue_operator_assignments a JOIN users u ON u.id=a.host_user_id
+      WHERE a.queue_id=$1 AND a.host_user_id=$2 AND u.role='HOST' AND u.is_active`, [queueId, userId]);
+  if (!assigned.rowCount) throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
 }
 
 export function createSeatingService({ pool }) {

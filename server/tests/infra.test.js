@@ -35,11 +35,11 @@ describe('P2 infrastructure (not feature AC results)', () => {
 
   test('INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys', async () => {
     const tables = (await pool.query(`SELECT table_name FROM information_schema.tables
-      WHERE table_schema = 'public' AND table_type = 'BASE TABLE'`)).rows.map(row => row.table_name);
+      WHERE table_schema = current_schema() AND table_type = 'BASE TABLE'`)).rows.map(row => row.table_name);
     expect(tables).toEqual(expect.arrayContaining(['schema_migrations', 'users', 'sessions',
       'restaurants', 'service_queues', 'queue_operator_assignments', 'queue_entries', 'queue_events', 'dining_tables']));
     const columns = (await pool.query(`SELECT table_name, column_name, data_type, column_default
-      FROM information_schema.columns WHERE table_schema = 'public'`)).rows;
+      FROM information_schema.columns WHERE table_schema = current_schema()`)).rows;
     const ids = columns.filter(row => row.column_name === 'id');
     // F-05 contract v0.2: dining_tables adds one UUID id; all original defaults stay checked.
     expect(ids).toHaveLength(7);
@@ -54,7 +54,7 @@ describe('P2 infrastructure (not feature AC results)', () => {
       FROM information_schema.table_constraints tc
       JOIN information_schema.key_column_usage kcu
         ON kcu.constraint_name = tc.constraint_name AND kcu.constraint_schema = tc.constraint_schema
-      WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'public'`)).rows;
+      WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = current_schema()`)).rows;
     for (const [table_name, column_name] of [
       ['sessions', 'user_id'], ['service_queues', 'restaurant_id'],
       ['queue_operator_assignments', 'queue_id'], ['queue_operator_assignments', 'host_user_id'],
@@ -66,7 +66,7 @@ describe('P2 infrastructure (not feature AC results)', () => {
 
   test('INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints', async () => {
     const indexes = (await pool.query(`SELECT indexname, indexdef FROM pg_indexes
-      WHERE schemaname = 'public' AND tablename = 'queue_entries'`)).rows;
+      WHERE schemaname = current_schema() AND tablename = 'queue_entries'`)).rows;
     const active = indexes.find(row => row.indexname === 'queue_entries_one_active_customer');
     const called = indexes.find(row => row.indexname === 'queue_entries_one_called');
     expect(active.indexdef).toMatch(/UNIQUE.*\(queue_id, customer_id\).*WHERE/);
@@ -78,7 +78,7 @@ describe('P2 infrastructure (not feature AC results)', () => {
       FROM information_schema.table_constraints tc
       JOIN information_schema.check_constraints cc
         ON cc.constraint_name = tc.constraint_name AND cc.constraint_schema = tc.constraint_schema
-      WHERE tc.table_schema = 'public' AND tc.constraint_type = 'CHECK'`)).rows;
+      WHERE tc.table_schema = current_schema() AND tc.constraint_type = 'CHECK'`)).rows;
     const entryChecks = checks.filter(row => row.table_name === 'queue_entries').map(row => row.check_clause).join(' ');
     expect(entryChecks).toMatch(/party_size >= 1/);
     // Lab 7 (L7-CR-01): the absolute ceiling widened from 8 to 10; the per-queue limit is enforced by the API.
@@ -115,7 +115,7 @@ describe('P2 infrastructure (not feature AC results)', () => {
         .filter(name => name.endsWith('.sql')).length;
       expect((await client.query('SELECT count(*)::int AS n FROM schema_migrations')).rows[0].n).toBe(migrationFiles);
       // F-05 contract v0.2: repeated seed keeps the same two configured tables.
-      expect((await client.query("SELECT to_regclass('public.dining_tables') AS name")).rows[0].name).toBe('dining_tables');
+      expect((await client.query("SELECT to_regclass('dining_tables') AS name")).rows[0].name).toBe('dining_tables');
       expect((await client.query('SELECT label,capacity FROM dining_tables ORDER BY label')).rows)
         .toEqual([{ label: 'T1', capacity: 4 }, { label: 'T2', capacity: 10 }]);
     } finally {

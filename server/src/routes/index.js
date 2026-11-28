@@ -19,6 +19,7 @@ export function createRoutes({ pool, config }) {
     ['get', '/queues/:queueId/entries'],
     ['post', '/queues/:queueId/call-next'],
     ['post', '/entries/:entryId/complete'],
+    ['patch', '/queues/:queueId'],
   ];
   for (const [method, path] of hostOnlyRoutes) router[method](path, requireRole('HOST'));
   // F-02 Customer-only endpoints (Host gets 403 before UUID/body checks).

@@ -26,6 +26,11 @@ for (const code of ['UNRESOLVED_CALLED', 'INVALID_TRANSITION']) {
       if (path === '/api/auth/me') return route.fulfill({ json: { data: {
         id: '44444444-4444-4444-8444-444444444444', email: 'host1@dineq.test', role: 'HOST',
       } } });
+      // F-06: the Host page also reads the queue name and status from the queue list.
+      if (path === '/api/queues') return route.fulfill({ json: { data: [{
+        id: queueId, name: 'Main queue', restaurant: { id: '66666666-6666-4666-8666-666666666666', name: 'Demo' },
+        status: 'OPEN', maxPartySize: 10, isAssigned: true,
+      }] } });
       if (path === `/api/queues/${queueId}/entries`) {
         reads++;
         const current = code === 'UNRESOLVED_CALLED'

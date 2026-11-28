@@ -1,0 +1,590 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f06-red.json"
+Working directory: server
+Commit: 5d66497b548e9726eb34c416f75f864e41b32bf6
+Date: 2026-11-28T06:41:02.443Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-f06impl/server
+
+ ❯ tests/f02-join.test.js (45 tests | 5 failed) 6489ms
+     × TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with per-queue isAssigned 198ms
+     × TEST-07 / AC-07: 'Assigned Host (main queue)' gets the C.6.1 shape with per-queue isAssigned 74ms
+     × TEST-07 / AC-07: 'Assigned Host (bar counter)' gets the C.6.1 shape with per-queue isAssigned 105ms
+     × TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with per-queue isAssigned 71ms
+     × TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED 70ms
+     ✓ TEST-07 / AC-07: a fixture with no queues returns { "data": [] } 141ms
+     ✓ TEST-07 / AC-07: queue list requires a Session 36ms
+     ✓ TEST-08 / AC-08: Customer joins an OPEN queue with partySize=4 and can read the ticket back 77ms
+     ✓ TEST-08 / AC-08: a Customer without tickets gets { "data": [] } from /api/me/entries 66ms
+     ✓ TEST-09 / AC-09: joining again while WAITING is rejected with 409 DUPLICATE_ACTIVE 76ms
+     ✓ TEST-09 / AC-09: joining again while CALLED is rejected with 409 DUPLICATE_ACTIVE 74ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE 178ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1013ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response) 150ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403 212ms
+     ✓ TEST-12 / AC-12: joining a CLOSED queue is 409 QUEUE_CLOSED with no insert and no ticket number used 82ms
+     ✓ TEST-12 / AC-12: partySize 0 is 400 INVALID_PARTY_SIZE and changes nothing 83ms
+     ✓ TEST-12 / AC-12: partySize 11 is 400 INVALID_PARTY_SIZE and changes nothing 164ms
+     ✓ TEST-12 / AC-12: partySize 1.5 is 400 INVALID_PARTY_SIZE and changes nothing 151ms
+     ✓ TEST-12 / AC-12: partySize -1 is 400 INVALID_PARTY_SIZE and changes nothing 123ms
+     ✓ TEST-12 / AC-12: partySize "ten" is 400 INVALID_PARTY_SIZE and changes nothing 145ms
+     ✓ TEST-12 / AC-12: partySize "abc" is 400 INVALID_PARTY_SIZE and changes nothing 119ms
+     ✓ TEST-12 / AC-12: partySize null is 400 INVALID_PARTY_SIZE and changes nothing 133ms
+     ✓ TEST-12 / AC-12: partySize missing is 400 INVALID_PARTY_SIZE and changes nothing 131ms
+     ✓ TEST-12 / AC-12: boundary partySize 1 is accepted on the seeded main queue 155ms
+     ✓ TEST-12 / AC-12: boundary partySize 8 is accepted on the seeded main queue 139ms
+     ✓ TEST-12 / AC-12: boundary partySize 9 is accepted on the seeded main queue 143ms
+     ✓ TEST-12 / AC-12: boundary partySize 10 is accepted on the seeded main queue 179ms
+     ✓ TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED  304ms
+     ✓ TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change 128ms
+     ✓ TEST-13 / AC-13: Host has no Customer ticket list (/api/me/entries is Customer-only) 127ms
+     ✓ TEST-21 / AC-21: ticket and JOINED event survive a new app instance with a new DB pool 193ms
+     ✓ TEST-23 / AC-23: GET entry with malformed UUID is 400 VALIDATION_ERROR 128ms
+     ✓ TEST-23 / AC-23: POST join with malformed UUID is 400 VALIDATION_ERROR 149ms
+     ✓ TEST-23 / AC-23: GET entry with an absent UUID is 404 NOT_FOUND 150ms
+     ✓ TEST-23 / AC-23: POST join with an absent UUID is 404 NOT_FOUND 170ms
+     ✓ TEST-23 / AC-23: GET entry (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks 24ms
+     ✓ TEST-23 / AC-23: POST join (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks 51ms
+     ✓ TEST-23 / AC-23: GET entry (absent) without a Session is 401 UNAUTHENTICATED before UUID checks 57ms
+     ✓ TEST-23 / AC-23: POST join (absent) without a Session is 401 UNAUTHENTICATED before UUID checks 50ms
+     ✓ TEST-23 / AC-23: malformed JSON to an absent queue is 404 NOT_FOUND (resource before body parsing) 114ms
+     ✓ TEST-23 / AC-23: malformed JSON to a malformed UUID is 400 VALIDATION_ERROR 156ms
+     ✓ TEST-23 / AC-23: malformed JSON to an existing queue is 400 VALIDATION_ERROR and changes nothing 111ms
+     ✓ TEST-23 / AC-23: Session and Role are still checked before malformed JSON (401 anonymous, 403 Host) 128ms
+     ✓ TEST-23 / AC-23: resource lookup precedes body validation (absent queue + bad partySize is 404; malformed id is 400) 156ms
+ ❯ tests/f06-queues.test.js (16 tests | 16 failed) 4871ms
+     × TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys 241ms
+     × TEST-46 / AC-46: host1 (Main queue) lists both queues ordered by restaurant, queue name, id with exact keys 105ms
+     × TEST-46 / AC-46: host3 (Bar counter) lists both queues ordered by restaurant, queue name, id with exact keys 121ms
+     × TEST-46 / AC-46: host2 (unassigned) lists both queues ordered by restaurant, queue name, id with exact keys 97ms
+     × TEST-47 / AC-47: close, repeat close (idempotent), reopen; extra body fields have no effect; the other queue is untouched 71ms
+     × TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes 238ms
+     × TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403 84ms
+     × TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering 80ms
+     × TEST-50 / AC-50: one Customer holds a ticket in each queue with separate numbering 78ms
+     × TEST-50 / AC-50: a Host of one queue cannot list, call, complete or read tickets of the other queue 25ms
+     × TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close 1969ms
+     × TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue 1549ms
+     × TEST-51 / AC-51: the seed has Main queue and Bar counter with the documented assignments and re-seeding keeps names and data 28ms
+     × TEST-51 / AC-51: the DB rejects a duplicate queue name in one restaurant (23505), empty and 61-character names (23514) 31ms
+     × TEST-51 / AC-51: a closed queue stays closed for a new app instance with a new DB pool 128ms
+     × TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash 23ms
+ ❯ tests/infra.test.js (11 tests | 2 failed) 362ms
+     ✓ INFRA-01: health endpoint returns the public success envelope 10ms
+     ✓ INFRA-02: missing config fails fast and test reset rejects unsafe database URLs 1ms
+     ✓ INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys 12ms
+     ✓ INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints 5ms
+     × INFRA-05: rerunning migrations and seed preserves identities, rows and ticket counter 15ms
+     × INFRA-06: seed contains 30 hashed customers and correctly scoped Hosts 2ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys 137ms
+     ✓ INFRA-08: unique indexes and timestamp/event constraints reject inconsistent rows 41ms
+     ✓ INFRA-09: /api/ready is public and reports the database as connected 3ms
+     ✓ INFRA-10: /api/ready returns 503 without leaking the database error when the DB is down 3ms
+     ✓ INFRA-11: /api/ready only answers GET/HEAD; POST without a session stays 401 2ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3454ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  429ms
+     ✓ TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written  456ms
+ ✓ tests/f01-auth.test.js (40 tests) 2668ms
+ ✓ tests/f03-host.test.js (21 tests) 2468ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  388ms
+ ✓ tests/f09-payload.test.js (11 tests) 898ms
+ ✓ tests/controlled-fifo.test.js (1 test) 400ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  398ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 23 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with per-queue isAssigned
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with per-queue isAssigned
+AssertionError: expected { data: [ { …(5) } ] } to deeply equal { data: [ { …(6) }, { …(6) } ] }
+
+- Expected
++ Received
+
+@@ -1,23 +1,11 @@
+  {
+    "data": [
+      {
+-       "id": "33333333-3333-4333-8333-333333333333",
+-       "isAssigned": false,
+-       "maxPartySize": 8,
+-       "name": "Bar counter",
+-       "restaurant": {
+-         "id": "11111111-1111-4111-8111-111111111111",
+-         "name": "DineQ Demo Restaurant",
+-       },
+-       "status": "OPEN",
+-     },
+-     {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": false,
+        "maxPartySize": 10,
+-       "name": "Main queue",
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "OPEN",
+
+ ❯ tests/f02-join.test.js:70:27
+     68|     const response = await request(app).get('/api/queues').set('Cookie…
+     69|     expect(response.status).toBe(200);
+     70|     expect(response.body).toEqual({ data: [bar(barAssigned), main(main…
+       |                           ^
+     71|     for (const queue of response.body.data) expect(typeof queue.isAssi…
+     72|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/23]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Assigned Host (main queue)' gets the C.6.1 shape with per-queue isAssigned
+AssertionError: expected { data: [ { …(5) } ] } to deeply equal { data: [ { …(6) }, { …(6) } ] }
+
+- Expected
++ Received
+
+@@ -1,23 +1,11 @@
+  {
+    "data": [
+      {
+-       "id": "33333333-3333-4333-8333-333333333333",
+-       "isAssigned": false,
+-       "maxPartySize": 8,
+-       "name": "Bar counter",
+-       "restaurant": {
+-         "id": "11111111-1111-4111-8111-111111111111",
+-         "name": "DineQ Demo Restaurant",
+-       },
+-       "status": "OPEN",
+-     },
+-     {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": true,
+        "maxPartySize": 10,
+-       "name": "Main queue",
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "OPEN",
+
+ ❯ tests/f02-join.test.js:70:27
+     68|     const response = await request(app).get('/api/queues').set('Cookie…
+     69|     expect(response.status).toBe(200);
+     70|     expect(response.body).toEqual({ data: [bar(barAssigned), main(main…
+       |                           ^
+     71|     for (const queue of response.body.data) expect(typeof queue.isAssi…
+     72|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/23]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Assigned Host (bar counter)' gets the C.6.1 shape with per-queue isAssigned
+Error: loginAs expected 200, received 401; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f02-join.test.js:67:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/23]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED
+AssertionError: expected { data: [ { …(5) } ] } to deeply equal { data: [ { …(6) }, { …(6) } ] }
+
+- Expected
++ Received
+
+@@ -1,23 +1,11 @@
+  {
+    "data": [
+      {
+-       "id": "33333333-3333-4333-8333-333333333333",
+-       "isAssigned": false,
+-       "maxPartySize": 8,
+-       "name": "Bar counter",
+-       "restaurant": {
+-         "id": "11111111-1111-4111-8111-111111111111",
+-         "name": "DineQ Demo Restaurant",
+-       },
+-       "status": "OPEN",
+-     },
+-     {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": false,
+        "maxPartySize": 10,
+-       "name": "Main queue",
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "CLOSED",
+
+ ❯ tests/f02-join.test.js:78:27
+     76|     const response = await request(app).get('/api/queues').set('Cookie…
+     77|     expect(response.status).toBe(200);
+     78|     expect(response.body).toEqual({ data: [bar(false), main(false, 'CL…
+       |                           ^
+     79|   });
+     80|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-46: queue list with names and per-queue assignment > TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys
+ FAIL  tests/f06-queues.test.js > F-06 AC-46: queue list with names and per-queue assignment > TEST-46 / AC-46: host2 (unassigned) lists both queues ordered by restaurant, queue name, id with exact keys
+AssertionError: expected { data: [ { …(5) } ] } to deeply equal { data: [ { …(6) }, { …(6) } ] }
+
+- Expected
++ Received
+
+@@ -1,23 +1,11 @@
+  {
+    "data": [
+      {
+-       "id": "33333333-3333-4333-8333-333333333333",
+-       "isAssigned": false,
+-       "maxPartySize": 8,
+-       "name": "Bar counter",
+-       "restaurant": {
+-         "id": "11111111-1111-4111-8111-111111111111",
+-         "name": "DineQ Demo Restaurant",
+-       },
+-       "status": "OPEN",
+-     },
+-     {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": false,
+        "maxPartySize": 10,
+-       "name": "Main queue",
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "OPEN",
+
+ ❯ tests/f06-queues.test.js:60:27
+     58|     const response = await request(app).get('/api/queues').set('Cookie…
+     59|     expect(response.status).toBe(200);
+     60|     expect(response.body).toEqual({ data: [barItem(barAssigned), mainI…
+       |                           ^
+     61|     for (const item of response.body.data) {
+     62|       expect(Object.keys(item).sort()).toEqual(['id', 'isAssigned', 'm…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-46: queue list with names and per-queue assignment > TEST-46 / AC-46: host1 (Main queue) lists both queues ordered by restaurant, queue name, id with exact keys
+AssertionError: expected { data: [ { …(5) } ] } to deeply equal { data: [ { …(6) }, { …(6) } ] }
+
+- Expected
++ Received
+
+@@ -1,23 +1,11 @@
+  {
+    "data": [
+      {
+-       "id": "33333333-3333-4333-8333-333333333333",
+-       "isAssigned": false,
+-       "maxPartySize": 8,
+-       "name": "Bar counter",
+-       "restaurant": {
+-         "id": "11111111-1111-4111-8111-111111111111",
+-         "name": "DineQ Demo Restaurant",
+-       },
+-       "status": "OPEN",
+-     },
+-     {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": true,
+        "maxPartySize": 10,
+-       "name": "Main queue",
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "OPEN",
+
+ ❯ tests/f06-queues.test.js:60:27
+     58|     const response = await request(app).get('/api/queues').set('Cookie…
+     59|     expect(response.status).toBe(200);
+     60|     expect(response.body).toEqual({ data: [barItem(barAssigned), mainI…
+       |                           ^
+     61|     for (const item of response.body.data) {
+     62|       expect(Object.keys(item).sort()).toEqual(['id', 'isAssigned', 'm…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-46: queue list with names and per-queue assignment > TEST-46 / AC-46: host3 (Bar counter) lists both queues ordered by restaurant, queue name, id with exact keys
+Error: loginAs expected 200, received 401; F-01 must be implemented first
+ ❯ loginAs tests/helpers/index.js:61:11
+     59|   const response = await request(app).post('/api/auth/login').send({ e…
+     60|   if (response.status !== 200) {
+     61|     throw new Error(`loginAs expected 200, received ${response.status}…
+       |           ^
+     62|   }
+     63|   const cookie = response.headers['set-cookie']?.find(value => value.s…
+ ❯ tests/f06-queues.test.js:58:74
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-47: assigned Host opens and closes a queue > TEST-47 / AC-47: close, repeat close (idempotent), reopen; extra body fields have no effect; the other queue is untouched
+error: column "name" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ queueRow tests/f06-queues.test.js:35:33
+     33| const join = (cookie, queueId, partySize = 2) => request(app)
+     34|   .post(`/api/queues/${queueId}/entries`).set('Cookie', cookie).send({…
+     35| const queueRow = async (id) => (await pool.query(
+       |                                 ^
+     36|   'SELECT name, status, next_ticket_no, max_party_size FROM service_qu…
+     37| const count = async (sql, params = []) => Number((await pool.query(sql…
+ ❯ tests/f06-queues.test.js:71:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-48: access control and validation order > TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ expectError tests/f06-queues.test.js:40:27
+     38|
+     39| function expectError(response, status, code) {
+     40|   expect(response.status).toBe(status);
+       |                           ^
+     41|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     42|   expect(response.body.error.message).not.toContain('@dineq.test');
+ ❯ tests/f06-queues.test.js:98:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-48: access control and validation order > TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ expectError tests/f06-queues.test.js:40:27
+     38|
+     39| function expectError(response, status, code) {
+     40|   expect(response.status).toBe(status);
+       |                           ^
+     41|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     42|   expect(response.body.error.message).not.toContain('@dineq.test');
+ ❯ tests/f06-queues.test.js:113:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-49: a CLOSED queue refuses new tickets but serves existing ones > TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f06-queues.test.js:133:77
+    131|     const t2 = await insertEntry(pool, { customer: 2, ticketNo: 2 });
+    132|     const host = await login('host1@dineq.test');
+    133|     expect((await patch(host, seedIds.queue, { status: 'CLOSED' })).st…
+       |                                                                             ^
+    134|
+    135|     const before = await dbState(pool);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-50: separate queues and concurrency > TEST-50 / AC-50: one Customer holds a ticket in each queue with separate numbering
+AssertionError: expected 404 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 404
+
+ ❯ tests/f06-queues.test.js:161:22
+    159|     const b = await join(cookie, BAR);
+    160|     expect(a.status).toBe(201);
+    161|     expect(b.status).toBe(201);
+       |                      ^
+    162|     expect([a.body.data.ticketNo, b.body.data.ticketNo]).toEqual([1, 1…
+    163|     expect([a.body.data.queueId, b.body.data.queueId]).toEqual([seedId…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-50: separate queues and concurrency > TEST-50 / AC-50: a Host of one queue cannot list, call, complete or read tickets of the other queue
+Error: No seeded user host3@dineq.test
+ ❯ userIdByEmail tests/helpers/queueFixtures.js:10:23
+      8| export async function userIdByEmail(pool, email) {
+      9|   const { rows } = await pool.query('SELECT id FROM users WHERE email …
+     10|   if (!rows[0]) throw new Error(`No seeded user ${email}`);
+       |                       ^
+     11|   return rows[0].id;
+     12| }
+ ❯ insertEntry tests/helpers/queueFixtures.js:25:18
+ ❯ tests/f06-queues.test.js:168:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-50: separate queues and concurrency > TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f06-queues.test.js:193:27
+    191|     const closing = patch(host, seedIds.queue, { status: 'CLOSED' });
+    192|     const [closed, ...results] = await Promise.all([closing, ...joins]…
+    193|     expect(closed.status).toBe(200);
+       |                           ^
+    194|
+    195|     const created = results.filter(r => r.status === 201);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-50: separate queues and concurrency > TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/f06-queues.test.js:212:52
+    210|     for (let n = 1; n <= 15; n++) cookies.push(await login(customerEma…
+    211|     const responses = await Promise.all(cookies.flatMap(cookie => [joi…
+    212|     expect(responses.every(r => r.status === 201)).toBe(true);
+       |                                                    ^
+    213|     for (const queueId of [seedIds.queue, BAR]) {
+    214|       const numbers = responses.filter(r => r.body.data.queueId === qu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-51: names, migration, seed and persistence > TEST-51 / AC-51: the seed has Main queue and Bar counter with the documented assignments and re-seeding keeps names and data
+error: column "name" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ tests/f06-queues.test.js:223:20
+    221| describe('F-06 AC-51: names, migration, seed and persistence', () => {
+    222|   test('TEST-51 / AC-51: the seed has Main queue and Bar counter with …
+    223|     const names = (await pool.query('SELECT id, name FROM service_queu…
+       |                    ^
+    224|     expect(names).toEqual([{ id: BAR, name: 'Bar counter' }, { id: see…
+    225|     const entry = await insertEntry(pool, { customer: 1, ticketNo: 1 }…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-51: names, migration, seed and persistence > TEST-51 / AC-51: the DB rejects a duplicate queue name in one restaurant (23505), empty and 61-character names (23514)
+AssertionError: expected error: column "name" of relation "service… { …(15) } to match object { code: '23505' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23505",
++ DatabaseError {
++   "code": "42703",
+  }
+
+ ❯ tests/f06-queues.test.js:248:59
+    246|     const insert = (restaurantId, name) => pool.query(
+    247|       `INSERT INTO service_queues (restaurant_id, status, name) VALUES…
+    248|     await expect(insert(seedIds.restaurant, 'Main queue')).rejects.toM…
+       |                                                           ^
+    249|     await expect(insert(seedIds.restaurant, '')).rejects.toMatchObject…
+    250|     await expect(insert(seedIds.restaurant, '   ')).rejects.toMatchObj…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-51: names, migration, seed and persistence > TEST-51 / AC-51: a closed queue stays closed for a new app instance with a new DB pool
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f06-queues.test.js:264:77
+    262|   test('TEST-51 / AC-51: a closed queue stays closed for a new app ins…
+    263|     const host = await login('host1@dineq.test');
+    264|     expect((await patch(host, seedIds.queue, { status: 'CLOSED' })).st…
+       |                                                                             ^
+    265|     const freshPool = createPool(process.env.TEST_DATABASE_URL, { max:…
+    266|     try {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/23]⎯
+
+ FAIL  tests/f06-queues.test.js > F-06 AC-51: names, migration, seed and persistence > TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash
+AssertionError: database/migrations/005_*.sql (queue names) must exist: expected undefined to be defined
+ ❯ tests/f06-queues.test.js:279:77
+    277|     const fifth = files.find(name => name.startsWith('005_'));
+    278|     // RED: migration 005 does not exist yet.
+    279|     expect(fifth, 'database/migrations/005_*.sql (queue names) must ex…
+       |                                                                             ^
+    280|     expect(existsSync(new URL(fifth, migrationsDir))).toBe(true);
+    281|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/23]⎯
+
+ FAIL  tests/infra.test.js > P2 infrastructure (not feature AC results) > INFRA-05: rerunning migrations and seed preserves identities, rows and ticket counter
+AssertionError: expected 1 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 1
+
+ ❯ tests/infra.test.js:112:95
+    110|       // F-06: the seed holds two queues (Main queue and Bar counter) …
+    111|       // re-seed must not rename them or touch the ticket counter (che…
+    112|       expect((await client.query('SELECT count(*)::int AS n FROM servi…
+       |                                                                                               ^
+    113|       expect((await client.query('SELECT name FROM service_queues ORDE…
+    114|         .toEqual([{ name: 'Bar counter' }, { name: 'Main queue' }]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/23]⎯
+
+ FAIL  tests/infra.test.js > P2 infrastructure (not feature AC results) > INFRA-06: seed contains 30 hashed customers and correctly scoped Hosts
+AssertionError: expected [ 'host1@dineq.test', …(1) ] to deeply equal [ 'host1@dineq.test', …(2) ]
+
+- Expected
++ Received
+
+  [
+    "host1@dineq.test",
+    "host2@dineq.test",
+-   "host3@dineq.test",
+  ]
+
+ ❯ tests/infra.test.js:129:79
+    127|     expect(accounts.filter(row => row.role === 'CUSTOMER').map(row => …
+    128|       Array.from({ length: 30 }, (_, i) => `customer${String(i + 1).pa…
+    129|     expect(accounts.filter(row => row.role === 'HOST').map(row => row.…
+       |                                                                               ^
+    130|     expect(accounts.every(row => row.password_hash.startsWith('$argon2…
+    131|     expect(await argon2.verify(accounts[0].password_hash, process.env.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/23]⎯
+
+
+ Test Files  3 failed | 5 passed (8)
+      Tests  23 failed | 148 passed (171)
+   Start at  13:41:02
+   Duration  23.76s (transform 177ms, setup 0ms, import 1.30s, tests 21.61s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-f06impl/docs/evidence/f06-red.json
+
+Exit code: 1

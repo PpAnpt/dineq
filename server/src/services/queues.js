@@ -76,24 +76,30 @@ export function toTicket(row) {
   };
 }
 
+// Queue JSON of the list and of the open/close response (F-06; maxPartySize from Lab 7).
+export function toQueueItem(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    restaurant: { id: row.restaurant_id, name: row.restaurant_name },
+    status: row.status,
+    maxPartySize: row.max_party_size,
+    isAssigned: row.is_assigned,
+  };
+}
+
 export function createQueueService({ pool }) {
   return {
     // C.6.1: no next_ticket_no, assignment rows or customer data.
     async listQueues(user) {
       const { rows } = await pool.query(
-        `SELECT q.id, q.status, q.max_party_size, r.id AS restaurant_id, r.name AS restaurant_name,
+        `SELECT q.id, q.name, q.status, q.max_party_size, r.id AS restaurant_id, r.name AS restaurant_name,
                 ($2 = 'HOST' AND EXISTS (
                   SELECT 1 FROM queue_operator_assignments a
                   WHERE a.queue_id = q.id AND a.host_user_id = $1)) AS is_assigned
            FROM service_queues q JOIN restaurants r ON r.id = q.restaurant_id
-          ORDER BY r.name, q.id`, [user.id, user.role]);
-      return rows.map(row => ({
-        id: row.id,
-        restaurant: { id: row.restaurant_id, name: row.restaurant_name },
-        status: row.status,
-        maxPartySize: row.max_party_size,
-        isAssigned: row.is_assigned,
-      }));
+          ORDER BY r.name, q.name, q.id`, [user.id, user.role]);
+      return rows.map(toQueueItem);
     },
 
     // customer_id comes from the Session; the optional filters (F-07a) only narrow the caller's own tickets.

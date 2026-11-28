@@ -1,6 +1,6 @@
 # F-06 Multiple Queues, Host Assignment and Open/Close - Sprint 2 Contract
 
-> **Status:** Draft v0.4 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-11, FR-12, BR-03, BR-07, BR-08, NFR-01, NFR-03, NFR-06
+> **Status:** Draft v0.8 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-11, FR-12, BR-03, BR-07, BR-08, NFR-01, NFR-03, NFR-06
 
 เป้าหมาย: ร้านมีหลายคิว (เช่น คิวหลักและเคาน์เตอร์บาร์) แต่ละคิวมีชื่อ เลขคิวของตนเอง และ Host ผู้รับผิดชอบ; Host ที่ Assigned เปิด/ปิดคิวของตนได้ คิวที่ปิดไม่รับ Join ใหม่แต่ยังให้บริการตั๋วเดิมจนจบ; API: `GET /api/queues` (เพิ่ม `name`), `PATCH /api/queues/:queueId`
 
@@ -89,6 +89,8 @@ Seed (`database/seed/seedData.js`, รันซ้ำปลอดภัย): `Ma
 
 เทส Sprint 1 ที่ต้องแก้ตาม Contract นี้ (แก้ในขั้น RED พร้อมเหตุผล ไม่ลด Assertion): TEST-07 (`GET /api/queues` บน Seed ได้ 2 รายการและมี `name`; Test "CLOSED queue is listed" ต้องระบุคิวที่ปิดจาก `id` ในรายการสองคิว), INFRA-06 (Host ใน Seed เป็น `host1`, `host2`, `host3`; Assignment ของ Main queue ยังเป็น `host1` เท่านั้น), INFRA-05 (จำนวนแถว `service_queues` หลังรัน Seed ซ้ำเปลี่ยนจาก 1 เป็น 2 และต้องไม่เปลี่ยนเลขคิวหรือสถานะของตั๋วเดิม). เทสอื่นที่ใช้ `seedIds.queue` และ `host2` เป็น Unassigned Host ต้องผ่านโดยไม่แก้
 
+Playwright (พบตอนค้นหา selector ที่อ้างหน้า `/queues`): หน้าจอมีสองคิวจึงมีฟอร์ม Join สองชุด; `client/e2e/sprint-1.spec.js` (helper `join` และ E2E-2/DEMO-03), `client/e2e/sprint-2-cancel.spec.js` (ถ้ามีใน Branch) และ `client/e2e/live-evidence.mjs` ต้องจำกัด locator ที่การ์ดของคิวหลัก (`data-queue-id`) แทน locator ทั่วทั้งหน้า; พฤติกรรมที่ตรวจเหมือนเดิม ไม่ลด Assertion; ชุด UI fixture `client/tests/review-ui.test.js` (Host) ต้องตอบ `GET /api/queues` เพิ่ม เพราะหน้า Host อ่านชื่อและสถานะคิวจากรายการคิว
+
 ชั้นที่ไม่ต้องแก้: Authentication/Session, Origin Check, Join/Call Next/Complete Service (เว้นแต่ชื่อใน Queue JSON), Ticket JSON, F-04 ตรรกะ Cancel
 
 ## 8. Definition of Done
@@ -108,6 +110,21 @@ Seed (`database/seed/seedData.js`, รันซ้ำปลอดภัย): `Ma
 - Queue JSON ของ Lab 7 (`maxPartySize`) และ F-06 (`name`) เป็น Field เพิ่ม ไม่ขัดกัน
 - เนื้อหาใน F-02/SDS สำหรับ `name`, `PATCH`, Seed และ Role/Permission จะถูกรวมใน PR สรุป Contract (S3-C) เพื่อลดการชนกันของไฟล์ระหว่าง Branch ขนาน
 
+## 9. Execution Results (2026-11-28)
+
+Recorded at commit `f8cab1e4055844ef6d52eb7474153eb4ef936683` on branch `feature/f-06-queues` (local PostgreSQL test database, in an isolated schema because another branch had already applied a different migration to the shared schema; not merged, not deployed). RED: [f06-red](../../evidence/f06-red.txt), 23 failed / 148 passed / 0 skipped of 171 on unmodified application code (second queue, host3, name column, PATCH endpoint and migration 005 missing). GREEN: [f06-green](../../evidence/f06-green.txt), 171 passed / 0 failed / 0 skipped; Playwright [f06-e2e-green](../../evidence/f06-e2e-green.txt), 7 passed (E2E-8 failed before the Host UI and queue names existed).
+
+| AC / Test | Actual file | Result |
+| --- | --- | --- |
+| AC-46 / TEST-46 | `server/tests/f06-queues.test.js`; revised TEST-07 in `f02-join.test.js` | PASS |
+| AC-47 / TEST-47 | `server/tests/f06-queues.test.js` | PASS (close, idempotent repeat, reopen, extra body fields ignored) |
+| AC-48 / TEST-48 | `server/tests/f06-queues.test.js` | PASS (role, assignment, Origin, UUID, 404 before 403, body order) |
+| AC-49 / TEST-49 | `server/tests/f06-queues.test.js`; E2E-8 | PASS |
+| AC-50 / TEST-50 | `server/tests/f06-queues.test.js` | PASS (separate numbering, cross-queue 403, 20 Joins racing a close, 15 customers on both queues) |
+| AC-51 / TEST-51 | `server/tests/f06-queues.test.js`; revised INFRA-05/06 | PASS (constraints, seed reruns, restart, upgrade fixtures including the seed queue next to a lower-sorting legacy queue) |
+
+UI fixtures (`client/tests/review-ui.test.js`) 3 passed with the Vite dev client running; the CI node checks passed 22 of 22 once `client/dist` existed (the one failing check, 'production image serves the built SPA', needs `npm run build:client` first; an earlier run before the first build showed 1 of 22 failing for that reason, and CI builds first). Not covered: manual keyboard audit of the close confirmation (AC-74 stays PLANNED) and any deployed-environment check.
+
 ## Revision History
 
 | Version | Date | Change |
@@ -116,3 +133,7 @@ Seed (`database/seed/seedData.js`, รันซ้ำปลอดภัย): `Ma
 | v0.2 | 2026-11-28 | Address PR #100 review: define a collision-safe backfill before the unique name constraint (old wording: column DEFAULT 'Main queue' then UNIQUE), extend AC-51 with a two-legacy-queues fixture, and keep Lab 7 `maxPartySize` in the queue response and AC-46/47 |
 | v0.3 | 2026-11-28 | Address PR #100 re-review: reserve `Main queue` for the fixed seed queue id `2222...` in the backfill (old v0.2 wording: first queue by id) so migrating and then seeding cannot hit 23505; AC-51 adds a fixture with a lower-sorting legacy queue next to the seeded queue |
 | v0.4 | 2026-11-28 | List INFRA-05 (queue count after seed 1 -> 2) among the Sprint 1 tests that change with this contract; omitted in v0.3 and found while reviewing the F-05 contract (PR #104) |
+| v0.5 | 2026-11-28 | Record the Playwright selector changes caused by two queue cards on /queues (join helper, E2E-2/DEMO-03, live-evidence.mjs) among the tests that change; found while preparing the F-06 UI tests, recorded before the E2E commit |
+| v0.6 | 2026-11-28 | Record that the Host UI fixture tests must also serve GET /api/queues (the Host page reads the queue name and status); recorded before the fixture change |
+| v0.7 | 2026-11-28 | Add execution results for AC-46..51 from f06-red, f06-green and f06-e2e-green at `f8cab1e`; contract text unchanged |
+| v0.8 | 2026-11-28 | Correct the explanation of the one failing CI node check in section 9: it needs the built client (`client/dist`), it is not flaky; also re-verified in a freshly recreated public schema (171 passed) because INFRA-03/04 read `table_schema = 'public'` and earlier isolated-schema runs inspected the shared public schema |

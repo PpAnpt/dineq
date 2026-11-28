@@ -169,6 +169,34 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 
 บัญชี Seed (v0.2): `customer01@dineq.test` ถึง `customer30@dineq.test` (CUSTOMER), `host1@dineq.test` (HOST, Assigned กับ Queue ที่ Seed), `host2@dineq.test` (HOST, ไม่ Assigned); รหัสผ่านทุกบัญชีอ่านจาก env `SEED_DEMO_PASSWORD` ตอนรัน Seed (ไม่ Commit ลง Git/เอกสาร/Log) และเก็บเป็น Argon2id Hash เท่านั้น; ตัวแปร `TEST_DATABASE_URL` ใช้ฐานข้อมูลแยกสำหรับ Test (เพิ่มใน `.env.example` ร่วมกับ `DATABASE_URL`)
 
+## C.9 F-05 No-show and Seating — Planned Contract
+
+**PLANNED / NOT EXECUTED**, 2026-11-28. The normative API, data, transaction, UI and TEST-36..45 definitions are in [F-05](sprints/sprint-2/F-05-no-show-seating.md). This section proposes Sprint 2 additions; it does not claim the current application implements them. It complements the parallel Sprint 3 additions in C.8 when those are merged.
+
+| Area | Planned addition |
+| --- | --- |
+| Data / C.2 | Migration 004 adds queue-scoped `dining_tables` (label, capacity 1..10, AVAILABLE/OCCUPIED, nullable occupied_entry_id) and nullable `queue_entries.table_id`. Unique queue label and occupied entry, occupancy CHECK, and composite same-queue FKs protect the row model. API checks capacity/state across rows under lock; no cross-table trigger is claimed. Migration 003, owned by F-04, already reserves NO_SHOW/CANCELLED and their event/timestamp checks; 004 must not replace them. |
+| State / C.3 | Assigned Host No-show: CALLED -> NO_SHOW, retain called_at, no completed_at/table. Seat: CALLED -> COMPLETED plus historical table_id and occupied table, with one existing COMPLETED event. All transition/event/table effects commit together or roll back. Legacy table-less Complete remains valid and unchanged. Release only clears current table occupancy; historical entry linkage stays. |
+| Permission / C.4 | All four new endpoints are HOST-only and require assignment to the resource's queue. Tables cannot be shared across queues, even by a Host assigned to both. Session/Role precede UUID/resource/body checks; writes keep the existing Origin guard first. Seat resolves entry existence/assignment before JSON parsing and target-table validation. |
+| UI / C.5 | Extend the Host queue screen with confirmed No-show, table list/capacity/occupancy, Seat selection and Release. Keep legacy Complete, loading/empty/error/success/refresh and keyboard controls. Customer ticket view displays terminal NO_SHOW and permits navigation to rejoin. |
+| Transactions | Queue -> Entry -> Table lock order, authoritative assignment/state recheck, one terminal transition/event under competing Seat/No-show/legacy Complete. CLOSED blocks new Join but permits serving existing tickets and releasing tables. Preserve FIFO and the one-CALLED partial unique index. |
+| Seed | Insert absent deterministic T1 (4 seats) and T2 (10 seats) on the seeded main queue. Re-seeding never releases occupied tables or resets ticket/event/counter history. No new environment variables or dependencies. |
+
+### C.9.1 Planned API and error additions
+
+| Method / endpoint | Request | Success |
+| --- | --- | --- |
+| POST /api/entries/:entryId/no-show | No body required | 200 `{ data: Ticket }`, NO_SHOW |
+| GET /api/queues/:queueId/tables | None | 200 `{ data: Table[] }`, label then id order; `[]` if empty |
+| POST /api/entries/:entryId/seat | JSON object `{ tableId: UUID }` | 200 `{ data: { entry: Ticket, table: Table } }` |
+| POST /api/tables/:tableId/release | No body required | 200 `{ data: Table }`, AVAILABLE; idempotent |
+
+`Ticket` keeps C.6.1's eight keys. `Table` contains exactly id, queueId, label, capacity, status, occupiedEntryId, occupiedTicketNo; both occupied fields are null when AVAILABLE. No customer identifiers/emails are added. Persisted historical table_id does not silently extend the old Ticket response.
+
+Planned C.6.2 catalog additions: **409 TABLE_OCCUPIED** for an occupied target and **409 INSUFFICIENT_CAPACITY** for an available undersized target. Seat evaluates valid CALLED state before occupancy, then capacity. Reuse INVALID_TRANSITION for a non-CALLED entry and the existing 400/401/403/404 codes/check order; cross-queue table choice is 403, missing target is 404. Rejections never change entries/tables/events/counters. All errors retain `{ error: { code, message } }` and hide database details.
+
+AC-36..45 / TEST-36..45 remain PLANNED until reviewed implementation and recorded real-DB runs. Dependencies: reviewed contracts and implemented migrations 002/003; no migration, source or test is added here.
+
 ## Revision History
 
 | Version | Date | Change |
@@ -177,3 +205,4 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | v0.2 | 2026-11-06 | Add error-code catalog and check order (C.6.2), response shapes incl. `isAssigned` and ticket JSON (C.6.1), UUID/timestamptz conventions (C.2), seed accounts and TEST_DATABASE_URL (C.7) |
 | v0.3 | 2026-11-06 | Address PR #1 review: define full queue-list JSON and endpoint-specific check order, clarify public login and the two 404 outcomes, link planned verification |
 | v0.4 | 2026-11-28 | Lab 7 (L7-CR-01, BR-09): add `service_queues.max_party_size` (1–10, default 8), widen `queue_entries.party_size` CHECK to 1–10, per-queue range check in the Join transaction (after the queue lock, before the CLOSED check), `maxPartySize` in the queue JSON, error text. Old wording: "party_size 1–8", "partySize: 1..8" |
+| v0.5-f05 | 2026-11-28 | Propose C.9 F-05 data/API/error/lock/UI contract and AC-36..45; preserve legacy Complete; reserve migration 004 after implemented 002/003. No implementation or verification result claimed |

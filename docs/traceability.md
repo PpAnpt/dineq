@@ -20,7 +20,7 @@
 | FR-06, BR-04/05 | F-03 / S1 | AC-15/16/24 / TEST-15/16/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-08, BR-10 | F-04 / S2 | AC/STS ออกแบบก่อน Implement | PLANNED / NOT EXECUTED (later sprint) |
-| FR-09/10, BR-11 | F-05 / S2 | No-show/Table Assignment AC/STS | PLANNED / NOT EXECUTED (later sprint) |
+| FR-09/10/16, BR-03/04/05/08/10/11/12, NFR-01/02/06/07 | F-05 / S2 | [No-show, seating, release and UI contract](sprints/sprint-2/F-05-no-show-seating.md): AC-36..45 / TEST-36..45; SDS C.9 | PLANNED / NOT EXECUTED (contract proposal; no runtime result or tested implementation SHA yet) |
 | FR-11/12 | F-06 / S2 | Multiple Queue/Config AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-16 (JOINED/CALLED/COMPLETED) | F-02 & F-03 / S1 | AC-08/15/17 / TEST-08/15/17 (ตรวจ Event ใน DB) | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-13, FR-16 (เหตุการณ์ภายหลัง) | F-07 / S3 | History/Filter Verification | PLANNED / NOT EXECUTED (later sprint) |
@@ -47,3 +47,4 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.3 | 2026-11-06 | Map queue-shape/assignment checks and new AC-23/24; explicitly cover both 404 codes and auth precedence without changing PLANNED statuses |
 | v0.4 | 2026-11-07 | P8: map actual S1 API/E2E/restart evidence and tested SHA; distinguish later-sprint/manual/release work as NOT EXECUTED |
 | v0.5 | 2026-11-28 | Lab 7 (L7-CR-01): add BR-09 per-queue party-size row (AC-07/12 revised, AC-25..27) as PLANNED; the earlier PASS stays attached to the Sprint 1 baseline rule |
+| v0.6-f05 | 2026-11-28 | Map F-05 AC-36..45 / TEST-36..45 to the proposed no-show/table contract and SDS C.9 as PLANNED; retain every historical Sprint 1 result |

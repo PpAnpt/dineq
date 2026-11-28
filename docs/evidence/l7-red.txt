@@ -1,0 +1,391 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/l7-red.json"
+Working directory: server
+Commit: d0554ed4209d9dac618fb5b25a572a20a90891cf
+Date: 2026-11-28T05:01:36.973Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-l7red/server
+
+ ❯ tests/f02-join.test.js (44 tests | 6 failed) 4274ms
+     × TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false 193ms
+     × TEST-07 / AC-07: 'Assigned Host' gets the C.6.1 shape with isAssigned=true 72ms
+     × TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with isAssigned=false 69ms
+     × TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED 70ms
+     ✓ TEST-07 / AC-07: a fixture with no queues returns { "data": [] } 113ms
+     ✓ TEST-07 / AC-07: queue list requires a Session 27ms
+     ✓ TEST-08 / AC-08: Customer joins an OPEN queue with partySize=4 and can read the ticket back 78ms
+     ✓ TEST-08 / AC-08: a Customer without tickets gets { "data": [] } from /api/me/entries 65ms
+     ✓ TEST-09 / AC-09: joining again while WAITING is rejected with 409 DUPLICATE_ACTIVE 74ms
+     ✓ TEST-09 / AC-09: joining again while CALLED is rejected with 409 DUPLICATE_ACTIVE 75ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE 172ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  990ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response) 136ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403 163ms
+     ✓ TEST-12 / AC-12: joining a CLOSED queue is 409 QUEUE_CLOSED with no insert and no ticket number used 71ms
+     ✓ TEST-12 / AC-12: partySize 0 is 400 INVALID_PARTY_SIZE and changes nothing 69ms
+     ✓ TEST-12 / AC-12: partySize 11 is 400 INVALID_PARTY_SIZE and changes nothing 71ms
+     ✓ TEST-12 / AC-12: partySize 1.5 is 400 INVALID_PARTY_SIZE and changes nothing 69ms
+     ✓ TEST-12 / AC-12: partySize -1 is 400 INVALID_PARTY_SIZE and changes nothing 66ms
+     ✓ TEST-12 / AC-12: partySize "ten" is 400 INVALID_PARTY_SIZE and changes nothing 66ms
+     ✓ TEST-12 / AC-12: partySize "abc" is 400 INVALID_PARTY_SIZE and changes nothing 68ms
+     ✓ TEST-12 / AC-12: partySize null is 400 INVALID_PARTY_SIZE and changes nothing 69ms
+     ✓ TEST-12 / AC-12: partySize missing is 400 INVALID_PARTY_SIZE and changes nothing 67ms
+     ✓ TEST-12 / AC-12: boundary partySize 1 is accepted on the seeded main queue 67ms
+     ✓ TEST-12 / AC-12: boundary partySize 8 is accepted on the seeded main queue 69ms
+     × TEST-12 / AC-12: boundary partySize 9 is accepted on the seeded main queue 67ms
+     × TEST-12 / AC-12: boundary partySize 10 is accepted on the seeded main queue 70ms
+     ✓ TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED 115ms
+     ✓ TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change 73ms
+     ✓ TEST-13 / AC-13: Host has no Customer ticket list (/api/me/entries is Customer-only) 66ms
+     ✓ TEST-21 / AC-21: ticket and JOINED event survive a new app instance with a new DB pool 108ms
+     ✓ TEST-23 / AC-23: GET entry with malformed UUID is 400 VALIDATION_ERROR 68ms
+     ✓ TEST-23 / AC-23: POST join with malformed UUID is 400 VALIDATION_ERROR 66ms
+     ✓ TEST-23 / AC-23: GET entry with an absent UUID is 404 NOT_FOUND 71ms
+     ✓ TEST-23 / AC-23: POST join with an absent UUID is 404 NOT_FOUND 70ms
+     ✓ TEST-23 / AC-23: GET entry (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks 24ms
+     ✓ TEST-23 / AC-23: POST join (malformed) without a Session is 401 UNAUTHENTICATED before UUID checks 25ms
+     ✓ TEST-23 / AC-23: GET entry (absent) without a Session is 401 UNAUTHENTICATED before UUID checks 23ms
+     ✓ TEST-23 / AC-23: POST join (absent) without a Session is 401 UNAUTHENTICATED before UUID checks 23ms
+     ✓ TEST-23 / AC-23: malformed JSON to an absent queue is 404 NOT_FOUND (resource before body parsing) 66ms
+     ✓ TEST-23 / AC-23: malformed JSON to a malformed UUID is 400 VALIDATION_ERROR 68ms
+     ✓ TEST-23 / AC-23: malformed JSON to an existing queue is 400 VALIDATION_ERROR and changes nothing 75ms
+     ✓ TEST-23 / AC-23: Session and Role are still checked before malformed JSON (401 anonymous, 403 Host) 71ms
+     ✓ TEST-23 / AC-23: resource lookup precedes body validation (absent queue + bad partySize is 404; malformed id is 400) 70ms
+ ❯ tests/l7-party-limit.test.js (24 tests | 21 failed) 1935ms
+     × TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit 116ms
+     × TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit 57ms
+     × TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit 58ms
+     ✓ TEST-25 / AC-25: a queue without an explicit limit uses the default 8 167ms
+     × TEST-25 / AC-25: invalid partySize 0 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing 24ms
+     × TEST-25 / AC-25: invalid partySize -1 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing 172ms
+     × TEST-25 / AC-25: invalid partySize 1.5 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing 54ms
+     × TEST-25 / AC-25: invalid partySize "ten" on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing 53ms
+     × TEST-25 / AC-25: invalid partySize null on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing 56ms
+     × TEST-25 / AC-25: invalid partySize missing on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing 56ms
+     × TEST-25 / AC-25: changing the limit takes effect on the next Join 56ms
+     × TEST-25 / AC-25: an out-of-range size on a CLOSED limit-4 queue is 400 first; a valid size is 409 QUEUE_CLOSED 62ms
+     × TEST-26 / AC-26: GET /api/queues returns maxPartySize: seeded main queue 10, unspecified queue 8, explicit queue 4 59ms
+     × TEST-26 / AC-26: re-running migrations and the seed keeps the main queue at 10 and changes no ticket or event 64ms
+     × TEST-26 / AC-26: applying migration 002 on a database that already holds tickets leaves tickets and events unchanged 158ms
+     × TEST-27 / AC-27: service_queues.max_party_size = 0 is rejected by the DB (23514) 26ms
+     × TEST-27 / AC-27: service_queues.max_party_size = 11 is rejected by the DB (23514) 55ms
+     × TEST-27 / AC-27: service_queues.max_party_size = -1 is rejected by the DB (23514) 56ms
+     × TEST-27 / AC-27: service_queues.max_party_size = 1 is accepted by the DB 58ms
+     × TEST-27 / AC-27: service_queues.max_party_size = 10 is accepted by the DB 163ms
+     × TEST-27 / AC-27: queue_entries.party_size = 9 is accepted by the DB 66ms
+     × TEST-27 / AC-27: queue_entries.party_size = 10 is accepted by the DB 64ms
+     ✓ TEST-27 / AC-27: queue_entries.party_size = 0 is rejected by the DB (23514) 167ms
+     ✓ TEST-27 / AC-27: queue_entries.party_size = 11 is rejected by the DB (23514) 67ms
+ ❯ tests/infra.test.js (11 tests | 1 failed) 499ms
+     ✓ INFRA-01: health endpoint returns the public success envelope 11ms
+     ✓ INFRA-02: missing config fails fast and test reset rejects unsafe database URLs 1ms
+     ✓ INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys 11ms
+     × INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints 8ms
+     ✓ INFRA-05: rerunning migrations and seed preserves identities, rows and ticket counter 11ms
+     ✓ INFRA-06: seed contains 30 hashed customers and correctly scoped Hosts 39ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys 258ms
+     ✓ INFRA-08: unique indexes and timestamp/event constraints reject inconsistent rows 40ms
+     ✓ INFRA-09: /api/ready is public and reports the database as connected 3ms
+     ✓ INFRA-10: /api/ready returns 503 without leaking the database error when the DB is down 3ms
+     ✓ INFRA-11: /api/ready only answers GET/HEAD; POST without a session stays 401 2ms
+ ✓ tests/f01-auth.test.js (40 tests) 2095ms
+ ✓ tests/f03-host.test.js (21 tests) 1958ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  304ms
+ ✓ tests/controlled-fifo.test.js (1 test) 327ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  326ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 28 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Unassigned Host' gets the C.6.1 shape with isAssigned=false
+AssertionError: expected { data: [ { …(4) } ] } to deeply equal { data: [ { …(5) } ] }
+
+- Expected
++ Received
+
+@@ -1,11 +1,10 @@
+  {
+    "data": [
+      {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": false,
+-       "maxPartySize": 10,
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "OPEN",
+
+ ❯ tests/f02-join.test.js:66:27
+     64|     const response = await request(app).get('/api/queues').set('Cookie…
+     65|     expect(response.status).toBe(200);
+     66|     expect(response.body).toEqual({ data: [item(isAssigned)] });
+       |                           ^
+     67|     expect(typeof response.body.data[0].isAssigned).toBe('boolean');
+     68|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/28]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: 'Assigned Host' gets the C.6.1 shape with isAssigned=true
+AssertionError: expected { data: [ { …(4) } ] } to deeply equal { data: [ { …(5) } ] }
+
+- Expected
++ Received
+
+@@ -1,11 +1,10 @@
+  {
+    "data": [
+      {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": true,
+-       "maxPartySize": 10,
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "OPEN",
+
+ ❯ tests/f02-join.test.js:66:27
+     64|     const response = await request(app).get('/api/queues').set('Cookie…
+     65|     expect(response.status).toBe(200);
+     66|     expect(response.body).toEqual({ data: [item(isAssigned)] });
+       |                           ^
+     67|     expect(typeof response.body.data[0].isAssigned).toBe('boolean');
+     68|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/28]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 queue list > TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED
+AssertionError: expected { data: [ { …(4) } ] } to deeply equal { data: [ { …(5) } ] }
+
+- Expected
++ Received
+
+@@ -1,11 +1,10 @@
+  {
+    "data": [
+      {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "isAssigned": false,
+-       "maxPartySize": 10,
+        "restaurant": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "name": "DineQ Demo Restaurant",
+        },
+        "status": "CLOSED",
+
+ ❯ tests/f02-join.test.js:74:27
+     72|     const response = await request(app).get('/api/queues').set('Cookie…
+     73|     expect(response.status).toBe(200);
+     74|     expect(response.body).toEqual({ data: [item(false, 'CLOSED')] });
+       |                           ^
+     75|   });
+     76|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/28]⎯
+
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: boundary partySize 9 is accepted on the seeded main queue
+ FAIL  tests/f02-join.test.js > F-02 join queue > TEST-12 / AC-12: boundary partySize 10 is accepted on the seeded main queue
+AssertionError: expected 400 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 400
+
+ ❯ tests/f02-join.test.js:230:29
+    228|   test.each([1, 8, 9, 10])('TEST-12 / AC-12: boundary partySize %i is …
+    229|     const response = await joinAs(await login(customerEmail(1)), party…
+    230|     expect(response.status).toBe(201);
+       |                             ^
+    231|     expect(response.body.data.partySize).toBe(partySize);
+    232|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/28]⎯
+
+ FAIL  tests/infra.test.js > P2 infrastructure (not feature AC results) > INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints
+AssertionError: expected '(ticket_no >= 1) ((party_size >= 1) A…' to match /party_size <= 10/
+
+- Expected:
+/party_size <= 10/
+
++ Received:
+"(ticket_no >= 1) ((party_size >= 1) AND (party_size <= 8)) (status = ANY (ARRAY['WAITING'::text, 'CALLED'::text, 'COMPLETED'::text])) (((status = 'WAITING'::text) AND (called_at IS NULL) AND (completed_at IS NULL)) OR ((status = 'CALLED'::text) AND (called_at IS NOT NULL) AND (completed_at IS NULL)) OR ((status = 'COMPLETED'::text) AND (called_at IS NOT NULL) AND (completed_at IS NOT NULL))) (((called_at IS NULL) OR (called_at >= created_at)) AND ((completed_at IS NULL) OR (completed_at >= called_at))) id IS NOT NULL queue_id IS NOT NULL customer_id IS NOT NULL ticket_no IS NOT NULL party_size IS NOT NULL status IS NOT NULL created_at IS NOT NULL"
+
+ ❯ tests/infra.test.js:83:25
+     81|     expect(entryChecks).toMatch(/party_size >= 1/);
+     82|     // Lab 7 (L7-CR-01): the absolute ceiling widened from 8 to 10; th…
+     83|     expect(entryChecks).toMatch(/party_size <= 10/);
+       |                         ^
+     84|     expect(entryChecks).not.toMatch(/party_size <= 8/);
+     85|     for (const status of ['WAITING', 'CALLED', 'COMPLETED']) expect(en…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit
+error: column "max_party_size" of relation "service_queues" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ insertQueue tests/helpers/queueFixtures.js:57:5
+     55|     [seedIds.restaurant]);
+     56|   if (maxPartySize !== null) {
+     57|     await pool.query('UPDATE service_queues SET max_party_size = $2 WH…
+       |     ^
+     58|       [rows[0].id, maxPartySize]);
+     59|   }
+ ❯ tests/l7-party-limit.test.js:47:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: invalid partySize 0 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: invalid partySize -1 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: invalid partySize 1.5 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: invalid partySize "ten" on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: invalid partySize null on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: invalid partySize missing on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing
+error: column "max_party_size" of relation "service_queues" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ insertQueue tests/helpers/queueFixtures.js:57:5
+     55|     [seedIds.restaurant]);
+     56|   if (maxPartySize !== null) {
+     57|     await pool.query('UPDATE service_queues SET max_party_size = $2 WH…
+       |     ^
+     58|       [rows[0].id, maxPartySize]);
+     59|   }
+ ❯ tests/l7-party-limit.test.js:76:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: changing the limit takes effect on the next Join
+error: column "max_party_size" of relation "service_queues" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ insertQueue tests/helpers/queueFixtures.js:57:5
+     55|     [seedIds.restaurant]);
+     56|   if (maxPartySize !== null) {
+     57|     await pool.query('UPDATE service_queues SET max_party_size = $2 WH…
+       |     ^
+     58|       [rows[0].id, maxPartySize]);
+     59|   }
+ ❯ tests/l7-party-limit.test.js:88:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: per-queue boundaries > TEST-25 / AC-25: an out-of-range size on a CLOSED limit-4 queue is 400 first; a valid size is 409 QUEUE_CLOSED
+error: column "max_party_size" of relation "service_queues" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ insertQueue tests/helpers/queueFixtures.js:57:5
+     55|     [seedIds.restaurant]);
+     56|   if (maxPartySize !== null) {
+     57|     await pool.query('UPDATE service_queues SET max_party_size = $2 WH…
+       |     ^
+     58|       [rows[0].id, maxPartySize]);
+     59|   }
+ ❯ tests/l7-party-limit.test.js:97:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-26 / AC-26: seed value, default and legacy data > TEST-26 / AC-26: GET /api/queues returns maxPartySize: seeded main queue 10, unspecified queue 8, explicit queue 4
+error: column "max_party_size" of relation "service_queues" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ insertQueue tests/helpers/queueFixtures.js:57:5
+     55|     [seedIds.restaurant]);
+     56|   if (maxPartySize !== null) {
+     57|     await pool.query('UPDATE service_queues SET max_party_size = $2 WH…
+       |     ^
+     58|       [rows[0].id, maxPartySize]);
+     59|   }
+ ❯ tests/l7-party-limit.test.js:112:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-26 / AC-26: seed value, default and legacy data > TEST-26 / AC-26: re-running migrations and the seed keeps the main queue at 10 and changes no ticket or event
+error: column "max_party_size" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ tests/l7-party-limit.test.js:133:13
+    131|     try { await seed(client, hash); } finally { client.release(); }
+    132|     expect(await snapshot()).toBe(before);
+    133|     expect((await pool.query('SELECT max_party_size FROM service_queue…
+       |             ^
+    134|       .rows[0].max_party_size).toBe(10);
+    135|     // The pre-existing ticket is still readable through the API, unch…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-26 / AC-26: seed value, default and legacy data > TEST-26 / AC-26: applying migration 002 on a database that already holds tickets leaves tickets and events unchanged
+AssertionError: database/migrations/002_*.sql (per-queue party size limit) must exist: expected undefined to be defined
+ ❯ tests/l7-party-limit.test.js:147:93
+    145|     expect(first).toBeDefined();
+    146|     // RED: migration 002 does not exist yet.
+    147|     expect(second, 'database/migrations/002_*.sql (per-queue party siz…
+       |                                                                                             ^
+    148|     expect(existsSync(new URL(second, migrationsDir))).toBe(true);
+    149|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: service_queues.max_party_size = 0 is rejected by the DB (23514)
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: service_queues.max_party_size = 11 is rejected by the DB (23514)
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: service_queues.max_party_size = -1 is rejected by the DB (23514)
+AssertionError: expected error: column "max_party_size" of relatio… { …(15) } to match object { code: '23514' }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "23514",
++ DatabaseError {
++   "code": "42703",
+  }
+
+ ❯ tests/l7-party-limit.test.js:193:7
+    191|     const queueId = await insertQueue(pool);
+    192|     await expect(pool.query('UPDATE service_queues SET max_party_size …
+    193|       .rejects.toMatchObject({ code: '23514' });
+       |       ^
+    194|     await expect(pool.query(
+    195|       `INSERT INTO service_queues (restaurant_id, status, max_party_si…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: service_queues.max_party_size = 1 is accepted by the DB
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: service_queues.max_party_size = 10 is accepted by the DB
+error: column "max_party_size" of relation "service_queues" does not exist
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ tests/l7-party-limit.test.js:201:5
+    199|   test.each([1, 10])('TEST-27 / AC-27: service_queues.max_party_size =…
+    200|     const queueId = await insertQueue(pool);
+    201|     await pool.query('UPDATE service_queues SET max_party_size = $2 WH…
+       |     ^
+    202|     expect((await pool.query('SELECT max_party_size FROM service_queue…
+    203|       .rows[0].max_party_size).toBe(value);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/28]⎯
+
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: queue_entries.party_size = 9 is accepted by the DB
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-27 / AC-27: database constraints > TEST-27 / AC-27: queue_entries.party_size = 10 is accepted by the DB
+error: new row for relation "queue_entries" violates check constraint "queue_entries_party_size_check"
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ insertEntry tests/helpers/queueFixtures.js:28:20
+     26|   const called = status === 'CALLED' || status === 'COMPLETED';
+     27|   const completed = status === 'COMPLETED';
+     28|   const { rows } = await pool.query(
+       |                    ^
+     29|     `INSERT INTO queue_entries (queue_id, customer_id, ticket_no, part…
+     30|      VALUES ($1, $2, $3, $4, $5,
+ ❯ tests/l7-party-limit.test.js:207:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/28]⎯
+
+
+ Test Files  3 failed | 3 passed (6)
+      Tests  28 failed | 113 passed (141)
+   Start at  12:01:37
+   Duration  12.63s (transform 107ms, setup 0ms, import 917ms, tests 11.09s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-l7red/docs/evidence/l7-red.json
+
+Exit code: 1

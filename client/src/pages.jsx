@@ -102,6 +102,55 @@ export function QueuesPage({ user }) {
   </>;
 }
 
+// F-04: the owner cancels a WAITING ticket after an explicit confirmation. The server decides
+// whether the ticket is still cancellable; a 409 is shown as an error and the list is reloaded.
+function CancelTicket({ ticket, onChanged }) {
+  const [confirming, setConfirming] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState(null);
+  const trigger = useRef(null);
+  const keep = useRef(null);
+  const returnFocus = useRef(false);
+  useEffect(() => {
+    if (confirming) keep.current?.focus();
+    // The trigger is disabled while confirming, so focus returns after it is enabled again.
+    else if (returnFocus.current) { returnFocus.current = false; trigger.current?.focus(); }
+  }, [confirming]);
+  function close() {
+    returnFocus.current = true;
+    setConfirming(false);
+  }
+  async function confirm() {
+    setPending(true);
+    setError(null);
+    try {
+      await api(`/entries/${encodeURIComponent(ticket.id)}/cancel`, { method: 'POST' });
+      setConfirming(false);
+      onChanged();
+    } catch (caught) {
+      setError(caught);
+      setConfirming(false);
+      onChanged();
+    } finally {
+      setPending(false);
+    }
+  }
+  return <div>
+    <button type="button" ref={trigger} onClick={() => setConfirming(true)} disabled={pending || confirming}
+      data-testid="cancel-ticket">Cancel queue</button>
+    {confirming && <div role="alertdialog" aria-labelledby={`cancel-title-${ticket.id}`}
+      onKeyDown={event => { if (event.key === 'Escape') close(); }} data-testid="cancel-confirm">
+      <p id={`cancel-title-${ticket.id}`}>Cancel queue number {ticket.ticketNo}? You can join again later with a new number.</p>
+      <button type="button" onClick={confirm} disabled={pending} data-testid="cancel-confirm-yes">
+        {pending ? 'Cancelling…' : 'Yes, cancel my queue'}
+      </button>
+      <button type="button" ref={keep} onClick={close} disabled={pending} data-testid="cancel-confirm-no">Keep my place</button>
+    </div>}
+    {pending && <p role="status">Cancelling your queue…</p>}
+    <ErrorMessage error={error} />
+  </div>;
+}
+
 export function MyQueuePage() {
   const resource = useResource('/me/entries');
   // F-06: tickets can belong to different queues, so each ticket shows its queue's name.
@@ -114,6 +163,9 @@ export function MyQueuePage() {
     <ResourceState resource={resource} emptyMessage="You have no tickets yet. Join a restaurant queue to get started." />
     <div className="cards" data-testid="my-tickets">
       {resource.data?.map(ticket => <Ticket key={ticket.id} ticket={ticket}>
+        {ticket.status === 'WAITING' && <CancelTicket ticket={ticket} onChanged={resource.refresh} />}
+        {ticket.status === 'CANCELLED' && <p data-testid="ticket-cancelled">
+          This queue was cancelled. <a href="/queues">Join a queue again</a> to get a new number.</p>}
         {queueName(ticket.queueId) && <p>Queue: <span data-testid="ticket-queue-name">{queueName(ticket.queueId)}</span></p>}
       </Ticket>)}
     </div>

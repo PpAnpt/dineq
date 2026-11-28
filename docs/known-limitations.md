@@ -70,4 +70,4 @@ by the release-prep task.
 
 ## Sprint 2 F-05 table candidate (local branch only)
 
-See [partial execution](evidence/f05-table-verification.md). Tables, GET tables and Release have recorded API/DB verification. No-show, Seat, the new UI and complete migration-003/004 integration remain unimplemented/unexecuted in this candidate. No deployed availability is claimed.
+Superseded by the [complete local F-05 candidate](evidence/f05-verification.md): No-show, Seat, tables, Release and their UI now have recorded verification, with 003/004/005 integrated. Peer review, staging merge, final F-07a cross-feature checks, non-destructive production demo-data provisioning and deployed-version checks remain separate gates. Table administration is seed/SQL only; full manual accessibility/performance audits are not claimed.

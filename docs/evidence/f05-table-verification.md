@@ -26,3 +26,7 @@ The four new service cases exercise account state/role changed after a trusted u
 - [Browser regression](f05-review-e2e.txt): **6 passed / 0 failed / 0 skipped**.
 
 The new active-Host assertions are unchanged between review RED/GREEN. P3 separately changes schema references in helpers, infrastructure inventory and upgrade-fixture source selection to follow current_schema/search_path; no assertion is loosened or removed. This is 31 F-05 slice cases, not full AC-36..45 completion. No-show/Seat/UI and integration with reviewed 003/005 remain pending.
+
+## Superseded local slice status
+
+The earlier pending No-show/Seat/UI work is implemented in the [full F-05 record](f05-verification.md). Earlier slice counts and limitations above remain historical, not the latest candidate status.

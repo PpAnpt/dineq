@@ -1,0 +1,20 @@
+Command: npm run test:review --workspace=client
+Source commit: 1a3d66dfa57e47df1999c215f24e26ef1577419f
+Captured at: 2026-11-28T08:16:03.691Z
+Node: v24.14.0
+
+
+> @dineq/client@0.1.0 test:review
+> node --test tests/review-ui.test.js
+
+✔ Host refreshes stale list after 409 UNRESOLVED_CALLED, preserving the server error (1036.6238ms)
+✔ Host refreshes stale list after 409 INVALID_TRANSITION, preserving the server error (583.7618ms)
+✔ Customer sees why CLOSED queue cannot be joined (491.9825ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2743.2082

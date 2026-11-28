@@ -1,0 +1,21 @@
+{
+  "id": "preflight-after",
+  "atUtc": "2026-11-27T15:24:19.179Z",
+  "url": "https://s21271a0d-4d7hbszvwq-as.a.run.app/host/queues/22222222-2222-4222-8222-222222222222",
+  "actor": "host1@dineq.test",
+  "queueId": "22222222-2222-4222-8222-222222222222",
+  "entries": [],
+  "target": {
+    "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+    "queueId": "22222222-2222-4222-8222-222222222222",
+    "ticketNo": 17,
+    "partySize": 2,
+    "status": "COMPLETED",
+    "createdAt": "2026-11-25T14:19:55.446Z",
+    "calledAt": "2026-11-27T15:24:17.385Z",
+    "completedAt": "2026-11-27T15:24:19.390Z"
+  },
+  "readyForRetest": true,
+  "onlyExpectedRetainedTicket": false,
+  "text": "Skip to content\nDineQ\nAssigned queues\nhost1@dineq.test · HOST\nLogout\nHost queue\nRefresh\nCall Next\n\nLoading…"
+}

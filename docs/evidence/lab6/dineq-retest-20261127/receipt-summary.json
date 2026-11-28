@@ -1,0 +1,191 @@
+{
+  "sourceZip": "UAT-DinoQ-Pic-3.zip",
+  "sourceZipSha256": "5d4387c3f04abcc08a7b899ad58e32e9e4a7cd52d6c6f52f42fcf22d90c6737a",
+  "sourceFiles": 45,
+  "sourcePngs": 27,
+  "sourceBytesPreserved": true,
+  "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+  "revision": "s21271a0d-00007-pnb",
+  "selectedRun": "2026-11-27T15:54:04.261Z",
+  "selectedRunEnd": "2026-11-27T15:54:15.373Z",
+  "sourceOperatorAttribution": {
+    "requestedTester": "Tithinan Sobking",
+    "scriptAuthorAndActionExecutor": "OpenAI Codex at Tithinan request, according to supplied report; not manual execution or personal script authorship by Tithinan"
+  },
+  "result": "PARTNER_REPORTED_PASS_9_OF_9",
+  "distinctSteps": 9,
+  "recordRowsIncludingPreconditionAndBothJoins": 11,
+  "findingsReceived": "None within selected case/run",
+  "attempts": [
+    {
+      "file": "2026-11-27T15-47-21-731Z-DQ-UAT-07-report.json",
+      "conclusion": "BLOCKED",
+      "error": "T07A Join response missing real ticket ID/number or expected fields.",
+      "coveredNumberedSteps": [],
+      "fullNineStepRun": false
+    },
+    {
+      "file": "2026-11-27T15-48-21-598Z-DQ-UAT-07-report.json",
+      "conclusion": "PASS",
+      "error": null,
+      "coveredNumberedSteps": [],
+      "fullNineStepRun": false
+    },
+    {
+      "file": "2026-11-27T15-49-23-735Z-DQ-UAT-07-report.json",
+      "conclusion": "INTERRUPTED",
+      "error": "Active queue changed before Call Next; stopped without action.",
+      "coveredNumberedSteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fullNineStepRun": false
+    },
+    {
+      "file": "2026-11-27T15-50-31-426Z-DQ-UAT-07-report.json",
+      "conclusion": "PASS",
+      "error": null,
+      "coveredNumberedSteps": [
+        8,
+        9
+      ],
+      "fullNineStepRun": false
+    },
+    {
+      "file": "2026-11-27T15-53-10-132Z-DQ-UAT-07-report.json",
+      "conclusion": "PASS",
+      "error": null,
+      "coveredNumberedSteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "fullNineStepRun": true
+    },
+    {
+      "file": "2026-11-27T15-54-04-260Z-DQ-UAT-07-report.json",
+      "conclusion": "PASS",
+      "error": null,
+      "coveredNumberedSteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "fullNineStepRun": true
+    }
+  ],
+  "finalSummaryChanges": [
+    {
+      "ticket": "T07A",
+      "rawSummaryStatus": "WAITING",
+      "consolidatedStatus": "COMPLETED",
+      "sameIdAndCompletedAt": true
+    },
+    {
+      "ticket": "T07B",
+      "rawSummaryStatus": "WAITING",
+      "consolidatedStatus": "COMPLETED",
+      "sameIdAndCompletedAt": true
+    }
+  ],
+  "timestampFormattingDifferences": [
+    {
+      "row": 0,
+      "key": "at",
+      "raw": "2026-11-27T15:54:09.340Z",
+      "final": "2026-11-27T15:54:09.34Z",
+      "sameInstant": true
+    },
+    {
+      "row": 2,
+      "key": "at",
+      "raw": "2026-11-27T15:54:10.760Z",
+      "final": "2026-11-27T15:54:10.76Z",
+      "sameInstant": true
+    }
+  ],
+  "finalRunScreenshotFolder": "source/screenshots/2026-11-27T15-54-04-260Z",
+  "readyScreenshots": [
+    "T07A-waiting.png",
+    "step2-fifo-waiting.png",
+    "step9-empty-queue.png"
+  ],
+  "loadingOrPartialScreenshots": [
+    "T07B-waiting.png",
+    "step3-A-called-B-waiting.png",
+    "step6-A-completed.png",
+    "step8-B-called.png",
+    "step8-B-completed.png"
+  ],
+  "evidenceQualifications": [
+    "Raw report fixture statuses remain WAITING despite completedAt; consolidated report changes them to COMPLETED. Originals preserved; exact before/after API payloads are not present.",
+    "Step 9 checks unchanged active Host list, not a fresh read of both completed owner records after the rejected request.",
+    "Step 2 runner sorts the Host list locally and does not explicitly check payload privacy; ready screenshot corroborates visible FIFO/no Customer emails, not the full raw response.",
+    "Supplied runner is supporting source, not separately version-frozen for each earlier attempt.",
+    "Digest/revision are supplied release references, not independent GCP queries by partner."
+  ],
+  "newReleaseDecision": {
+    "value": "Accepted",
+    "latestSource": "Siwarak explicitly confirms HairRoot Accepted for 1ffb8b0 / 00007-pnb and subsequently identifies Tithinan, 27 Nov after retest. Retest timestamps are not substituted for exact decision time.",
+    "supersededInterpretation": {
+      "value": "Accepted",
+      "source": "Siwarak relayed the partner's single-word response to the explicitly version-bound question in chat on 27 November 2026",
+      "exactNamedDecisionAuthor": "Not separately supplied; requested tester is Tithinan, which is not substituted as a signature",
+      "authoredMessageArtifact": "Not supplied"
+    },
+    "baselineDecision": "Accepted for 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 / s21271a0d-00005-rdp",
+    "previousUnconfirmedStatus": "PENDING_NOT_CONFIRMED_FOR_NEW_RELEASE",
+    "decisionMaker": "Tithinan Sobking",
+    "decisionDateAsReported": "2026-11-27",
+    "decisionClockTime": null,
+    "receiptDate": "2026-11-28"
+  },
+  "independentRerunByDineQ": false,
+  "liveMutationsByThisImport": false,
+  "runnerExecutedByThisImport": false,
+  "IivoActualContribution": {
+    "originalExecutionReportedByPartner": {
+      "case": "DQ-UAT-01",
+      "steps": [
+        1,
+        3
+      ],
+      "date": "2026-11-26",
+      "timeAsSupplied": "19:33",
+      "baseline": "17c8b90",
+      "citedEvidence": [
+        "E-B7",
+        "E-B8",
+        "E-B9"
+      ],
+      "citedArtifactsInspectedHere": true
+    },
+    "retestResultsAndImagesReviewReportedBySiwarak": {
+      "role": "Review retest results and images",
+      "date": "Not supplied",
+      "specificEvidence": "Not supplied"
+    },
+    "newRetestExecutionEvidence": "Not supplied; do not infer from review role"
+  },
+  "ownerReadbackSupplement": {
+    "state": "NOT_SUPPLIED_DISCLOSED_LIMITATION",
+    "scope": "No later owner Refresh/GET artifact available; original/consolidated discrepancy and step-9 limitation remain disclosed. No new evidence created."
+  }
+}

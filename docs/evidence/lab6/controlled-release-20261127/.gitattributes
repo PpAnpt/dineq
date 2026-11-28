@@ -1,0 +1,6 @@
+# Preserve original evidence bytes, including Windows line endings.
+*.json -text whitespace=cr-at-eol
+*.txt -text whitespace=cr-at-eol
+*.png -text
+# Keep a timestamp-only blank log line verbatim rather than editing captured output.
+deploy-excerpts.txt whitespace=cr-at-eol,-blank-at-eol

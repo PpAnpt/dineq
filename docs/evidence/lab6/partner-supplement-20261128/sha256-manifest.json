@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "file": ".gitattributes",
+      "sha256": "b5719992dd9b2ef7dbbb6335263e9798d6b13a031099bfce991bb2504d4259c7"
+    },
+    {
+      "file": "DQ-ALVIN-A01-anon-my-queue.png",
+      "sha256": "a9e6dbf44936db3f2c1e5e2b9ba3e5cb8f588a12303e529ed5ce2570b426fcc8"
+    },
+    {
+      "file": "DQ-ALVIN-A02-wrong-password-c1.png",
+      "sha256": "5b1adf1693ea9f4e51d2a154991eba578deecf0d94e83da2edae7c58bda7532c"
+    },
+    {
+      "file": "DQ-ALVIN-A03-unknown-email.png",
+      "sha256": "758e4076643a7763a3ee3212d1823e3ccf1d3b9f624f191ab6606e03361bd7fb"
+    },
+    {
+      "file": "message-original.txt",
+      "sha256": "be39e1b817d3b612e6d454d28292ef576ab82b52b2d32bcbf5e0d05c4a31256f"
+    },
+    {
+      "file": "partner-report.md",
+      "sha256": "327944584a6b25e7d3de2c724a39df0fc28146b63303715258b99ef5d5c4c16e"
+    }
+  ]
+}

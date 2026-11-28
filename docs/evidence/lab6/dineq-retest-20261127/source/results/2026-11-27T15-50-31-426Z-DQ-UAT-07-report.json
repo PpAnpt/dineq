@@ -1,0 +1,77 @@
+{
+  "product": "DineQ",
+  "case": "DQ-UAT-07",
+  "tester": "Tithinan Sobking",
+  "scriptAuthor": "OpenAI Codex (GPT-6), at Tithinan Sobking’s request",
+  "runner": "Playwright automation executed by OpenAI Codex on the user’s behalf",
+  "startedAt": "2026-11-27T15:50:31.427Z",
+  "endedAt": "2026-11-27T15:50:38.668Z",
+  "timezone": "Asia/Bangkok",
+  "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+  "revision": "s21271a0d-00007-pnb",
+  "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+  "runConclusion": "PASS",
+  "error": null,
+  "evidence": {
+    "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+    "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+    "revision": "s21271a0d-00007-pnb",
+    "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+    "queue": {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "name": "DineQ Demo Restaurant",
+      "status": "OPEN"
+    },
+    "tickets": {
+      "T07A": {
+        "id": "e966e16c-b843-4468-81b5-5a4a2dd7fa72",
+        "ticketNo": 18,
+        "partySize": 3,
+        "status": "COMPLETED"
+      },
+      "T07B": {
+        "id": "0ecf7d4f-ae0e-4a9e-ad16-02beb1cbf49e",
+        "ticketNo": 19,
+        "partySize": 5,
+        "status": "WAITING"
+      }
+    },
+    "steps": [
+      {
+        "step": 8,
+        "status": "PASS",
+        "expected": "Call Next returns B after A is completed",
+        "actual": "B #19 CALLED; verified UUID 0ecf7d4f-ae0e-4a9e-ad16-02beb1cbf49e",
+        "evidenceId": "step8-B-called",
+        "at": "2026-11-27T15:50:37.240Z"
+      },
+      {
+        "step": 9,
+        "status": "PASS",
+        "expected": "404 NO_WAITING_ENTRY; active list remains empty and completed history unchanged",
+        "actual": "404 NO_WAITING_ENTRY",
+        "evidenceId": "step9-empty-queue",
+        "at": "2026-11-27T15:50:38.017Z"
+      }
+    ]
+  },
+  "results": [
+    {
+      "step": 8,
+      "status": "PASS",
+      "expected": "Call Next returns B after A is completed",
+      "actual": "B #19 CALLED; verified UUID 0ecf7d4f-ae0e-4a9e-ad16-02beb1cbf49e",
+      "evidenceId": "step8-B-called",
+      "at": "2026-11-27T15:50:37.240Z"
+    },
+    {
+      "step": 9,
+      "status": "PASS",
+      "expected": "404 NO_WAITING_ENTRY; active list remains empty and completed history unchanged",
+      "actual": "404 NO_WAITING_ENTRY",
+      "evidenceId": "step9-empty-queue",
+      "at": "2026-11-27T15:50:38.017Z"
+    }
+  ],
+  "findings": "None observed within DQ-UAT-07."
+}

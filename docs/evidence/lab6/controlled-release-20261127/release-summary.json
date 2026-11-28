@@ -1,0 +1,88 @@
+{
+  "mainCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+  "stagingCommit": "fb98f4c54d4d65173f465b1f87c7d58da1245a52",
+  "releasePr": 65,
+  "deployedRevision": "s21271a0d-00007-pnb",
+  "trafficPercentFromDeployResponse": 100,
+  "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+  "digestSource": "Runtime manifest exported by the successful deploy image build; new revision/100% traffic from authenticated gcloud run deploy response. Not a separate post-deploy status.imageDigest query.",
+  "deployRun": 46024849737,
+  "deployUrl": "https://github.com/PpAnpt/dineq/actions/runs/46024849737",
+  "deployResult": "success",
+  "deployedAtUtc": "2026-11-27T15:28:57.7376149Z",
+  "publicSmoke": {
+    "atUtc": "2026-11-27T15:29:36.798Z",
+    "method": "Public read-only Playwright smoke; no login or ticket mutation",
+    "expectedMainCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+    "versionProof": "Deploy run 46024849737, not the unchanged static UI label",
+    "url": "https://s21271a0d-4d7hbszvwq-as.a.run.app/login",
+    "checks": [
+      {
+        "route": "/api/health",
+        "status": 200,
+        "body": {
+          "data": {
+            "status": "ok"
+          }
+        }
+      },
+      {
+        "route": "/api/ready",
+        "status": 200,
+        "body": {
+          "data": {
+            "status": "ready",
+            "db": "connected"
+          }
+        }
+      }
+    ],
+    "text": "Skip to content\nDineQ\nSign in to DineQ\n\nUse your Customer or Host account.\n\nLab 5 release: deployed through the staging to main pipeline.\n\nAccount details\nEmail\nPassword\nSign in",
+    "result": "PASS"
+  },
+  "retainedTicketPreparation": {
+    "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+    "ticketNo": 17,
+    "finalStatus": "COMPLETED",
+    "activeQueueEmptyBeforeDeploy": true,
+    "evidence": "preflight-before.json / preflight-retained-called.json / preflight-after.json",
+    "authorization": "Student explicitly authorized this exact ticket after an automatic review rejection; no action was taken before that authorization",
+    "imageLimit": "Loading-only preflight images excluded; API records plus ready CALLED screenshot retained"
+  },
+  "partnerDeployNotice": "Student confirmed HairRoot informed and waiting before main merge",
+  "retestOperatorPlanned": "Tithinan Sobking",
+  "independentDQ07Result": "NOT EXECUTED / awaiting actual HairRoot results",
+  "noPartnerMessageSentByAgent": true,
+  "baselineDigestComparison": {
+    "source": "Read-only gcloud commands in the student's authenticated Cloud Shell, observed through native Chrome accessibility; wrapped digest lines joined without changing values",
+    "dateBangkok": "2026-11-27",
+    "project": "cpe-se-course-2026",
+    "region": "asia-southeast1",
+    "service": "s21271a0d",
+    "canonicalUrl": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+    "latestReadyRevisionName": "s21271a0d-l6-1126161809",
+    "traffic": [
+      {
+        "revisionName": "s21271a0d-l6-1126161809",
+        "percent": 100
+      }
+    ],
+    "revisionImages": [
+      {
+        "revision": "s21271a0d-00005-rdp",
+        "specImage": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8",
+        "statusImageDigest": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8"
+      },
+      {
+        "revision": "s21271a0d-l6-1126161809",
+        "specImage": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8",
+        "statusImageDigest": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8"
+      }
+    ],
+    "sameRuntimeDigest": true,
+    "baselineCommit": "17c8b90642ecb742b4f8b7e8c55da7fd34ddd620",
+    "baselineLinkSource": "Deployment run 44986245220 build log exports runtime manifest 78f53db5..., names the full 17c8b90 tag, and deploy step reports revision s21271a0d-00005-rdp serving 100 percent; exact excerpts retained in baseline-deploy-link.txt",
+    "registryTagDescribeAttempt": "A supplementary read-only Artifact Registry describe was submitted, but its result has not yet been collected; no claim is made from that attempt",
+    "noGcpMutation": true
+  }
+}

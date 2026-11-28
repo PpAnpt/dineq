@@ -1,5 +1,14 @@
 # Lab 6 contributions and remaining evidence
 
+Latest 28 Nov update: [HairRoot new-release Accepted response](dineq-new-release-decision-20261128.md) relayed by Siwarak for 1ffb8b0 / 00007-pnb. [Anapat UAT-07-R02 tester participation](anapat-retest-statement-20261128.md) confirmed; use original R02 image times, replacing the earlier approximate 22:30 recollection. Owner Refresh/GET supplement remains missing. Earlier status text below is dated history.
+
+
+Latest participation clarification: [Anapat is a UAT-07-R02 retest tester](anapat-retest-statement-20261128.md), reported by Siwarak for 27 Nov around 22:30. This supersedes earlier no-execution-reported status; original screenshot times/attribution are retained.
+
+
+Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
+
+
 Prepared 27 November 2026 for [#51](https://github.com/PpAnpt/dineq/issues/51)
 and the later #52 report. Group **TH-007_P9**, name supplied by the student:
 **ซวยเเล้วหนูคู่หูพี่่มาเเล้ว**. Both students own the submitted work. The
@@ -10,7 +19,7 @@ review, assisted execution and independent acceptance.
 
 | Student | Recorded work / source | Limit or missing execution evidence |
 | --- | --- | --- |
-| Siwarak Chatvichai, 67070501086, BBINGOAL | Requested the recorded HairRoot browser run and privately entered test credentials; R01 attributes the assisted observations. Directed DineQ owner CLOSED/OPEN operations and supplied incoming partner ZIPs; existing operator chronology is in PR #60. Authored/owned the issue branches with agent assistance and requested teammate review | Agent-driven actions are declared as assisted, not manual clicks by Siwarak. DineQ's own HairRoot acceptance decision remains pending. HairRoot's original DineQ Accepted decision is received; the TA-authorized exercise is recorded separately in PR #64 |
+| Siwarak Chatvichai, 67070501086, BBINGOAL | Requested the recorded HairRoot browser run and privately entered test credentials; R01 attributes the assisted observations. Directed DineQ owner CLOSED/OPEN operations and supplied incoming partner ZIPs; existing operator chronology is in PR #60. Authored/owned the issue branches with agent assistance and requested teammate review; explicitly declared HairRoot Accepted for cbaf1ba on 27 Nov | Agent-driven actions are declared as assisted, not manual clicks by Siwarak. HairRoot's original DineQ Accepted decision is received; the TA-authorized exercise is recorded separately from original UAT |
 | Anapat Banjerdsilp, 67070501049, PpAnpt | Reviewed DineQ cases at PR #54 and later HairRoot evidence follow-up at PR #59; substantive submitted reviews and merges are the supporting record | Actual HairRoot case/action execution is not established by those reviews. Need case IDs, actions, version, time and retained evidence for the work actually performed |
 
 AI assistance is recorded task-by-task in [the AI-use log](../../ai-use-log.md).
@@ -24,7 +33,7 @@ used to infer equal execution contributions.
 | HairRoot student | Supplied attribution | Still to confirm |
 | --- | --- | --- |
 | Tithinan Sobking, 67070501018 | [27 Nov relayed response](dineq-acceptance-received-20261127.md): wrote and ran the Playwright script; declared Accepted for DineQ's original UAT on 27 Nov | Partner-declared attribution; exact script revision/per-case times and additional AI involvement not newly supplied |
-| Iivo Peter Alvey Ranne, 67070501051 | Named member of HairRoot TH-060_P1; latest clarification promises actual role/case details later | Still PENDING actions, case IDs, version, time and evidence. A line naming Tithinan does not establish Iivo's contribution |
+| Iivo Peter Alvey Ranne, 67070501051 | [Partner clarification](partner-clarification-20261127.md): DQ-UAT-01 steps 1/3 on 26 Nov 2026 at 19:33, baseline 17c8b90, E-B7-E-B9. Siwarak additionally attributes review of new retest results/images | Cited original evidence not inspected here; later review date/items/acknowledgement not supplied. No new retest execution by Iivo is established |
 
 ## Minimal contribution return sheet
 
@@ -35,7 +44,8 @@ copy another person's run as one's own.
 | Student / team | Product tested | Case / specific action actually performed | Date/time Bangkok | Exact version and verification | Evidence / actual outcome |
 | --- | --- | --- | --- | --- | --- |
 | Anapat / DineQ | HairRoot | PENDING actual record | PENDING | PENDING | PENDING |
-| Iivo / HairRoot | DineQ | PENDING actual record | PENDING | PENDING | PENDING |
+| Iivo / HairRoot | DineQ original UAT | DQ-UAT-01 steps 1 and 3, partner-reported | 26 Nov 2026, 19:33 as supplied | Baseline 17c8b90 | E-B7-E-B9 cited; source verification pending |
+| Iivo / HairRoot | DineQ retest records | Review of retest results/images, reported by Siwarak | Not supplied | Received 1ffb8b0 retest report | Specific review items/evidence not supplied; not a retest execution claim |
 
 If a contribution has not occurred, use a bounded supplementary session on the
 agreed release. Read-only version/own-record checks or normal role/UI checks may
@@ -51,9 +61,9 @@ It does not establish Anapat's execution contribution.
 | Work | State at preparation | Evidence required to complete |
 | --- | --- | --- |
 | Latest DineQ results / #49 | PR #60 merged as 603beb1 on 27 Nov | Original sources/qualifications retained; independent decision and missing actual participation remain separate |
-| DineQ independent decision / #51 | Partner-declared Accepted received via Siwarak on 27 Nov; decision maker Tithinan, HairRoot TH-060_P1 | Decision is received, not invented. Actual image-digest/baseline linkage and Iivo role/case evidence remain required for final documentation |
-| HairRoot retest / #48 and #51 | Targeted R02 checks PASS on cbaf1ba; source/full commit/times/evidence recorded, revision partner-declared | Anapat actual execution contribution and DineQ-authored version-bound final decision still required; original R01 history preserved |
-| DineQ isolated exercise / #50 | TA authorization and local RED/GREEN/regression recorded separately in [exercise PR #64](https://github.com/PpAnpt/dineq/pull/64) | Reviewed corrected release, pipeline deploy/smoke and HairRoot independent DQ-UAT-07 retest remain separate from original UAT acceptance |
+| DineQ independent decision / #51 | Partner-declared Accepted received via Siwarak on 27 Nov; decision maker Tithinan, HairRoot TH-060_P1 | Decision is received, not invented. Original image-digest linkage recorded in the release record; verify cited Iivo E-B7-E-B9 and later review details. New-release acceptance remains separate and unconfirmed |
+| HairRoot retest / #48 and #51 | Targeted R02 checks PASS on cbaf1ba; source/full commit/times/evidence recorded, revision partner-declared. [Siwarak declared Accepted](hairroot-acceptance-declared-20261127.md) for this version on 27 Nov | Anapat actual execution contribution still required; original R01 history and targeted-rerun scope preserved |
+| DineQ isolated exercise / #50 | TA authorization and local RED/GREEN/regression; reviewed #64 squash and #65 release deployed as 1ffb8b0 / 00007-pnb. Partner reports DQ-UAT-07 PASS 9/9 | Promised read-only #22/#23 supplement and separate new-release decision unconfirmed. Original Accepted applies only to 17c8b90 |
 | One self-contained PDF / #52 | Draftable, not final | Parts A–D, internal evidence/pages, cases, both products' results, triage, exercise or disclosed dependency, decisions, contributions, AI use and limitations |
 
 Prepared forms and source checks can progress while waiting. They cannot replace

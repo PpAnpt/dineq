@@ -38,7 +38,7 @@ Tested commit: `a7a145ec6b870abaed2b3ae13a88e0ffa832818d`. All AC-01..24 are PAS
 
 Selected UI journeys: [release-e2e-run.txt](evidence/release-e2e-run.txt), 4 passed / 0 failed / 0 skipped; UI fixtures/build: [release-build-ui-checks.txt](evidence/release-build-ui-checks.txt), 3 passed / 0 failed / 0 skipped. Local NFR-02 also has a [real process restart and SQL-event comparison](evidence/release-restart-persistence.txt) on source-equivalent baseline `3d2ba1b78714f51127cdf07b7e44951c06ed8d7a`.
 
-PASS applies to the specified recorded cases, not all future work. Manual two-profile walkthrough, full loading/empty/keyboard audit, Sprint 2/3 checks, GCP, accepted main release and release tag remain NOT EXECUTED. Release-prep review is pending. See [known limitations](known-limitations.md).
+Integrated Sprint 2 branch (all PRs of F-04, F-05, F-06, F-07a, F-09a and migration 006 merged into `sprint-2-staging`): [s2-integration](evidence/s2-integration.txt) 289 passed / 0 failed / 0 skipped (13 files) and [s2-e2e](evidence/s2-e2e.txt) 11 passed, local runs recorded on `b05cbd5` on top of head `5e8c9a7`, whose CI run 46133241147 was green (PR #117); the per-row results above that say "not merged" describe the earlier feature-branch runs and are kept as recorded. Not deployed. PASS applies to the specified recorded cases, not all future work. Manual two-profile walkthrough, full loading/empty/keyboard audit, Sprint 2/3 checks, GCP, accepted main release and release tag remain NOT EXECUTED. Release-prep review is pending. See [known limitations](known-limitations.md).
 
 ## Revision History
 
@@ -66,3 +66,4 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.13 | 2026-11-28 | F-07a: FR-13 row changes from PLANNED to PASS for the local runs at `d527981` (f07a-red, f07a-green, f07a-e2e-green); F-07b stays PLANNED; review, integration and deployment pending |
 | v0.15 | 2026-11-28 | Lab 7: add AC-26b / TEST-26b (migration `006`, PLANNED) to the BR-09 row; the recorded PASS covers AC-07/12/25/26/27 only |
 | v0.16 | 2026-11-28 | Lab 7: AC-26b / TEST-26b changes from PLANNED to PASS for the local runs at `34f461a` (l7-activation-red/green/e2e); deployment pending |
+| v0.17 | 2026-11-28 | Add the integrated Sprint 2 evidence (`s2-integration` 289/0/0, `s2-e2e` 11) to the results note; no row changes status, per-row feature-branch wording is kept as recorded; deployment still pending |

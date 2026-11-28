@@ -75,6 +75,9 @@ test('E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and 
     await expect(h.page.getByTestId('seat-table').locator(`option[value="${seedIds.table4}"]`)).toHaveCount(0);
     await h.page.getByTestId('seat-table').selectOption(seedIds.table10);
     await h.page.getByTestId('seat-ticket').click();
+    // Wait for the Host's seat to finish before the Customer refreshes; without this the refresh can reach the
+    // server first on a slow runner and still see CALLED (CI runs 46126635454 and 46126853260 failed here).
+    await expect(h.page.getByTestId('host-notice')).toContainText('Ticket #2: COMPLETED');
     await second.page.getByTestId('refresh-my-queue').click();
     await expect(second.page.getByTestId('ticket-status')).toHaveText('COMPLETED');
   } finally { await c.context.close(); await second?.context.close(); await h?.context.close(); }

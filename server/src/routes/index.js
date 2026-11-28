@@ -24,6 +24,8 @@ export function createRoutes({ pool, config }) {
   // F-02 Customer-only endpoints (Host gets 403 before UUID/body checks).
   router.post('/queues/:queueId/entries', requireRole('CUSTOMER'));
   router.get('/me/entries', requireRole('CUSTOMER'));
+  // F-04: only Customers cancel (Host gets 403 before UUID/resource checks).
+  router.post('/entries/:entryId/cancel', requireRole('CUSTOMER'));
 
   // No global body parser: a route that must check its resource before the body
   // (SDS C.6.3 steps 4-5) parses JSON itself; /auth parses it here.

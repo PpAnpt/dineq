@@ -124,6 +124,8 @@ These are planned test-contract changes, to be made before implementation and ex
 
 Implementation discovery (2026-11-28): TEST-07's empty-queue fixture must delete newly seeded dining_tables before service_queues (only when 004 exists); its exact empty-array assertions and role coverage stay unchanged. The first table-slice probe exposed this FK dependency; this is test setup maintenance, not a change to queue-list behavior.
 
+UI test impact (before UI implementation): client/tests/review-ui.test.js must explicitly serve GET /api/queues/:queueId/tables with an empty array. Its old catch-all represents a mutating 409 and must not be triggered by the new read, which would falsely mark the fixture as changed. Existing 409-refresh, error-message and CLOSED assertions remain unchanged; new F-05 journeys are E2E-10/11 (E2E-9 is reserved for F-07a).
+
 | Existing test/helper | Planned change and expected value | Reason / preserved checks |
 | --- | --- | --- |
 | server/tests/infra.test.js — INFRA-03 | UUID `id` column count **6 -> 7**; add dining_tables to the required table inventory and its queue/occupant FKs plus queue_entries.table_id to the FK assertions | 004 adds one UUID-PK table and the nullable relationship. Keep the existing UUID defaults, timestamp and original table/FK assertions; verify the new composite same-queue constraints in TEST-45. |

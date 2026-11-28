@@ -46,7 +46,11 @@ gcloud run services describe s21271a0d --project=cpe-se-course-2026 --region=asi
 gcloud run revisions describe s21271a0d-00007-pnb --project=cpe-se-course-2026 --region=asia-southeast1 --format="value(metadata.name,metadata.creationTimestamp,status.imageDigest)"
 ```
 
-- [ ] Serving revision before the release is `s21271a0d-00007-pnb` (or the value read, recorded as read).
+- [x] Serving revision before the release is `s21271a0d-00007-pnb`. Read-only baseline run in Cloud Shell on 28 Nov 2026 by the teammate's account (clock time not shown in the screenshot), transcribed from his screenshot, using the three commands above:
+  - latestReadyRevisionName and latestCreatedRevisionName: `s21271a0d-00007-pnb`; service URL `https://s21271a0d-4d7hbszvwq-as.a.run.app`.
+  - Traffic: one entry, `latestRevision: true`, 100 percent, `revisionName: s21271a0d-00007-pnb`.
+  - Revision `s21271a0d-00007-pnb` created 2026-11-27T15:28:45Z (22:28 Asia/Bangkok), image `asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47` (digest transcribed from the screenshot; the 64 hex characters should be compared with the console once before it is quoted in a PDF).
+  - Not captured yet: the migration job image (a separate read-only command) and the existing partner records.
 - [ ] Public read-only check of `GET /api/queues` is not possible without a session; record the Login page release label and `/api/ready` only.
 - [ ] Note the existing partner test records on the deployed database (the fixtures the ledger calls #22 and #23, used for the HairRoot retest) so the post-deploy checks do not modify or delete them; confirm what exactly those fixtures are before the first write.
 
@@ -104,3 +108,4 @@ Each check records: time (Asia/Bangkok), account role (not the password), reques
 | v0.3 | 2026-11-28 | Update after the F-05, F-07a and migration 006 contract merges: D5 resolved, feature gate checked, new gate for green CI (E2E-11 race, PR #113) |
 | v0.4 | 2026-11-28 | CI gate checked on `df5923c`; D1 now has code in PR #114 and a new gate for merging it |
 | v0.5 | 2026-11-28 | Record Anapat's decisions D2 = NO (no demo rows on production, Seat/Release/two-queue view not demonstrable there), D3 not needed, D4 = NO, D6 = `v2.0-sprint2-rc1`; check 10 narrowed to what an empty table list allows. Old wording said D2-D4 and D6 were PENDING |
+| v0.6 | 2026-11-28 | Record the read-only pre-deploy baseline from Cloud Shell (serving revision `00007-pnb`, 100 percent traffic, creation time, image digest); the migration job image and partner records are still not captured |

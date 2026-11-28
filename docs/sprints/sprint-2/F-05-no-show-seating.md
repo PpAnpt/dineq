@@ -1,6 +1,6 @@
 # F-05 Host No-show and Table Assignment
 
-> Draft v0.2, 28 November 2026. All AC and verification are **PLANNED / NOT EXECUTED**. Contract proposal for teammate review before tests or implementation. Refs: #92 (contracts), #81 (implementation). AC-36..45 are reserved for F-05; F-04 uses 28..35 and F-06 starts at 46.
+> Contract v0.5, 28 November 2026. Local API/UI verification is recorded below; peer review, integration and deployment remain separate gates. The initial contract was reviewed and merged as #104 before implementation. Refs: #92 (contracts), #81 (implementation). AC-36..45 are reserved for F-05; F-04 uses 28..35 and F-06 starts at 46.
 
 ## 1. Requirements and bounded decisions
 
@@ -18,7 +18,7 @@ FR-09 permits the assigned Host to mark a called Customer absent. FR-10 requires
 | Boundaries | Table capacity is an integer 1..10; equal capacity is sufficient. Join still obeys the target queue's Lab 7 limit, independently of the available tables. |
 | Excluded | Table creation/edit/deletion API, table merging, reservations, timers, automatic no-show/release, automatic table choice and cross-queue pooling. Configuration is seed/SQL only. |
 
-Planning base: sprint-2-staging 2181b97414430df315ef99e0f1369b55774e50c4. F-04 contract reviewed at PR #99 / 591ecc7, Lab 7 contract merged through #98. This document does not claim their implementations or migrations exist yet.
+Original planning base: sprint-2-staging 2181b97414430df315ef99e0f1369b55774e50c4. F-04 contract reviewed at PR #99 / 591ecc7, Lab 7 contract merged through #98. At contract design time their implementations were pending; F-04/003 and F-06/005 are now integrated in the candidate below.
 
 ## 2. API and response shapes
 
@@ -84,9 +84,9 @@ Queue locking serializes competing Seat/No-show and Seat/Release requests. Two c
 
 Do not create an invalid fixture with two CALLED entries in one queue: the preserved partial unique index forbids it. The existing Complete endpoint only locks the entry; it never subsequently requests the queue/table lock, so it cannot invert the new lock order. Seat versus legacy Complete must produce only one COMPLETED event and either an occupied assigned table (Seat won) or no occupancy (Complete won).
 
-## 4. Planned data and migration 004
+## 4. Data and migration 004
 
-`database/migrations/004_no_show_seating.sql` is **to be implemented after review**, not added by this PR. It runs transactionally through the existing schema_migrations runner. Required implemented predecessors: 002 (Lab 7 range/limit) and 003 (F-04 CANCELLED/NO_SHOW status, timestamp and event checks). Do not edit/reapply 003's state/event checks in 004.
+`database/migrations/004_no_show_seating.sql` implements the reviewed plan; it adds tables/history linkage only. It runs transactionally through the existing schema_migrations runner. Required implemented predecessors: 002 (Lab 7 range/limit) and 003 (F-04 CANCELLED/NO_SHOW status, timestamp and event checks). Do not edit/reapply 003's state/event checks in 004.
 
 | Table/constraint | Planned definition or effect |
 | --- | --- |
@@ -103,9 +103,9 @@ DB constraints enforce ranges, row shape, uniqueness and queue-consistent refere
 
 Seed two deterministic-ID tables on seedIds.queue: `T1` capacity 4 and `T2` capacity 10, initially AVAILABLE. Insert only if those seed IDs are absent; rerunning seed must never release an occupied table or overwrite historical links/counters. Keep existing users/Host assignments and queue limit semantics. F-06's extra queue is not required by this seed; multi-queue negative tests create separate fixtures. Configuration/migration must not reset live tickets.
 
-### Implementation module plan
+### Implementation modules
 
-| File | Planned responsibility |
+| File | Responsibility |
 | --- | --- |
 | server/src/services/seating.js | createSeatingService with listTables, noShow, seat and releaseTable; shared Table serialization; queue-first transactions and assignment recheck; reuse the existing Ticket serializer |
 | server/src/routes/seating.js | createSeatingRoutes; UUID/resource/assignment resolution before Seat JSON parsing; delegate business behavior to the service |
@@ -113,14 +113,18 @@ Seed two deterministic-ID tables on seedIds.queue: `T1` capacity 4 and `T2` capa
 | database/migrations/004_no_show_seating.sql | Add the planned tables, nullable historical link and constraints without changing 003 |
 | database/seed/seedData.js | Insert absent deterministic T1/T2 only; never clear occupancy on conflict |
 | server/tests/f05-seating.test.js and tests/helpers | Real DB/API tests TEST-36..45, legal active-ticket fixtures and temporary fault injection |
-| client/src/pages.jsx and components.jsx | Host table/status/action controls and Customer NO_SHOW presentation, confirmation and keyboard/error states |
-| client/e2e/sprint-2.spec.js | New bounded journeys after reviewed API/UI implementation; preserved Sprint 1 journey stays in its original suite |
+| client/src/pages.jsx (reuses components.jsx) | Host table/status/action controls and Customer NO_SHOW presentation, confirmation and keyboard/error states |
+| client/e2e/sprint-2-seating.spec.js | New bounded journeys after reviewed API/UI implementation; preserved Sprint 1 journey stays in its original suite |
 
 Authentication/session/Origin middleware, F-04 cancellation logic, existing Call Next/Complete implementation, dependency manifests and container/configuration are unchanged unless a separately reviewed contract revision identifies a need.
 
 ### Existing tests and setup that change, with reasons
 
 These are planned test-contract changes, to be made before implementation and explained in RED commits; they are not permission to weaken unrelated assertions.
+
+Implementation discovery (2026-11-28): TEST-07's empty-queue fixture must delete newly seeded dining_tables before service_queues (only when 004 exists); its exact empty-array assertions and role coverage stay unchanged. The first table-slice probe exposed this FK dependency; this is test setup maintenance, not a change to queue-list behavior.
+
+UI test impact (before UI implementation): client/tests/review-ui.test.js must explicitly serve GET /api/queues/:queueId/tables with an empty array. Its old catch-all represents a mutating 409 and must not be triggered by the new read, which would falsely mark the fixture as changed. Existing 409-refresh, error-message and CLOSED assertions remain unchanged; new F-05 journeys are E2E-10/11 (E2E-9 is reserved for F-07a).
 
 | Existing test/helper | Planned change and expected value | Reason / preserved checks |
 | --- | --- | --- |
@@ -145,7 +149,7 @@ On Customer `/my-queue`, show NO_SHOW as terminal, preserve the original ticket 
 
 ## 6. Acceptance criteria and STS
 
-Each subcase gets a real named test beginning `TEST-xx / AC-xx:`. All rows are PLANNED. A table of cases is test design, not executed evidence.
+Each subcase gets a real named test beginning `TEST-xx / AC-xx:`. The rows define the test design; actual local results, SHAs and their limits are in the execution record below.
 
 | AC/Test | Preconditions and actual inputs to use | Required expected observations | Level |
 | --- | --- | --- | --- |
@@ -175,9 +179,31 @@ Selected UI journeys to implement after API GREEN: Join -> Call -> No-show -> ow
 - Intended delivery order if time is tight: (1) reviewed migration 004/test setup plus No-show, access, table read/target validation and capacity rejection (AC-36/37/38/39/41/42); (2) successful seating, release, legal concurrency, rollback/upgrade/restart verification (AC-40/43/44/45); (3) complete the UI journeys and integrated regression. Tests still precede their implementation in each step. This is a work order, not a scope cut: any unfinished AC/UI stays NOT EXECUTED or FAIL as supported by evidence and is reported explicitly; do not call F-05 complete until its full contract/DoD is met.
 - Append AI-use/contribution records and known limitations: seed/SQL table administration, queue-scoped tables, no automatic allocation/release, API enforcement of cross-table capacity/state, and source-qualified unexecuted checks.
 
+## Execution record
+
+[Full local record](../../evidence/f05-verification.md): API RED 37 failed / 220 passed; GREEN and final regression 257 passed / 0 failed / 0 skipped. UI RED 2 failed / 8 passed, then UI GREEN 10 passed. Final API/UI share source `1a3d66dfa57e47df1999c215f24e26ef1577419f`. Node checks 22 passed; UI fixtures 3 passed.
+
+| AC | Test | Actual cases | Result |
+| --- | --- | --- | --- |
+| AC-36 | TEST-36 | 2 passed | PASS local |
+| AC-37 | TEST-37 | 10 passed | PASS local |
+| AC-38 | TEST-38 | 19 passed | PASS local |
+| AC-39 | TEST-39 | 3 passed | PASS local |
+| AC-40 | TEST-40 | 3 passed | PASS local |
+| AC-41 | TEST-41 | 10 passed | PASS local |
+| AC-42 | TEST-42 | 1 passed | PASS local |
+| AC-43 | TEST-43 | 3 passed | PASS local |
+| AC-44 | TEST-44 | 5 passed | PASS local |
+| AC-45 | TEST-45 | 12 passed | PASS local |
+
+Earlier table-only results are preserved in [the slice record](../../evidence/f05-table-verification.md). Scripted keyboard checks are not a full manual accessibility audit (AC-74). Peer review, staging merge and new deployment verification remain separate gates.
+
 ## Revision History
 
 | Version | Date | Change |
 | --- | --- | --- |
 | v0.1 | 2026-11-28 | Proposed complete F-05 contract and TEST-36..45 before tests, migrations or implementation; reserved 004 and retained Sprint 1 Complete |
 | v0.2 | 2026-11-28 | Address PpAnpt's PR #104 review: declare INFRA-03 UUID count 6 -> 7, INFRA-05 seed/migration expectations and FK-aware reset impact; clarify valid-table inputs in AC-37 and target-before-state errors in AC-41; state delivery order without silently reducing scope |
+| v0.3 | 2026-11-28 | Record table-slice execution only; disclose corrected TEST-07 empty-queue setup and TEST-45 FK fixture, retain full-feature/integration/UI gaps |
+| v0.4 | 2026-11-28 | Address #107 review: active HOST service checks and generic Forbidden message; schema-aware test/reset/upgrade references; record additional review RED/GREEN and private-schema run without claiming full F-05 completion |
+| v0.5 | 2026-11-28 | Integrate reviewed F-04/003 and F-06/005, implement No-show/Seat and UI after RED, record full AC-36..45 local results and retain release/manual-audit limits |

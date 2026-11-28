@@ -1,0 +1,39 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-tables-green.json"
+Working directory: server
+Commit: a6aea0fb2a76f47d55495c6d039addc2b9edda8c
+Date: 2026-11-28T06:32:22.341Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ✓ tests/f05-tables.test.js (26 tests) 4591ms
+     ✓ TEST-39 / AC-39: assigned Host gets exact seeded Table shapes ordered by label then id  311ms
+ ✓ tests/infra.test.js (11 tests) 530ms
+ ✓ tests/f02-join.test.js (44 tests) 10204ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  380ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1720ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  342ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 6028ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  666ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  472ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  406ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  384ms
+     ✓ TEST-25 / AC-25: an out-of-range size on a CLOSED limit-4 queue is 400 first; a valid size is 409 QUEUE_CLOSED  308ms
+ ✓ tests/f01-auth.test.js (40 tests) 6793ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  310ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  341ms
+ ✓ tests/f03-host.test.js (21 tests) 4214ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  329ms
+ ✓ tests/f09-payload.test.js (11 tests) 1987ms
+ ✓ tests/controlled-fifo.test.js (1 test) 607ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  605ms
+
+ Test Files  8 passed (8)
+      Tests  180 passed (180)
+   Start at  13:32:22
+   Duration  39.26s (transform 218ms, setup 0ms, import 2.69s, tests 34.95s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-tables-green.json
+
+Exit code: 0

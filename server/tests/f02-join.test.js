@@ -79,6 +79,10 @@ describe('F-02 queue list', () => {
   });
 
   test('TEST-07 / AC-07: a fixture with no queues returns { "data": [] }', async () => {
+    // F-05: seeded tables reference queues. Keep this fixture valid before/after 004.
+    if ((await pool.query("SELECT to_regclass('dining_tables') AS name")).rows[0].name) {
+      await pool.query('DELETE FROM dining_tables');
+    }
     await pool.query('DELETE FROM queue_operator_assignments');
     await pool.query('DELETE FROM service_queues');
     for (const email of [customerEmail(1), 'host1@dineq.test']) {

@@ -67,3 +67,7 @@ captions/navigation/page numbers and P9 evidence assembly remain pending. The
 theme/assumption confirmations listed in SRS are not claimed to be approved by
 the TA. Follow [release-handoff.md](release-handoff.md); no merge/tag was performed
 by the release-prep task.
+
+## Sprint 2 F-05 table candidate (local branch only)
+
+Superseded by the [complete local F-05 candidate](evidence/f05-verification.md): No-show, Seat, tables, Release and their UI now have recorded verification, with 003/004/005 integrated. Peer review, staging merge, final F-07a cross-feature checks, non-destructive production demo-data provisioning and deployed-version checks remain separate gates. Table administration is seed/SQL only; full manual accessibility/performance audits are not claimed.

@@ -1,0 +1,413 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-tables-red.json"
+Working directory: server
+Commit: 653959a7d35f375e87189e3af8d7541a9a7f5e2b
+Date: 2026-11-28T06:27:56.077Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ❯ tests/f05-tables.test.js (26 tests | 21 failed) 3229ms
+     × TEST-39 / AC-39: assigned Host gets exact seeded Table shapes ordered by label then id 268ms
+     × TEST-39 / AC-39: assigned empty queue returns [] without leaking another queue tables 155ms
+     × TEST-39 / AC-39: occupied table exposes only current entry UUID/number, no personal fields 87ms
+     ✓ TEST-38 / AC-38: get tables anonymous check order and no DB change 104ms
+     × TEST-38 / AC-38: get tables Customer check order and no DB change 154ms
+     × TEST-38 / AC-38: get tables malformed UUID check order and no DB change 151ms
+     ✓ TEST-38 / AC-38: get tables missing resource check order and no DB change 156ms
+     × TEST-38 / AC-38: get tables unassigned Host check order and no DB change 156ms
+     ✓ TEST-38 / AC-38: post tables anonymous check order and no DB change 128ms
+     × TEST-38 / AC-38: post tables Customer check order and no DB change 181ms
+     × TEST-38 / AC-38: post tables malformed UUID check order and no DB change 152ms
+     ✓ TEST-38 / AC-38: post tables missing resource check order and no DB change 158ms
+     × TEST-38 / AC-38: post tables unassigned Host check order and no DB change 152ms
+     ✓ TEST-38 / AC-38: foreign Origin release is 403 before Session or UUID checks 95ms
+     × TEST-38 / AC-38: Host assigned to A cannot list/release a table in B 81ms
+     × TEST-43 / AC-43: release on CLOSED queue is idempotent and retains completed entry/event/history 105ms
+     × TEST-43 / AC-43: concurrent Releases both succeed without changing ticket history 152ms
+     × TEST-45 / AC-45: repeat migrations/seed retain occupied tables, counter and historical entry 99ms
+     × TEST-45 / AC-45: new app/pool retains occupied and then released history 92ms
+     × TEST-45 / AC-45: DB rejects capacity 0 (23514) 87ms
+     × TEST-45 / AC-45: DB rejects capacity 11 (23514) 84ms
+     × TEST-45 / AC-45: DB rejects invalid table label "" 83ms
+     × TEST-45 / AC-45: DB rejects invalid table label "   " 86ms
+     × TEST-45 / AC-45: DB rejects invalid table label "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 82ms
+     × TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references 87ms
+     × TEST-45 / AC-45: migration 004 upgrades legacy rows without changing their existing fields 90ms
+ ❯ tests/infra.test.js (11 tests | 2 failed) 466ms
+     ✓ INFRA-01: health endpoint returns the public success envelope 19ms
+     ✓ INFRA-02: missing config fails fast and test reset rejects unsafe database URLs 1ms
+     × INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys 17ms
+     ✓ INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints 20ms
+     × INFRA-05: rerunning migrations and seed preserves identities, rows and ticket counter 51ms
+     ✓ INFRA-06: seed contains 30 hashed customers and correctly scoped Hosts 60ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys 65ms
+     ✓ INFRA-08: unique indexes and timestamp/event constraints reject inconsistent rows 35ms
+     ✓ INFRA-09: /api/ready is public and reports the database as connected 6ms
+     ✓ INFRA-10: /api/ready returns 503 without leaking the database error when the DB is down 4ms
+     ✓ INFRA-11: /api/ready only answers GET/HEAD; POST without a session stays 401 3ms
+ ✓ tests/f02-join.test.js (44 tests) 10808ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  312ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1961ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response)  316ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  378ms
+     ✓ TEST-12 / AC-12: boundary partySize 10 is accepted on the seeded main queue  305ms
+     ✓ TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED  325ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 5150ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  509ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  380ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  375ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  346ms
+ ✓ tests/f01-auth.test.js (40 tests) 5485ms
+ ✓ tests/f03-host.test.js (21 tests) 4084ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  364ms
+ ✓ tests/f09-payload.test.js (11 tests) 1616ms
+ ✓ tests/controlled-fifo.test.js (1 test) 615ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  612ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 23 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-39 / AC-39: assigned Host gets exact seeded Table shapes ordered by label then id
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-tables.test.js:50:29
+     48|   test('TEST-39 / AC-39: assigned Host gets exact seeded Table shapes …
+     49|     const response = await request(app).get(list(seedIds.queue)).set('…
+     50|     expect(response.status).toBe(200);
+       |                             ^
+     51|     expect(response.body).toEqual({ data: [
+     52|       { id: T1, queueId: seedIds.queue, label: 'T1', capacity: 4, stat…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-39 / AC-39: assigned empty queue returns [] without leaking another queue tables
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f05-tables.test.js:59:29
+     57|     const queue = await insertQueue(pool, { assignedHostEmail: host });
+     58|     const response = await request(app).get(list(queue)).set('Cookie',…
+     59|     expect(response.status).toBe(200);
+       |                             ^
+     60|     expect(response.body).toEqual({ data: [] });
+     61|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-39 / AC-39: occupied table exposes only current entry UUID/number, no personal fields
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ occupy tests/f05-tables.test.js:35:3
+ ❯ tests/f05-tables.test.js:63:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: get tables Customer check order and no DB change
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: get tables unassigned Host check order and no DB change
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: post tables Customer check order and no DB change
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: post tables unassigned Host check order and no DB change
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ tests/f05-tables.test.js:84:31
+     82|       if (cookie) call.set('Cookie', cookie);
+     83|       const response = await call;
+     84|       expect(response.status).toBe(status);
+       |                               ^
+     85|       expect(response.body.error.code).toBe(code);
+     86|       expect(response.body.data).toBeUndefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: get tables malformed UUID check order and no DB change
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: post tables malformed UUID check order and no DB change
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ tests/f05-tables.test.js:84:31
+     82|       if (cookie) call.set('Cookie', cookie);
+     83|       const response = await call;
+     84|       expect(response.status).toBe(status);
+       |                               ^
+     85|       expect(response.body.error.code).toBe(code);
+     86|       expect(response.body.data).toBeUndefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: Host assigned to A cannot list/release a table in B
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ tests/f05-tables.test.js:98:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-43 / AC-43: release on CLOSED queue is idempotent and retains completed entry/event/history
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ occupy tests/f05-tables.test.js:35:3
+ ❯ tests/f05-tables.test.js:112:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-43 / AC-43: concurrent Releases both succeed without changing ticket history
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ occupy tests/f05-tables.test.js:35:3
+ ❯ tests/f05-tables.test.js:130:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: repeat migrations/seed retain occupied tables, counter and historical entry
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ occupy tests/f05-tables.test.js:35:3
+ ❯ tests/f05-tables.test.js:138:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: new app/pool retains occupied and then released history
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ occupy tests/f05-tables.test.js:35:3
+ ❯ tests/f05-tables.test.js:147:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: DB rejects capacity 0 (23514)
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: DB rejects capacity 11 (23514)
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ tests/f05-tables.test.js:162:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: DB rejects invalid table label ""
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: DB rejects invalid table label "   "
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: DB rejects invalid table label "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ tests/f05-tables.test.js:166:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references
+AssertionError: migration 004 must create dining_tables: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ requireSchema tests/f05-tables.test.js:24:48
+     22|   // An explicit missing-feature assertion, never a fixture INSERT/imp…
+     23|   expect((await pool.query("SELECT to_regclass('public.dining_tables')…
+     24|     'migration 004 must create dining_tables').toBe('dining_tables');
+       |                                                ^
+     25| }
+     26| async function snapshot() {
+ ❯ occupy tests/f05-tables.test.js:35:3
+ ❯ tests/f05-tables.test.js:170:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/23]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-45 / AC-45: migration 004 upgrades legacy rows without changing their existing fields
+AssertionError: migration 004 is part of this contract: expected undefined to be defined
+ ❯ tests/f05-tables.test.js:187:62
+    185|     const dir = new URL('../../database/migrations/', import.meta.url);
+    186|     const fourth = readdirSync(dir).find(name => name.startsWith('004_…
+    187|     expect(fourth, 'migration 004 is part of this contract').toBeDefin…
+       |                                                              ^
+    188|     const client = await pool.connect();
+    189|     try {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/23]⎯
+
+ FAIL  tests/infra.test.js > P2 infrastructure (not feature AC results) > INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys
+AssertionError: expected [ 'schema_migrations', …(7) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ [
+    "schema_migrations",
+-   "users",
+-   "sessions",
+-   "restaurants",
+-   "service_queues",
+-   "queue_operator_assignments",
+-   "queue_entries",
+    "queue_events",
+-   "dining_tables",
++   "queue_entries",
++   "queue_operator_assignments",
++   "service_queues",
++   "restaurants",
++   "sessions",
++   "users",
+  ]
+
+ ❯ tests/infra.test.js:39:20
+     37|     const tables = (await pool.query(`SELECT table_name FROM informati…
+     38|       WHERE table_schema = 'public' AND table_type = 'BASE TABLE'`)).r…
+     39|     expect(tables).toEqual(expect.arrayContaining(['schema_migrations'…
+       |                    ^
+     40|       'restaurants', 'service_queues', 'queue_operator_assignments', '…
+     41|     const columns = (await pool.query(`SELECT table_name, column_name,…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/23]⎯
+
+ FAIL  tests/infra.test.js > P2 infrastructure (not feature AC results) > INFRA-05: rerunning migrations and seed preserves identities, rows and ticket counter
+AssertionError: expected null to be 'dining_tables' // Object.is equality
+
+- Expected:
+"dining_tables"
+
++ Received:
+null
+
+ ❯ tests/infra.test.js:118:103
+    116|       expect((await client.query('SELECT count(*)::int AS n FROM schem…
+    117|       // F-05 contract v0.2: repeated seed keeps the same two configur…
+    118|       expect((await client.query("SELECT to_regclass('public.dining_ta…
+       |                                                                                                       ^
+    119|       expect((await client.query('SELECT label,capacity FROM dining_ta…
+    120|         .toEqual([{ label: 'T1', capacity: 4 }, { label: 'T2', capacit…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/23]⎯
+
+
+ Test Files  2 failed | 6 passed (8)
+      Tests  23 failed | 157 passed (180)
+   Start at  13:27:56
+   Duration  35.99s (transform 211ms, setup 0ms, import 2.88s, tests 31.45s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-tables-red.json
+
+Exit code: 1

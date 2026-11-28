@@ -20,9 +20,14 @@ An oversized JSON body (>100 KB) is rejected with HTTP 413 but error code
 synthetic login payload in [release-build-ui-checks.txt](evidence/release-build-ui-checks.txt).
 No login/session is created. The response does not match the meaning of an
 internal server error, and 413 is not specified in the Sprint 1 error catalog.
-This remains unresolved; choosing a documented size limit/error code requires
-the normal contract revision before changing behavior. The required small-body
-400/401/403/404/409 cases pass their recorded tests.
+The merged F-09a contract now defines the correction. On local candidate
+`e75a598`, [RED](evidence/f09-payload-red.txt) records 2 failed / 121 passed and
+[GREEN](evidence/f09-payload-green.txt) records 123 passed / 0 failed / 0 skipped
+with unchanged tests: oversized parsed JSON returns `413 PAYLOAD_TOO_LARGE`,
+message `Request body is too large`, and no DB changes or Set-Cookie. Existing
+auth/role/resource precedence and small requests are preserved. This corrects
+the candidate only; review, integration and deployment remain pending, and the
+historical Sprint 1 observation above remains valid for that release.
 
 ## Verification not executed
 

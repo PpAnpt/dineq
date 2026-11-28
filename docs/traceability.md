@@ -26,7 +26,7 @@
 | FR-13, FR-16 (เหตุการณ์ภายหลัง) | F-07 / S3 | F-07a: AC-52..57 / TEST-52..57 (วางแผน Implement ใน D2); F-07b: AC-58/59 / TEST-58/59 (PLANNED) (`docs/sprints/sprint-3/F-07-history.md`) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
 | FR-15 (ส่วน S1) | F-02 / S1 | AC-12 / TEST-12 (400/409 + ไม่ Insert); UI Validation/Loading/Error/Empty ตรวจด้วย E2E/Manual (ยังไม่มี TEST ID) | PASS AC-12 and selected E2E/error states; full UI-state/manual checklist NOT EXECUTED |
 | FR-14 | F-08 / S3 | AC-60..64 / TEST-60..64 (`F-08-reporting.md`) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ไม่ Implement ใน D2) |
-| NFR-06 (413) , FR-15 (ส่วนที่เหลือ) | F-09a / S3 | AC-70..72 / TEST-70..72 (`F-09-hardening.md`; 413 PAYLOAD_TOO_LARGE; วางแผน Implement ใน D2) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
+| NFR-06 (413) , FR-15 (ส่วนที่เหลือ) | F-09a / S3 | AC-70..72 / TEST-70..72 (`F-09-hardening.md`; 413 PAYLOAD_TOO_LARGE) | PASS local API/DB at e75a598: 11 F-09a cases; full suite 123 passed / 0 failed / 0 skipped, [recorded GREEN](evidence/f09-payload-green.txt). Review/integration/deployment pending |
 | NFR-04, NFR-07, FR-15 (UX), Final Regression | F-09 / S3 | AC-73..76 / TEST-73..76 (ผลวัด/Checklist/ผลรันจริงเท่านั้น) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
 
 
@@ -52,3 +52,5 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.6 | 2026-11-28 | F-04: map FR-08/BR-10 to AC-28..35 (PLANNED) |
 | v0.7 | 2026-11-28 | Sprint 3: map FR-13/14/15, NFR-04/06/07 to AC-52..76 (PLANNED)|
 | v0.8 | 2026-11-28 | F-06: map FR-11/12 to AC-46..51 (PLANNED) |
+
+| v0.9-f09a | 2026-11-28 | Record local AC-70..72 results from f09-payload-green at e75a5989f909a5ebcf08041085a861a34596dc90; integration/deployment remain pending |

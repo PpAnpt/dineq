@@ -43,6 +43,15 @@ F-09a ไม่ขึ้นกับ Sprint 2; ไม่มี Migration ให�
 
 ## Revision History
 
+Execution record (2026-11-28): AC-70..72 / TEST-70..72 PASS for the 11 local
+API/DB cases in server/tests/f09-payload.test.js at full commit
+`e75a5989f909a5ebcf08041085a861a34596dc90`. Full suite:
+[RED](../../evidence/f09-payload-red.txt), 2 failed / 121 passed / 0 skipped;
+[GREEN](../../evidence/f09-payload-green.txt), 123 passed / 0 failed / 0 skipped.
+The tests are unchanged between RED and GREEN. Review/CI, integration and
+deployment are separate pending checks; AC-73..76 remain PLANNED.
+
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-28 | Initial draft; F-09a ระบุจากข้อจำกัดที่บันทึกไว้ใน Sprint 1 |
+| v0.2 | 2026-11-28 | Record real local AC-70..72 RED/GREEN at e75a598; retain planned status for AC-73..76 and no deployment claim |

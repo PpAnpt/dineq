@@ -11,6 +11,7 @@
 | NFR-06 | F-01 & F-02 & F-03 / S1; F-09 / S3 | S1: AC-02/05/06/09/11/12/16/18/22/23/24 / TEST-02/05/06/09/11/12/16/18/22/23/24; 404 NOT_FOUND = TEST-23/24b, 404 NO_WAITING_ENTRY = TEST-24a | PASS mapped S1 cases only; S3 NOT EXECUTED |
 | FR-02 | F-02 / S1 | AC-07 / TEST-07 (Queue JSON, isAssigned ของ Customer/Assigned Host/Unassigned Host และ Empty List) | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-03, BR-09 | F-02 / S1 | AC-08/12 / TEST-08/12 | PASS (mapped Sprint 1 API cases; source SHA below) |
+| FR-03, BR-09 (Lab 7, L7-CR-01) | F-02 / S1 change in Lab 7 | AC-07 (revised, adds maxPartySize), AC-12 (revised), AC-25/26/27 / TEST-07/12/25/26/27 | PLANNED (contract revised 2026-11-28; the PASS above refers to the old fixed 1–8 rule at the Sprint 1 baseline) |
 | FR-04, BR-08 | F-02 / S1; F-07 / S3 | AC-11/23 / TEST-11/23; S3 Test ยังต้องออกแบบ | PASS mapped S1 cases only; S3 NOT EXECUTED |
 | BR-01, NFR-03 | F-02 / S1 | AC-10 / TEST-10 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | BR-02 | F-02 / S1 | AC-09 / TEST-09 | PASS (mapped Sprint 1 API cases; source SHA below) |
@@ -18,7 +19,7 @@
 | FR-05 | F-03 / S1 | AC-14/24 / TEST-14/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-06, BR-04/05 | F-03 / S1 | AC-15/16/24 / TEST-15/16/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
-| FR-08, BR-10 | F-04 / S2 | AC/STS ออกแบบก่อน Implement | PLANNED / NOT EXECUTED (later sprint) |
+| FR-08, BR-10 | F-04 / S2 | AC-28..35 / TEST-28..35 (`docs/sprints/sprint-2/F-04-cancel.md`; BR-12/FR-16 ของ Event CANCELLED = AC-28/29/35, BR-02 = AC-33) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ยังไม่มีเทสหรือโค้ด) |
 | FR-09/10, BR-11 | F-05 / S2 | No-show/Table Assignment AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-11/12 | F-06 / S2 | Multiple Queue/Config AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-16 (JOINED/CALLED/COMPLETED) | F-02 & F-03 / S1 | AC-08/15/17 / TEST-08/15/17 (ตรวจ Event ใน DB) | PASS (mapped Sprint 1 API cases; source SHA below) |
@@ -47,4 +48,6 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.2 | 2026-11-06 | Close gaps before implementation: add NFR-02→AC-21, NFR-06 S1 mapping, FR-16/FR-15 S1 rows, AC-22 under NFR-01; split BR-03 and NFR-01 |
 | v0.3 | 2026-11-06 | Map queue-shape/assignment checks and new AC-23/24; explicitly cover both 404 codes and auth precedence without changing PLANNED statuses |
 | v0.4 | 2026-11-07 | P8: map actual S1 API/E2E/restart evidence and tested SHA; distinguish later-sprint/manual/release work as NOT EXECUTED |
-| v0.5-s3 | 2026-11-28 | Sprint 3: map FR-13/14/15, NFR-04/06/07 to AC-52..76 (PLANNED); label to be merged with the other v0.5 rows at integration |
+| v0.5 | 2026-11-28 | Lab 7 (L7-CR-01): add BR-09 per-queue party-size row (AC-07/12 revised, AC-25..27) as PLANNED; the earlier PASS stays attached to the Sprint 1 baseline rule |
+| v0.6 | 2026-11-28 | F-04: map FR-08/BR-10 to AC-28..35 (PLANNED) |
+| v0.7 | 2026-11-28 | Sprint 3: map FR-13/14/15, NFR-04/06/07 to AC-52..76 (PLANNED)|

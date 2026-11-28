@@ -64,7 +64,7 @@ FR ทุกข้อมีรหัสถาวร แสดงพฤติก�
 | BR-06 | เปลี่ยนสถานะได้เฉพาะ JOIN→WAITING→CALLED→COMPLETED ใน Sprint 1 | 1 |
 | BR-07 | ห้าม Join Queue ที่ CLOSED; คำขอที่ถูกปฏิเสธห้ามกินเลขคิว | 1 |
 | BR-08 | Customer อ่านข้อมูลส่วนตัวเฉพาะของตน; Host อ่าน/แก้คิวที่ Assigned เท่านั้น | 1 |
-| BR-09 | partySize ต้องเป็นเลขจำนวนเต็มตั้งแต่ 1 ถึง 8; ค่าที่ไม่ถูกต้องต้องถูกปฏิเสธก่อน Insert | 1 |
+| BR-09 | partySize ต้องเป็นเลขจำนวนเต็มตั้งแต่ 1 ถึง max_party_size ของ Queue ปลายทาง (แต่ละ Queue มีค่าเอง 1–10, ค่าเริ่มต้น 8; Queue หลักของร้านตั้งเป็น 10); ค่าที่ไม่ถูกต้องต้องถูกปฏิเสธก่อน Insert (v0.2: เดิมกำหนด 1–8 ทุก Queue) | 1, แก้ใน Lab 7 |
 | BR-10 | ใน Sprint 2 การ Cancel/No-show ทำได้เฉพาะสถานะที่อนุญาต และต้องเก็บประวัติ | 2 |
 | BR-11 | ใน Sprint 2 ห้าม Assign โต๊ะที่นั่งไม่พอหรือถูกใช้งาน โดยไม่อนุญาตให้ข้าม FIFO ตามอำเภอใจ | 2 |
 | BR-12 | State Transition และ Queue Event ต้องบันทึกใน Transaction เดียวกัน; Fail แล้ว DB ไม่เปลี่ยน | 1–3 |
@@ -104,4 +104,5 @@ FR ทุกข้อมีรหัสถาวร แสดงพฤติก�
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
-| v0.2-s3 | 2026-11-28 | Sprint 3 contracts: NFR-06 now also covers 413 PAYLOAD_TOO_LARGE (F-09a); old wording: "Error 400/401/403/404/409". Version label to be merged with the Lab 7 row at integration |
+| v0.2 | 2026-11-28 | Lab 7 (L7-CR-01): BR-09 changes from a fixed 1–8 to a per-queue maximum party size (1–10, default 8). Old wording kept here: "partySize ต้องเป็นเลขจำนวนเต็มตั้งแต่ 1 ถึง 8" |
+| v0.3 | 2026-11-28 | Sprint 3 contracts: NFR-06 now also covers 413 PAYLOAD_TOO_LARGE (F-09a); old wording: "Error 400/401/403/404/409"|

@@ -1,9 +1,9 @@
 name: CI & Docker Build
 on:
   push:
-    branches: [staging, main]
+    branches: [staging, main, sprint-2-staging]
   pull_request:
-    branches: [staging, main, sprint-1-staging]
+    branches: [staging, main, sprint-1-staging, sprint-2-staging]
   workflow_dispatch:
   workflow_call:
 permissions:

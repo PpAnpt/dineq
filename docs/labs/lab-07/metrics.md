@@ -1,8 +1,8 @@
 # Lab 7 Metrics
 
 Repository: `PpAnpt/dineq`
-Observation window: 2026-11-22 00:00:00 +07 (2026-11-21T17:00:00.000Z) to 2026-11-28 14:54:53 +07 (2026-11-28T07:54:53.834Z), start inclusive, end exclusive.
-Snapshot taken: 2026-11-28 14:54:53 +07 (2026-11-28T07:54:53.834Z). Counts after this time are not included.
+Observation window: 2026-11-22 00:00:00 +07 (2026-11-21T17:00:00.000Z) to 2026-11-28 15:23:02 +07 (2026-11-28T08:23:02.965Z), start inclusive, end exclusive.
+Snapshot taken: 2026-11-28 15:23:02 +07 (2026-11-28T08:23:02.965Z). Counts after this time are not included.
 
 ## M1 Issues completed
 Definition: issues closed with reason `COMPLETED` whose `closedAt` is in the window. Closed as not planned/duplicate are listed separately and not counted.
@@ -101,7 +101,7 @@ Value: **1 of 1** DineQ-owned findings resolved; 1 listed finding(s) belong to a
 ## M5 CI runs by conclusion
 Definition: workflow runs created in the window, grouped by conclusion (`in_progress`/`queued` shown by status). Skipped or cancelled runs are not successes.
 
-**CI & Docker Build:** 92 runs (87 success, 4 failure, 1 cancelled); success 87/92 completed.
+**CI & Docker Build:** 96 runs (91 success, 4 failure, 1 cancelled); success 91/96 completed.
 
 | Run ID | Created (Bangkok) | Event | Branch | Commit | Result |
 | :-- | :-- | :-- | :-- | :-- | :-- |
@@ -197,6 +197,10 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 | 46122016469 | 2026-11-28 14:36:51 +07 | pull_request | feature/f-06-queues | ed2b138 | success |
 | 46122172908 | 2026-11-28 14:38:57 +07 | push | sprint-2-staging | 0044084 | success |
 | 46122315560 | 2026-11-28 14:40:52 +07 | pull_request | feature/f-07a-history-filter | dd6b4b3 | success |
+| 46123466625 | 2026-11-28 14:56:16 +07 | pull_request | docs/l7-metrics | 5cd5030 | success |
+| 46123709782 | 2026-11-28 14:59:46 +07 | pull_request | docs/rel1-release-checklist | 6bf8c63 | success |
+| 46124783851 | 2026-11-28 15:13:20 +07 | pull_request | docs/l7-activation-migration | 7d4e220 | success |
+| 46125176188 | 2026-11-28 15:18:14 +07 | pull_request | feature/f-05-noshow-tables | d9ba81c | success |
 
 **Deploy to Google Cloud:** 2 runs (2 success); success 2/2 completed.
 
@@ -215,6 +219,6 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 
 ## Interpretation (max 100 words)
 
-CI succeeded in 87 of 92 runs (94.6%). Four failures were new Lab 5 browser tests on feature branches, fixed before merge; one run was superseded. Risk: the Sprint 2 and Lab 7 code is merged on sprint-2-staging but not deployed, and the live main queue still allows only 8 until its limit is changed, so the 143-test count describes a branch, not the running service. Action: Siwarak opens the release PR by 29 Nov 15:00; Anapat runs the post-deploy checks that evening and replaces M3 with the full-suite record of the deployed commit.
+CI succeeded in 91 of 96 runs (94.8%). Four failures were new Lab 5 browser tests on feature branches, fixed before merge; one run was superseded. Risk: Lab 7, F-04, F-06 and F-09a are merged on sprint-2-staging but not deployed, F-05 (#107) and F-07a (#109) were still in review, and the live main queue still allows only 8; the 143-test count describes the Lab 7 branch. Action: Siwarak opens the release PR by 29 Nov 15:00; Anapat runs post-deploy checks that evening and replaces M3 with the deployed commit's full-suite record.
 
-(Draft written at the 28 Nov 14:54 snapshot. Regenerate the numbers with the command above at the final snapshot and update this text if a value changes; the limit is 100 words.)
+(Draft written at the 28 Nov 15:23 snapshot. Regenerate the numbers with the command above at the final snapshot and update this text if a value changes; the limit is 100 words.)

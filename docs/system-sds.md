@@ -19,13 +19,14 @@
 | restaurants | id, name, status, created_at | สาขาร้านอาหาร หนึ่งสาขา Seed | 1 |
 | service_queues | id, restaurant_id, status OPEN/CLOSED, next_ticket_no, max_party_size (v0.4) | FK restaurants; next_ticket_no ≥ 1; max_party_size 1–10 DEFAULT 8 | 1; คอลัมน์ max_party_size ใน Lab 7 (Migration 002) |
 | queue_operator_assignments | queue_id, host_user_id | PK (queue_id,host_user_id); ตรวจ Host role ที่ API | 1 |
-| queue_entries | id, queue_id, customer_id, ticket_no, party_size, status, created_at, called_at, completed_at | UNIQUE ticket; partial unique Active; party_size 1–10 (v0.4; เพดานสัมบูรณ์ของ DB, ขีดจำกัดจริงต่อคิวตรวจโดย Backend ภายใต้ Lock) | 1 |
+| queue_entries | id, queue_id, customer_id, ticket_no, party_size, status, created_at, called_at, completed_at, table_id (S2 nullable, COMPLETED only) | UNIQUE ticket; partial unique Active; party_size 1–10 (v0.4; เพดานสัมบูรณ์ของ DB, ขีดจำกัดจริงต่อคิวตรวจโดย Backend ภายใต้ Lock) | 1 |
+| dining_tables | id, queue_id, label, capacity 1..10, status AVAILABLE/OCCUPIED, occupied_entry_id nullable | Unique queue label/current occupant; same-queue composite FKs with queue_entries; see C.9 | 2 |
 | queue_events | id, entry_id, actor_id, event_type, from_status, to_status, occurred_at | FK entry/user; เขียน Atomic กับ Transition | 1 |
 
 
 ความสัมพันธ์: users 1:N sessions, users 1:N queue_entries (Customer), restaurants 1:N service_queues, service_queues 1:N queue_entries, queue_entries 1:N queue_events และ users (Operator) N:M service_queues ผ่าน queue_operator_assignments
 
-Database Constraints: UNIQUE(queue_id,ticket_no); UNIQUE แบบ Partial สำหรับ (queue_id,customer_id) เฉพาะ WAITING/CALLED; UNIQUE แบบ Partial สำหรับ queue_id ที่มี CALLED; CHECK party_size BETWEEN 1 AND 8; CHECK timestamps/สถานะ; Foreign Key ตามความสัมพันธ์; ไม่ปล่อยให้ Browser เป็นผู้กำหนด Customer ID หรือ Ticket Number
+Database Constraints: UNIQUE(queue_id,ticket_no); UNIQUE แบบ Partial สำหรับ (queue_id,customer_id) เฉพาะ WAITING/CALLED; UNIQUE แบบ Partial สำหรับ queue_id ที่มี CALLED; CHECK party_size BETWEEN 1 AND 10; CHECK timestamps/สถานะ; Foreign Key ตามความสัมพันธ์; ไม่ปล่อยให้ Browser เป็นผู้กำหนด Customer ID หรือ Ticket Number
 
 ชนิดข้อมูลมาตรฐาน: Primary Key ของทุกตารางที่มี `id` เป็น UUID (`gen_random_uuid()`); `ticket_no` และ `next_ticket_no` เป็น integer; ทุก Timestamp เป็น `timestamptz`; JSON ใช้ camelCase และ DB ใช้ snake_case
 
@@ -39,6 +40,8 @@ Call Next Transaction: BEGIN → ล็อก Queue → ตรวจ Host Assign
 
 Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = CALLED → เปลี่ยนเป็น COMPLETED พร้อม completed_at และ Event → COMMIT; Complete ซ้ำหรือข้ามสถานะ = 409 และไม่มี Event ใหม่
 
+F-05 extensions: assigned Host No-show changes CALLED -> NO_SHOW with one atomic event; Seat changes CALLED -> COMPLETED together with table occupancy and the historical table link. Queue -> Entry -> Table locks and rollback preserve FIFO/one-CALLED; Release changes only current occupancy, retaining history. Legacy table-less Complete stays valid. See C.9 for exact transactions and checks.
+
 ## C.4 Role / Permission Matrix
 
 | Operation | Customer | Host |
@@ -49,6 +52,7 @@ Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = 
 | ดูข้อมูล Ticket ส่วนตัว | เฉพาะเจ้าของ | เฉพาะ Queue ที่ Assigned |
 | ดู Waiting List | ไม่ได้ | เฉพาะ Queue ที่ Assigned |
 | Call Next / Complete | ไม่ได้ | เฉพาะ Queue ที่ Assigned |
+| No-show / Seat / Release / Table list | Not permitted | Assigned active Host only, own queue (F-05) |
 | ดู Ticket ของ Customer อื่น | ไม่ได้ | เฉพาะ Queue ที่ Assigned |
 | จัดการโต๊ะ / Queue Config | ไม่มีใน Sprint 1 | ต้องทำ Contract เพิ่มใน Sprint 2 |
 
@@ -59,8 +63,8 @@ Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = 
 | :---- | :---- | :---- |
 | /login | Customer/Host | ฟอร์ม Login, Invalid Credentials, Loading, Logout |
 | /queues | Customer | รายการร้าน/คิว OPEN/CLOSED, ใส่ partySize, Join, แจ้งซ้ำ/คิวปิด |
-| /my-queue | Customer | Ticket No., partySize, WAITING/CALLED/COMPLETED, Empty, Refresh |
-| /host/queues/:queueId | Host ที่ Assigned | Waiting List FIFO, Currently CALLED, Call Next, Complete, Conflict/Error |
+| /my-queue | Customer | Ticket No., partySize, WAITING/CALLED/COMPLETED/CANCELLED/NO_SHOW, Empty, Refresh |
+| /host/queues/:queueId | Host ที่ Assigned | Waiting List FIFO, Currently CALLED, Call Next, Complete, Conflict/Error; No-show confirmation, fitting-table picker and Release (F-05) |
 
 
 ## C.6 API Specification — Endpoint Inventory
@@ -79,6 +83,10 @@ Complete Transaction: BEGIN → ตรวจ Host Assignment และ Ticket = 
 | GET | /api/queues/:queueId/entries | Assigned Host | 200 WAITING/CALLED FIFO; 400/401/403/404 |
 | POST | /api/queues/:queueId/call-next | Assigned Host | 200 CALLED; 400/401/403/404/409 |
 | POST | /api/entries/:entryId/complete | Assigned Host | 200 COMPLETED; 400/401/403/404/409 |
+| POST | /api/entries/:entryId/no-show | Assigned Host; no body | 200 NO_SHOW Ticket; 400/401/403/404/409 |
+| GET | /api/queues/:queueId/tables | Assigned Host | 200 Table array; 400/401/403/404 |
+| POST | /api/entries/:entryId/seat | Assigned Host: { tableId } after entry permission | 200 { entry: Ticket, table: Table }; 400/401/403/404/409/413 |
+| POST | /api/tables/:tableId/release | Assigned Host; no body | 200 AVAILABLE Table, idempotent; 400/401/403/404 |
 
 ### C.6.1 Response Shapes (v0.3)
 
@@ -107,6 +115,8 @@ UUID และชื่อร้านในตัวอย่างเป็น
 
 - Ticket JSON (Join, `/api/me/entries`, `/api/entries/:entryId`, Waiting List): `id`, `queueId`, `ticketNo`, `partySize`, `status`, `createdAt`, `calledAt`, `completedAt` (`calledAt`/`completedAt` เป็น `null` จนกว่าจะเปลี่ยนสถานะ); ไม่มี Email หรือข้อมูลส่วนตัวของ Customer ใน Waiting List ของ Host
 
+F-05 Ticket responses retain the same eight keys, with terminal NO_SHOW supported. Historical table_id stays in the database; Table responses and Seat response composition are defined in C.9.1.
+
 ### C.6.2 Error Code Catalog (v0.2)
 
 รูปแบบ `{ error: { code, message } }`; `code` เป็นค่าคงที่ตามตาราง ส่วน `message` อ่านเข้าใจได้และไม่เปิดเผยข้อมูลส่วนตัว
@@ -119,19 +129,22 @@ UUID และชื่อร้านในตัวอย่างเป็น
 | 401 | INVALID_CREDENTIALS | Email/Password ไม่ถูกต้อง (ข้อความเดียวกัน ไม่บอกว่า Email มีหรือไม่) |
 | 403 | FORBIDDEN | Role ไม่ถูกต้อง, ไม่ใช่เจ้าของ Ticket หรือ Host ไม่ได้ Assigned |
 | 403 | ORIGIN_NOT_ALLOWED | Request ที่เปลี่ยนข้อมูลมี Origin ไม่ตรง APP_ORIGIN |
-| 404 | NOT_FOUND | ไม่มี Resource (Queue/Entry) นั้นอยู่จริง |
+| 404 | NOT_FOUND | ไม่มี Resource (Queue/Entry/Table) นั้นอยู่จริง |
 | 404 | NO_WAITING_ENTRY | Call Next แต่ไม่มี Ticket WAITING |
 | 409 | DUPLICATE_ACTIVE | Customer มี Ticket WAITING/CALLED อยู่แล้วใน Queue นั้น |
 | 409 | QUEUE_CLOSED | Join Queue ที่ CLOSED |
 | 409 | UNRESOLVED_CALLED | Call Next ขณะมี CALLED ค้างอยู่ |
 | 409 | INVALID_TRANSITION | เปลี่ยนสถานะผิดลำดับ (เช่น Complete ใบที่ไม่ใช่ CALLED) |
+| 409 | TABLE_OCCUPIED | Seat target is occupied (before capacity check) |
+| 409 | INSUFFICIENT_CAPACITY | Available Seat target is too small |
+| 413 | PAYLOAD_TOO_LARGE | Parsed JSON exceeds 100 KB; Request body is too large (F-09a) |
 
 ### C.6.3 ลำดับตรวจตามประเภท Endpoint (v0.3)
 
 1. Origin: ทุก `POST/PUT/PATCH/DELETE` ที่มี Origin Header และไม่ตรง `APP_ORIGIN` คืน `403 ORIGIN_NOT_ALLOWED` ก่อนตรวจ Session/Body รวมถึง Login; ถ้าไม่มี Origin Header ให้ตรวจขั้นถัดไปตามปกติ
 2. Public Endpoint: `POST /api/auth/login` ไม่ต้องมี Session/Cookie; ตรวจ Body ก่อน (`400 VALIDATION_ERROR` เมื่อ email/password ขาดหรือชนิดข้อมูลไม่ถูกต้อง) แล้วตรวจ Credentials (`401 INVALID_CREDENTIALS` เมื่อไม่ตรง, `200` เมื่อถูกต้อง) ส่วน `GET /api/health` ไม่ต้องมี Session
 3. Protected Endpoint: ตรวจ Session ก่อน (`401 UNAUTHENTICATED`) แล้วตรวจ Role ของ Endpoint (`403 FORBIDDEN` เช่น Host เรียก Join หรือ Customer เรียก Host-only API) โดยยังไม่อ่าน/ส่งข้อมูล Resource ให้ผู้ไม่มีสิทธิ์
-4. สำหรับ Endpoint ที่รับ `:queueId`/`:entryId`: ตรวจรูปแบบ UUID (`400 VALIDATION_ERROR`) ก่อน Query Resource; UUID ถูกต้องแต่ไม่มี Queue/Entry นั้นคืน `404 NOT_FOUND` จากนั้นจึงตรวจ Ownership/Assignment ของ Resource ที่พบ (`403 FORBIDDEN`) โดยไม่เปิดเผยข้อมูลส่วนตัวใน Response ที่ปฏิเสธ
+4. สำหรับ Endpoint ที่รับ `:queueId`/`:entryId`/`:tableId`: ตรวจรูปแบบ UUID (`400 VALIDATION_ERROR`) ก่อน Query Resource; UUID ถูกต้องแต่ไม่มี Queue/Entry นั้นคืน `404 NOT_FOUND` จากนั้นจึงตรวจ Ownership/Assignment ของ Resource ที่พบ (`403 FORBIDDEN`) โดยไม่เปิดเผยข้อมูลส่วนตัวใน Response ที่ปฏิเสธ
 5. ตรวจ Body ของคำขอที่ผ่านสิทธิ์แล้ว เช่น Join ที่ partySize ไม่ใช่จำนวนเต็ม ≥ 1 คืน `400 INVALID_PARTY_SIZE` และเมื่อล็อก Queue แล้วตรวจช่วง 1 ถึง maxPartySize ของ Queue (`400 INVALID_PARTY_SIZE`, ก่อน `409 QUEUE_CLOSED`) จากนั้นตรวจ Business Rules ใน Transaction ตาม C.3 (`409` ตาม Catalog) ก่อนเขียนข้อมูล; Role/Assignment และสถานะที่ใช้ตัดสินการเขียนต้องยังถูกต้องภายใต้ Lock
 
 กรณี Call Next: หลังพบ Queue และผ่าน Assignment แล้ว ตรวจ CALLED ค้างก่อน (`409 UNRESOLVED_CALLED`); ถ้าไม่มี CALLED และไม่มี WAITING คืน `404 NO_WAITING_ENTRY` เป็นกรณีไม่พบรายการที่เรียกได้ ไม่ใช่ Queue หายไป
@@ -180,7 +193,7 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | `queue_entries.status` เพิ่ม `CANCELLED`, `NO_SHOW`; `queue_events.event_type/from_status/to_status` เพิ่มค่าเดียวกัน; Transition CHECK ใหม่ | F-04 / 003 | CANCELLED จาก WAITING เท่านั้น; NO_SHOW จาก CALLED (ใช้โดย F-05) |
 | ตารางโต๊ะและการผูกโต๊ะกับตั๋ว | F-05 / 004 | กำหนดใน Contract F-05 (ความจุ, สถานะ AVAILABLE/OCCUPIED) |
 | `service_queues.name` (1-60 ตัวอักษร, UNIQUE ต่อร้าน) | F-06 / 005 | แยกหลายคิวในร้านเดียวกัน; Seed เพิ่มคิว `Bar counter` และ `host3@dineq.test` |
-| `service_queues.max_party_size` (1-10, ค่าเริ่มต้น 8) | Lab 7 / 002 | BR-09 ต่อคิว; `queue_entries.party_size` CHECK 1-10 |
+| `service_queues.max_party_size` (1-10, ค่าเริ่มต้น 8) | Lab 7 / 002; ข้อมูล Queue หลักที่มีอยู่แล้วปรับ 8 เป็น 10 โดย 006 (ไม่เปลี่ยน Schema) | BR-09 ต่อคิว; `queue_entries.party_size` CHECK 1-10 |
 
 **API (C.6 เพิ่มเติม)**
 
@@ -192,15 +205,15 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | GET | `/api/me/entries?status&from&to` | Customer | F-07a | วางแผน Implement ใน D2 |
 | GET | `/api/queues/:queueId/history`, `/api/entries/:entryId/events` | Host ที่ Assigned / เจ้าของ | F-07b | PLANNED |
 | GET | `/api/queues/:queueId/summary` | Host ที่ Assigned | F-08 | PLANNED |
-| (No-show และจัดสรรโต๊ะ) | ตาม Contract F-05 | Host ที่ Assigned | F-05 | วางแผน Implement ใน D2 (Contract กำลังร่างโดยเจ้าของ F-05) |
+| (No-show and seating) | Canonical endpoints in C.6 and details in C.9 | Assigned Host | F-05 | Local implementation and recorded verification below; release pending |
 
 **Error Catalog เพิ่มเติม (C.6.2):** `413 PAYLOAD_TOO_LARGE` (Body JSON เกิน 100 KB; F-09a, ไม่สร้าง Session/Row; Endpoint ที่ตรวจสิทธิ์ก่อน Parse Body ยังคืน 401/403/400/404 ก่อน) ไม่มี Code ใหม่อื่นใน Sprint 2: Cancel/ปิดคิวใช้ `INVALID_TRANSITION`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_ERROR` ที่มีอยู่
 
 **ข้อกำหนดร่วม:** ลำดับตรวจตาม C.6.3 ทุก Endpoint ใหม่; การเปลี่ยนสถานะที่แก้ตั๋วเขียน Event ใน Transaction เดียวกัน (BR-12) และล็อกแถวคิวก่อนแถวตั๋วเพื่อไม่ให้เกิด Deadlock กับ Call Next; ไม่รับ User ID/Role/ticketNo จาก Client
 
-## C.9 F-05 No-show and Seating — Planned Contract
+## C.9 F-05 No-show and Seating — Contract and Local Implementation
 
-**PLANNED / NOT EXECUTED**, 2026-11-28. The normative API, data, transaction, UI and TEST-36..45 definitions are in [F-05](sprints/sprint-2/F-05-no-show-seating.md). This section proposes Sprint 2 additions; it does not claim the current application implements them. It complements the parallel Sprint 3 additions in C.8 when those are merged.
+**Locally verified candidate**, 2026-11-28, source `1a3d66dfa57e47df1999c215f24e26ef1577419f`. [F-05](sprints/sprint-2/F-05-no-show-seating.md) remains the normative contract; [recorded runs](evidence/f05-verification.md) map all AC-36..45. This is not a deployed-release claim.
 
 | Area | Planned addition |
 | --- | --- |
@@ -211,7 +224,7 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | Transactions | Queue -> Entry -> Table lock order, authoritative assignment/state recheck, one terminal transition/event under competing Seat/No-show/legacy Complete. CLOSED blocks new Join but permits serving existing tickets and releasing tables. Preserve FIFO and the one-CALLED partial unique index. |
 | Seed | Insert absent deterministic T1 (4 seats) and T2 (10 seats) on the seeded main queue. Re-seeding never releases occupied tables or resets ticket/event/counter history. No new environment variables or dependencies. |
 
-### C.9.1 Planned API and error additions
+### C.9.1 API and error additions
 
 | Method / endpoint | Request | Success |
 | --- | --- | --- |
@@ -222,9 +235,9 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 
 `Ticket` keeps C.6.1's eight keys. `Table` contains exactly id, queueId, label, capacity, status, occupiedEntryId, occupiedTicketNo; both occupied fields are null when AVAILABLE. No customer identifiers/emails are added. Persisted historical table_id does not silently extend the old Ticket response.
 
-Planned C.6.2 catalog additions: **409 TABLE_OCCUPIED** for an occupied target and **409 INSUFFICIENT_CAPACITY** for an available undersized target. Seat evaluates valid CALLED state before occupancy, then capacity. Reuse INVALID_TRANSITION for a non-CALLED entry and the existing 400/401/403/404 codes/check order; cross-queue table choice is 403, missing target is 404. Rejections never change entries/tables/events/counters. All errors retain `{ error: { code, message } }` and hide database details.
+C.6.2 catalog additions: **409 TABLE_OCCUPIED** for an occupied target and **409 INSUFFICIENT_CAPACITY** for an available undersized target. Seat evaluates valid CALLED state before occupancy, then capacity. Reuse INVALID_TRANSITION for a non-CALLED entry and the existing 400/401/403/404 codes/check order; cross-queue table choice is 403, missing target is 404. Rejections never change entries/tables/events/counters. All errors retain `{ error: { code, message } }` and hide database details.
 
-AC-36..45 / TEST-36..45 remain PLANNED until reviewed implementation and recorded real-DB runs. Dependencies: reviewed contracts and implemented migrations 002/003; no migration, source or test is added here.
+AC-36..45 / TEST-36..45 have 68 passing local cases within the recorded 257-test suite; UI journeys 10/11 pass within the 10-test browser suite at `1a3d66dfa57e47df1999c215f24e26ef1577419f`. Implemented migrations 001..005 are integrated. Peer review, staging merge, final cross-feature release and deployment verification are not certified by these local results.
 
 ## Revision History
 
@@ -236,3 +249,5 @@ AC-36..45 / TEST-36..45 remain PLANNED until reviewed implementation and recorde
 | v0.4 | 2026-11-28 | Lab 7 (L7-CR-01, BR-09): add `service_queues.max_party_size` (1–10, default 8), widen `queue_entries.party_size` CHECK to 1–10, per-queue range check in the Join transaction (after the queue lock, before the CLOSED check), `maxPartySize` in the queue JSON, error text. Old wording: "party_size 1–8", "partySize: 1..8" |
 | v0.5-f05 | 2026-11-28 | Propose C.9 F-05 data/API/error/lock/UI contract and AC-36..45; preserve legacy Complete; reserve migration 004 after implemented 002/003. No implementation or verification result claimed |
 | v0.5 | 2026-11-28 | Add C.8 collecting the Sprint 2-3 planned additions (statuses, queue name, new endpoints, 413 error) without editing existing C.2-C.6 rows|
+| v0.6-f05 | 2026-11-28 | Consolidate implemented F-05 table/API/security/error details into C.2/C.4/C.6/C.9 and record real API/UI verification; retain legacy Complete and release/manual-audit limits |
+| v0.6 | 2026-11-28 | Lab 7 change request v0.2: note that data migration `006` raises the existing main queue limit from 8 to 10 (no schema change) |

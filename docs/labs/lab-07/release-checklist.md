@@ -1,6 +1,6 @@
 # Release Checklist REL-1: sprint-2-staging to main (Deliverable 2 and Lab 7)
 
-> **Status:** Draft v0.2 (2026-11-28) · nothing in this file has been executed. Every box is unchecked. Merging the release PR to `main` deploys to Cloud Run immediately; every Cloud Shell or `gcloud` step needs explicit permission from the owner first (course rule: GCP, IAM and billing actions are never run without authorization).
+> **Status:** Draft v0.3 (2026-11-28) · nothing in this file has been executed. Every box is unchecked. Merging the release PR to `main` deploys to Cloud Run immediately; every Cloud Shell or `gcloud` step needs explicit permission from the owner first (course rule: GCP, IAM and billing actions are never run without authorization).
 
 ## 0. What the pipeline does (read from `.github/workflows/deploy.yml`)
 
@@ -18,12 +18,13 @@
 | D2 | Whether the new demo rows (Bar counter, `host3`, tables T1/T2) must exist on the deployed database | yes (seed run on production) or no (the demo uses only the main queue) | Decide from what the post-deploy demo must show. Without them F-06 shows one queue and F-05 has no tables to seat. If they are needed, prepare an idempotent, reviewed procedure that inserts only the missing rows (Bar counter, `host3`, T1/T2) and does **not** overwrite existing accounts or password hashes (the current seed does overwrite hashes), and rehearse it on a disposable database first | PENDING (reviewer's suggestion recorded; the procedure is not written yet) |
 | D3 | How the operator runs SQL or the seed against the deployed database | not documented in the repository (earlier seeding on Cloud SQL `s21271a0d-pg` is not described); candidates are a one-off override of the migration job's command, or a database connection from Cloud Shell | Known so far (reviewer's finding): the migration job `s21271a0d-migrate` was used from Cloud Shell before, but no complete transcript of a seed command is in the repository, so the exact earlier method cannot be reproduced from the repo. This is a recorded limitation. Before the real run, write down a verifiable procedure (the exact job or connection method, the command, the expected output, who runs it) and have it reviewed; never put credentials in Git or chat | PENDING |
 | D4 | Whether `lab6-staging` (Lab 6 records and the version ledger) is merged into `main` with this release | yes / no | Decide before the release PR so the PR body lists it correctly | PENDING |
-| D5 | Scope statement for F-05 at release time | whole F-05 / table slice only (PR #107 partial) | Whatever is merged and tested at the cut-off; unfinished No-show, Seat and UI stay NOT EXECUTED in the PDFs, not hidden | PENDING (cut-off 29 Nov 12:00 per the plan) |
+| D5 | Scope statement for F-05 at release time | whole F-05 / table slice only | **Resolved by the merge of PR #107 (c874e15): No-show, Seat, tables, Release and the UI are on `sprint-2-staging` with API 257 and E2E 10 recorded locally by the author and re-run by the reviewer.** Still NOT EXECUTED: the manual keyboard audit and any deployed check | Decided 28 Nov |
 | D6 | Tag or release name for the candidate | for example `v2.0-sprint2-rc1` on the `main` merge commit | Create only after a reviewed merge and a passing deploy | PENDING |
 
 ## 2. Pre-release gates (all must be true before the release PR is opened)
 
-- [ ] Every feature PR for the cut-off is merged into `sprint-2-staging` (#109 F-07a; #107 F-05 or its agreed slice) and no open review thread blocks one of them.
+- [x] Every feature PR for the cut-off is merged into `sprint-2-staging` (F-05 #107, F-07a #109, F-04 #106, F-06 #108, F-09a #105; checked 28 Nov 15:45); no open review thread blocks one of them. Still open: the contract for migration 006 is merged (#112) but the migration and its tests are not written.
+- [ ] **CI on `sprint-2-staging` is green on its head commit.** At 15:45 it was red on the last two pushes because of a timing race in E2E-11 (fix in PR #113); this gate is not met until #113 is merged and a green run is seen.
 - [ ] `sprint-2-staging` CI is green on its head commit (the workflow now runs for this branch, PR #102).
 - [ ] Full API/DB suite recorded on that commit: `npm run test:record -- s2-integration` (clean tree, fresh database or schema; counts copied into the PR body, not estimated).
 - [ ] Playwright run recorded on that commit: `npm run test:e2e:record -- s2-e2e`; the regenerated Sprint 1 screenshots are not committed.
@@ -99,3 +100,4 @@ Each check records: time (Asia/Bangkok), account role (not the password), reques
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-28 | Initial checklist drafted from the deploy workflow, Lab 5 deployment notes and the version ledger; all boxes unchecked, decisions D1 to D6 open |
 | v0.2 | 2026-11-28 | Record decision D1 = (c) (contract PR #112) and the reviewer's feedback: option (a) suggested, the D2 procedure must not overwrite existing accounts, and D3 has no complete transcript of the earlier seed in the repository |
+| v0.3 | 2026-11-28 | Update after the F-05, F-07a and migration 006 contract merges: D5 resolved, feature gate checked, new gate for green CI (E2E-11 race, PR #113) |

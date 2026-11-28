@@ -1,0 +1,59 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-green.json"
+Working directory: server
+Commit: 1d704937bc1ec459e99cdb3762eeca7c02d07042
+Date: 2026-11-28T08:01:00.624Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ✓ tests/f02-join.test.js (45 tests) 10614ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with per-queue isAssigned  346ms
+     ✓ TEST-09 / AC-09: joining again while CALLED is rejected with 409 DUPLICATE_ACTIVE  311ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1842ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  321ms
+ ✓ tests/f05-seating.test.js (37 tests) 8735ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  481ms
+   ✓ TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body  369ms
+   ✓ TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body  370ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  372ms
+ ✓ tests/f04-cancel.test.js (18 tests) 7528ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket  369ms
+     ✓ TEST-29 / AC-29: when the event insert fails nothing changes (no CANCELLED status, no event) and the error is generic  307ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  463ms
+     ✓ TEST-31 / AC-31: malformed UUID is 400, absent UUID is 404; anonymous 401 and Host 403 come first; nothing changes  322ms
+     ✓ TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds  399ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  3359ms
+ ✓ tests/f06-queues.test.js (16 tests) 7161ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  464ms
+     ✓ TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403  383ms
+     ✓ TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering  428ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  1935ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1352ms
+     ✓ TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash  371ms
+ ✓ tests/f05-tables.test.js (31 tests) 5712ms
+ ✓ tests/f01-auth.test.js (40 tests) 6324ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  317ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  302ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 6134ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  579ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  430ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  428ms
+     ✓ TEST-25 / AC-25: a queue without an explicit limit uses the default 8  323ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  330ms
+ ✓ tests/f03-host.test.js (21 tests) 4462ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  365ms
+ ✓ tests/f09-payload.test.js (11 tests) 2461ms
+     ✓ TEST-71 / AC-71: bad UUID precedes oversized Join parsing  316ms
+ ✓ tests/controlled-fifo.test.js (1 test) 605ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  603ms
+ ✓ tests/infra.test.js (11 tests) 514ms
+
+ Test Files  11 passed (11)
+      Tests  257 passed (257)
+   Start at  15:01:01
+   Duration  66.55s (transform 260ms, setup 0ms, import 4.04s, tests 60.25s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-green.json
+
+Exit code: 0

@@ -18,7 +18,7 @@
 | FR-05 | F-03 / S1 | AC-14/24 / TEST-14/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-06, BR-04/05 | F-03 / S1 | AC-15/16/24 / TEST-15/16/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
-| FR-08, BR-10 | F-04 / S2 | AC/STS ออกแบบก่อน Implement | PLANNED / NOT EXECUTED (later sprint) |
+| FR-08, BR-10 | F-04 / S2 | AC-28..35 / TEST-28..35 (`docs/sprints/sprint-2/F-04-cancel.md`; BR-12/FR-16 ของ Event CANCELLED = AC-28/29/35, BR-02 = AC-33) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ยังไม่มีเทสหรือโค้ด) |
 | FR-09/10, BR-11 | F-05 / S2 | No-show/Table Assignment AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-11/12 | F-06 / S2 | Multiple Queue/Config AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-16 (JOINED/CALLED/COMPLETED) | F-02 & F-03 / S1 | AC-08/15/17 / TEST-08/15/17 (ตรวจ Event ใน DB) | PASS (mapped Sprint 1 API cases; source SHA below) |
@@ -45,3 +45,4 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.2 | 2026-11-06 | Close gaps before implementation: add NFR-02→AC-21, NFR-06 S1 mapping, FR-16/FR-15 S1 rows, AC-22 under NFR-01; split BR-03 and NFR-01 |
 | v0.3 | 2026-11-06 | Map queue-shape/assignment checks and new AC-23/24; explicitly cover both 404 codes and auth precedence without changing PLANNED statuses |
 | v0.4 | 2026-11-07 | P8: map actual S1 API/E2E/restart evidence and tested SHA; distinguish later-sprint/manual/release work as NOT EXECUTED |
+| v0.5-f04 | 2026-11-28 | F-04: map FR-08/BR-10 to AC-28..35 (PLANNED); version label to be merged with the Lab 7 row at integration |

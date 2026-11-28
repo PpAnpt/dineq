@@ -1,6 +1,6 @@
 # F-06 Multiple Queues, Host Assignment and Open/Close - Sprint 2 Contract
 
-> **Status:** Draft v0.3 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-11, FR-12, BR-03, BR-07, BR-08, NFR-01, NFR-03, NFR-06
+> **Status:** Draft v0.4 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-11, FR-12, BR-03, BR-07, BR-08, NFR-01, NFR-03, NFR-06
 
 เป้าหมาย: ร้านมีหลายคิว (เช่น คิวหลักและเคาน์เตอร์บาร์) แต่ละคิวมีชื่อ เลขคิวของตนเอง และ Host ผู้รับผิดชอบ; Host ที่ Assigned เปิด/ปิดคิวของตนได้ คิวที่ปิดไม่รับ Join ใหม่แต่ยังให้บริการตั๋วเดิมจนจบ; API: `GET /api/queues` (เพิ่ม `name`), `PATCH /api/queues/:queueId`
 
@@ -87,7 +87,7 @@ Seed (`database/seed/seedData.js`, รันซ้ำปลอดภัย): `Ma
 | AC-50 / TEST-50 | (ก) Customer Join ทั้ง Main queue และ Bar counter; (ข) `host1` เรียก Waiting List/Call Next/Complete/GET entry ของ Bar counter; (ค) 20 Join พร้อมกันบน Main queue ระหว่างที่ `host1` ปิดคิว; (ง) 15 Customer ต่างบัญชี Join ทั้งสองคิวพร้อมกัน | (ก) ได้ตั๋วสองใบ เลขคิวนับแยกกันคิวละ 1 และไม่ติด `DUPLICATE_ACTIVE`; (ข) 403 ทุกกรณีและไม่มีข้อมูลคิวอื่นรั่ว; (ค) ทุก Join เป็น 201 (Commit ก่อนปิด) หรือ 409 `QUEUE_CLOSED` (หลังปิด); ไม่มีตั๋วถูกสร้างหลังการปิดสำเร็จ; เลขคิวของตั๋วที่สำเร็จเป็นเลขต่อเนื่องไม่ซ้ำ; (ง) เลขคิวไม่ซ้ำและต่อเนื่องในแต่ละคิว | API + DB + Concurrency |
 | AC-51 / TEST-51 | รัน Migration 005 บน DB ที่มีคิวและตั๋วเดิม **รวม (ก) Fixture ที่ร้านเดียวมีสองคิวเดิม (ยังไม่มีชื่อ) และ (ข) Fixture ที่ร้านของ Seed มีคิว Seed `2222...` กับคิวเดิมอีกคิวที่ `id` เรียงก่อน เช่น `00000000-0000-4000-8000-000000000001`** แล้วรัน Migration และรัน Seed ซ้ำอย่างน้อยสองรอบ; INSERT คิวชื่อซ้ำในร้านเดียวกัน, ชื่อว่าง, ชื่อยาว 61 ตัวอักษร; ปิดคิวแล้วสร้าง App Instance ใหม่พร้อม DB Pool ใหม่ต่อ DB เดิม | ร้านที่มีคิวเดียวได้ `Main queue`; ร้านที่มีสองคิวได้ `Main queue` กับ `Queue 2` ตามลำดับ `id` โดย Migration ไม่ล้มด้วย 23505; ใน Fixture (ข) คิว `2222...` ได้ `Main queue` และคิวเดิมอีกคิวได้ `Queue 2` จากนั้น Seed ทั้งสองรอบสำเร็จโดยไม่เกิด 23505 และไม่เปลี่ยนชื่อ; ตั๋ว, Event, Assignment, เลขคิวเดิมไม่เปลี่ยน; Migration/Seed ซ้ำไม่ล้มและไม่เปลี่ยนข้อมูลเดิม; มี Bar counter และ `host3` ผูกถูกคิว; DB ปฏิเสธชื่อซ้ำ (23505) ว่าง/ยาวเกิน (23514); สถานะ CLOSED ยังอยู่หลัง Restart | DB Constraint + Migration + Restart Persistence |
 
-เทส Sprint 1 ที่ต้องแก้ตาม Contract นี้ (แก้ในขั้น RED พร้อมเหตุผล ไม่ลด Assertion): TEST-07 (`GET /api/queues` บน Seed ได้ 2 รายการและมี `name`; Test "CLOSED queue is listed" ต้องระบุคิวที่ปิดจาก `id` ในรายการสองคิว), INFRA-06 (Host ใน Seed เป็น `host1`, `host2`, `host3`; Assignment ของ Main queue ยังเป็น `host1` เท่านั้น). เทสอื่นที่ใช้ `seedIds.queue` และ `host2` เป็น Unassigned Host ต้องผ่านโดยไม่แก้
+เทส Sprint 1 ที่ต้องแก้ตาม Contract นี้ (แก้ในขั้น RED พร้อมเหตุผล ไม่ลด Assertion): TEST-07 (`GET /api/queues` บน Seed ได้ 2 รายการและมี `name`; Test "CLOSED queue is listed" ต้องระบุคิวที่ปิดจาก `id` ในรายการสองคิว), INFRA-06 (Host ใน Seed เป็น `host1`, `host2`, `host3`; Assignment ของ Main queue ยังเป็น `host1` เท่านั้น), INFRA-05 (จำนวนแถว `service_queues` หลังรัน Seed ซ้ำเปลี่ยนจาก 1 เป็น 2 และต้องไม่เปลี่ยนเลขคิวหรือสถานะของตั๋วเดิม). เทสอื่นที่ใช้ `seedIds.queue` และ `host2` เป็น Unassigned Host ต้องผ่านโดยไม่แก้
 
 ชั้นที่ไม่ต้องแก้: Authentication/Session, Origin Check, Join/Call Next/Complete Service (เว้นแต่ชื่อใน Queue JSON), Ticket JSON, F-04 ตรรกะ Cancel
 
@@ -115,3 +115,4 @@ Seed (`database/seed/seedData.js`, รันซ้ำปลอดภัย): `Ma
 | v0.1 | 2026-11-28 | Initial draft, committed before tests and implementation |
 | v0.2 | 2026-11-28 | Address PR #100 review: define a collision-safe backfill before the unique name constraint (old wording: column DEFAULT 'Main queue' then UNIQUE), extend AC-51 with a two-legacy-queues fixture, and keep Lab 7 `maxPartySize` in the queue response and AC-46/47 |
 | v0.3 | 2026-11-28 | Address PR #100 re-review: reserve `Main queue` for the fixed seed queue id `2222...` in the backfill (old v0.2 wording: first queue by id) so migrating and then seeding cannot hit 23505; AC-51 adds a fixture with a lower-sorting legacy queue next to the seeded queue |
+| v0.4 | 2026-11-28 | List INFRA-05 (queue count after seed 1 -> 2) among the Sprint 1 tests that change with this contract; omitted in v0.3 and found while reviewing the F-05 contract (PR #104) |

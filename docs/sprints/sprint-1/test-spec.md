@@ -110,6 +110,20 @@ Additional recorded checks at the same source SHA: [E2E](../../evidence/release-
 
 Real process-restart evidence at baseline `3d2ba1b78714f51127cdf07b7e44951c06ed8d7a`: [HTTP/SQL transcript](../../evidence/release-restart-persistence.txt). P8 changed docs only; application/test source is identical between that baseline and the tested SHA above. GCP verification remains NOT EXECUTED (Lab 5).
 
+## Execution Results: Lab 7 (L7-CR-01), 2026-11-28
+
+Recorded at commit `680e8aab2c5977ebc14dfee969af29d7bc44645c` on branch `test/l7-per-queue-party-limit` (local PostgreSQL test database; not merged, not deployed). RED: [l7-red](../../evidence/l7-red.txt), 28 failed / 113 passed / 0 skipped of 141 at `d0554ed` on unmodified application code. GREEN: [l7-green](../../evidence/l7-green.txt), 141 passed / 0 failed / 0 skipped; Playwright [l7-e2e-green](../../evidence/l7-e2e-green.txt), 6 passed / 0 failed / 0 skipped.
+
+| AC / Test | Actual file | Result at the commit above |
+| --- | --- | --- |
+| AC-07 / TEST-07 (revised) | `server/tests/f02-join.test.js` | PASS (4 cases, `maxPartySize: 10` on the seeded queue) |
+| AC-12 / TEST-12 (revised) | `server/tests/f02-join.test.js` | PASS (invalid shapes, 11 rejected, 1/8/9/10 accepted, 400 before 409 on CLOSED) |
+| AC-25 / TEST-25 | `server/tests/l7-party-limit.test.js` | PASS (limits 4/8/10, default 8, invalid shapes, limit change, CLOSED order) |
+| AC-26 / TEST-26 | `server/tests/l7-party-limit.test.js` | PASS (seed 10/default 8/explicit 4, migrate+seed rerun, upgrade with existing tickets) |
+| AC-27 / TEST-27 | `server/tests/l7-party-limit.test.js` | PASS (DB constraints 23514 for 0/-1/11, accepted 1/10, party_size 9/10 accepted) |
+
+Changed Sprint 1 tests (INFRA-04/05/07, E2E-2/DEMO-03) follow `docs/labs/lab-07/impact-analysis.md` section 4; no assertion was deleted or skipped.
+
 ## Revision History
 
 | Version | Date | Change |
@@ -119,3 +133,4 @@ Real process-restart evidence at baseline `3d2ba1b78714f51127cdf07b7e44951c06ed8
 | v0.3 | 2026-11-06 | Sync reviewed contracts: public-login/auth precedence, queue JSON/isAssigned, new AC-23/24 with explicit 400/401/403/404 cases; all tests remain PLANNED |
 | v0.4 | 2026-11-07 | P8: add actual results for all 24 AC from release-full-run, full test-name ledger and honest DoD/manual/release statuses; preserve original AC/design |
 | v0.5 | 2026-11-28 | Lab 7 (L7-CR-01): add TEST-25..27, revise TEST-07/TEST-12 for per-queue party size limits (old TEST-12: partySize=0,9,1.5/text, boundaries 1 and 8). New tests are PLANNED; the earlier Sprint 1 results above stay valid for the v0.4 rows they ran |
+| v0.6 | 2026-11-28 | Lab 7: add actual results for AC-07/12 (revised) and AC-25..27 from the recorded l7-red / l7-green runs at `680e8aa`; earlier Sprint 1 results unchanged |

@@ -34,7 +34,7 @@
 - [ ] `docs/known-limitations.md`, `docs/traceability.md` (revision labels renumbered and unique), SRS/SDS/features and the contracts' result sections match what was really run; no row says PASS without a recorded run and a commit SHA.
 - [ ] No secrets, passwords or personal e-mails in the diff (secret scan on the release diff).
 - [ ] `docs/ai-use-log.md` has a row for each task; contributions are consistent with the PR history.
-- [ ] Lab 7 change request has the announcement poster, post date, screenshot and the reviewer PR number filled in (it blocks the Lab 7 PDF, not the deploy).
+- [x] Lab 7 change request has the announcer, screenshot and the reviewer PR number (#98) filled in (change request v0.6); the exact post date is not visible in the screenshot ("4 days ago") and is stated as about 25 Nov 2026.
 
 ## 3. Pre-deploy baseline (read-only; owner runs it in Cloud Shell, or authorizes it)
 

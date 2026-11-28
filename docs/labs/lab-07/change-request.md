@@ -1,6 +1,6 @@
 # Lab 7 Change Request: Per-Queue Maximum Party Size
 
-> **Status:** v0.5 (2026-11-29; revision history below) · CPE334 Theme 9 · DineQ · Change to an implemented Sprint 1 behaviour
+> **Status:** v0.6 (2026-11-29; revision history below) · CPE334 Theme 9 · DineQ · Change to an implemented Sprint 1 behaviour
 
 ## 1. Summary
 
@@ -79,7 +79,7 @@ The limit is a public property of a queue and contains no personal data.
 | Item | Value |
 | :---- | :---- |
 | Instructor / TA approval | Not required. The Lab 7 spec-sheet announcement states that students need not obtain Instructor or TA approval for the Sprint 1 change request, provided the change is a reasonably complex feature and not a trivial one. |
-| Announcement | **Not attached.** The authors decided on 29 Nov 2026 not to include the instructor's announcement (poster name, post date, screenshot) in the submission. Approval of the change therefore rests on the teammate's review of this contract before any test or code (the reviewer record below), not on an attached announcement |
+| Announcement | Announcer: **Suthep Madarasmi** (shown with the group's admin label) · Date posted: the post shows only "4 days ago" (Facebook) in the screenshot taken on 29 Nov 2026, so it was posted about 25 Nov 2026; **the exact date and time are not visible in the image** · Screenshot: `docs/evidence/lab7/instructor-announcement.png`. Quoted text: "Lab 7 Spec Sheet Change. You need not get Instructor or TA Approval for your change request to Sprint 1. Think of a good change to Sprint 1 among yourselves, but do try to make it a complex enough added feature and not just a trivial change." The screenshot also shows the handout sentence "Record instructor/TA approval, approver and date" highlighted, which this announcement replaces. The teammate's review of this contract before any test or code is recorded below |
 | Contract reviewer (teammate) | Siwarak (BBINGOAL) · Review PR number: #98 (approved before merge; the later contract revision for migration 006 is PR #112) |
 | Review must happen | Before any test or code change. The contract PR is merged before the RED branch is created. |
 
@@ -92,3 +92,4 @@ The limit is a public property of a queue and contains no personal data.
 | v0.3 | 2026-11-28 | Review wording fix (PR #112): state that a main queue at 8 is raised to 10 even when 8 was set on purpose, because the guard `= 8` cannot tell a default from a deliberate 8; values other than 8 are untouched. Old wording said a limit 'changed on purpose' is left alone |
 | v0.4 | 2026-11-28 | Add the reviewer's normative sentence for migration 006 to item 5 (same meaning as v0.3; no behaviour change) |
 | v0.5 | 2026-11-29 | Fill the reviewer PR number (#98) and record that the announcement evidence is not attached (the authors' decision); no change to the contract itself. Old wording: announcer, date and screenshot PENDING, review PR number PENDING |
+| v0.6 | 2026-11-29 | Attach the instructor announcement (screenshot, announcer Suthep Madarasmi, quoted text); the exact post date is not visible ("4 days ago") and is stated as about 25 Nov 2026. Old wording (v0.5): the announcement evidence was not attached |

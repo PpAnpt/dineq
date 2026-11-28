@@ -23,7 +23,7 @@ function partySizeError(limit) {
 }
 
 const HISTORY_STATUSES = ['WAITING', 'CALLED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'];
-const ISO_WITH_ZONE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/;
+const ISO_WITH_ZONE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?(Z|[+-]\d{2}:\d{2})$/;
 
 // F-07a (docs/sprints/sprint-3/F-07-history.md section 1): optional status, from, to. Anything
 // unexpected is a 400 VALIDATION_ERROR before any query; unknown parameters are ignored.
@@ -33,12 +33,17 @@ function parseInstant(value, name) {
   const m = ISO_WITH_ZONE.exec(value);
   if (!m) throw bad();
   const [year, month, day, hour, minute, second] = m.slice(1, 7).map(part => (part === undefined ? 0 : Number(part)));
+  const fraction = m[7] ?? '';
   const calendar = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
-  const offset = m[7] === 'Z' ? null : /^[+-](\d{2}):(\d{2})$/.exec(m[7]);
+  const offset = m[8] === 'Z' ? null : /^[+-](\d{2}):(\d{2})$/.exec(m[8]);
   if (month < 1 || month > 12 || hour > 23 || minute > 59 || second > 59
     || calendar.getUTCFullYear() !== year || calendar.getUTCMonth() !== month - 1 || calendar.getUTCDate() !== day
     || (offset && (Number(offset[1]) > 23 || Number(offset[2]) > 59))) throw bad();
-  return { text: value, ms: Date.parse(value) };
+  // Whole milliseconds from the string without its fraction, then the fraction as nanoseconds, so that
+  // from/to are ordered at the full precision (PostgreSQL stores microseconds; a Date only milliseconds).
+  const ns = BigInt(Date.parse(value.replace(/\.\d+/, ''))) * 1_000_000_000n
+    + BigInt((fraction + '000000000').slice(0, 9));
+  return { text: value, ns };
 }
 
 export function parseHistoryFilters(query = {}) {
@@ -52,7 +57,7 @@ export function parseHistoryFilters(query = {}) {
   }
   const from = Object.hasOwn(query, 'from') ? parseInstant(query.from, 'from') : null;
   const to = Object.hasOwn(query, 'to') ? parseInstant(query.to, 'to') : null;
-  if (from && to && from.ms > to.ms) throw httpError(400, 'VALIDATION_ERROR', 'from must not be after to');
+  if (from && to && from.ns > to.ns) throw httpError(400, 'VALIDATION_ERROR', 'from must not be after to');
   filters.from = from?.text ?? null;
   filters.to = to?.text ?? null;
   return filters;

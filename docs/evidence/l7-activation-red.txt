@@ -1,0 +1,135 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/l7-activation-red.json"
+Working directory: server
+Commit: 573365deea49095ef05cae8792f0d6c85d2965b6
+Date: 2026-11-28T08:53:51.448Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-006/server
+
+ ✓ tests/f06-queues.test.js (16 tests) 4946ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  351ms
+     ✓ TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering  304ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  1578ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1055ms
+ ✓ tests/f04-cancel.test.js (18 tests) 4223ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  317ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  1821ms
+ ✓ tests/f02-join.test.js (45 tests) 6236ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1440ms
+ ✓ tests/f05-seating.test.js (37 tests) 5153ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  377ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  411ms
+ ✓ tests/f05-tables.test.js (31 tests) 3737ms
+     ✓ TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references  427ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3674ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  410ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  343ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  320ms
+ ✓ tests/f01-auth.test.js (40 tests) 3331ms
+ ✓ tests/infra.test.js (11 tests) 563ms
+ ✓ tests/f03-host.test.js (21 tests) 3304ms
+     ✓ TEST-20 / AC-20: Customer cannot list / call-next / complete; no state changes  356ms
+ ✓ tests/f07a-history.test.js (22 tests) 2708ms
+ ❯ tests/l7-activation.test.js (10 tests | 10 failed) 552ms
+     × TEST-26b / AC-26b: the migration file database/migrations/006_*.sql exists 152ms
+     × TEST-26b / AC-26b: a main queue at the default 8 becomes 10; other queues, tickets, events and counters stay 39ms
+     × TEST-26b / AC-26b: a main queue at an 8 that someone set on purpose (the migration cannot tell the two apart) becomes 10; other queues, tickets, events and counters stay 38ms
+     × TEST-26b / AC-26b: a main queue at 4 is not changed (only 8 is raised) 39ms
+     × TEST-26b / AC-26b: a main queue at 6 is not changed (only 8 is raised) 37ms
+     × TEST-26b / AC-26b: a main queue at 9 is not changed (only 8 is raised) 39ms
+     × TEST-26b / AC-26b: a main queue at 10 is not changed (only 8 is raised) 53ms
+     × TEST-26b / AC-26b: running 006 a second time changes nothing 55ms
+     × TEST-26b / AC-26b: without the seed queue it is a no-op and does not fail 49ms
+     × TEST-26b / AC-26b: on a new database the whole migration chain, then the seed, ends with the main queue at 10 49ms
+ ✓ tests/f09-payload.test.js (11 tests) 1097ms
+ ✓ tests/controlled-fifo.test.js (1 test) 446ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  445ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: the migration file database/migrations/006_*.sql exists
+AssertionError: database/migrations/006_*.sql (activation of the main queue limit) must exist: expected undefined to be defined
+ ❯ tests/l7-activation.test.js:69:105
+     67| describe('Lab 7 TEST-26b / AC-26b: migration 006 activates the main qu…
+     68|   test('TEST-26b / AC-26b: the migration file database/migrations/006_…
+     69|     expect(activation, 'database/migrations/006_*.sql (activation of t…
+       |                                                                                                         ^
+     70|     expect(existsSync(new URL(activation, migrationsDir))).toBe(true);
+     71|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: a main queue at the default 8 becomes 10; other queues, tickets, events and counters stay
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: a main queue at an 8 that someone set on purpose (the migration cannot tell the two apart) becomes 10; other queues, tickets, events and counters stay
+AssertionError: 006 must exist: expected undefined to be defined
+ ❯ tests/l7-activation.test.js:77:42
+     75|     ['an 8 that someone set on purpose (the migration cannot tell the …
+     76|   ])('TEST-26b / AC-26b: a main queue at %s becomes 10; other queues, …
+     77|     expect(activation, '006 must exist').toBeDefined();
+       |                                          ^
+     78|     await withLegacyDatabase(mainLimit, async ({ client, limits, untou…
+     79|       const before = await untouched();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: a main queue at 4 is not changed (only 8 is raised)
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: a main queue at 6 is not changed (only 8 is raised)
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: a main queue at 9 is not changed (only 8 is raised)
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: a main queue at 10 is not changed (only 8 is raised)
+AssertionError: 006 must exist: expected undefined to be defined
+ ❯ tests/l7-activation.test.js:87:42
+     85|
+     86|   test.each([4, 6, 9, 10])('TEST-26b / AC-26b: a main queue at %i is n…
+     87|     expect(activation, '006 must exist').toBeDefined();
+       |                                          ^
+     88|     await withLegacyDatabase(mainLimit, async ({ client, limits, untou…
+     89|       const before = await untouched();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: running 006 a second time changes nothing
+AssertionError: 006 must exist: expected undefined to be defined
+ ❯ tests/l7-activation.test.js:97:42
+     95|
+     96|   test('TEST-26b / AC-26b: running 006 a second time changes nothing',…
+     97|     expect(activation, '006 must exist').toBeDefined();
+       |                                          ^
+     98|     await withLegacyDatabase(8, async ({ client, limits, untouched }) …
+     99|       await apply(client);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: without the seed queue it is a no-op and does not fail
+AssertionError: 006 must exist: expected undefined to be defined
+ ❯ tests/l7-activation.test.js:107:42
+    105|
+    106|   test('TEST-26b / AC-26b: without the seed queue it is a no-op and do…
+    107|     expect(activation, '006 must exist').toBeDefined();
+       |                                          ^
+    108|     await withLegacyDatabase(null, async ({ client, limits, untouched …
+    109|       const before = await untouched();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  tests/l7-activation.test.js > Lab 7 TEST-26b / AC-26b: migration 006 activates the main queue limit on existing data > TEST-26b / AC-26b: on a new database the whole migration chain, then the seed, ends with the main queue at 10
+AssertionError: 006 must exist: expected undefined to be defined
+ ❯ tests/l7-activation.test.js:117:42
+    115|
+    116|   test('TEST-26b / AC-26b: on a new database the whole migration chain…
+    117|     expect(activation, '006 must exist').toBeDefined();
+       |                                          ^
+    118|     const hash = (await pool.query('SELECT password_hash FROM users LI…
+    119|     const client = await pool.connect();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+
+ Test Files  1 failed | 12 passed (13)
+      Tests  10 failed | 279 passed (289)
+   Start at  15:53:51
+   Duration  44.25s (transform 231ms, setup 0ms, import 2.54s, tests 39.97s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-006/docs/evidence/l7-activation-red.json
+
+Exit code: 1

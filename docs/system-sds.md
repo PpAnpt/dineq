@@ -193,7 +193,7 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | `queue_entries.status` เพิ่ม `CANCELLED`, `NO_SHOW`; `queue_events.event_type/from_status/to_status` เพิ่มค่าเดียวกัน; Transition CHECK ใหม่ | F-04 / 003 | CANCELLED จาก WAITING เท่านั้น; NO_SHOW จาก CALLED (ใช้โดย F-05) |
 | ตารางโต๊ะและการผูกโต๊ะกับตั๋ว | F-05 / 004 | กำหนดใน Contract F-05 (ความจุ, สถานะ AVAILABLE/OCCUPIED) |
 | `service_queues.name` (1-60 ตัวอักษร, UNIQUE ต่อร้าน) | F-06 / 005 | แยกหลายคิวในร้านเดียวกัน; Seed เพิ่มคิว `Bar counter` และ `host3@dineq.test` |
-| `service_queues.max_party_size` (1-10, ค่าเริ่มต้น 8) | Lab 7 / 002 | BR-09 ต่อคิว; `queue_entries.party_size` CHECK 1-10 |
+| `service_queues.max_party_size` (1-10, ค่าเริ่มต้น 8) | Lab 7 / 002; ข้อมูล Queue หลักที่มีอยู่แล้วปรับ 8 เป็น 10 โดย 006 (ไม่เปลี่ยน Schema) | BR-09 ต่อคิว; `queue_entries.party_size` CHECK 1-10 |
 
 **API (C.6 เพิ่มเติม)**
 
@@ -249,5 +249,5 @@ AC-36..45 / TEST-36..45 have 68 passing local cases within the recorded 257-test
 | v0.4 | 2026-11-28 | Lab 7 (L7-CR-01, BR-09): add `service_queues.max_party_size` (1–10, default 8), widen `queue_entries.party_size` CHECK to 1–10, per-queue range check in the Join transaction (after the queue lock, before the CLOSED check), `maxPartySize` in the queue JSON, error text. Old wording: "party_size 1–8", "partySize: 1..8" |
 | v0.5-f05 | 2026-11-28 | Propose C.9 F-05 data/API/error/lock/UI contract and AC-36..45; preserve legacy Complete; reserve migration 004 after implemented 002/003. No implementation or verification result claimed |
 | v0.5 | 2026-11-28 | Add C.8 collecting the Sprint 2-3 planned additions (statuses, queue name, new endpoints, 413 error) without editing existing C.2-C.6 rows|
-
 | v0.6-f05 | 2026-11-28 | Consolidate implemented F-05 table/API/security/error details into C.2/C.4/C.6/C.9 and record real API/UI verification; retain legacy Complete and release/manual-audit limits |
+| v0.6 | 2026-11-28 | Lab 7 change request v0.2: note that data migration `006` raises the existing main queue limit from 8 to 10 (no schema change) |

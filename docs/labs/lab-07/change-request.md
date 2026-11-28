@@ -31,14 +31,14 @@
 2. A `partySize` that is not an integer from 1 up (0, negative, 1.5, text, null, missing) or is greater than the target queue's limit is rejected with `400 INVALID_PARTY_SIZE`. For the "greater than the limit" case the message names the limit, for example `partySize must be an integer from 1 to 4 for this queue`.
 3. A rejected Join inserts nothing and consumes no ticket number (BR-07 behaviour unchanged).
 4. A Join to a CLOSED queue is still `409 QUEUE_CLOSED`. The existing order is kept: an invalid `partySize` is reported before the closed state.
-5. The restaurant's main demo queue is set to 10 by the seed (new 10-seat tables). A queue without an explicit value keeps 8.
+5. The restaurant's main demo queue (the fixed seed queue id `22222222-2222-4222-8222-222222222222`) has limit 10 (new 10-seat tables). On a new database the seed sets it. On a database that already holds that queue (the deployed one) data migration `006` raises it from 8 to 10: it touches only that queue, only while its limit equals 8, does nothing when the queue is absent, and never lowers a value. The migration cannot tell the default 8 from an 8 that someone set on purpose, so **a main queue whose limit is 8 is raised to 10 even if it was set to 8 deliberately**; every other value (for example 4, 6, 9 or 10) is left alone. Normative statement (reviewer's wording): *Migration 006 updates the fixed seed queue whenever its current max_party_size is 8, including an explicitly configured value of 8. It preserves every non-8 value and all other queues, and is a no-op when the seed queue is absent.* A queue without an explicit value keeps 8.
 6. `GET /api/queues` adds `maxPartySize` to every item. Existing fields are unchanged (additive, backward-compatible).
 7. The Join form takes its `max` attribute and label from `maxPartySize` of the queue.
 8. The database keeps an absolute ceiling: `queue_entries.party_size` 1..10 and `service_queues.max_party_size` 1..10.
 
 ## 4. Scope
 
-In scope: SRS BR-09; F-02 contract and its AC-07/AC-12; new AC-25..AC-27; System SDS (tables, Join transaction, API, error catalog, check order); migration `002`; seed; `join` and `listQueues` services; Join form; tests for the above.
+In scope: SRS BR-09; F-02 contract and its AC-07/AC-12; new AC-25..AC-27; System SDS (tables, Join transaction, API, error catalog, check order); migration `002`; migration `006` (activation of the main queue limit on existing data); seed; `join` and `listQueues` services; Join form; tests for the above.
 
 Out of scope: a Host UI/API to change the limit (the value is set by seed or SQL in this change), per-restaurant defaults, changing FIFO, changing Call Next/Complete, table assignment (F-05), any change to authentication.
 
@@ -52,6 +52,7 @@ The full rows are in the revised F-02 contract and the Sprint 1 test specificati
 | AC-12 (revised) | Invalid shape, or a value above the target queue's limit, is `400 INVALID_PARTY_SIZE`; CLOSED is `409 QUEUE_CLOSED`; nothing inserted, no number consumed |
 | AC-25 | Per-queue boundaries are enforced (limits 4, 8, 10) and the error names the limit |
 | AC-26 | The seeded main queue accepts up to 10; a queue without an explicit value defaults to 8; tickets that exist before the migration stay readable unchanged |
+| AC-26b | Migration `006` raises only the seed queue from 8 to 10 on existing data (also when the 8 was set deliberately), leaves every other queue and every other value alone, is a no-op when run again or when the queue is absent, and changes no ticket, event or counter |
 | AC-27 | The database rejects an out-of-range `max_party_size` (0, 11) and a `party_size` above 10; invalid party size is still reported before a closed queue |
 
 ## 6. Boundary and invalid cases
@@ -87,3 +88,6 @@ The limit is a public property of a queue and contains no personal data.
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-28 | Initial change request, committed before any test or implementation change |
+| v0.2 | 2026-11-28 | Replace seed-only activation of the main queue limit by seed plus data migration `006` for existing databases (old wording: the seed is the only place the value 10 is introduced, and the deployed queue stays at 8 until the seed is run there). Reason: the pipeline migrates but never seeds, so a manual live step was needed and could be forgotten. New AC-26b. Decided in the release checklist review (option c) |
+| v0.3 | 2026-11-28 | Review wording fix (PR #112): state that a main queue at 8 is raised to 10 even when 8 was set on purpose, because the guard `= 8` cannot tell a default from a deliberate 8; values other than 8 are untouched. Old wording said a limit 'changed on purpose' is left alone |
+| v0.4 | 2026-11-28 | Add the reviewer's normative sentence for migration 006 to item 5 (same meaning as v0.3; no behaviour change) |

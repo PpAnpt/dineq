@@ -62,7 +62,7 @@ gcloud run revisions describe s21271a0d-00007-pnb --project=cpe-se-course-2026 -
 
 ## 5. After the merge (record, do not fix silently)
 
-- [ ] Deploy workflow run id and conclusion (both jobs), the full `main` commit SHA, the image tag in the run summary, the new revision name, the runnable digest, the smoke test result.
+- [x] Deploy workflow run [46151508392](https://github.com/PpAnpt/dineq/actions/runs/46151508392) on 28 Nov 2026 (merge of PR #120 at about 20:49 Asia/Bangkok): both jobs succeeded. Full `main` commit `f3e7c637457dd4f1f78e9bfabda513359fbcb538`; image tag is that full SHA; push digest `sha256:358811130e3478a049c0819c35d7c227f4390b5b30721440fcf941399708b97e` (from the push log); migration job execution `s21271a0d-migrate-4m7km` completed successfully; new revision `s21271a0d-00008-g6r` serving 100 percent of traffic; smoke test passed (`/api/health`, `/api/ready` with `db: connected`, UI root). Source: the workflow log, read by the assistant. The runnable image digest of the new revision is not captured yet (next item).
 - [ ] Read-only Cloud Shell after the deploy: serving revision and traffic, revision digest, migration job image (the ledger lists these as PENDING items).
 - [ ] If any step fails, stop and report the real output; do not retry blindly or patch live data.
 
@@ -70,11 +70,11 @@ gcloud run revisions describe s21271a0d-00007-pnb --project=cpe-se-course-2026 -
 
 | # | Check | Expected | Result |
 | --- | --- | --- | --- |
-| 1 | Login page shows the release label; `/api/ready` is ready | pass | PENDING |
+| 1 | Login page shows the release label; `/api/ready` is ready | pass | PASS for `/api/ready` and the UI root (workflow smoke test) and for login in the browser by the owner, 28 Nov; the release label text was not read separately |
 | 2 | Sprint 1 journey: Customer joins, Host calls next, Host completes, Customer sees COMPLETED | unchanged behaviour | PENDING |
-| 3 | `GET /api/queues` shows `maxPartySize` for each queue (main queue 10 only after D1 is done) | field present; value 10 on the main queue after D1 | PENDING |
-| 4 | Join with party size 10 on the main queue; party size 11 rejected; party size 9 accepted | 201, 400 `INVALID_PARTY_SIZE` naming the limit, 201 | PENDING |
-| 5 | Cancel a WAITING ticket, then join again | CANCELLED, new ticket number | PENDING |
+| 3 | `GET /api/queues` shows `maxPartySize` for each queue (main queue 10 only after D1 is done) | field present; value 10 on the main queue after D1 | PASS by the owner in the browser, 28 Nov (customer demo account; the main queue showed a limit of 10, so migration 006 took effect); not yet run through the API script |
+| 4 | Join with party size 10 on the main queue; party size 11 rejected; party size 9 accepted | 201, 400 `INVALID_PARTY_SIZE` naming the limit, 201 | PASS for 11 rejected with the limit named and 10 accepted, by the owner in the browser, 28 Nov; party size 9 was not tried. Status codes were not captured (browser) |
+| 5 | Cancel a WAITING ticket, then join again | CANCELLED, new ticket number | PARTIAL: the owner cancelled the ticket made in check 4 in the browser (28 Nov); the rejoin and the new ticket number were not checked |
 | 6 | Host closes and reopens the queue; a Join while closed | 409 `QUEUE_CLOSED`, no number consumed; reopen works | PENDING |
 | 7 | Customer history filter (status and date range) | only own tickets, invalid range 400 | PENDING |
 | 8 | Persistence: the ticket still exists after the serving revision changes or the instance restarts | same ids and states | PENDING |
@@ -109,3 +109,4 @@ Each check records: time (Asia/Bangkok), account role (not the password), reques
 | v0.4 | 2026-11-28 | CI gate checked on `df5923c`; D1 now has code in PR #114 and a new gate for merging it |
 | v0.5 | 2026-11-28 | Record Anapat's decisions D2 = NO (no demo rows on production, Seat/Release/two-queue view not demonstrable there), D3 not needed, D4 = NO, D6 = `v2.0-sprint2-rc1`; check 10 narrowed to what an empty table list allows. Old wording said D2-D4 and D6 were PENDING |
 | v0.6 | 2026-11-28 | Record the read-only pre-deploy baseline from Cloud Shell (serving revision `00007-pnb`, 100 percent traffic, creation time, image digest); the migration job image and partner records are still not captured |
+| v0.7 | 2026-11-28 | Record the deploy of PR #120 (run 46151508392, revision `00008-g6r`, migration execution `4m7km`, smoke test passed) and the owner's manual browser checks 1, 3, 4 and the cancel part of 5; everything not run stays PENDING or PARTIAL |

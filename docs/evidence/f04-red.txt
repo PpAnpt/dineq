@@ -1,0 +1,295 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f04-red.json"
+Working directory: server
+Commit: 1f62e5d2962d6777483b697f34348275ac554f33
+Date: 2026-11-28T06:23:25.813Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-f04impl/server
+
+ ✓ tests/f02-join.test.js (44 tests) 4961ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1173ms
+ ❯ tests/f04-cancel.test.js (16 tests | 15 failed) 1448ms
+     × TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket 203ms
+     × TEST-29 / AC-29: when the event insert fails nothing changes (no CANCELLED status, no event) and the error is generic 87ms
+     × TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING 82ms
+     × TEST-31 / AC-31: malformed UUID is 400, absent UUID is 404; anonymous 401 and Host 403 come first; nothing changes 81ms
+     × TEST-32 / AC-32: cancelling a CALLED ticket is 409 INVALID_TRANSITION and changes nothing 80ms
+     × TEST-32 / AC-32: cancelling a COMPLETED ticket is 409 INVALID_TRANSITION and changes nothing 79ms
+     × TEST-32 / AC-32: cancelling twice is 409 INVALID_TRANSITION the second time, with one CANCELLED event 77ms
+     × TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds 78ms
+     × TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds) 192ms
+     × TEST-34 / AC-34: ten parallel cancels of one ticket give one 200, nine 409 and a single CANCELLED event 241ms
+     × TEST-35 / AC-35: the DB accepts CANCELLED without called_at/completed_at and rejects it with either (23514) 34ms
+     × TEST-35 / AC-35: NO_SHOW (schema only) needs called_at and no completed_at 36ms
+     × TEST-35 / AC-35: CANCELLED events must go WAITING to CANCELLED and NO_SHOW events CALLED to NO_SHOW (23514 otherwise) 36ms
+     ✓ TEST-35 / AC-35: re-running migrations is a no-op 34ms
+     × TEST-35 / AC-35: applying migration 003 on a database that already holds tickets leaves them unchanged 27ms
+     × TEST-35 / AC-35: a cancelled ticket and its event survive a new app instance with a new DB pool 76ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3213ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  357ms
+ ✓ tests/f01-auth.test.js (40 tests) 2119ms
+ ✓ tests/f03-host.test.js (21 tests) 1872ms
+ ✓ tests/infra.test.js (11 tests) 596ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys  346ms
+ ✓ tests/f09-payload.test.js (11 tests) 704ms
+ ✓ tests/controlled-fifo.test.js (1 test) 493ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  492ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 15 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-28: owner cancels a WAITING ticket > TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f04-cancel.test.js:50:29
+     48|     const cookie = await login(customerEmail(1));
+     49|     const response = await cancel(cookie, entry.id, { body: { status: …
+     50|     expect(response.status).toBe(200);
+       |                             ^
+     51|     expect(Object.keys(response.body.data).sort()).toEqual(TICKET_KEYS…
+     52|     expect(response.body.data).toMatchObject({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-29: the transition and its event are atomic > TEST-29 / AC-29: when the event insert fails nothing changes (no CANCELLED status, no event) and the error is generic
+AssertionError: expected 404 to be 500 // Object.is equality
+
+- Expected
++ Received
+
+- 500
++ 404
+
+ ❯ tests/f04-cancel.test.js:85:31
+     83|       const before = await dbState(pool);
+     84|       const response = await cancel(cookie, entry.id);
+     85|       expect(response.status).toBe(500);
+       |                               ^
+     86|       expect(response.body.error.code).toBe('INTERNAL_ERROR');
+     87|       expect(JSON.stringify(response.body)).not.toMatch(/injected|trig…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-30: access control > TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ expectError tests/f04-cancel.test.js:38:27
+     36|
+     37| function expectError(response, status, code) {
+     38|   expect(response.status).toBe(status);
+       |                           ^
+     39|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     40|   expect(response.body.error.message).not.toContain('@dineq.test');
+ ❯ tests/f04-cancel.test.js:104:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-31: path validation precedence > TEST-31 / AC-31: malformed UUID is 400, absent UUID is 404; anonymous 401 and Host 403 come first; nothing changes
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ expectError tests/f04-cancel.test.js:38:27
+     36|
+     37| function expectError(response, status, code) {
+     38|   expect(response.status).toBe(status);
+       |                           ^
+     39|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     40|   expect(response.body.error.message).not.toContain('@dineq.test');
+ ❯ tests/f04-cancel.test.js:122:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-32: only WAITING tickets can be cancelled > TEST-32 / AC-32: cancelling a CALLED ticket is 409 INVALID_TRANSITION and changes nothing
+ FAIL  tests/f04-cancel.test.js > F-04 AC-32: only WAITING tickets can be cancelled > TEST-32 / AC-32: cancelling a COMPLETED ticket is 409 INVALID_TRANSITION and changes nothing
+AssertionError: expected 404 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 404
+
+ ❯ expectError tests/f04-cancel.test.js:38:27
+     36|
+     37| function expectError(response, status, code) {
+     38|   expect(response.status).toBe(status);
+       |                           ^
+     39|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     40|   expect(response.body.error.message).not.toContain('@dineq.test');
+ ❯ tests/f04-cancel.test.js:137:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-32: only WAITING tickets can be cancelled > TEST-32 / AC-32: cancelling twice is 409 INVALID_TRANSITION the second time, with one CANCELLED event
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f04-cancel.test.js:145:53
+    143|     const entry = await insertEntry(pool, { customer: 1, ticketNo: 1 }…
+    144|     const cookie = await login(customerEmail(1));
+    145|     expect((await cancel(cookie, entry.id)).status).toBe(200);
+       |                                                     ^
+    146|     const before = await dbState(pool);
+    147|     expectError(await cancel(cookie, entry.id), 409, 'INVALID_TRANSITI…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-33: effect on the queue > TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f04-cancel.test.js:160:47
+    158|     const t3 = await insertEntry(pool, { customer: 3, ticketNo: 3 });
+    159|     const two = await login(customerEmail(2));
+    160|     expect((await cancel(two, t2.id)).status).toBe(200);
+       |                                               ^
+    161|
+    162|     // BR-02: the cancelled ticket no longer counts as active, so cust…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-34: concurrency > TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)
+AssertionError: expected 404 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 404
+
+ ❯ expectError tests/f04-cancel.test.js:38:27
+     36|
+     37| function expectError(response, status, code) {
+     38|   expect(response.status).toBe(status);
+       |                           ^
+     39|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     40|   expect(response.body.error.message).not.toContain('@dineq.test');
+ ❯ tests/f04-cancel.test.js:210:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-34: concurrency > TEST-34 / AC-34: ten parallel cancels of one ticket give one 200, nine 409 and a single CANCELLED event
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/f04-cancel.test.js:224:53
+    222|     const cookie = await login(customerEmail(1));
+    223|     const responses = await Promise.all(Array.from({ length: 10 }, () …
+    224|     expect(responses.filter(r => r.status === 200)).toHaveLength(1);
+       |                                                     ^
+    225|     const conflicts = responses.filter(r => r.status === 409);
+    226|     expect(conflicts).toHaveLength(9);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: the DB accepts CANCELLED without called_at/completed_at and rejects it with either (23514)
+error: new row for relation "queue_entries" violates check constraint "queue_entries_status_check"
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ tests/f04-cancel.test.js:241:5
+    239|
+    240|   test('TEST-35 / AC-35: the DB accepts CANCELLED without called_at/co…
+    241|     await insertRaw('CANCELLED');
+       |     ^
+    242|     await pool.query('DELETE FROM queue_entries');
+    243|     await expect(insertRaw('CANCELLED', { called: true })).rejects.toM…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: NO_SHOW (schema only) needs called_at and no completed_at
+error: new row for relation "queue_entries" violates check constraint "queue_entries_status_check"
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ tests/f04-cancel.test.js:248:5
+    246|
+    247|   test('TEST-35 / AC-35: NO_SHOW (schema only) needs called_at and no …
+    248|     await insertRaw('NO_SHOW', { called: true });
+       |     ^
+    249|     await pool.query('DELETE FROM queue_entries');
+    250|     await expect(insertRaw('NO_SHOW')).rejects.toMatchObject({ code: '…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: CANCELLED events must go WAITING to CANCELLED and NO_SHOW events CALLED to NO_SHOW (23514 otherwise)
+error: new row for relation "queue_events" violates check constraint "queue_events_event_type_check"
+ ❯ ../node_modules/pg-pool/index.js:45:11
+ ❯ tests/f04-cancel.test.js:263:5
+    261|     await expect(event('CANCELLED', 'WAITING', 'COMPLETED')).rejects.t…
+    262|     await expect(event('NO_SHOW', 'WAITING', 'NO_SHOW')).rejects.toMat…
+    263|     await event('CANCELLED', 'WAITING', 'CANCELLED');
+       |     ^
+    264|     await event('NO_SHOW', 'CALLED', 'NO_SHOW');
+    265|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: applying migration 003 on a database that already holds tickets leaves them unchanged
+AssertionError: database/migrations/003_*.sql (CANCELLED and NO_SHOW statuses) must exist: expected undefined to be defined
+ ❯ tests/f04-cancel.test.js:277:96
+    275|     const third = files.find(name => name.startsWith('003_'));
+    276|     // RED: migration 003 does not exist yet.
+    277|     expect(third, 'database/migrations/003_*.sql (CANCELLED and NO_SHO…
+       |                                                                                                ^
+    278|     expect(existsSync(new URL(third, migrationsDir))).toBe(true);
+    279|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/15]⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: a cancelled ticket and its event survive a new app instance with a new DB pool
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/f04-cancel.test.js:327:30
+    325|     const cookie = await login(customerEmail(1));
+    326|     const cancelled = await cancel(cookie, entry.id);
+    327|     expect(cancelled.status).toBe(200);
+       |                              ^
+    328|
+    329|     const freshPool = createPool(process.env.TEST_DATABASE_URL, { max:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/15]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  15 failed | 155 passed (170)
+   Start at  13:23:26
+   Duration  17.48s (transform 132ms, setup 0ms, import 1.23s, tests 15.41s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-f04impl/docs/evidence/f04-red.json
+
+Exit code: 1

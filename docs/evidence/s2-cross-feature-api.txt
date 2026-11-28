@@ -1,0 +1,115 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/s2-cross-feature-api.json"
+Working directory: server
+Commit: d7f31d4c87e6d98d18da51b1780eae76d9dfd1a8
+Date: 2026-11-28T14:22:58.182Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/s2-cross-feature/server
+
+ ✓ tests/f06-queues.test.js (16 tests) 8473ms
+     ✓ TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys  373ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  520ms
+     ✓ TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403  436ms
+     ✓ TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering  571ms
+     ✓ TEST-50 / AC-50: a Host of one queue cannot list, call, complete or read tickets of the other queue  326ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  2454ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1611ms
+     ✓ TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash  421ms
+ ✓ tests/f04-cancel.test.js (18 tests) 7370ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket  442ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  431ms
+     ✓ TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds  398ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  3356ms
+     ✓ TEST-34 / AC-34: ten parallel cancels of one ticket give one 200, nine 409 and a single CANCELLED event  356ms
+ ✓ tests/f02-join.test.js (45 tests) 10880ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with per-queue isAssigned  316ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1807ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  381ms
+     ✓ TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED  357ms
+ ✓ tests/f05-seating.test.js (37 tests) 9467ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  446ms
+   ✓ TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body  352ms
+   ✓ TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body  401ms
+   ✓ TEST-40 / AC-40: Seat party 1 at table4 atomically completes ticket on CLOSED queue  315ms
+   ✓ TEST-40 / AC-40: Seat party 4 at table4 atomically completes ticket on CLOSED queue  309ms
+   ✓ TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue  307ms
+   ✓ TEST-41 / AC-41: missing/foreign table precedes WAITING state even for Host assigned to both queues  368ms
+   ✓ TEST-43 / AC-43: release permits later seating without erasing the previous historical link  339ms
+   ✓ TEST-44 / AC-44: concurrent Seat at table4/table4 has one terminal event and occupied table  327ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  439ms
+ ✓ tests/f05-tables.test.js (31 tests) 6131ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 6422ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  610ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  459ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  485ms
+     ✓ TEST-25 / AC-25: a queue without an explicit limit uses the default 8  336ms
+     ✓ TEST-25 / AC-25: invalid partySize -1 on a limit-4 queue is 400 INVALID_PARTY_SIZE and changes nothing  348ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  366ms
+     ✓ TEST-25 / AC-25: limit raised 4 -> 6 while the Join waits: partySize 5 is accepted with ticket 1  307ms
+ ✓ tests/f01-auth.test.js (40 tests) 7381ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  328ms
+     ✓ TEST-02 / AC-02: wrong password and unknown email return the same 401 without a session or DB changes  378ms
+     ✓ TEST-03 / AC-03: /auth/me returns the session user and ignores forged identity/role fields  311ms
+ ❯ tests/infra.test.js (11 tests | 1 failed) 549ms
+     ✓ INFRA-01: health endpoint returns the public success envelope 19ms
+     ✓ INFRA-02: missing config fails fast and test reset rejects unsafe database URLs 1ms
+     ✓ INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys 40ms
+     ✓ INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints 17ms
+     ✓ INFRA-05: rerunning migrations and seed preserves identities, rows and ticket counter 66ms
+     ✓ INFRA-06: seed contains 30 hashed customers and correctly scoped Hosts 64ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys 70ms
+     ✓ INFRA-08: unique indexes and timestamp/event constraints reject inconsistent rows 34ms
+     ✓ INFRA-09: /api/ready is public and reports the database as connected 6ms
+     ✓ INFRA-10: /api/ready returns 503 without leaking the database error when the DB is down 4ms
+     × INFRA-11: /api/ready only answers GET/HEAD; POST without a session stays 401 9ms
+ ✓ tests/f03-host.test.js (21 tests) 5604ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  396ms
+     ✓ TEST-17 / AC-17: Complete a CALLED ticket -> COMPLETED in DB and visible to the owner  317ms
+     ✓ TEST-18 / AC-18: Complete a COMPLETED ticket -> 409 INVALID_TRANSITION, row and events unchanged  347ms
+     ✓ TEST-20 / AC-20: Customer cannot list / call-next / complete; no state changes  380ms
+     ✓ TEST-24b / AC-24: host2@dineq.test with a valid but absent UUID gets 404 NOT_FOUND on all three endpoints (not 403)  332ms
+ ✓ tests/f07a-history.test.js (22 tests) 4666ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all  408ms
+     ✓ TEST-55 / AC-55: a Customer never sees another Customer ticket under any filter; Host 403 before the filters; anonymous 401  370ms
+ ✓ tests/l7-activation.test.js (10 tests) 3240ms
+     ✓ TEST-26b / AC-26b: a main queue at the default 8 becomes 10; other queues, tickets, events and counters stay  316ms
+     ✓ TEST-26b / AC-26b: a main queue at an 8 that someone set on purpose (the migration cannot tell the two apart) becomes 10; other queues, tickets, events and counters stay  495ms
+     ✓ TEST-26b / AC-26b: a main queue at 4 is not changed (only 8 is raised)  313ms
+     ✓ TEST-26b / AC-26b: a main queue at 9 is not changed (only 8 is raised)  409ms
+     ✓ TEST-26b / AC-26b: a main queue at 10 is not changed (only 8 is raised)  309ms
+     ✓ TEST-26b / AC-26b: on a new database the whole migration chain, then the seed, ends with the main queue at 10  327ms
+ ✓ tests/f09-payload.test.js (11 tests) 1959ms
+ ✓ tests/controlled-fifo.test.js (1 test) 594ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  592ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/infra.test.js > Lab 5 readiness endpoint (infrastructure, not a Sprint 1 AC) > INFRA-11: /api/ready only answers GET/HEAD; POST without a session stays 401
+AssertionError: expected 403 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 403
+
+ ❯ tests/infra.test.js:211:29
+    209|   test('INFRA-11: /api/ready only answers GET/HEAD; POST without a ses…
+    210|     const response = await request(app).post('/api/ready').set('Origin…
+    211|     expect(response.status).toBe(401);
+       |                             ^
+    212|     expect(response.body.error.code).toBe('UNAUTHENTICATED');
+    213|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 12 passed (13)
+      Tests  1 failed | 288 passed (289)
+   Start at  21:22:58
+   Duration  80.62s (transform 332ms, setup 0ms, import 4.81s, tests 72.74s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/s2-cross-feature/docs/evidence/s2-cross-feature-api.json
+
+Exit code: 1

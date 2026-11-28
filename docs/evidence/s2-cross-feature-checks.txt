@@ -1,0 +1,32 @@
+Command: node --test server/checks/production.test.js client/tests/live-evidence-lib.test.js
+Commit: d7f31d4c87e6d98d18da51b1780eae76d9dfd1a8
+Date: 2026-11-28T14:25:08.086Z
+Node: v24.14.0
+Scope: local createApp({ pool: {} }) via Supertest; offline evidence helpers; no deployed URL or production DB.
+
+✔ activeEntry returns the single WAITING/CALLED entry and ignores COMPLETED (2.2743ms)
+✔ assertHostPrerequisites passes only when the customer ticket is the FIFO head and nothing is CALLED (0.3476ms)
+✔ assertHostPrerequisites stops when another customer has an older WAITING ticket (0.513ms)
+✔ assertHostPrerequisites stops when an unrelated CALLED ticket exists (0.1556ms)
+✔ assertHostPrerequisites stops when the customer ticket is missing or not WAITING (0.5231ms)
+✔ assertResponse accepts the exact status and error code and rejects anything else (0.3306ms)
+✔ assertCallNextTarget requires the intended entry id in CALLED state (0.2231ms)
+✔ assertCompleted requires the same entry id and COMPLETED (0.224ms)
+✔ assertEntryState finds the entry by id and checks its status (0.2223ms)
+✔ buildBaseline stores the base URL, queue id and both entry ids with expected states (1.5399ms)
+✔ validateBaseline rejects another environment, a stale or incomplete baseline (0.4536ms)
+✔ compareC05 passes only when both records keep id, queue and expected status (0.3648ms)
+✔ pickBaselineFile chooses the newest c04 baseline and reports none explicitly (0.1534ms)
+✔ resultFileName never gives a failed run a success-named results file (0.1277ms)
+✔ production image serves the built SPA and deep links (67.3601ms)
+✔ SPA fallback cannot hide unknown API routes or missing assets (9.9636ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 489.9605
+
+Exit code: 0

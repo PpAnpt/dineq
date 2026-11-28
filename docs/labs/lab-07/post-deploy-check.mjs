@@ -1,252 +1,233 @@
 #!/usr/bin/env node
-// Post-deploy check for release REL-1 (docs/labs/lab-07/release-checklist.md, section 6).
+// Read-only post-deploy check for release REL-1 (docs/labs/lab-07/release-checklist.md, section 6).
 //
 // Usage (Node 20+, no dependencies):
-//   node docs/labs/lab-07/post-deploy-check.mjs --base-url <url>            dry run: read-only checks, lists what writes would do
-//   node docs/labs/lab-07/post-deploy-check.mjs --base-url <url> --yes      also runs the checks that create tickets
-//   --allow-close <queueId>   additionally close and reopen that queue (check 6); never closes anything else
-//   --save-baseline <file>    write ticket ids and states of the customer account (no secrets) for check 8
-//   --compare-baseline <file> compare the current history with a saved baseline (check 8)
+//   node docs/labs/lab-07/post-deploy-check.mjs --base-url https://<service>
+//   --save-baseline <file>     write ticket ids, states and numbers of the Customer account (no secrets)
+//   --compare-baseline <file>  compare the current history with a saved baseline (check 8)
 //
 // Accounts come only from environment variables; nothing secret is printed or written:
-//   DINEQ_CUSTOMER_EMAIL, DINEQ_CUSTOMER_PASSWORD, DINEQ_OTHER_CUSTOMER_EMAIL, DINEQ_OTHER_CUSTOMER_PASSWORD,
-//   DINEQ_HOST_EMAIL, DINEQ_HOST_PASSWORD
+//   DINEQ_CUSTOMER_EMAIL, DINEQ_CUSTOMER_PASSWORD  (required, must be a CUSTOMER account)
+//   DINEQ_HOST_EMAIL, DINEQ_HOST_PASSWORD          (optional, must be a HOST account, a different user)
 //
-// Safety rules (the script enforces them): it never touches a ticket it did not create; it stops a write
-// section if the customer already has an active ticket in the queue; the Host journey (call-next, complete)
-// runs only when the Host's list contains no ticket except the script's own, otherwise it is SKIPPED;
-// every ticket the script creates is cancelled or completed again. It must not be run against production
-// without the owner's explicit permission (release checklist, section 8).
+// What it does and does not do (safe for a shared deployed service):
+//  - Every request except Login and Logout is a GET. Login creates a session and Logout ends it; these are the only
+//    writes it makes (so it is not "zero database writes": a session row is created and deleted).
+//  - It never joins, cancels, calls next, completes, seats, releases or opens/closes anything. Those checks are
+//    SKIPPED and must be done by a person (or are covered by the recorded local E2E run).
+//  - It verifies with GET /api/auth/me that the Customer slot is a CUSTOMER, the Host slot is a HOST and that they
+//    are different users, before any other check. On a mismatch it stops.
+//  - It accepts only a bare origin (https, or http for localhost), never follows a redirect, puts a timeout on every
+//    request, and prints only its own allowlisted messages (never raw error text, URLs, passwords or cookies).
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
-const args = process.argv.slice(2);
-const flag = (name) => args.includes(name);
-const option = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
+const MAIN_QUEUE = '22222222-2222-4222-8222-222222222222';
+const TIMEOUT_MS = 10000;
 
-const baseUrl = (option('--base-url') ?? '').replace(/\/+$/, '');
-const write = flag('--yes');
-const allowClose = option('--allow-close');
-const saveBaseline = option('--save-baseline');
-const compareBaseline = option('--compare-baseline');
-if (!/^https?:\/\//.test(baseUrl)) {
-  console.error('Usage: node post-deploy-check.mjs --base-url <http(s)://host> [--yes] [--allow-close <queueId>]');
-  process.exit(2);
+export function parseArgs(argv) {
+  const opts = { baseUrl: '', saveBaseline: undefined, compareBaseline: undefined };
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+    if (arg === '--base-url') opts.baseUrl = argv[++i] ?? '';
+    else if (arg === '--save-baseline') opts.saveBaseline = argv[++i];
+    else if (arg === '--compare-baseline') opts.compareBaseline = argv[++i];
+    else throw new Error('Unknown option (the write options were removed; this tool is read-only)');
+  }
+  return opts;
 }
-const origin = new URL(baseUrl).origin;
-const env = (name) => process.env[name] ?? '';
 
-// ---- tiny HTTP client with a cookie jar per account -------------------------------------------------
-class Client {
-  constructor(role) { this.role = role; this.cookie = ''; }
+// Returns the origin, or null when the value is not a bare, safe origin.
+export function safeOrigin(value) {
+  let url;
+  try { url = new URL(value); } catch { return null; }
+  const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+  if (url.protocol !== 'https:' && !(url.protocol === 'http:' && local)) return null;
+  if (url.username || url.password || url.search || url.hash) return null;
+  if (url.pathname !== '/' || /[?#]/.test(value.replace(/^[a-z]+:\/\/[^/]*/i, '').slice(1))) return null;
+  return url.origin;
+}
+
+class Session {
+  constructor(origin, fetchImpl) { this.origin = origin; this.fetchImpl = fetchImpl; this.cookie = ''; }
   async call(method, path, body) {
-    const headers = { Origin: origin };
+    const headers = { Origin: this.origin };
     if (this.cookie) headers.Cookie = this.cookie;
     if (body !== undefined) headers['Content-Type'] = 'application/json';
-    const res = await fetch(baseUrl + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
-    const setCookie = res.headers.getSetCookie?.() ?? [];
-    for (const line of setCookie) {
+    const res = await this.fetchImpl(this.origin + path, {
+      method, headers, body: body === undefined ? undefined : JSON.stringify(body),
+      redirect: 'manual', signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+    for (const line of res.headers.getSetCookie?.() ?? []) {
       const pair = line.split(';')[0];
       if (pair.startsWith('dineq_session=')) this.cookie = pair;
     }
     let json = null;
     try { json = await res.json(); } catch { /* not JSON */ }
-    return { status: res.status, body: json, data: json?.data, code: json?.error?.code, message: json?.error?.message ?? '' };
+    return { status: res.status, data: json?.data, code: json?.error?.code };
   }
   async login(email, password) {
-    if (!email || !password) return false;
     const r = await this.call('POST', '/api/auth/login', { email, password });
     return r.status === 200;
   }
-}
-
-// ---- result table ------------------------------------------------------------------------------------
-const results = [];
-const bangkok = () => new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Bangkok' }) + ' (Asia/Bangkok)';
-function record(id, name, outcome, detail) {
-  results.push({ id, name, outcome, detail, time: bangkok() });
-  console.log(`${outcome.padEnd(7)} ${String(id).padEnd(3)} ${name} - ${detail}`);
-}
-const pass = (id, name, detail) => record(id, name, 'PASS', detail);
-const fail = (id, name, detail) => record(id, name, 'FAIL', detail);
-const skip = (id, name, detail) => record(id, name, 'SKIPPED', detail);
-const check = (id, name, ok, detail) => (ok ? pass : fail)(id, name, detail);
-
-const customer = new Client('CUSTOMER');
-const other = new Client('CUSTOMER2');
-const host = new Client('HOST');
-const created = []; // tickets this script created and has not closed yet
-
-async function cleanup() {
-  for (const id of [...created]) {
-    const r = await customer.call('POST', `/api/entries/${id}/cancel`);
-    if (r.status === 200) created.splice(created.indexOf(id), 1);
+  async me() {
+    const r = await this.call('GET', '/api/auth/me');
+    return r.status === 200 ? r.data : null;
+  }
+  async logout() {
+    if (!this.cookie) return;
+    try { await this.call('POST', '/api/auth/logout'); } catch { /* reported by the caller's summary */ }
   }
 }
 
-async function main() {
-  console.log(`Target: ${baseUrl}   mode: ${write ? 'WRITE (--yes)' : 'DRY RUN (read-only)'}   ${bangkok()}\n`);
+export async function run({
+  baseUrl, env = process.env, fetchImpl = fetch, out = console.log, err = console.error,
+  readFileImpl = (p) => readFileSync(p, 'utf8'), writeFileImpl = (p, c) => writeFileSync(p, c),
+  saveBaseline, compareBaseline,
+} = {}) {
+  const results = [];
+  const stamp = () => new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Bangkok' }) + ' (Asia/Bangkok)';
+  const record = (id, name, outcome, detail) => {
+    results.push({ id, name, outcome, detail, time: stamp() });
+    out(`${outcome.padEnd(7)} ${String(id).padEnd(3)} ${name} - ${detail}`);
+  };
+  const check = (id, name, ok, detail) => record(id, name, ok ? 'PASS' : 'FAIL', detail);
+  const finish = () => {
+    const count = (o) => results.filter((r) => r.outcome === o).length;
+    out(`\nSummary: ${count('PASS')} PASS, ${count('FAIL')} FAIL, ${count('SKIPPED')} SKIPPED   (${stamp()})`);
+    return { results, exitCode: count('FAIL') > 0 ? 1 : 0 };
+  };
 
-  // 1. Login page and readiness (public).
-  const ready = await customer.call('GET', '/api/ready');
-  const page = await fetch(baseUrl + '/');
-  const html = page.ok ? await page.text() : '';
-  check(1, 'Login page served and /api/ready is ready', page.ok && ready.status === 200 && ready.data?.status === 'ready',
-    `GET / ${page.status}; /api/ready ${ready.status}; release label text ${/release-label|Lab \d+ release/i.test(html) ? 'present in the HTML' : 'rendered by the client (check on screen)'}`);
-
-  const haveCustomer = await customer.login(env('DINEQ_CUSTOMER_EMAIL'), env('DINEQ_CUSTOMER_PASSWORD'));
-  if (!haveCustomer) {
-    skip('2-9', 'Everything that needs a Customer', 'DINEQ_CUSTOMER_EMAIL / DINEQ_CUSTOMER_PASSWORD missing or login failed');
-    return;
+  const origin = safeOrigin(baseUrl ?? '');
+  if (!origin) {
+    err('Refused: --base-url must be a bare https origin (http only for localhost): no credentials, path, query or fragment.');
+    return { results, exitCode: 2 };
   }
+  out(`Target: ${origin}   mode: READ-ONLY (Login/Logout are the only writes)   ${stamp()}\n`);
 
-  // 3. Queue list shows maxPartySize on every queue.
-  const queues = await customer.call('GET', '/api/queues');
-  const list = Array.isArray(queues.data) ? queues.data : [];
-  const withLimit = list.length > 0 && list.every((q) => Number.isInteger(q.maxPartySize));
-  check(3, 'GET /api/queues has maxPartySize on every queue', queues.status === 200 && withLimit,
-    `status ${queues.status}; ` + list.map((q) => `${q.name ?? '?'}=${q.maxPartySize}/${q.status}`).join(', '));
-  const main = list.find((q) => q.id === '22222222-2222-4222-8222-222222222222');
-  if (main) check('3b', 'Main queue limit is 10 (migration 006)', main.maxPartySize === 10, `maxPartySize ${main.maxPartySize}`);
-  const target = main ?? list.find((q) => q.status === 'OPEN');
-  if (!target) { skip('4-7', 'Write checks', 'no OPEN queue found'); return; }
+  const customer = new Session(origin, fetchImpl);
+  const host = new Session(origin, fetchImpl);
+  const safe = async (label, fn) => {
+    try { return await fn(); } catch (e) { record('!', label, 'FAIL', `request failed (${e?.name === 'TimeoutError' ? 'timeout' : 'network or parsing error'})`); return null; }
+  };
 
-  // 7 (read part) and 8: history, always read-only.
-  const history = await customer.call('GET', '/api/me/entries');
-  const badRange = await customer.call('GET', '/api/me/entries?from=2026-12-31T00:00:00Z&to=2026-01-01T00:00:00Z');
-  const badStatus = await customer.call('GET', '/api/me/entries?status=BOGUS');
-  const filtered = await customer.call('GET', '/api/me/entries?status=COMPLETED&from=2020-01-01T00:00:00Z');
-  check(7, 'History filter: valid filter 200, reversed range 400, bad status 400',
-    history.status === 200 && filtered.status === 200 && badRange.status === 400 && badStatus.status === 400
-      && (filtered.data ?? []).every((t) => t.status === 'COMPLETED'),
-    `all ${history.status}, filtered ${filtered.status} (${(filtered.data ?? []).length} rows), reversed ${badRange.status}, bad status ${badStatus.status}`);
+  try {
+    // 1. Public: readiness and the UI root.
+    const anon = new Session(origin, fetchImpl);
+    const ready = await safe('Readiness', () => anon.call('GET', '/api/ready'));
+    const page = await safe('UI root', async () => {
+      const res = await fetchImpl(origin + '/', { method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(TIMEOUT_MS) });
+      return { status: res.status, ok: res.status === 200 && /id="root"/.test(await res.text()) };
+    });
+    check(1, 'UI root served and /api/ready is ready', ready?.status === 200 && ready?.data?.status === 'ready' && page?.ok === true,
+      `/api/ready ${ready?.status ?? '-'}; GET / ${page?.status ?? '-'}; the release label text is rendered by the client and must be read on screen`);
 
-  if (saveBaseline && history.status === 200) {
-    writeFileSync(saveBaseline, JSON.stringify({ savedAt: new Date().toISOString(),
-      tickets: history.data.map((t) => ({ id: t.id, status: t.status, ticketNo: t.ticketNo })) }, null, 2));
-    console.log(`        baseline saved: ${history.data.length} tickets -> ${saveBaseline}`);
-  }
-  if (compareBaseline) {
-    const base = JSON.parse(readFileSync(compareBaseline, 'utf8'));
-    const now = new Map((history.data ?? []).map((t) => [t.id, t.status]));
-    const lost = base.tickets.filter((t) => !now.has(t.id));
-    const changed = base.tickets.filter((t) => now.has(t.id) && now.get(t.id) !== t.status);
-    check(8, 'Persistence: every baseline ticket still exists with the same state', lost.length === 0 && changed.length === 0,
-      `${base.tickets.length} in baseline, ${lost.length} missing, ${changed.length} changed state`);
-  } else {
-    skip(8, 'Persistence across revision/restart', 'needs --save-baseline before and --compare-baseline after the deploy');
-  }
-
-  // 9. Forbidden cases (read-only: 403 must happen before anything changes).
-  const hostQueuesAsCustomer = await customer.call('GET', `/api/queues/${target.id}/entries`);
-  const callAsCustomer = await customer.call('POST', `/api/queues/${target.id}/call-next`);
-  check(9, 'Customer on Host endpoints gets 403 with no private data',
-    hostQueuesAsCustomer.status === 403 && callAsCustomer.status === 403 && !JSON.stringify(hostQueuesAsCustomer.body).includes('@'),
-    `list ${hostQueuesAsCustomer.status} ${hostQueuesAsCustomer.code ?? ''}; call-next ${callAsCustomer.status} ${callAsCustomer.code ?? ''}`);
-
-  const haveHost = await host.login(env('DINEQ_HOST_EMAIL'), env('DINEQ_HOST_PASSWORD'));
-  if (haveHost) {
-    const tables = await host.call('GET', `/api/queues/${target.id}/tables`);
-    check(10, 'Host table list answers (F-05 deployed)', tables.status === 200 && Array.isArray(tables.data),
-      `status ${tables.status}; ${Array.isArray(tables.data) ? tables.data.length + ' tables' : 'no list'}`);
-  } else {
-    skip(10, 'Host table list', 'host credentials missing or login failed');
-  }
-
-  if (!write) {
-    skip('2,4,5,6,9b', 'Checks that create tickets', 'dry run: add --yes (needs the owner\'s permission for production)');
-    return;
-  }
-
-  // ---- write section: refuse if the customer already has an active ticket in the queue -------------
-  const active = (history.data ?? []).filter((t) => t.queueId === target.id && ['WAITING', 'CALLED'].includes(t.status));
-  if (active.length > 0) {
-    skip('2,4,5,6,9b', 'Checks that create tickets', `customer already has ${active.length} active ticket(s) in the queue; not touching them`);
-    return;
-  }
-  const limit = target.maxPartySize;
-
-  // 4. Party size limit: over limit rejected, limit accepted, then a smaller size after cancelling.
-  const tooMany = await customer.call('POST', `/api/queues/${target.id}/entries`, { partySize: limit + 1 });
-  check(4, `Join with ${limit + 1} is rejected (INVALID_PARTY_SIZE naming the limit)`,
-    tooMany.status === 400 && tooMany.code === 'INVALID_PARTY_SIZE' && tooMany.message.includes(String(limit)),
-    `status ${tooMany.status} ${tooMany.code ?? ''}`);
-  const atLimit = await customer.call('POST', `/api/queues/${target.id}/entries`, { partySize: limit });
-  if (atLimit.status === 201) created.push(atLimit.data.id);
-  check('4b', `Join with ${limit} (the limit) is accepted`, atLimit.status === 201 && atLimit.data?.status === 'WAITING',
-    `status ${atLimit.status} ticket ${atLimit.data?.ticketNo ?? '-'}`);
-  if (atLimit.status !== 201) return;
-
-  // 5. Cancel, then join again with 9 (or the limit if smaller): new ticket number.
-  const cancelled = await customer.call('POST', `/api/entries/${atLimit.data.id}/cancel`);
-  if (cancelled.status === 200) created.splice(created.indexOf(atLimit.data.id), 1);
-  const size = Math.min(9, limit);
-  const again = await customer.call('POST', `/api/queues/${target.id}/entries`, { partySize: size });
-  if (again.status === 201) created.push(again.data.id);
-  check(5, 'Cancel a WAITING ticket, then join again gets a new ticket number',
-    cancelled.status === 200 && cancelled.data?.status === 'CANCELLED' && again.status === 201 && again.data.ticketNo > atLimit.data.ticketNo,
-    `cancel ${cancelled.status} ${cancelled.data?.status ?? ''}; rejoin ${again.status} ticket ${again.data?.ticketNo ?? '-'} (was ${atLimit.data.ticketNo}), party ${size}`);
-  if (again.status !== 201) { await cleanup(); return; }
-
-  // 9b. Another customer cannot cancel this ticket.
-  if (await other.login(env('DINEQ_OTHER_CUSTOMER_EMAIL'), env('DINEQ_OTHER_CUSTOMER_PASSWORD'))) {
-    const steal = await other.call('POST', `/api/entries/${again.data.id}/cancel`);
-    const still = await customer.call('GET', `/api/entries/${again.data.id}`);
-    check('9b', "Another Customer's cancel is 403 and the ticket stays WAITING", steal.status === 403 && still.data?.status === 'WAITING',
-      `status ${steal.status} ${steal.code ?? ''}; owner still sees ${still.data?.status ?? still.status}`);
-  } else {
-    skip('9b', "Another Customer's cancel", 'second customer credentials missing or login failed');
-  }
-
-  // 2. Sprint 1 journey, only when the script's ticket is the only one the Host sees.
-  if (haveHost) {
-    const waiting = await host.call('GET', `/api/queues/${target.id}/entries`);
-    const rows = waiting.data ?? [];
-    const onlyOurs = waiting.status === 200 && rows.length === 1 && rows[0].id === again.data.id;
-    if (onlyOurs) {
-      const called = await host.call('POST', `/api/queues/${target.id}/call-next`);
-      const done = called.status === 200 ? await host.call('POST', `/api/entries/${again.data.id}/complete`) : called;
-      if (done.status === 200) created.splice(created.indexOf(again.data.id), 1);
-      const seen = await customer.call('GET', `/api/entries/${again.data.id}`);
-      check(2, 'Sprint 1 journey: join, Host calls next, Host completes, Customer sees COMPLETED',
-        called.status === 200 && done.status === 200 && seen.data?.status === 'COMPLETED',
-        `call-next ${called.status}; complete ${done.status}; customer sees ${seen.data?.status ?? seen.status}`);
-    } else {
-      skip(2, 'Sprint 1 journey (Host call-next and complete)',
-        `the Host's list has ${rows.length} ticket(s) besides/including ours; call-next would take the oldest one, so it was not run`);
+    // Accounts: login, then verify the role and that the two slots are different users, before anything else.
+    if (!env.DINEQ_CUSTOMER_EMAIL || !env.DINEQ_CUSTOMER_PASSWORD) {
+      record('2-9', 'Everything that needs a Customer', 'SKIPPED', 'customer credentials not provided');
+      return finish();
     }
-  } else {
-    skip(2, 'Sprint 1 journey', 'host credentials missing or login failed');
-  }
-
-  // 6. Close and reopen, only for the queue named with --allow-close.
-  if (allowClose && haveHost) {
-    const before = (await customer.call('GET', '/api/queues')).data?.find((q) => q.id === allowClose);
-    if (!before || before.status !== 'OPEN') {
-      skip(6, 'Close and reopen', 'the allowed queue is missing or not OPEN');
-    } else {
-      await cleanup(); // the customer must not hold an active ticket while we test the closed join
-      const closed = await host.call('PATCH', `/api/queues/${allowClose}`, { status: 'CLOSED' });
-      const joinClosed = await customer.call('POST', `/api/queues/${allowClose}/entries`, { partySize: 1 });
-      const reopened = await host.call('PATCH', `/api/queues/${allowClose}`, { status: 'OPEN' });
-      check(6, 'Host closes and reopens; Join while closed is 409 QUEUE_CLOSED',
-        closed.status === 200 && joinClosed.status === 409 && joinClosed.code === 'QUEUE_CLOSED' && reopened.status === 200,
-        `close ${closed.status}; join while closed ${joinClosed.status} ${joinClosed.code ?? ''}; reopen ${reopened.status}`);
-      if (reopened.status !== 200) console.error('WARNING: the queue may still be CLOSED; reopen it by hand.');
+    const loggedIn = await safe('Customer login', () => customer.login(env.DINEQ_CUSTOMER_EMAIL, env.DINEQ_CUSTOMER_PASSWORD));
+    const who = loggedIn ? await safe('Customer identity', () => customer.me()) : null;
+    if (!who || who.role !== 'CUSTOMER') {
+      record('A', 'Customer account role', 'FAIL', who ? `the Customer slot holds a ${String(who.role).slice(0, 12)} account (role mismatch); stopped before any other check` : 'login failed or identity unreadable; stopped');
+      return finish();
     }
-  } else {
-    skip(6, 'Close and reopen', 'not requested (--allow-close <queueId>) or no host login');
+    record('A', 'Customer account role', 'PASS', 'GET /api/auth/me reports CUSTOMER');
+
+    let hostOk = false;
+    if (env.DINEQ_HOST_EMAIL && env.DINEQ_HOST_PASSWORD) {
+      const hostIn = await safe('Host login', () => host.login(env.DINEQ_HOST_EMAIL, env.DINEQ_HOST_PASSWORD));
+      const hostWho = hostIn ? await safe('Host identity', () => host.me()) : null;
+      if (!hostWho || hostWho.role !== 'HOST') {
+        record('B', 'Host account role', 'FAIL', hostWho ? `the Host slot holds a ${String(hostWho.role).slice(0, 12)} account (role mismatch); Host checks skipped` : 'login failed or identity unreadable; Host checks skipped');
+      } else if (hostWho.id === who.id) {
+        record('B', 'Host account is a different user', 'FAIL', 'the Host and Customer slots are the same account (not distinct); Host checks skipped');
+      } else {
+        hostOk = true;
+        record('B', 'Host account role', 'PASS', 'GET /api/auth/me reports HOST, different user from the Customer');
+      }
+    } else {
+      record('B', 'Host checks', 'SKIPPED', 'host credentials not provided');
+    }
+
+    // Public read after the role checks: no session means 401.
+    const unauth = await safe('Unauthenticated read', () => anon.call('GET', '/api/queues'));
+    check('1b', 'GET /api/queues without a session is 401', unauth?.status === 401, `status ${unauth?.status ?? '-'}`);
+
+    // 3. Queue list.
+    const queues = await safe('Queue list', () => customer.call('GET', '/api/queues'));
+    const list = Array.isArray(queues?.data) ? queues.data : [];
+    check(3, 'GET /api/queues has maxPartySize on every queue', queues?.status === 200 && list.length > 0 && list.every((q) => Number.isInteger(q.maxPartySize)),
+      `status ${queues?.status ?? '-'}; ` + list.map((q) => `${q.name ?? '?'}=${q.maxPartySize}/${q.status}`).join(', '));
+    const main = list.find((q) => q.id === MAIN_QUEUE);
+    if (main) check('3b', 'Main queue limit is 10 (migration 006)', main.maxPartySize === 10, `maxPartySize ${main.maxPartySize}`);
+    const target = main ?? list[0];
+
+    // 7 and 8. History: reads only. A failed read is a failure, never an empty history.
+    const history = await safe('History', () => customer.call('GET', '/api/me/entries'));
+    const historyOk = history?.status === 200 && Array.isArray(history.data);
+    if (!historyOk) {
+      record(7, 'History filter', 'FAIL', `history could not be read (status ${history?.status ?? '-'}); no baseline written or compared`);
+    } else {
+      const badRange = await safe('Reversed range', () => customer.call('GET', '/api/me/entries?from=2026-12-31T00:00:00Z&to=2026-01-01T00:00:00Z'));
+      const badStatus = await safe('Bad status', () => customer.call('GET', '/api/me/entries?status=BOGUS'));
+      const filtered = await safe('Filtered', () => customer.call('GET', '/api/me/entries?status=COMPLETED&from=2020-01-01T00:00:00Z'));
+      check(7, 'History filter: valid filter 200, reversed range 400, bad status 400',
+        filtered?.status === 200 && badRange?.status === 400 && badStatus?.status === 400 && (filtered.data ?? []).every((t) => t.status === 'COMPLETED'),
+        `all ${history.status}, filtered ${filtered?.status ?? '-'} (${(filtered?.data ?? []).length} rows), reversed ${badRange?.status ?? '-'}, bad status ${badStatus?.status ?? '-'}`);
+      if (saveBaseline) {
+        writeFileImpl(saveBaseline, JSON.stringify({ savedAt: new Date().toISOString(),
+          tickets: history.data.map((t) => ({ id: t.id, status: t.status, ticketNo: t.ticketNo })) }, null, 2));
+        out(`        baseline saved: ${history.data.length} tickets`);
+      }
+      if (compareBaseline) {
+        let base = null;
+        try { base = JSON.parse(readFileImpl(compareBaseline)); } catch { /* reported below */ }
+        if (!base || !Array.isArray(base.tickets)) {
+          record(8, 'Persistence compare', 'FAIL', 'the baseline file could not be read');
+        } else {
+          const now = new Map(history.data.map((t) => [t.id, t.status]));
+          const lost = base.tickets.filter((t) => !now.has(t.id));
+          const changed = base.tickets.filter((t) => now.has(t.id) && now.get(t.id) !== t.status);
+          check(8, 'Persistence: every baseline ticket still exists with the same state', lost.length === 0 && changed.length === 0,
+            `${base.tickets.length} in baseline, ${lost.length} missing, ${changed.length} changed state`);
+        }
+      } else {
+        record(8, 'Persistence across revision or restart', 'SKIPPED', 'needs --save-baseline before and --compare-baseline after the change');
+      }
+    }
+
+    // 9. Forbidden role, read-only form: a Customer must not read the Host list (GET only).
+    if (target) {
+      const hostList = await safe('Customer on Host list', () => customer.call('GET', `/api/queues/${target.id}/entries`));
+      const body = JSON.stringify(hostList ?? {});
+      check(9, 'Customer reading the Host waiting list gets 403 with no private data', hostList?.status === 403 && !body.includes('@'),
+        `status ${hostList?.status ?? '-'} ${hostList?.code ?? ''}`);
+    }
+
+    // 10. Host table list (read-only).
+    if (hostOk && target) {
+      const tables = await safe('Tables', () => host.call('GET', `/api/queues/${target.id}/tables`));
+      check(10, 'Host table list answers (F-05 deployed)', tables?.status === 200 && Array.isArray(tables.data),
+        `status ${tables?.status ?? '-'}; ${Array.isArray(tables?.data) ? tables.data.length + ' tables' : 'no list'}`);
+    } else {
+      record(10, 'Host table list', 'SKIPPED', 'no verified Host account');
+    }
+
+    record('2,4,5,6', 'Checks that write data', 'SKIPPED',
+      'not run by this read-only tool: join, party size limit, cancel, Host Call Next and Complete, close and reopen are manual checks (or covered by the recorded local E2E run)');
+  } finally {
+    await customer.logout();
+    await host.logout();
   }
+  return finish();
 }
 
-try {
-  await main();
-} catch (error) {
-  fail('!', 'Unexpected error', error.message);
-} finally {
-  try { await cleanup(); } catch { /* reported below */ }
-  if (created.length) console.error(`WARNING: ${created.length} ticket(s) created by this run are still open: ${created.join(', ')}`);
-  const count = (o) => results.filter((r) => r.outcome === o).length;
-  console.log(`\nSummary: ${count('PASS')} PASS, ${count('FAIL')} FAIL, ${count('SKIPPED')} SKIPPED   (${bangkok()})`);
-  process.exitCode = count('FAIL') > 0 || created.length > 0 ? 1 : 0;
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  let opts;
+  try { opts = parseArgs(process.argv.slice(2)); } catch (e) { console.error(e.message); process.exit(2); }
+  const { exitCode } = await run({ ...opts });
+  process.exitCode = exitCode;
 }

@@ -17,14 +17,14 @@ Status words: planned = contract only; in progress = started; implemented = code
 
 ## C.2 Remaining work to the 13 December plan
 
-The owners and dates below are **proposals** from the working plan and must be confirmed by the two authors before they go into the PDF.
+Siwarak confirmed his two items in his review of this file on 28 November (F-08 on 6 to 10 December, AC-75 on 11 December) and that F-07b stays with Anapat. The other dates are still **proposals** that Anapat must confirm before they go into the PDF.
 
 | Feature / AC | What remains | Proposed owner | Proposed date |
 | :-- | :-- | :-- | :-- |
-| F-07b (AC-58, 59) | tests first, endpoints for Host history and ticket events, UI | Anapat | 6 to 8 Dec |
-| F-08 (AC-60 to 64) | tests first, summary endpoint and Host page | Siwarak | 6 to 10 Dec |
+| F-07b (AC-58, 59) | tests first, endpoints for Host history and ticket events, UI | Anapat (owner confirmed by Siwarak; date proposed) | 6 to 8 Dec |
+| F-08 (AC-60 to 64) | tests first, summary endpoint and Host page | Siwarak (confirmed) | 6 to 10 Dec |
 | AC-73 | measurement script and a real run with environment, tool and time recorded | Anapat | 10 Dec |
 | AC-74 | manual keyboard checklist with recorded results | both | 11 Dec |
-| AC-75 | screen by state checklist with captures | Siwarak | 11 Dec |
+| AC-75 | screen by state checklist with captures | Siwarak (confirmed) | 11 Dec |
 | AC-76 and release | final regression, release PR, deploy, post-deploy checks, version ledger | both | 12 to 13 Dec |
 | Carry-over | merge `lab6-staging` records if wanted, extend demo data on production, share `assertAssigned`, make INFRA schema checks use `current_schema()` everywhere | both | before 13 Dec |

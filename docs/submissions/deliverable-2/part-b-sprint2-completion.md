@@ -7,7 +7,7 @@
 | F-04 Customer cancel (AC-28..35) | `docs/sprints/sprint-2/F-04-cancel.md` | #99, `615e70d` | one finding (make AC-33 executable with the UNRESOLVED_CALLED guard), fixed, approved |
 | F-05 No-show and tables (AC-36..45) | `docs/sprints/sprint-2/F-05-no-show-seating.md` | #104, `7e51dcb` | findings on missing test impacts and check order, fixed |
 | F-06 Queues and open/close (AC-46..51) | `docs/sprints/sprint-2/F-06-queues.md` | #100, `5bfc2b8` | three findings (backfill collisions, response shape, seed-queue ordering), fixed, approved |
-| Lab 7 change (AC-25..27, 26b) | `docs/labs/lab-07/` and F-02 v0.4 to v0.6 | #98, `fa13210`; #112, `07952da` | approved; wording fix recorded after the second revision |
+| Lab 7 change (AC-25..27, 26b) | `docs/labs/lab-07/` and F-02 v0.4 to v0.6 | #98, `fa13210`; #112, `07952da` | #98: approved before merge. #112: the reviewer's wording point was fixed before the merge, but his record 'Reviewed d1222be, no blocking finding' was written **after** the merge; it is a recorded review, not an Approve before the merge |
 | Sprint 3 contracts (AC-52..76) | `docs/sprints/sprint-3/` | #101, `e82d592` | one finding (do not label planned work as implemented), fixed, approved |
 
 Each contract was merged before the branch that holds its tests. The history of each contract is in its Revision History.

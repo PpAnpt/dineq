@@ -60,6 +60,9 @@ These tests assert the old rule literally. They are changed in the RED step, eac
 | TEST-07 queue JSON shape | exact keys without `maxPartySize` | adds `maxPartySize` | AC-07 revised |
 | INFRA-04 schema test (`party_size <= 8`) | CHECK text contains `<= 8` | CHECK text contains `<= 10`, and `service_queues` CHECK for `max_party_size` | Column range widened |
 | INFRA-07 `[0, 9]` rejected | 9 rejected by the DB | `[0, 11]` rejected by the DB | Column range widened |
+| INFRA-05 `schema_migrations` count | exactly 1 migration recorded | number of `.sql` files in `database/migrations` | Migration `002` is added; the literal 1 would only restate the old file count (found while writing the RED tests) |
+| E2E-2 / DEMO-03 (`client/e2e/sprint-1.spec.js`) | label `Party size (1-8)`, out-of-range example 9 | label `Party size (1-10)` and `max=10` for the seeded main queue, out-of-range example 11 (server still rejects it) | UI label and limit come from `maxPartySize`; found when searching the repo for the hard-coded label |
+| `join()` helper in the E2E spec and `client/e2e/live-evidence.mjs` | label `Party size (1-8)` | label matched for any per-queue limit | Label text now depends on the queue |
 
 Fixtures that insert entries with `party_size` up to 8 (`controlled-fifo.test.js`, `f03-host.test.js`, `queueFixtures.js`) stay valid with no change.
 
@@ -82,3 +85,5 @@ About 6 source files, 1 migration, 2 UI lines, 5 revised tests and about 8 new t
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-28 | Initial impact analysis, committed before any test or implementation change |
+| v0.2 | 2026-11-28 | Add INFRA-05 to the tests that change with the contract (migration count follows the number of migration files); found while preparing the RED tests, recorded before the test commit |
+| v0.3 | 2026-11-28 | Add the E2E label/limit changes (DEMO-03 uses 11 against `max=10`) found while searching for the hard-coded 8 in the client; recorded before the E2E test commit |

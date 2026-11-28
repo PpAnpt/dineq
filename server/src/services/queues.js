@@ -11,8 +11,15 @@ export function requireUuid(value, name) {
   return value;
 }
 
+// Shape check only (SDS C.6.3 step 5); the upper bound is the target queue's own
+// max_party_size, checked inside the Join transaction under the queue lock (Lab 7, L7-CR-01).
 export function isValidPartySize(value) {
-  return typeof value === 'number' && Number.isInteger(value) && value >= 1 && value <= 8;
+  return typeof value === 'number' && Number.isInteger(value) && value >= 1;
+}
+
+function partySizeError(limit) {
+  return httpError(400, 'INVALID_PARTY_SIZE',
+    `partySize must be an integer from 1 to ${limit} for this queue`);
 }
 
 export function toTicket(row) {
@@ -33,7 +40,7 @@ export function createQueueService({ pool }) {
     // C.6.1: no next_ticket_no, assignment rows or customer data.
     async listQueues(user) {
       const { rows } = await pool.query(
-        `SELECT q.id, q.status, r.id AS restaurant_id, r.name AS restaurant_name,
+        `SELECT q.id, q.status, q.max_party_size, r.id AS restaurant_id, r.name AS restaurant_name,
                 ($2 = 'HOST' AND EXISTS (
                   SELECT 1 FROM queue_operator_assignments a
                   WHERE a.queue_id = q.id AND a.host_user_id = $1)) AS is_assigned
@@ -43,6 +50,7 @@ export function createQueueService({ pool }) {
         id: row.id,
         restaurant: { id: row.restaurant_id, name: row.restaurant_name },
         status: row.status,
+        maxPartySize: row.max_party_size,
         isAssigned: row.is_assigned,
       }));
     },
@@ -81,16 +89,19 @@ export function createQueueService({ pool }) {
     async join(user, queueId, partySize) {
       await this.assertQueueExists(queueId);
       if (!isValidPartySize(partySize)) {
-        throw httpError(400, 'INVALID_PARTY_SIZE', 'partySize must be an integer from 1 to 8');
+        throw httpError(400, 'INVALID_PARTY_SIZE', 'partySize must be a whole number of at least 1');
       }
 
       const client = await pool.connect();
       try {
         await client.query('BEGIN');
         const locked = await client.query(
-          'SELECT id, status, next_ticket_no FROM service_queues WHERE id = $1 FOR UPDATE', [queueId]);
+          'SELECT id, status, next_ticket_no, max_party_size FROM service_queues WHERE id = $1 FOR UPDATE',
+          [queueId]);
         if (!locked.rows[0]) throw httpError(404, 'NOT_FOUND', 'Queue not found');
         const queue = locked.rows[0];
+        // Per-queue limit from the locked row, before the CLOSED check (Sprint 1 order is kept).
+        if (partySize > queue.max_party_size) throw partySizeError(queue.max_party_size);
         if (queue.status !== 'OPEN') throw httpError(409, 'QUEUE_CLOSED', 'This queue is closed');
 
         const account = await client.query('SELECT role, is_active FROM users WHERE id = $1', [user.id]);

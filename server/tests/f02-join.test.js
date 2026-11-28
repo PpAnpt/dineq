@@ -50,6 +50,8 @@ describe('F-02 queue list', () => {
     id: seedIds.queue,
     restaurant: { id: seedIds.restaurant, name: 'DineQ Demo Restaurant' },
     status,
+    // Lab 7 (L7-CR-01, AC-07 revised): the seeded main queue exposes its per-queue limit (10).
+    maxPartySize: 10,
     isAssigned,
   });
 
@@ -203,8 +205,12 @@ describe('F-02 join queue', () => {
     expect(await nextTicketNo()).toBe(1);
   });
 
+  // Lab 7 (L7-CR-01, AC-12 revised): the seeded main queue now allows 10, so the old
+  // out-of-range example 9 became 11 here; 9 is still rejected on a limit-8 queue
+  // (see l7-party-limit.test.js, TEST-25). All other invalid shapes are unchanged.
   test.each([
-    ['0', { partySize: 0 }], ['9', { partySize: 9 }], ['1.5', { partySize: 1.5 }],
+    ['0', { partySize: 0 }], ['11', { partySize: 11 }], ['1.5', { partySize: 1.5 }],
+    ['-1', { partySize: -1 }], ['"ten"', { partySize: 'ten' }],
     ['"abc"', { partySize: 'abc' }], ['null', { partySize: null }], ['missing', {}],
   ])('TEST-12 / AC-12: partySize %s is 400 INVALID_PARTY_SIZE and changes nothing', async (_label, body) => {
     const cookie = await login(customerEmail(1));
@@ -218,10 +224,19 @@ describe('F-02 join queue', () => {
     expect(await nextTicketNo()).toBe(1);
   });
 
-  test.each([1, 8])('TEST-12 / AC-12: boundary partySize %i is accepted', async (partySize) => {
+  // Lab 7 (L7-CR-01): the old boundaries 1 and 8 stay valid; 9 and 10 are valid on the seeded main queue.
+  test.each([1, 8, 9, 10])('TEST-12 / AC-12: boundary partySize %i is accepted on the seeded main queue', async (partySize) => {
     const response = await joinAs(await login(customerEmail(1)), partySize);
     expect(response.status).toBe(201);
     expect(response.body.data.partySize).toBe(partySize);
+  });
+
+  test('TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED', async () => {
+    await pool.query("UPDATE service_queues SET status = 'CLOSED' WHERE id = $1", [seedIds.queue]);
+    const before = await state();
+    expectError(await joinAs(await login(customerEmail(1)), 11), 400, 'INVALID_PARTY_SIZE');
+    expect(await state()).toBe(before);
+    expectError(await joinAs(await login(customerEmail(1)), 4), 409, 'QUEUE_CLOSED');
   });
 
   test('TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change', async () => {

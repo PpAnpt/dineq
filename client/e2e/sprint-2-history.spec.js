@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetAndSeed, closeTestPool } from '../../server/tests/helpers/index.js';
+import { seedIds } from '../../database/seed/seedData.js';
 
 // F-07a browser journey (AC-57): the Customer filters their own tickets on My queue by status and
 // date range, clears the filter, and sees a clear empty state and a readable validation error.
@@ -22,8 +23,10 @@ async function signIn(browser, email) {
 
 async function join(page, partySize) {
   await page.getByRole('link', { name: 'Queues', exact: true }).click();
-  await page.getByLabel(/^Party size \(1–\d+\)$/).fill(String(partySize));
-  await page.getByTestId('join-queue').click();
+  // Scoped to the main queue's card so the helper also works when /queues lists several queues (F-06).
+  const card = page.locator(`[data-queue-id="${seedIds.queue}"]`);
+  await card.getByLabel(/^Party size \(1–\d+\)$/).fill(String(partySize));
+  await card.getByTestId('join-queue').click();
 }
 
 test('E2E-9 / F-07a AC-57: filter My queue by status and date range, clear it, empty state and error', async ({ browser }) => {

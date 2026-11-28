@@ -23,6 +23,8 @@ export function createRoutes({ pool, config }) {
     ['post', '/entries/:entryId/complete'],
     ['get', '/queues/:queueId/tables'],
     ['post', '/tables/:tableId/release'],
+    ['post', '/entries/:entryId/no-show'],
+    ['post', '/entries/:entryId/seat'],
     ['patch', '/queues/:queueId'],
   ];
   for (const [method, path] of hostOnlyRoutes) router[method](path, requireRole('HOST'));

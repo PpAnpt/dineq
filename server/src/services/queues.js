@@ -22,6 +22,42 @@ function partySizeError(limit) {
     `partySize must be an integer from 1 to ${limit} for this queue`);
 }
 
+const HISTORY_STATUSES = ['WAITING', 'CALLED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'];
+const ISO_WITH_ZONE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/;
+
+// F-07a (docs/sprints/sprint-3/F-07-history.md section 1): optional status, from, to. Anything
+// unexpected is a 400 VALIDATION_ERROR before any query; unknown parameters are ignored.
+function parseInstant(value, name) {
+  const bad = () => httpError(400, 'VALIDATION_ERROR', `${name} must be an ISO 8601 timestamp with a timezone`);
+  if (typeof value !== 'string') throw bad();
+  const m = ISO_WITH_ZONE.exec(value);
+  if (!m) throw bad();
+  const [year, month, day, hour, minute, second] = m.slice(1, 7).map(part => (part === undefined ? 0 : Number(part)));
+  const calendar = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  const offset = m[7] === 'Z' ? null : /^[+-](\d{2}):(\d{2})$/.exec(m[7]);
+  if (month < 1 || month > 12 || hour > 23 || minute > 59 || second > 59
+    || calendar.getUTCFullYear() !== year || calendar.getUTCMonth() !== month - 1 || calendar.getUTCDate() !== day
+    || (offset && (Number(offset[1]) > 23 || Number(offset[2]) > 59))) throw bad();
+  return { text: value, ms: Date.parse(value) };
+}
+
+export function parseHistoryFilters(query = {}) {
+  const filters = { status: null, from: null, to: null };
+  if (Object.hasOwn(query, 'status')) {
+    const { status } = query;
+    if (typeof status !== 'string' || !HISTORY_STATUSES.includes(status)) {
+      throw httpError(400, 'VALIDATION_ERROR', `status must be one of ${HISTORY_STATUSES.join(', ')}`);
+    }
+    filters.status = status;
+  }
+  const from = Object.hasOwn(query, 'from') ? parseInstant(query.from, 'from') : null;
+  const to = Object.hasOwn(query, 'to') ? parseInstant(query.to, 'to') : null;
+  if (from && to && from.ms > to.ms) throw httpError(400, 'VALIDATION_ERROR', 'from must not be after to');
+  filters.from = from?.text ?? null;
+  filters.to = to?.text ?? null;
+  return filters;
+}
+
 export function toTicket(row) {
   return {
     id: row.id,
@@ -55,10 +91,17 @@ export function createQueueService({ pool }) {
       }));
     },
 
-    async listMyEntries(user) {
+    // customer_id comes from the Session; the optional filters (F-07a) only narrow the caller's own tickets.
+    // created_at >= from (inclusive) and created_at < to (exclusive); the id is a final stable tie-break.
+    async listMyEntries(user, filters = {}) {
       const { rows } = await pool.query(
-        'SELECT * FROM queue_entries WHERE customer_id = $1 ORDER BY created_at DESC, ticket_no DESC',
-        [user.id]);
+        `SELECT * FROM queue_entries
+          WHERE customer_id = $1
+            AND ($2::text IS NULL OR status = $2)
+            AND ($3::timestamptz IS NULL OR created_at >= $3::timestamptz)
+            AND ($4::timestamptz IS NULL OR created_at < $4::timestamptz)
+          ORDER BY created_at DESC, ticket_no DESC, id`,
+        [user.id, filters.status ?? null, filters.from ?? null, filters.to ?? null]);
       return rows.map(toTicket);
     },
 

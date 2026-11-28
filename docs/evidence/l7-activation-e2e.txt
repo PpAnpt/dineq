@@ -1,0 +1,26 @@
+Command: playwright test --reporter=list,json (npm run test:e2e)
+Working directory: client
+Commit: dcecc72beae724db5160b2ad08aeb604605c86f6
+Date: 2026-11-28T08:55:48.146Z
+Node: v24.14.0
+
+
+Running 11 tests using 1 worker
+
+(node:1112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › e2e\sprint-1.spec.js:43:1 › E2E-1 / DEMO-01: join, Host Call Next + Complete, customer sees persisted COMPLETED (4.4s)
+  ok  2 [chromium] › e2e\sprint-1.spec.js:74:1 › E2E-2 / DEMO-02 + DEMO-03: duplicate active join and invalid party size are rejected (1.0s)
+  ok  3 [chromium] › e2e\sprint-1.spec.js:103:1 › E2E-3 / DEMO-04: a Customer cannot use the Host page or call-next API (477ms)
+  ok  4 [chromium] › e2e\sprint-1.spec.js:120:1 › E2E-4 / DEMO-05: after logout the old session cookie is rejected (554ms)
+  ok  5 [chromium] › e2e\sprint-1.spec.js:143:1 › E2E-5 / LAB5-C06: login page shows the Lab 5 release label (225ms)
+  ok  6 [chromium] › e2e\sprint-1.spec.js:148:1 › E2E-6 / LAB5: evidence helper sees the Customer 403 on the Host page without a Host API request (431ms)
+  ok  7 [chromium] › e2e\sprint-2-cancel.spec.js:31:1 › E2E-7 / F-04 AC-28 AC-33: cancel needs a confirmation, shows CANCELLED, and a new join gets a new ticket number (1.5s)
+  ok  8 [chromium] › e2e\sprint-2-history.spec.js:32:1 › E2E-9 / F-07a AC-57: filter My queue by status and date range, clear it, empty state and error (1.4s)
+  ok  9 [chromium] › e2e\sprint-2-queues.spec.js:24:1 › E2E-8 / F-06 AC-46 AC-47 AC-49: Host closes the queue, Customer cannot join, Host reopens, Customer joins (1.3s)
+  ok 10 [chromium] › e2e\sprint-2-seating.spec.js:25:1 › E2E-10 / F-05 AC-36 AC-37 AC-38: keyboard No-show confirmation, owner refresh and rejoin retain old history (1.4s)
+  ok 11 [chromium] › e2e\sprint-2-seating.spec.js:54:1 › E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and retained owner completion (2.0s)
+
+  11 passed (20.0s)
+
+Exit code: 0

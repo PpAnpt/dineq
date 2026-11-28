@@ -110,10 +110,15 @@ function CancelTicket({ ticket, onChanged }) {
   const [error, setError] = useState(null);
   const trigger = useRef(null);
   const keep = useRef(null);
-  useEffect(() => { if (confirming) keep.current?.focus(); }, [confirming]);
+  const returnFocus = useRef(false);
+  useEffect(() => {
+    if (confirming) keep.current?.focus();
+    // The trigger is disabled while confirming, so focus returns after it is enabled again.
+    else if (returnFocus.current) { returnFocus.current = false; trigger.current?.focus(); }
+  }, [confirming]);
   function close() {
+    returnFocus.current = true;
     setConfirming(false);
-    trigger.current?.focus();
   }
   async function confirm() {
     setPending(true);

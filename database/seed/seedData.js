@@ -2,6 +2,7 @@
 export const seedIds = {
   restaurant: '11111111-1111-4111-8111-111111111111',
   queue: '22222222-2222-4222-8222-222222222222',
+  barQueue: '33333333-3333-4333-8333-333333333333',
 };
 
 export async function seed(client, passwordHash) {
@@ -14,6 +15,7 @@ export async function seed(client, passwordHash) {
     })),
     { email: 'host1@dineq.test', role: 'HOST' },
     { email: 'host2@dineq.test', role: 'HOST' },
+    { email: 'host3@dineq.test', role: 'HOST' },
   ];
   await client.query('BEGIN');
   try {
@@ -28,13 +30,21 @@ export async function seed(client, passwordHash) {
     [seedIds.restaurant]);
     // Lab 7 (L7-CR-01): the main demo queue takes parties up to 10. Only this column is updated on
     // conflict, so re-running the seed never touches status, ticket counter or tickets.
-    await client.query(`INSERT INTO service_queues (id, restaurant_id, status, max_party_size)
-      VALUES ($1, $2, 'OPEN', 10)
-      ON CONFLICT (id) DO UPDATE SET max_party_size = EXCLUDED.max_party_size`,
+    // F-06: the main queue is named 'Main queue' (the migration backfill reserves that name for this id).
+    await client.query(`INSERT INTO service_queues (id, restaurant_id, status, max_party_size, name)
+      VALUES ($1, $2, 'OPEN', 10, 'Main queue')
+      ON CONFLICT (id) DO UPDATE SET max_party_size = EXCLUDED.max_party_size, name = EXCLUDED.name`,
     [seedIds.queue, seedIds.restaurant]);
+    // F-06: a second queue in the same restaurant; status and counter are never reset on conflict.
+    await client.query(`INSERT INTO service_queues (id, restaurant_id, status, name)
+      VALUES ($1, $2, 'OPEN', 'Bar counter') ON CONFLICT (id) DO NOTHING`,
+    [seedIds.barQueue, seedIds.restaurant]);
     await client.query(`INSERT INTO queue_operator_assignments (queue_id, host_user_id)
       SELECT $1, id FROM users WHERE email = 'host1@dineq.test'
       ON CONFLICT DO NOTHING`, [seedIds.queue]);
+    await client.query(`INSERT INTO queue_operator_assignments (queue_id, host_user_id)
+      SELECT $1, id FROM users WHERE email = 'host3@dineq.test'
+      ON CONFLICT DO NOTHING`, [seedIds.barQueue]);
     await client.query('COMMIT');
   } catch (error) {
     await client.query('ROLLBACK');

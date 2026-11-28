@@ -151,13 +151,51 @@ function CancelTicket({ ticket, onChanged }) {
   </div>;
 }
 
+const TICKET_STATUSES = ['WAITING', 'CALLED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'];
+const NO_FILTER = { status: '', from: '', to: '' };
+
+// F-07a: the query string for GET /api/me/entries. Date-time inputs are local time; the server
+// needs an ISO 8601 instant with a timezone, so they are converted here. An unreadable value is
+// dropped so the server's 400 is not triggered by the browser's own formatting.
+function historyQuery(filter) {
+  const params = new URLSearchParams();
+  if (filter.status) params.set('status', filter.status);
+  for (const key of ['from', 'to']) {
+    const time = filter[key] ? new Date(filter[key]) : null;
+    if (time && !Number.isNaN(time.getTime())) params.set(key, time.toISOString());
+  }
+  const text = params.toString();
+  return text ? `?${text}` : '';
+}
+
 export function MyQueuePage() {
-  const resource = useResource('/me/entries');
+  const [draft, setDraft] = useState(NO_FILTER);
+  const [applied, setApplied] = useState(NO_FILTER);
+  const filtered = Object.values(applied).some(Boolean);
+  const resource = useResource(`/me/entries${historyQuery(applied)}`);
   return <>
     <h1>My queue</h1>
     <p>Refresh to see the latest ticket status.</p>
     <button onClick={resource.refresh} disabled={resource.loading} data-testid="refresh-my-queue">Refresh</button>
-    <ResourceState resource={resource} emptyMessage="You have no tickets yet. Join a restaurant queue to get started." />
+    <form onSubmit={event => { event.preventDefault(); setApplied(draft); }} aria-label="Filter my tickets"
+      data-testid="history-filter">
+      <label htmlFor="filter-status">Status</label>
+      <select id="filter-status" value={draft.status} onChange={event => setDraft({ ...draft, status: event.target.value })}>
+        <option value="">All</option>
+        {TICKET_STATUSES.map(status => <option key={status} value={status}>{status}</option>)}
+      </select>
+      <label htmlFor="filter-from">From</label>
+      <input id="filter-from" type="datetime-local" value={draft.from}
+        onChange={event => setDraft({ ...draft, from: event.target.value })} />
+      <label htmlFor="filter-to">To</label>
+      <input id="filter-to" type="datetime-local" value={draft.to}
+        onChange={event => setDraft({ ...draft, to: event.target.value })} />
+      <button type="submit" data-testid="apply-filter">Apply filter</button>
+      <button type="button" data-testid="clear-filter"
+        onClick={() => { setDraft(NO_FILTER); setApplied(NO_FILTER); }}>Clear filter</button>
+    </form>
+    <ResourceState resource={resource}
+      emptyMessage={filtered ? 'No tickets match the filter.' : 'You have no tickets yet. Join a restaurant queue to get started.'} />
     <div className="cards" data-testid="my-tickets">
       {resource.data?.map(ticket => <Ticket key={ticket.id} ticket={ticket}>
         {ticket.status === 'WAITING' && <CancelTicket ticket={ticket} onChanged={resource.refresh} />}

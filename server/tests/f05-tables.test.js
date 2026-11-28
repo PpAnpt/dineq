@@ -4,6 +4,7 @@ import request from 'supertest';
 import { seed, seedIds } from '../../database/seed/seedData.js';
 import { migrate } from '../../database/migrate.js';
 import { createPool } from '../src/db/pool.js';
+import { createSeatingService } from '../src/services/seating.js';
 import { closeTestPool, createTestApp, loginAs, resetAndSeed } from './helpers/index.js';
 import { insertEntry, insertQueue } from './helpers/queueFixtures.js';
 
@@ -45,6 +46,32 @@ async function occupy() {
   return entry;
 }
 describe('F-05 table slice (No-show/Seat pending F-04 migration 003)', () => {
+  test.each([
+    ['inactive Host', 'listTables'], ['inactive Host', 'releaseTable'],
+    ['role changed to Customer', 'listTables'], ['role changed to Customer', 'releaseTable'],
+  ])('TEST-38 / AC-38: service rejects %s at %s despite a retained assignment', async (change, operation) => {
+    if (operation === 'releaseTable') await occupy();
+    const user = (await pool.query('SELECT id FROM users WHERE email=$1', [host])).rows[0];
+    if (change === 'inactive Host') await pool.query('UPDATE users SET is_active=false WHERE id=$1', [user.id]);
+    else await pool.query("UPDATE users SET role='CUSTOMER' WHERE id=$1", [user.id]);
+    const before = await snapshot();
+    // Real DB service check: simulates account changes after the authenticated context was loaded.
+    // An ordinary HTTP request is already rejected by Session middleware; do not claim otherwise.
+    await expect(createSeatingService({ pool })[operation](user, operation === 'listTables' ? seedIds.queue : T1))
+      .rejects.toMatchObject({ status: 403, code: 'FORBIDDEN', message: 'This operation is not permitted' });
+    expect(await snapshot()).toEqual(before);
+  });
+  test('TEST-38 / AC-38: inactive Host old cookie gets 401 before table UUID checks', async () => {
+    const cookie = await loginAs(host, { app });
+    await pool.query('UPDATE users SET is_active=false WHERE email=$1', [host]);
+    const before = await snapshot();
+    for (const response of [await request(app).get(list('not-a-uuid')).set('Cookie', cookie),
+      await request(app).post(release('not-a-uuid')).set('Cookie', cookie)]) {
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe('UNAUTHENTICATED');
+    }
+    expect(await snapshot()).toEqual(before);
+  });
   test('TEST-39 / AC-39: assigned Host gets exact seeded Table shapes ordered by label then id', async () => {
     const response = await request(app).get(list(seedIds.queue)).set('Cookie', await loginAs(host, { app }));
     expect(response.status).toBe(200);

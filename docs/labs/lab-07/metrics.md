@@ -1,8 +1,8 @@
 # Lab 7 Metrics
 
 Repository: `PpAnpt/dineq`
-Observation window: 2026-11-22 00:00:00 +07 (2026-11-21T17:00:00.000Z) to 2026-11-28 15:23:02 +07 (2026-11-28T08:23:02.965Z), start inclusive, end exclusive.
-Snapshot taken: 2026-11-28 15:23:02 +07 (2026-11-28T08:23:02.965Z). Counts after this time are not included.
+Observation window: 2026-11-22 00:00:00 +07 (2026-11-21T17:00:00.000Z) to 2026-11-28 15:45:01 +07 (2026-11-28T08:45:01.184Z), start inclusive, end exclusive.
+Snapshot taken: 2026-11-28 15:45:01 +07 (2026-11-28T08:45:01.184Z). Counts after this time are not included.
 
 ## M1 Issues completed
 Definition: issues closed with reason `COMPLETED` whose `closedAt` is in the window. Closed as not planned/duplicate are listed separately and not counted.
@@ -50,7 +50,7 @@ Excluded:
 
 ## M2 Pull requests merged
 Definition: pull requests with `mergedAt` in the window (any base branch).
-Value: **29** merged (5 into staging, 2 into main, 11 into lab6-staging, 11 into sprint-2-staging).
+Value: **32** merged (5 into staging, 2 into main, 11 into lab6-staging, 14 into sprint-2-staging).
 
 | PR | Merged (Bangkok) | Base | Title |
 | :-- | :-- | :-- | :-- |
@@ -82,7 +82,10 @@ Value: **29** merged (5 into staging, 2 into main, 11 into lab6-staging, 11 into
 | #104 | 2026-11-28 13:19:01 +07 | sprint-2-staging | docs(F-05): no-show, table seating and release contract (AC-36..45) |
 | #105 | 2026-11-28 13:21:30 +07 | sprint-2-staging | fix(F-09a): return PAYLOAD_TOO_LARGE with recorded RED and GREEN |
 | #106 | 2026-11-28 14:35:44 +07 | sprint-2-staging | feat(F-04): Customer cancel ticket (RED then GREEN, AC-28..35) |
+| #107 | 2026-11-28 15:33:02 +07 | sprint-2-staging | feat(F-05): No-show, capacity-aware seating and table release (AC-36..45) |
 | #108 | 2026-11-28 14:38:54 +07 | sprint-2-staging | feat(F-06): multiple queues, names and open/close by the assigned Host (RED then GREEN, AC-46..51) |
+| #109 | 2026-11-28 15:36:42 +07 | sprint-2-staging | feat(F-07a): Customer history filter by status and date range (RED then GREEN, AC-52..57) |
+| #112 | 2026-11-28 15:39:41 +07 | sprint-2-staging | docs(lab7): contract revision - activate the main queue limit with data migration 006 (AC-26b) |
 
 ## M3 Automated test results (one suite, one commit)
 Source: `docs/evidence/l7-green-lock.txt/.json`. Command: `node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/l7-green-lock.json"` (working directory `server`). Commit: `6fa36bf7eac7e3457bb0497763a64c3168b6bb93`. Run date: 2026-11-28T05:30:18.464Z.
@@ -101,7 +104,7 @@ Value: **1 of 1** DineQ-owned findings resolved; 1 listed finding(s) belong to a
 ## M5 CI runs by conclusion
 Definition: workflow runs created in the window, grouped by conclusion (`in_progress`/`queued` shown by status). Skipped or cancelled runs are not successes.
 
-**CI & Docker Build:** 96 runs (91 success, 4 failure, 1 cancelled); success 91/96 completed.
+**CI & Docker Build:** 107 runs (99 success, 6 failure, 1 cancelled, 1 in_progress); success 99/106 completed.
 
 | Run ID | Created (Bangkok) | Event | Branch | Commit | Result |
 | :-- | :-- | :-- | :-- | :-- | :-- |
@@ -201,6 +204,17 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 | 46123709782 | 2026-11-28 14:59:46 +07 | pull_request | docs/rel1-release-checklist | 6bf8c63 | success |
 | 46124783851 | 2026-11-28 15:13:20 +07 | pull_request | docs/l7-activation-migration | 7d4e220 | success |
 | 46125176188 | 2026-11-28 15:18:14 +07 | pull_request | feature/f-05-noshow-tables | d9ba81c | success |
+| 46125586150 | 2026-11-28 15:23:26 +07 | pull_request | docs/l7-metrics | dc7205a | success |
+| 46125606978 | 2026-11-28 15:23:42 +07 | pull_request | docs/rel1-release-checklist | 4f432b6 | success |
+| 46125797781 | 2026-11-28 15:26:08 +07 | pull_request | feature/f-05-noshow-tables | b7f1711 | success |
+| 46125967576 | 2026-11-28 15:28:22 +07 | pull_request | docs/l7-activation-migration | 78fdfe3 | success |
+| 46126108123 | 2026-11-28 15:30:12 +07 | pull_request | docs/l7-activation-migration | d1222be | success |
+| 46126348346 | 2026-11-28 15:33:05 +07 | push | sprint-2-staging | c874e15 | success |
+| 46126464713 | 2026-11-28 15:34:36 +07 | pull_request | feature/f-07a-history-filter | 8eec802 | success |
+| 46126635454 | 2026-11-28 15:36:45 +07 | push | sprint-2-staging | 890be0f | failure |
+| 46126665904 | 2026-11-28 15:37:08 +07 | pull_request | docs/l7-activation-migration | eccc773 | success |
+| 46126853260 | 2026-11-28 15:39:43 +07 | push | sprint-2-staging | 07952da | failure |
+| 46127244206 | 2026-11-28 15:44:55 +07 | pull_request | fix/e2e-seating-sync | 9893c93 | in_progress |
 
 **Deploy to Google Cloud:** 2 runs (2 success); success 2/2 completed.
 
@@ -219,6 +233,6 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 
 ## Interpretation (max 100 words)
 
-CI succeeded in 91 of 96 runs (94.8%). Four failures were new Lab 5 browser tests on feature branches, fixed before merge; one run was superseded. Risk: Lab 7, F-04, F-06 and F-09a are merged on sprint-2-staging but not deployed, F-05 (#107) and F-07a (#109) were still in review, and the live main queue still allows only 8; the 143-test count describes the Lab 7 branch. Action: Siwarak opens the release PR by 29 Nov 15:00; Anapat runs post-deploy checks that evening and replaces M3 with the deployed commit's full-suite record.
+CI succeeded in 99 of 106 completed runs (93.4%). Four failures were new Lab 5 browser tests fixed before merge; two were a timing race in the F-05 seating test E2E-11 on sprint-2-staging, reproduced locally and fixed in PR #113; one run was superseded. Risk: sprint-2-staging is not green until #113 merges, nothing is deployed, and the live main queue still allows only 8 (migration 006 is agreed in the contract but not yet written). Action: Anapat merges #113 and writes migration 006 tonight; Siwarak opens the release PR by 29 Nov 15:00 only after green CI.
 
-(Draft written at the 28 Nov 15:23 snapshot. Regenerate the numbers with the command above at the final snapshot and update this text if a value changes; the limit is 100 words.)
+(Draft written at the 28 Nov 15:45 snapshot. Regenerate the numbers with the command above at the final snapshot and update this text if a value changes; the limit is 100 words.)

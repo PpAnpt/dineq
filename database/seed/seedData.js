@@ -2,6 +2,8 @@
 export const seedIds = {
   restaurant: '11111111-1111-4111-8111-111111111111',
   queue: '22222222-2222-4222-8222-222222222222',
+  table4: '55555555-5555-4555-8555-555555555551',
+  table10: '55555555-5555-4555-8555-555555555552',
   barQueue: '33333333-3333-4333-8333-333333333333',
 };
 
@@ -42,6 +44,11 @@ export async function seed(client, passwordHash) {
     await client.query(`INSERT INTO queue_operator_assignments (queue_id, host_user_id)
       SELECT $1, id FROM users WHERE email = 'host1@dineq.test'
       ON CONFLICT DO NOTHING`, [seedIds.queue]);
+    // F-05: insert absent tables only. Never overwrite live occupancy or historical links.
+    for (const [id, label, capacity] of [[seedIds.table4, 'T1', 4], [seedIds.table10, 'T2', 10]]) {
+      await client.query(`INSERT INTO dining_tables(id,queue_id,label,capacity)
+        VALUES ($1,$2,$3,$4) ON CONFLICT (id) DO NOTHING`, [id, seedIds.queue, label, capacity]);
+    }
     await client.query(`INSERT INTO queue_operator_assignments (queue_id, host_user_id)
       SELECT $1, id FROM users WHERE email = 'host3@dineq.test'
       ON CONFLICT DO NOTHING`, [seedIds.barQueue]);

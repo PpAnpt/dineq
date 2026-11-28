@@ -1,0 +1,105 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/pdc-red.json"
+Working directory: server
+Commit: b2100a4d0150168450e4a0e32d4aa5f542ee6d9e
+Date: 2026-11-28T14:46:41.358Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-pd/server
+
+ ✓ tests/f06-queues.test.js (16 tests) 6016ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  1830ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  2087ms
+     ✓ TEST-51 / AC-51: a closed queue stays closed for a new app instance with a new DB pool  332ms
+ ✓ tests/f04-cancel.test.js (18 tests) 4970ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  306ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  2527ms
+ ✓ tests/f02-join.test.js (45 tests) 8560ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE  305ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1284ms
+     ✓ TEST-11 / AC-11: Customer A cannot read Customer B ticket (403, no B data in response)  375ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  394ms
+     ✓ TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED  333ms
+ ✓ tests/f05-seating.test.js (37 tests) 7191ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  440ms
+   ✓ TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue  308ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  543ms
+ ✓ tests/f05-tables.test.js (31 tests) 3456ms
+     ✓ TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references  486ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 4515ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  429ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  317ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  351ms
+     ✓ TEST-27 / AC-27: service_queues.max_party_size = 11 is rejected by the DB (23514)  358ms
+ ✓ tests/f01-auth.test.js (40 tests) 3489ms
+ ✓ tests/infra.test.js (11 tests) 483ms
+ ✓ tests/f03-host.test.js (21 tests) 3328ms
+stderr | tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-01: a URL with embedded credentials is rejected before any request and is never printed
+Usage: node post-deploy-check.mjs --base-url <http(s)://host> [--yes] [--allow-close <queueId>]
+
+ ❯ tests/post-deploy-check.test.js (16 tests | 16 failed) 99ms
+     × TEST-PDC-01: a URL with embedded credentials is rejected before any request and is never printed 28ms
+     × TEST-PDC-02: a base URL with a path is rejected before any request 5ms
+     × TEST-PDC-02: a base URL with a query string is rejected before any request 2ms
+     × TEST-PDC-02: a base URL with a fragment is rejected before any request 10ms
+     × TEST-PDC-02: a base URL with plain http on a public host is rejected before any request 4ms
+     × TEST-PDC-03: a full run sends no mutating request except Login and Logout (no Join, Cancel, Call Next, Complete, PATCH) 2ms
+     × TEST-PDC-04: a happy run passes the read-only checks and says which checks were not run 3ms
+     × TEST-PDC-05: a Customer slot that holds a Host account aborts after the role check and sends nothing else 2ms
+     × TEST-PDC-06: the Host slot must be a Host and a different account from the Customer 1ms
+     × TEST-PDC-07: redirects are not followed and the credentials are not sent to another host 1ms
+     × TEST-PDC-08: every request has a timeout signal 8ms
+     × TEST-PDC-09: an unreadable history is a failure, not an empty history, and no baseline is written 2ms
+     × TEST-PDC-10: an error that carries a secret is printed without it 20ms
+     × TEST-PDC-11: passwords and session cookies never appear in the output 4ms
+     × TEST-PDC-12: baseline compare passes when identical and fails when a ticket is missing or changed 2ms
+     × TEST-PDC-13: the tool refuses the removed write options instead of silently ignoring them 2ms
+ ✓ tests/f07a-history.test.js (22 tests) 3614ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all  338ms
+     ✓ TEST-55 / AC-55: a Customer never sees another Customer ticket under any filter; Host 403 before the filters; anonymous 401  464ms
+ ✓ tests/l7-activation.test.js (10 tests) 1075ms
+ ✓ tests/f09-payload.test.js (11 tests) 1165ms
+     ✓ TEST-70 / AC-70: public oversized login returns safe 413 without a cookie or DB mutation  305ms
+ ✓ tests/controlled-fifo.test.js (1 test) 483ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  481ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 16 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-01: a URL with embedded credentials is rejected before any request and is never printed
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-02: a base URL with a path is rejected before any request
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-02: a base URL with a query string is rejected before any request
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-02: a base URL with a fragment is rejected before any request
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-02: a base URL with plain http on a public host is rejected before any request
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-03: a full run sends no mutating request except Login and Logout (no Join, Cancel, Call Next, Complete, PATCH)
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-04: a happy run passes the read-only checks and says which checks were not run
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-05: a Customer slot that holds a Host account aborts after the role check and sends nothing else
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-06: the Host slot must be a Host and a different account from the Customer
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-07: redirects are not followed and the credentials are not sent to another host
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-08: every request has a timeout signal
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-09: an unreadable history is a failure, not an empty history, and no baseline is written
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-10: an error that carries a secret is printed without it
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-11: passwords and session cookies never appear in the output
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-12: baseline compare passes when identical and fails when a ticket is missing or changed
+ FAIL  tests/post-deploy-check.test.js > Lab 7 post-deploy-check tool: read-only safety (PR #116 review) > TEST-PDC-13: the tool refuses the removed write options instead of silently ignoring them
+Error: process.exit unexpectedly called with "2"
+ ❯ ../docs/labs/lab-07/post-deploy-check.mjs:34:11
+     32| if (!/^https?:\/\//.test(baseUrl)) {
+     33|   console.error('Usage: node post-deploy-check.mjs --base-url <http(s)…
+     34|   process.exit(2);
+       |           ^
+     35| }
+     36| const origin = new URL(baseUrl).origin;
+ ❯ runTool tests/post-deploy-check.test.js:55:19
+ ❯ tests/post-deploy-check.test.js:75:39
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/16]⎯
+
+
+ Test Files  1 failed | 13 passed (14)
+      Tests  16 failed | 289 passed (305)
+   Start at  21:46:41
+   Duration  52.91s (transform 353ms, setup 0ms, import 2.58s, tests 48.44s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-pd/docs/evidence/pdc-red.json
+
+Exit code: 1

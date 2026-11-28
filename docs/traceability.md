@@ -20,7 +20,7 @@
 | FR-06, BR-04/05 | F-03 / S1 | AC-15/16/24 / TEST-15/16/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-08, BR-10 | F-04 / S2 | AC-28..35 / TEST-28..35 (`docs/sprints/sprint-2/F-04-cancel.md`; BR-12/FR-16 ของ Event CANCELLED = AC-28/29/35, BR-02 = AC-33) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ยังไม่มีเทสหรือโค้ด) |
-| FR-09/10/16, BR-03/04/05/08/10/11/12, NFR-01/02/06/07 | F-05 / S2 | [No-show, seating, release and UI contract](sprints/sprint-2/F-05-no-show-seating.md): AC-36..45 / TEST-36..45; SDS C.9 | PARTIAL: 26 table/read/release/DB cases passed locally at a6aea0fb2a76f47d55495c6d039addc2b9edda8c; [record](evidence/f05-table-verification.md). No-show/Seat/UI/full integration NOT EXECUTED; not full F-05 PASS |
+| FR-09/10/16, BR-03/04/05/08/10/11/12, NFR-01/02/06/07 | F-05 / S2 | [No-show, seating, release and UI contract](sprints/sprint-2/F-05-no-show-seating.md): AC-36..45 / TEST-36..45; SDS C.9 | PARTIAL: 31 table/read/release/DB cases passed locally at ed3b57299fc6da3d27235b9e0ba136b011ce7a4f; [record](evidence/f05-table-verification.md). No-show/Seat/UI/full integration NOT EXECUTED; not full F-05 PASS |
 | FR-11/12, BR-07/08 (หลายคิว) | F-06 / S2 | AC-46..51 / TEST-46..51 (`docs/sprints/sprint-2/F-06-queues.md`; BR-07 ปิดคิว = AC-49, BR-08 แยกคิว = AC-48/50, NFR-03 ต่อคิว = AC-50) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ยังไม่มีเทสหรือโค้ด) |
 | FR-16 (JOINED/CALLED/COMPLETED) | F-02 & F-03 / S1 | AC-08/15/17 / TEST-08/15/17 (ตรวจ Event ใน DB) | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-13, FR-16 (เหตุการณ์ภายหลัง) | F-07 / S3 | F-07a: AC-52..57 / TEST-52..57 (วางแผน Implement ใน D2); F-07b: AC-58/59 / TEST-58/59 (PLANNED) (`docs/sprints/sprint-3/F-07-history.md`) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
@@ -57,3 +57,5 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.10 | 2026-11-28 | Record local AC-70..72 results from f09-payload-green at e75a5989f909a5ebcf08041085a861a34596dc90; integration/deployment remain pending |
 
 | v0.11-f05 | 2026-11-28 | Record partial F-05 table-slice results from real runs at a6aea0fb2a76f47d55495c6d039addc2b9edda8c; keep remaining F-05 checks unexecuted |
+
+| v0.12-f05-review | 2026-11-28 | Record #107 active-Host and private-schema checks: 185 local passes at ed3b57299fc6da3d27235b9e0ba136b011ce7a4f; other F-05 operations/UI remain unexecuted |

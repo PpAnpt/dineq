@@ -37,11 +37,12 @@ describe('P2 infrastructure (not feature AC results)', () => {
     const tables = (await pool.query(`SELECT table_name FROM information_schema.tables
       WHERE table_schema = 'public' AND table_type = 'BASE TABLE'`)).rows.map(row => row.table_name);
     expect(tables).toEqual(expect.arrayContaining(['schema_migrations', 'users', 'sessions',
-      'restaurants', 'service_queues', 'queue_operator_assignments', 'queue_entries', 'queue_events']));
+      'restaurants', 'service_queues', 'queue_operator_assignments', 'queue_entries', 'queue_events', 'dining_tables']));
     const columns = (await pool.query(`SELECT table_name, column_name, data_type, column_default
       FROM information_schema.columns WHERE table_schema = 'public'`)).rows;
     const ids = columns.filter(row => row.column_name === 'id');
-    expect(ids).toHaveLength(6);
+    // F-05 contract v0.2: dining_tables adds one UUID id; all original defaults stay checked.
+    expect(ids).toHaveLength(7);
     for (const row of ids) {
       expect(row.data_type).toBe('uuid');
       expect(row.column_default).toContain('gen_random_uuid()');
@@ -59,6 +60,7 @@ describe('P2 infrastructure (not feature AC results)', () => {
       ['queue_operator_assignments', 'queue_id'], ['queue_operator_assignments', 'host_user_id'],
       ['queue_entries', 'queue_id'], ['queue_entries', 'customer_id'],
       ['queue_events', 'entry_id'], ['queue_events', 'actor_id'],
+      ['dining_tables', 'queue_id'], ['dining_tables', 'occupied_entry_id'], ['queue_entries', 'table_id'],
     ]) expect(foreignKeys).toContainEqual({ table_name, column_name });
   });
 
@@ -112,6 +114,10 @@ describe('P2 infrastructure (not feature AC results)', () => {
       const migrationFiles = readdirSync(new URL('../../database/migrations', import.meta.url))
         .filter(name => name.endsWith('.sql')).length;
       expect((await client.query('SELECT count(*)::int AS n FROM schema_migrations')).rows[0].n).toBe(migrationFiles);
+      // F-05 contract v0.2: repeated seed keeps the same two configured tables.
+      expect((await client.query("SELECT to_regclass('public.dining_tables') AS name")).rows[0].name).toBe('dining_tables');
+      expect((await client.query('SELECT label,capacity FROM dining_tables ORDER BY label')).rows)
+        .toEqual([{ label: 'T1', capacity: 4 }, { label: 'T2', capacity: 10 }]);
     } finally {
       await client.query('UPDATE service_queues SET next_ticket_no = 1 WHERE id = $1', [seedIds.queue]);
       client.release();

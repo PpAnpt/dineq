@@ -1,0 +1,139 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-review-red.json"
+Working directory: server
+Commit: 4c0872cd009879fdf2e32672ee48f3ec3159cc2b
+Date: 2026-11-28T07:20:10.980Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ✓ tests/f02-join.test.js (44 tests) 10231ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with isAssigned=false  318ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1794ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  350ms
+ ✓ tests/f01-auth.test.js (40 tests) 6105ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 5614ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  533ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  391ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  439ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  360ms
+ ❯ tests/f05-tables.test.js (31 tests | 4 failed) 5526ms
+     × TEST-38 / AC-38: service rejects inactive Host at listTables despite a retained assignment 234ms
+     × TEST-38 / AC-38: service rejects inactive Host at releaseTable despite a retained assignment 136ms
+     × TEST-38 / AC-38: service rejects role changed to Customer at listTables despite a retained assignment 113ms
+     × TEST-38 / AC-38: service rejects role changed to Customer at releaseTable despite a retained assignment 129ms
+     ✓ TEST-38 / AC-38: inactive Host old cookie gets 401 before table UUID checks 212ms
+     ✓ TEST-39 / AC-39: assigned Host gets exact seeded Table shapes ordered by label then id 167ms
+     ✓ TEST-39 / AC-39: assigned empty queue returns [] without leaking another queue tables 173ms
+     ✓ TEST-39 / AC-39: occupied table exposes only current entry UUID/number, no personal fields 183ms
+     ✓ TEST-38 / AC-38: get tables anonymous check order and no DB change 116ms
+     ✓ TEST-38 / AC-38: get tables Customer check order and no DB change 175ms
+     ✓ TEST-38 / AC-38: get tables malformed UUID check order and no DB change 177ms
+     ✓ TEST-38 / AC-38: get tables missing resource check order and no DB change 177ms
+     ✓ TEST-38 / AC-38: get tables unassigned Host check order and no DB change 183ms
+     ✓ TEST-38 / AC-38: post tables anonymous check order and no DB change 114ms
+     ✓ TEST-38 / AC-38: post tables Customer check order and no DB change 173ms
+     ✓ TEST-38 / AC-38: post tables malformed UUID check order and no DB change 190ms
+     ✓ TEST-38 / AC-38: post tables missing resource check order and no DB change 193ms
+     ✓ TEST-38 / AC-38: post tables unassigned Host check order and no DB change 197ms
+     ✓ TEST-38 / AC-38: foreign Origin release is 403 before Session or UUID checks 122ms
+     ✓ TEST-38 / AC-38: Host assigned to A cannot list/release a table in B 213ms
+     ✓ TEST-43 / AC-43: release on CLOSED queue is idempotent and retains completed entry/event/history 250ms
+     ✓ TEST-43 / AC-43: concurrent Releases both succeed without changing ticket history 253ms
+     ✓ TEST-45 / AC-45: repeat migrations/seed retain occupied tables, counter and historical entry 217ms
+     ✓ TEST-45 / AC-45: new app/pool retains occupied and then released history 254ms
+     ✓ TEST-45 / AC-45: DB rejects capacity 0 (23514) 101ms
+     ✓ TEST-45 / AC-45: DB rejects capacity 11 (23514) 103ms
+     ✓ TEST-45 / AC-45: DB rejects invalid table label "" 121ms
+     ✓ TEST-45 / AC-45: DB rejects invalid table label "   " 129ms
+     ✓ TEST-45 / AC-45: DB rejects invalid table label "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 166ms
+     ✓ TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references  306ms
+     ✓ TEST-45 / AC-45: migration 004 upgrades legacy rows without changing their existing fields 244ms
+ ✓ tests/f03-host.test.js (21 tests) 4550ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  435ms
+ ✓ tests/f09-payload.test.js (11 tests) 1816ms
+ ✓ tests/controlled-fifo.test.js (1 test) 565ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  562ms
+ ✓ tests/infra.test.js (11 tests) 572ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: service rejects inactive Host at listTables despite a retained assignment
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: service rejects role changed to Customer at listTables despite a retained assignment
+AssertionError: promise resolved "[ { …(7) }, { …(7) } ]" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+[
+  {
+    "capacity": 4,
+    "id": "55555555-5555-4555-8555-555555555551",
+    "label": "T1",
+    "occupiedEntryId": null,
+    "occupiedTicketNo": null,
+    "queueId": "22222222-2222-4222-8222-222222222222",
+    "status": "AVAILABLE",
+  },
+  {
+    "capacity": 10,
+    "id": "55555555-5555-4555-8555-555555555552",
+    "label": "T2",
+    "occupiedEntryId": null,
+    "occupiedTicketNo": null,
+    "queueId": "22222222-2222-4222-8222-222222222222",
+    "status": "AVAILABLE",
+  },
+]
+
+ ❯ tests/f05-tables.test.js:61:7
+     59|     // An ordinary HTTP request is already rejected by Session middlew…
+     60|     await expect(createSeatingService({ pool })[operation](user, opera…
+     61|       .rejects.toMatchObject({ status: 403, code: 'FORBIDDEN', message…
+       |       ^
+     62|     expect(await snapshot()).toEqual(before);
+     63|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: service rejects inactive Host at releaseTable despite a retained assignment
+ FAIL  tests/f05-tables.test.js > F-05 table slice (No-show/Seat pending F-04 migration 003) > TEST-38 / AC-38: service rejects role changed to Customer at releaseTable despite a retained assignment
+AssertionError: promise resolved "{ …(7) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "capacity": 4,
++   "id": "55555555-5555-4555-8555-555555555551",
++   "label": "T1",
++   "occupiedEntryId": null,
++   "occupiedTicketNo": null,
++   "queueId": "22222222-2222-4222-8222-222222222222",
++   "status": "AVAILABLE",
+  }
+
+ ❯ tests/f05-tables.test.js:61:7
+     59|     // An ordinary HTTP request is already rejected by Session middlew…
+     60|     await expect(createSeatingService({ pool })[operation](user, opera…
+     61|       .rejects.toMatchObject({ status: 403, code: 'FORBIDDEN', message…
+       |       ^
+     62|     expect(await snapshot()).toEqual(before);
+     63|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  4 failed | 181 passed (185)
+   Start at  14:20:11
+   Duration  39.45s (transform 242ms, setup 0ms, import 2.89s, tests 34.98s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-review-red.json
+
+Exit code: 1

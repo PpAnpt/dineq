@@ -35,24 +35,30 @@ export function toTicket(row) {
   };
 }
 
+// Queue JSON of the list and of the open/close response (F-06; maxPartySize from Lab 7).
+export function toQueueItem(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    restaurant: { id: row.restaurant_id, name: row.restaurant_name },
+    status: row.status,
+    maxPartySize: row.max_party_size,
+    isAssigned: row.is_assigned,
+  };
+}
+
 export function createQueueService({ pool }) {
   return {
     // C.6.1: no next_ticket_no, assignment rows or customer data.
     async listQueues(user) {
       const { rows } = await pool.query(
-        `SELECT q.id, q.status, q.max_party_size, r.id AS restaurant_id, r.name AS restaurant_name,
+        `SELECT q.id, q.name, q.status, q.max_party_size, r.id AS restaurant_id, r.name AS restaurant_name,
                 ($2 = 'HOST' AND EXISTS (
                   SELECT 1 FROM queue_operator_assignments a
                   WHERE a.queue_id = q.id AND a.host_user_id = $1)) AS is_assigned
            FROM service_queues q JOIN restaurants r ON r.id = q.restaurant_id
-          ORDER BY r.name, q.id`, [user.id, user.role]);
-      return rows.map(row => ({
-        id: row.id,
-        restaurant: { id: row.restaurant_id, name: row.restaurant_name },
-        status: row.status,
-        maxPartySize: row.max_party_size,
-        isAssigned: row.is_assigned,
-      }));
+          ORDER BY r.name, q.name, q.id`, [user.id, user.role]);
+      return rows.map(toQueueItem);
     },
 
     async listMyEntries(user) {
@@ -78,6 +84,40 @@ export function createQueueService({ pool }) {
       }
       if (!allowed) throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
       return toTicket(entry);
+    },
+
+    // Cancel Transaction (F-04 contract section 2). Order: 404 -> 403 (owner) outside the
+    // transaction, then queue row FOR UPDATE -> entry row FOR UPDATE (same order as Call Next),
+    // state recheck (409) and the CANCELLED event in the same transaction (BR-12).
+    // The owner and the event actor come from the Session only.
+    async cancel(user, entryId) {
+      const found = await pool.query('SELECT queue_id, customer_id FROM queue_entries WHERE id = $1', [entryId]);
+      if (!found.rows[0]) throw httpError(404, 'NOT_FOUND', 'Queue entry not found');
+      if (found.rows[0].customer_id !== user.id) throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
+
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        await client.query('SELECT id FROM service_queues WHERE id = $1 FOR UPDATE', [found.rows[0].queue_id]);
+        const locked = await client.query('SELECT * FROM queue_entries WHERE id = $1 FOR UPDATE', [entryId]);
+        const entry = locked.rows[0];
+        if (!entry || entry.customer_id !== user.id) throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
+        if (entry.status !== 'WAITING') {
+          throw httpError(409, 'INVALID_TRANSITION', 'Only a WAITING ticket can be cancelled');
+        }
+        const updated = await client.query(
+          `UPDATE queue_entries SET status = 'CANCELLED' WHERE id = $1 RETURNING *`, [entryId]);
+        await client.query(
+          `INSERT INTO queue_events (entry_id, actor_id, event_type, from_status, to_status)
+           VALUES ($1, $2, 'CANCELLED', 'WAITING', 'CANCELLED')`, [entryId, user.id]);
+        await client.query('COMMIT');
+        return toTicket(updated.rows[0]);
+      } catch (error) {
+        await client.query('ROLLBACK').catch(() => {});
+        throw error;
+      } finally {
+        client.release();
+      }
     },
 
     async assertQueueExists(queueId) {

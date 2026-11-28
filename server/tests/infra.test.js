@@ -109,7 +109,11 @@ describe('P2 infrastructure (not feature AC results)', () => {
       expect((await client.query('SELECT id, email FROM users ORDER BY email')).rows).toEqual(before);
       expect((await client.query('SELECT next_ticket_no FROM service_queues WHERE id = $1', [seedIds.queue])).rows[0].next_ticket_no).toBe(7);
       expect((await client.query('SELECT count(*)::int AS n FROM restaurants')).rows[0].n).toBe(1);
-      expect((await client.query('SELECT count(*)::int AS n FROM service_queues')).rows[0].n).toBe(1);
+      // F-06: the seed holds two queues (Main queue and Bar counter) in the one restaurant; the
+      // re-seed must not rename them or touch the ticket counter (checked above).
+      expect((await client.query('SELECT count(*)::int AS n FROM service_queues')).rows[0].n).toBe(2);
+      expect((await client.query('SELECT name FROM service_queues ORDER BY name')).rows)
+        .toEqual([{ name: 'Bar counter' }, { name: 'Main queue' }]);
       // Lab 7 (L7-CR-01): every migration file is recorded exactly once (was a literal 1 with one file).
       const migrationFiles = readdirSync(new URL('../../database/migrations', import.meta.url))
         .filter(name => name.endsWith('.sql')).length;
@@ -128,12 +132,16 @@ describe('P2 infrastructure (not feature AC results)', () => {
     const accounts = (await pool.query('SELECT email, role, password_hash FROM users ORDER BY email')).rows;
     expect(accounts.filter(row => row.role === 'CUSTOMER').map(row => row.email)).toEqual(
       Array.from({ length: 30 }, (_, i) => `customer${String(i + 1).padStart(2, '0')}@dineq.test`));
-    expect(accounts.filter(row => row.role === 'HOST').map(row => row.email)).toEqual(['host1@dineq.test', 'host2@dineq.test']);
+    expect(accounts.filter(row => row.role === 'HOST').map(row => row.email)).toEqual(['host1@dineq.test', 'host2@dineq.test', 'host3@dineq.test']);
     expect(accounts.every(row => row.password_hash.startsWith('$argon2id$'))).toBe(true);
     expect(await argon2.verify(accounts[0].password_hash, process.env.SEED_DEMO_PASSWORD)).toBe(true);
     expect((await pool.query(`SELECT u.email FROM queue_operator_assignments a
       JOIN users u ON u.id = a.host_user_id WHERE a.queue_id = $1`, [seedIds.queue])).rows)
       .toEqual([{ email: 'host1@dineq.test' }]);
+    // F-06: host3 is assigned to the Bar counter only; host2 stays unassigned everywhere.
+    expect((await pool.query(`SELECT u.email, q.name FROM queue_operator_assignments a
+      JOIN users u ON u.id = a.host_user_id JOIN service_queues q ON q.id = a.queue_id ORDER BY u.email`)).rows)
+      .toEqual([{ email: 'host1@dineq.test', name: 'Main queue' }, { email: 'host3@dineq.test', name: 'Bar counter' }]);
   });
 
   test('INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys', async () => {

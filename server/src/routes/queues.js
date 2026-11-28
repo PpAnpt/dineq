@@ -23,6 +23,13 @@ export function createQueueRoutes({ queueService }) {
     res.status(201).json({ data: ticket });
   });
 
+  // F-04: owner cancels a WAITING ticket. No request body is read; identity and ownership
+  // come from the Session, and the Customer-only guard runs earlier in routes/index.js.
+  router.post('/entries/:entryId/cancel', async (req, res) => {
+    const entryId = requireUuid(req.params.entryId, 'entryId');
+    res.json({ data: await queueService.cancel(req.user, entryId) });
+  });
+
   router.get('/me/entries', async (req, res) => {
     res.json({ data: await queueService.listMyEntries(req.user) });
   });

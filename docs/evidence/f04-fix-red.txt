@@ -1,0 +1,162 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f04-fix-red.json"
+Working directory: server
+Commit: ab8fe2b89ac48576560202a86125471b46c89ecb
+Date: 2026-11-28T07:04:58.755Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-f04impl/server
+
+ ❯ tests/f04-cancel.test.js (18 tests | 2 failed) 4185ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket 202ms
+     ✓ TEST-29 / AC-29: when the event insert fails nothing changes (no CANCELLED status, no event) and the error is generic 85ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING 226ms
+     ✓ TEST-31 / AC-31: malformed UUID is 400, absent UUID is 404; anonymous 401 and Host 403 come first; nothing changes 165ms
+     ✓ TEST-32 / AC-32: cancelling a CALLED ticket is 409 INVALID_TRANSITION and changes nothing 93ms
+     ✓ TEST-32 / AC-32: cancelling a COMPLETED ticket is 409 INVALID_TRANSITION and changes nothing 86ms
+     ✓ TEST-32 / AC-32: cancelling twice is 409 INVALID_TRANSITION the second time, with one CANCELLED event 86ms
+     ✓ TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds 157ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  2282ms
+     ✓ TEST-34 / AC-34: ten parallel cancels of one ticket give one 200, nine 409 and a single CANCELLED event 223ms
+     ✓ TEST-35 / AC-35: the DB accepts CANCELLED without called_at/completed_at and rejects it with either (23514) 36ms
+     ✓ TEST-35 / AC-35: NO_SHOW (schema only) needs called_at and no completed_at 37ms
+     ✓ TEST-35 / AC-35: CANCELLED events must go WAITING to CANCELLED and NO_SHOW events CALLED to NO_SHOW (23514 otherwise) 39ms
+     × TEST-35 / AC-35: a CANCELLED event with from_status NULL is rejected (23514) 54ms
+     × TEST-35 / AC-35: a NO_SHOW event with from_status NULL is rejected (23514) 39ms
+     ✓ TEST-35 / AC-35: re-running migrations is a no-op 47ms
+     ✓ TEST-35 / AC-35: applying migration 003 on a database that already holds tickets leaves them unchanged 71ms
+     ✓ TEST-35 / AC-35: a cancelled ticket and its event survive a new app instance with a new DB pool 251ms
+ ✓ tests/f02-join.test.js (44 tests) 7812ms
+     ✓ TEST-09 / AC-09: ten simultaneous joins by the same Customer yield one 201 and nine 409 DUPLICATE_ACTIVE  308ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1233ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  335ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3941ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  431ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  324ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  337ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  340ms
+ ✓ tests/f01-auth.test.js (40 tests) 2660ms
+ ✓ tests/f03-host.test.js (21 tests) 2768ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  353ms
+ ✓ tests/f09-payload.test.js (11 tests) 1151ms
+     ✓ TEST-70 / AC-70: public oversized login returns safe 413 without a cookie or DB mutation  340ms
+ ✓ tests/infra.test.js (11 tests) 697ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys  379ms
+ ✓ tests/controlled-fifo.test.js (1 test) 582ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  580ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: a CANCELLED event with from_status NULL is rejected (23514)
+ FAIL  tests/f04-cancel.test.js > F-04 AC-35: constraints, upgrade and persistence > TEST-35 / AC-35: a NO_SHOW event with from_status NULL is rejected (23514)
+AssertionError: promise resolved "Result{ command: 'INSERT', …(9) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ Result {
++   "RowCtor": null,
++   "_parsers": undefined,
++   "_prebuiltEmptyResultObject": null,
++   "_types": TypeOverrides {
++     "_types": {
++       "arrayParser": {
++         "create": [Function create],
++       },
++       "builtins": {
++         "ABSTIME": 702,
++         "ACLITEM": 1033,
++         "BIT": 1560,
++         "BOOL": 16,
++         "BPCHAR": 1042,
++         "BYTEA": 17,
++         "CHAR": 18,
++         "CID": 29,
++         "CIDR": 650,
++         "CIRCLE": 718,
++         "DATE": 1082,
++         "FLOAT4": 700,
++         "FLOAT8": 701,
++         "GTSVECTOR": 3642,
++         "INET": 869,
++         "INT2": 21,
++         "INT4": 23,
++         "INT8": 20,
++         "INTERVAL": 1186,
++         "JSON": 114,
++         "JSONB": 3802,
++         "MACADDR": 829,
++         "MACADDR8": 774,
++         "MONEY": 790,
++         "NUMERIC": 1700,
++         "OID": 26,
++         "PATH": 602,
++         "PG_DEPENDENCIES": 3402,
++         "PG_LSN": 3220,
++         "PG_NDISTINCT": 3361,
++         "PG_NODE_TREE": 194,
++         "POLYGON": 604,
++         "REFCURSOR": 1790,
++         "REGCLASS": 2205,
++         "REGCONFIG": 3734,
++         "REGDICTIONARY": 3769,
++         "REGNAMESPACE": 4089,
++         "REGOPER": 2203,
++         "REGOPERATOR": 2204,
++         "REGPROC": 24,
++         "REGPROCEDURE": 2202,
++         "REGROLE": 4096,
++         "REGTYPE": 2206,
++         "RELTIME": 703,
++         "SMGR": 210,
++         "TEXT": 25,
++         "TID": 27,
++         "TIME": 1083,
++         "TIMESTAMP": 1114,
++         "TIMESTAMPTZ": 1184,
++         "TIMETZ": 1266,
++         "TINTERVAL": 704,
++         "TSQUERY": 3615,
++         "TSVECTOR": 3614,
++         "TXID_SNAPSHOT": 2970,
++         "UUID": 2950,
++         "VARBIT": 1562,
++         "VARCHAR": 1043,
++         "XID": 28,
++         "XML": 142,
++       },
++       "getTypeParser": [Function getTypeParser],
++       "setTypeParser": [Function setTypeParser],
++     },
++     "binary": {},
++     "text": {},
++   },
++   "command": "INSERT",
++   "fields": [],
++   "oid": 0,
++   "rowAsArray": false,
++   "rowCount": 1,
++   "rows": [],
+  }
+
+ ❯ tests/f04-cancel.test.js:275:38
+    273|       await expect(pool.query(
+    274|         `INSERT INTO queue_events (entry_id, actor_id, event_type, fro…
+    275|         [entry.id, actor, type, to])).rejects.toMatchObject({ code: '2…
+       |                                      ^
+    276|       expect(await count('SELECT count(*) FROM queue_events WHERE entr…
+    277|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  2 failed | 170 passed (172)
+   Start at  14:04:58
+   Duration  26.16s (transform 228ms, setup 0ms, import 1.42s, tests 23.80s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-f04impl/docs/evidence/f04-fix-red.json
+
+Exit code: 1

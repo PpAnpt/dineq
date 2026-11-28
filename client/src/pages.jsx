@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from './api.js';
 import { ErrorMessage, ResourceState, Ticket, useResource } from './components.jsx';
 
@@ -69,7 +69,7 @@ function JoinForm({ queue }) {
     <ErrorMessage error={error} />
     <form onSubmit={join} aria-busy={pending}>
       <fieldset disabled={pending || queue.status !== 'OPEN'}>
-        <legend>Join {queue.restaurant.name}</legend>
+        <legend>Join {queue.restaurant.name} ({queue.name})</legend>
         <label htmlFor={inputId}>Party size (1–{queue.maxPartySize})</label>
         <input id={inputId} name="partySize" type="number" min="1" max={queue.maxPartySize} step="1" required
           defaultValue="1" data-testid="party-size" />
@@ -91,7 +91,7 @@ export function QueuesPage({ user }) {
       !queues.some(queue => queue.isAssigned) && <p data-testid="unassigned-state">No queue is assigned to your Host account.</p>}
     <div className="cards" data-testid="queue-list">
       {queues.map(queue => <article key={queue.id} className="queue" data-testid="queue" data-queue-id={queue.id}>
-        <h2>{queue.restaurant.name}</h2>
+        <h2>{queue.restaurant.name}: <span data-testid="queue-name">{queue.name}</span></h2>
         <p>Status: <strong data-testid="queue-status">{queue.status}</strong></p>
         {user.role === 'CUSTOMER' && queue.status === 'CLOSED' &&
           <p>This queue is closed. New tickets are unavailable.</p>}
@@ -102,17 +102,131 @@ export function QueuesPage({ user }) {
   </>;
 }
 
+// F-04: the owner cancels a WAITING ticket after an explicit confirmation. The server decides
+// whether the ticket is still cancellable; a 409 is shown as an error and the list is reloaded.
+function CancelTicket({ ticket, onChanged }) {
+  const [confirming, setConfirming] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState(null);
+  const trigger = useRef(null);
+  const keep = useRef(null);
+  const returnFocus = useRef(false);
+  useEffect(() => {
+    if (confirming) keep.current?.focus();
+    // The trigger is disabled while confirming, so focus returns after it is enabled again.
+    else if (returnFocus.current) { returnFocus.current = false; trigger.current?.focus(); }
+  }, [confirming]);
+  function close() {
+    returnFocus.current = true;
+    setConfirming(false);
+  }
+  async function confirm() {
+    setPending(true);
+    setError(null);
+    try {
+      await api(`/entries/${encodeURIComponent(ticket.id)}/cancel`, { method: 'POST' });
+      setConfirming(false);
+      onChanged();
+    } catch (caught) {
+      setError(caught);
+      setConfirming(false);
+      onChanged();
+    } finally {
+      setPending(false);
+    }
+  }
+  return <div>
+    <button type="button" ref={trigger} onClick={() => setConfirming(true)} disabled={pending || confirming}
+      data-testid="cancel-ticket">Cancel queue</button>
+    {confirming && <div role="alertdialog" aria-labelledby={`cancel-title-${ticket.id}`}
+      onKeyDown={event => { if (event.key === 'Escape') close(); }} data-testid="cancel-confirm">
+      <p id={`cancel-title-${ticket.id}`}>Cancel queue number {ticket.ticketNo}? You can join again later with a new number.</p>
+      <button type="button" onClick={confirm} disabled={pending} data-testid="cancel-confirm-yes">
+        {pending ? 'Cancelling…' : 'Yes, cancel my queue'}
+      </button>
+      <button type="button" ref={keep} onClick={close} disabled={pending} data-testid="cancel-confirm-no">Keep my place</button>
+    </div>}
+    {pending && <p role="status">Cancelling your queue…</p>}
+    <ErrorMessage error={error} />
+  </div>;
+}
+
 export function MyQueuePage() {
   const resource = useResource('/me/entries');
+  // F-06: tickets can belong to different queues, so each ticket shows its queue's name.
+  const queues = useResource('/queues');
+  const queueName = id => queues.data?.find(queue => queue.id === id)?.name;
   return <>
     <h1>My queue</h1>
     <p>Refresh to see the latest ticket status.</p>
     <button onClick={resource.refresh} disabled={resource.loading} data-testid="refresh-my-queue">Refresh</button>
     <ResourceState resource={resource} emptyMessage="You have no tickets yet. Join a restaurant queue to get started." />
     <div className="cards" data-testid="my-tickets">
-      {resource.data?.map(ticket => <Ticket key={ticket.id} ticket={ticket} />)}
+      {resource.data?.map(ticket => <Ticket key={ticket.id} ticket={ticket}>
+        {ticket.status === 'WAITING' && <CancelTicket ticket={ticket} onChanged={resource.refresh} />}
+        {ticket.status === 'CANCELLED' && <p data-testid="ticket-cancelled">
+          This queue was cancelled. <a href="/queues">Join a queue again</a> to get a new number.</p>}
+        {queueName(ticket.queueId) && <p>Queue: <span data-testid="ticket-queue-name">{queueName(ticket.queueId)}</span></p>}
+      </Ticket>)}
     </div>
   </>;
+}
+
+// F-06: the assigned Host opens or closes the queue. Closing asks for a confirmation because new
+// tickets are refused; waiting tickets can still be called. Reopening is immediate.
+function QueueStatus({ queueId }) {
+  const queues = useResource('/queues');
+  const [pending, setPending] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [error, setError] = useState(null);
+  const trigger = useRef(null);
+  const keep = useRef(null);
+  const returnFocus = useRef(false);
+  const queue = queues.data?.find(item => item.id === queueId);
+  useEffect(() => {
+    if (confirming) keep.current?.focus();
+    else if (returnFocus.current) { returnFocus.current = false; trigger.current?.focus(); }
+  }, [confirming]);
+  function dismiss() {
+    returnFocus.current = true;
+    setConfirming(false);
+  }
+  async function setStatus(status) {
+    setPending(true);
+    setError(null);
+    try {
+      await api(`/queues/${encodeURIComponent(queueId)}`, { method: 'PATCH', body: { status } });
+      setConfirming(false);
+      queues.refresh();
+    } catch (caught) {
+      setError(caught);
+      setConfirming(false);
+    } finally {
+      setPending(false);
+    }
+  }
+  if (queues.loading) return <p role="status" data-testid="loading">Loading queue…</p>;
+  if (queues.error) return <ErrorMessage error={queues.error} />;
+  if (!queue) return null;
+  const closing = queue.status === 'OPEN';
+  return <section data-testid="queue-status-panel">
+    <p>Queue: <strong data-testid="host-queue-name">{queue.name}</strong> · Status:{' '}
+      <strong data-testid="host-queue-status">{queue.status}</strong></p>
+    <button type="button" ref={trigger} disabled={pending || confirming} data-testid="toggle-queue-status"
+      onClick={() => (closing ? setConfirming(true) : setStatus('OPEN'))}>
+      {closing ? 'Close queue' : 'Open queue'}
+    </button>
+    {confirming && <div role="alertdialog" aria-labelledby="close-title" data-testid="close-confirm"
+      onKeyDown={event => { if (event.key === 'Escape') dismiss(); }}>
+      <p id="close-title">Close this queue? New tickets will be refused, but waiting tickets can still be called.</p>
+      <button type="button" disabled={pending} onClick={() => setStatus('CLOSED')} data-testid="close-confirm-yes">
+        {pending ? 'Closing…' : 'Yes, close the queue'}
+      </button>
+      <button type="button" ref={keep} disabled={pending} onClick={dismiss} data-testid="close-confirm-no">Keep it open</button>
+    </div>}
+    {pending && !confirming && <p role="status">Saving…</p>}
+    <ErrorMessage error={error} />
+  </section>;
 }
 
 export function HostPage({ queueId }) {
@@ -143,6 +257,7 @@ export function HostPage({ queueId }) {
   const unavailable = pending || resource.loading || Boolean(resource.error);
   return <>
     <h1>Host queue</h1>
+    <QueueStatus queueId={queueId} />
     <div className="actions">
       <button onClick={() => { setError(null); setNotice(''); resource.refresh(); }}
         disabled={pending || resource.loading} data-testid="refresh-host-queue">Refresh</button>

@@ -46,32 +46,36 @@ function expectError(response, status, code) {
 }
 
 describe('F-02 queue list', () => {
-  const item = (isAssigned, status = 'OPEN') => ({
-    id: seedIds.queue,
-    restaurant: { id: seedIds.restaurant, name: 'DineQ Demo Restaurant' },
-    status,
-    // Lab 7 (L7-CR-01, AC-07 revised): the seeded main queue exposes its per-queue limit (10).
-    maxPartySize: 10,
-    isAssigned,
+  // F-06 (AC-46 revises AC-07): the seed now has two queues in the same restaurant, listed by
+  // restaurant name, queue name, then id: 'Bar counter' before 'Main queue'. Every item has a name.
+  const barQueueId = '33333333-3333-4333-8333-333333333333';
+  const restaurant = { id: seedIds.restaurant, name: 'DineQ Demo Restaurant' };
+  const bar = (isAssigned, status = 'OPEN') => ({
+    id: barQueueId, name: 'Bar counter', restaurant, status, maxPartySize: 8, isAssigned,
+  });
+  // Lab 7 (L7-CR-01, AC-07 revised): the seeded main queue exposes its per-queue limit (10).
+  const main = (isAssigned, status = 'OPEN') => ({
+    id: seedIds.queue, name: 'Main queue', restaurant, status, maxPartySize: 10, isAssigned,
   });
 
   test.each([
-    { email: customerEmail(1), isAssigned: false, who: 'Customer' },
-    { email: 'host1@dineq.test', isAssigned: true, who: 'Assigned Host' },
-    { email: 'host2@dineq.test', isAssigned: false, who: 'Unassigned Host' },
-  ])('TEST-07 / AC-07: $who gets the C.6.1 shape with isAssigned=$isAssigned', async ({ email, isAssigned }) => {
+    { email: customerEmail(1), barAssigned: false, mainAssigned: false, who: 'Customer' },
+    { email: 'host1@dineq.test', barAssigned: false, mainAssigned: true, who: 'Assigned Host (main queue)' },
+    { email: 'host3@dineq.test', barAssigned: true, mainAssigned: false, who: 'Assigned Host (bar counter)' },
+    { email: 'host2@dineq.test', barAssigned: false, mainAssigned: false, who: 'Unassigned Host' },
+  ])('TEST-07 / AC-07: $who gets the C.6.1 shape with per-queue isAssigned', async ({ email, barAssigned, mainAssigned }) => {
     const cookie = await login(email);
     const response = await request(app).get('/api/queues').set('Cookie', cookie);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ data: [item(isAssigned)] });
-    expect(typeof response.body.data[0].isAssigned).toBe('boolean');
+    expect(response.body).toEqual({ data: [bar(barAssigned), main(mainAssigned)] });
+    for (const queue of response.body.data) expect(typeof queue.isAssigned).toBe('boolean');
   });
 
   test('TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED', async () => {
     await pool.query("UPDATE service_queues SET status = 'CLOSED' WHERE id = $1", [seedIds.queue]);
     const response = await request(app).get('/api/queues').set('Cookie', await login(customerEmail(1)));
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ data: [item(false, 'CLOSED')] });
+    expect(response.body).toEqual({ data: [bar(false), main(false, 'CLOSED')] });
   });
 
   test('TEST-07 / AC-07: a fixture with no queues returns { "data": [] }', async () => {

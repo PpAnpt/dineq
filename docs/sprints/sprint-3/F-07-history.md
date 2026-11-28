@@ -1,6 +1,6 @@
 # F-07 Queue History and Filters - Sprint 3 Contract
 
-> **Status:** Draft v0.3 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-04, FR-13, FR-16, BR-08, BR-12, NFR-01, NFR-04, NFR-06
+> **Status:** Draft v0.4 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-04, FR-13, FR-16, BR-08, BR-12, NFR-01, NFR-04, NFR-06
 
 เป้าหมาย: ผู้ใช้ดูประวัติของคิวที่ตนมีสิทธิ์เท่านั้น และกรองตามสถานะและช่วงเวลาได้ แบ่งเป็นสองส่วนตาม Checkpoint: **F-07a (วางแผน Implement ใน Deliverable 2)** คือตัวกรองประวัติตั๋วของ Customer และ **F-07b (PLANNED)** คือประวัติของ Host และประวัติการเปลี่ยนสถานะของตั๋ว
 
@@ -71,6 +71,8 @@ Recorded at commit `d52798182651a3eefe2dd7523cbcee108be4edf1` on branch `feature
 | AC-56 / TEST-56 | `server/tests/f07a-history.test.js` | PASS |
 | AC-57 / TEST-57 | `client/e2e/sprint-2-history.spec.js` (E2E-9) | PASS |
 
+Review fix (PR #109, P2, microsecond order of from and to): [f07a-fix-red](../../evidence/f07a-fix-red.txt) 3 failed / 191 passed / 0 skipped of 194 before the change, then [f07a-fix-green](../../evidence/f07a-fix-green.txt) 194 passed / 0 failed / 0 skipped and [f07a-fix-e2e-green](../../evidence/f07a-fix-e2e-green.txt) 8 passed at `d45a2be1a22d8b3e2e79822bafd7bad7ef5198f9`; the validation now compares epoch milliseconds plus the fraction as nanoseconds (contract unchanged: from after to is 400).
+
 Not covered: F-07b (AC-58/59) stays PLANNED; no manual keyboard audit beyond the Enter-on-button step in E2E-9 (AC-74 stays PLANNED); no deployed-environment check. The one failing CI node check ('production image serves the built SPA') needs `client/dist`, i.e. `npm run build:client` first; it failed only when it ran before the first build in a fresh worktree and passes once the client is built (CI builds first). The suite was also re-run in a freshly recreated public schema (188 passed) because INFRA-03/04 read `table_schema = 'public'`, so earlier isolated-schema runs had inspected the shared public schema for those two tests.
 
 ## Revision History
@@ -80,3 +82,4 @@ Not covered: F-07b (AC-58/59) stays PLANNED; no manual keyboard audit beyond the
 | v0.1 | 2026-11-28 | Initial draft, committed before tests and implementation |
 | v0.2 | 2026-11-28 | Add execution results for F-07a (AC-52..57) from f07a-red, f07a-green and f07a-e2e-green at `d527981`; contract text unchanged, F-07b still planned |
 | v0.3 | 2026-11-28 | Correct the explanation of the failing CI node check (needs the built client) and note the clean-schema re-run of the suite |
+| v0.4 | 2026-11-28 | Record the review-fix runs (f07a-fix-red/green/e2e-green) at `d45a2be`: from/to ordered at nanosecond precision; AC-54 text unchanged |

@@ -1,6 +1,6 @@
 # Part D: Traceability matrix (requirement to result)
 
-> **Status:** v0.2 · updated 28 Nov 2026 after the release: integrated runs at `5e8c9a7` (`s2-integration` 289 passed / 0 failed / 0 skipped; `s2-e2e` 11 passed; CI green) and deployed `main` `f3e7c63`. A PASS here means a recorded local run at the commit named plus the green CI run; deployment checks are listed separately in Part E.5 and were only partly run. Rows marked PLANNED or NOT EXECUTED have no run.
+> **Status:** v0.3 · updated 29 Nov 2026 (FR-03 and BR-09 rows corrected to the post-release state; v0.2 was 28 Nov 2026) after the release: integrated runs at `5e8c9a7` (`s2-integration` 289 passed / 0 failed / 0 skipped; `s2-e2e` 11 passed; CI green) and deployed `main` `f3e7c63`. A PASS here means a recorded local run at the commit named plus the green CI run; deployment checks are listed separately in Part E.5 and were only partly run. Rows marked PLANNED or NOT EXECUTED have no run.
 
 ## D.1 Requirement coverage
 
@@ -8,7 +8,7 @@
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
 | FR-01 | Login, logout, current user, role from the server | F-01 | S1 | AC-01..04 | f01-auth.test.js | PASS at `a7a145e` (108 recorded) and in every later recorded suite; CI green on `df5923c` |
 | FR-02 | View queues with OPEN or CLOSED | F-02, F-06 | S1, S2 | AC-07 (revised), AC-46 | f02-join.test.js, f06-queues.test.js | PASS: S1 at `a7a145e`; revised AC-07 `l7-green`; AC-46 `f06-green` (`f8cab1e`) |
-| FR-03 | Customer joins with a party size | F-02 | S1, Lab 7 | AC-08, AC-12, AC-25..27, AC-26b | f02-join.test.js, l7-party-limit.test.js, l7-activation.test.js | PASS: `l7-green-lock` 143 (`6fa36bf`). AC-26b is separate: PASS in its own local run (`l7-activation-green` 289 at `34f461a`) and PR #114's CI (head `aea7348`, green); the CI run on `df5923c` does not cover it because migration `006` was not on `sprint-2-staging` then |
+| FR-03 | Customer joins with a party size | F-02 | S1, Lab 7 | AC-08, AC-12, AC-25..27, AC-26b | f02-join.test.js, l7-party-limit.test.js, l7-activation.test.js | PASS: `l7-green-lock` 143 (`6fa36bf`) and, integrated with migration `006`, `s2-integration` 289 / 0 / 0 (`b05cbd5` on `5e8c9a7`); AC-26b also in `l7-activation-green` 289 (`34f461a`). Deployed (revision `00008-g6r`): the owner saw the form limit 10 and size 10 accepted in the browser (no API status codes) |
 | FR-04 | Customer views own tickets and history | F-02, F-07 | S1, S3 | AC-11, AC-23; AC-52..57; AC-58, 59 | f02-join.test.js, f07a-history.test.js | PASS: S1; F-07a `f07a-fix-green` 194 (`d45a2be`); AC-58/59 PLANNED |
 | FR-05 | Assigned Host sees WAITING and CALLED | F-03 | S1 | AC-14, AC-24 | f03-host.test.js | PASS at `a7a145e` (108 recorded) and in every later recorded suite; CI green on `df5923c` |
 | FR-06 | Host Call Next by FIFO | F-03 | S1 | AC-15, AC-16, AC-24 | f03-host.test.js, controlled-fifo.test.js | PASS at `a7a145e` (108 recorded) and in every later recorded suite; CI green on `df5923c` |
@@ -30,7 +30,7 @@
 | BR-06 | Allowed state transitions only | F-03, F-04, F-05 | S1, S2 | AC-17, 18, 32, 37 | f03, f04, f05 tests | PASS |
 | BR-07 | No Join to a CLOSED queue; a rejected Join consumes no number | F-02, F-06 | S1, S2 | AC-12, AC-49 | f02-join.test.js, f06-queues.test.js | PASS |
 | BR-08 | Private data only to the owner; Host only own queue | F-02, F-03, F-06, F-07 | S1..S3 | AC-11, 23, 48, 50, 55 | f02, f03, f06, f07a tests | PASS; AC-58, 63 PLANNED |
-| BR-09 | Party size rule (fixed 1..8, then per queue) | F-02, Lab 7 | S1, Lab 7 | AC-12 (revised), AC-25..27, AC-26b | f02-join, l7-party-limit, l7-activation tests | Old rule PASS at `a7a145e`; revised rule PASS `l7-green-lock`; AC-26b in PR #114 |
+| BR-09 | Party size rule (fixed 1..8, then per queue) | F-02, Lab 7 | S1, Lab 7 | AC-12 (revised), AC-25..27, AC-26b | f02-join, l7-party-limit, l7-activation tests | Old rule PASS at `a7a145e`; revised rule PASS `l7-green-lock` and `s2-integration`; AC-26b merged (PR #114) and applied by the migration job on the deployed database |
 | BR-10 | Cancel and no-show only from allowed states, history kept | F-04, F-05 | S2 | AC-28, 32, 36, 37 | f04, f05 tests | PASS |
 | BR-11 | No table that is too small or in use | F-05 | S2 | AC-40, 42 | f05-seating.test.js | PASS |
 | BR-12 | Transition and event in one transaction | F-02..F-05 | S1, S2 | AC-15, 17, 18, 29, 34, 45 | f03, f04, f05 tests | PASS (rollback cases with injected failure) |
@@ -38,8 +38,8 @@
 | NFR-02 | Data readable after a restart | F-02, F-04, F-05, F-06 | S1, S2, Lab 5 | AC-21, 35, 45, 51 | tests with a new app and pool; Lab 5 restart evidence | PASS locally and Lab 5 cloud restart evidence; not repeated on the new release |
 | NFR-03 | Concurrent Joins keep numbers unique | F-02, F-06 | S1, S2 | AC-10, AC-50 | f02-join.test.js, f06-queues.test.js | PASS |
 | NFR-04 | p95 at most 1000 ms for the listing endpoints | F-09 | S3 | AC-73 | none | NOT EXECUTED: no measurement taken |
-| NFR-05 | Argon2id, hashed session token, no real secrets in the repository | F-01 | S1 | AC-01..04 | f01-auth.test.js, infra.test.js, secret scans in reviews | PASS for Argon2id and session hashing (tests); secret scans were run by reviewers on individual PR diffs, but the **secret scan of the final release diff is PENDING** until it is run |
-| NFR-06 | Clear 400/401/403/404/409/413 errors | F-01..F-04, F-09 | S1..S3 | AC-02, 05, 06, 09, 11, 12, 16, 18, 22, 23, 24, 70..72 | all API tests, f09-payload.test.js | PASS; 413 PASS locally (PR #105), not deployed |
+| NFR-05 | Argon2id, hashed session token, no real secrets in the repository | F-01 | S1 | AC-01..04 | f01-auth.test.js, infra.test.js, secret scans in reviews | PASS for Argon2id and session hashing (tests); secret scans were run by reviewers on individual PR diffs, and the release diff was scanned twice: the teammate's Gitleaks scan of the release diff (PR #120 body: no leaks, about 3.42 MB) and, on 29 Nov 2026, the assistant's pattern scan of `git diff origin/main` (cloud and GitHub token formats, private keys, password/secret/token assignments) plus exact-match searches for the local demo seed password and the local database password in all tracked files and in the PDF sources: 0 hits; the only e-mail addresses in the PDF sources are synthetic `@dineq.test` accounts. This is a scan of this diff and these files, not a guarantee about all Git history, and Gitleaks was not re-run by the assistant |
+| NFR-06 | Clear 400/401/403/404/409/413 errors | F-01..F-04, F-09 | S1..S3 | AC-02, 05, 06, 09, 11, 12, 16, 18, 22, 23, 24, 70..72 | all API tests, f09-payload.test.js | PASS; 413 PASS locally (PR #105); included in the deployed release, not run there |
 | NFR-07 | Join, Call Next, Complete usable by keyboard | F-09 | S3 | AC-74 | partial checks in Playwright | NOT EXECUTED: no full manual audit |
 
 ## D.2 Acceptance criteria: implemented, ran, passed

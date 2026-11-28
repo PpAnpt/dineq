@@ -1,6 +1,6 @@
 # Part E: Release candidate on main (deployed 28 November 2026)
 
-> Facts below come from recorded evidence files, the GitHub Actions log of the deploy run, and read-only Cloud Shell output sent by the teammate as screenshots. Anything not run is marked NOT RUN. The release tag has **not** been created yet (needs the owner's permission; planned name `v2.0-sprint2-rc1`).
+> Facts below come from recorded evidence files, the GitHub Actions log of the deploy run, and read-only Cloud Shell output sent by the teammate as screenshots. Anything not run is marked NOT RUN. The release tag `v2.0-sprint2-rc1` was created on 29 Nov 2026 (annotated tag object `5f932dd4f219228feac902cab88b9a6e23a480ec`, pointing at `f3e7c637457dd4f1f78e9bfabda513359fbcb538`).
 
 ## E.1 Identity of the candidate
 
@@ -18,7 +18,7 @@
 | Serving revision | `s21271a0d-00008-g6r`, created 2026-11-28T13:52:46Z (20:52 Asia/Bangkok), 100 percent of traffic; before the release: `s21271a0d-00007-pnb` | Cloud Shell |
 | Public URL | https://s21271a0d-4d7hbszvwq-as.a.run.app | deploy configuration |
 | Smoke test in the pipeline | `/api/health`, `/api/ready` (`db: connected`) and the UI root passed | workflow log |
-| Tag | NOT CREATED yet; planned `v2.0-sprint2-rc1` on the `main` merge commit after the post-deploy checks | release checklist D6 |
+| Tag | `v2.0-sprint2-rc1` (annotated), created by the owner's instruction on 29 Nov 2026 after the deploy and the partial post-deploy checks; points at the `main` merge commit above | `git ls-remote --tags origin` |
 
 `main` had no commit that was missing from `sprint-2-staging` when the release PR was checked (0 behind, 202 ahead), so the merge introduced nothing that the integration branch had not tested.
 
@@ -50,14 +50,14 @@ Not covered: a single long journey that crosses every feature in one browser ses
 
 ## E.5 Post-deploy checks (28 Nov 2026)
 
-Done by the owner by hand in the browser with a demo Customer account (no status codes captured); the scripted version (`docs/labs/lab-07/post-deploy-check.mjs`, PR #116) has not been run against the deployed service.
+Done by the owner by hand in the browser with the synthetic demo account `customer29@dineq.test` (four screenshots in `docs/evidence/deployed-00008-g6r/`, no status codes captured, no address bar or clock visible); the scripted version (`docs/labs/lab-07/post-deploy-check.mjs`, PR #116) has not been run against the deployed service.
 
 | # | Check | Result |
 | :-- | :-- | :-- |
 | 1 | Login page and readiness | PASS: `/api/ready` and UI root by the pipeline smoke test; login by the owner |
-| 3 | `maxPartySize` shown for the main queue (10 after migration 006) | PASS: the main queue showed a limit of 10 |
-| 4 | Party size 11 rejected naming the limit; 10 accepted | PASS (9 not tried) |
-| 5 | Cancel a WAITING ticket | PARTIAL: the ticket from check 4 was cancelled; the rejoin was not checked |
+| 3 | `maxPartySize` shown for the main queue (10 after migration 006) | PASS: the form label reads `Party size (1-10)` (screenshots S2, S3) |
+| 4 | Party size 11 rejected; 10 accepted | PASS with a limit: the browser blocks 11 with "Value must be less than or equal to 10." (S2; the form `max` attribute, so no request reaches the API and the 400 `INVALID_PARTY_SIZE` is not shown); 10 was accepted and created Ticket #25 (S4); 9 not tried |
+| 5 | Cancel a WAITING ticket, then join again gets a new number | PASS: Ticket #24 was cancelled in the first manual check and the later join got Ticket #25, which was then cancelled (S4, S5); the order and times of the joins are not shown in the images |
 | 2, 6, 7, 8, 9, 10 | Host journey, close and reopen, history filter, persistence across restart, forbidden roles through the API, table list | NOT RUN on the deployed service (shared service; the Host journey and close/reopen could affect other teams' tickets) |
 
 ## E.6 Setup summary

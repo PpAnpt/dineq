@@ -1,6 +1,6 @@
 # Deliverable 2 working papers (draft, 28 November 2026)
 
-> **Status:** Draft v0.1 · CPE334 Theme 9 · DineQ · updated on 28 Nov 2026 after the release: evidence at `sprint-2-staging` head `5e8c9a7`, deployed `main` commit `f3e7c63` (deploy run 46151508392). These files feed the self-contained PDF; the PDF must embed the content, not only link it. The release candidate **is** on `main` and deployed; the release tag is not created yet.
+> **Status:** Draft v0.1 · CPE334 Theme 9 · DineQ · updated on 28 Nov 2026 after the release: evidence at `sprint-2-staging` head `5e8c9a7`, deployed `main` commit `f3e7c63` (deploy run 46151508392). These files feed the self-contained PDF; the PDF must embed the content, not only link it. The release candidate **is** on `main` and deployed; the release tag `v2.0-sprint2-rc1` was created on 29 Nov 2026 on `f3e7c63`.
 
 | File | PDF part | Content |
 | :-- | :-- | :-- |

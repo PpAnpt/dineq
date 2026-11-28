@@ -96,7 +96,7 @@ async function clickAndCapture(page, matcher, click) {
 
 async function uiJoin(page, queueId, size) {
   await page.goto(`${base}/queues`);
-  await page.getByLabel('Party size (1–8)').fill(String(size));
+  await page.getByLabel(/^Party size \(1–\d+\)$/).fill(String(size));
   return clickAndCapture(page, (method, path) => method === 'POST' && path === `/api/queues/${queueId}/entries`,
     () => page.getByTestId('join-queue').click());
 }

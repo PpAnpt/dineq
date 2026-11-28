@@ -48,10 +48,15 @@ export async function insertEntry(pool, {
 }
 
 // A second OPEN queue (same restaurant) that no Host is assigned to.
-export async function insertQueue(pool, { assignedHostEmail = null } = {}) {
+// Lab 7 (L7-CR-01): maxPartySize sets the per-queue party size limit; omitted = column default.
+export async function insertQueue(pool, { assignedHostEmail = null, maxPartySize = null } = {}) {
   const { rows } = await pool.query(
     `INSERT INTO service_queues (restaurant_id, status) VALUES ($1, 'OPEN') RETURNING id`,
     [seedIds.restaurant]);
+  if (maxPartySize !== null) {
+    await pool.query('UPDATE service_queues SET max_party_size = $2 WHERE id = $1',
+      [rows[0].id, maxPartySize]);
+  }
   if (assignedHostEmail) {
     await pool.query(
       'INSERT INTO queue_operator_assignments (queue_id, host_user_id) VALUES ($1, $2)',

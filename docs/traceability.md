@@ -11,7 +11,7 @@
 | NFR-06 | F-01 & F-02 & F-03 / S1; F-09 / S3 | S1: AC-02/05/06/09/11/12/16/18/22/23/24 / TEST-02/05/06/09/11/12/16/18/22/23/24; 404 NOT_FOUND = TEST-23/24b, 404 NO_WAITING_ENTRY = TEST-24a | PASS mapped S1 cases only; S3 NOT EXECUTED |
 | FR-02 | F-02 / S1 | AC-07 / TEST-07 (Queue JSON, isAssigned ของ Customer/Assigned Host/Unassigned Host และ Empty List) | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-03, BR-09 | F-02 / S1 | AC-08/12 / TEST-08/12 | PASS (mapped Sprint 1 API cases; source SHA below) |
-| FR-03, BR-09 (Lab 7, L7-CR-01) | F-02 / S1 change in Lab 7 | AC-07 (revised, adds maxPartySize), AC-12 (revised), AC-25/26/27 / TEST-07/12/25/26/27 | PLANNED (contract revised 2026-11-28; the PASS above refers to the old fixed 1–8 rule at the Sprint 1 baseline) |
+| FR-03, BR-09 (Lab 7, L7-CR-01) | F-02 / S1 change in Lab 7 | AC-07 (revised, adds maxPartySize), AC-12 (revised), AC-25/26/27 / TEST-07/12/25/26/27 | PASS for the revised rule at `680e8aab2c5977ebc14dfee969af29d7bc44645c` on branch `test/l7-per-queue-party-limit` (API/DB: [l7-red](evidence/l7-red.txt) 28 failed / 113 passed / 0 skipped of 141, then [l7-green](evidence/l7-green.txt) 141 passed / 0 failed / 0 skipped; Playwright [l7-e2e-green](evidence/l7-e2e-green.txt) 6 passed). Local run only: not merged, not deployed; the PASS above still refers to the old fixed 1–8 rule at the Sprint 1 baseline |
 | FR-04, BR-08 | F-02 / S1; F-07 / S3 | AC-11/23 / TEST-11/23; S3 Test ยังต้องออกแบบ | PASS mapped S1 cases only; S3 NOT EXECUTED |
 | BR-01, NFR-03 | F-02 / S1 | AC-10 / TEST-10 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | BR-02 | F-02 / S1 | AC-09 / TEST-09 | PASS (mapped Sprint 1 API cases; source SHA below) |
@@ -52,3 +52,4 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.6 | 2026-11-28 | F-04: map FR-08/BR-10 to AC-28..35 (PLANNED) |
 | v0.7 | 2026-11-28 | Sprint 3: map FR-13/14/15, NFR-04/06/07 to AC-52..76 (PLANNED)|
 | v0.8 | 2026-11-28 | F-06: map FR-11/12 to AC-46..51 (PLANNED) |
+| v0.9 | 2026-11-28 | Lab 7: BR-09 per-queue row changes from PLANNED to PASS for the local API/DB and E2E runs at `680e8aa` (l7-green, l7-e2e-green); deployment and review still pending |

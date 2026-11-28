@@ -26,8 +26,11 @@ export async function seed(client, passwordHash) {
     await client.query(`INSERT INTO restaurants (id, name, status)
       VALUES ($1, 'DineQ Demo Restaurant', 'OPEN') ON CONFLICT (id) DO NOTHING`,
     [seedIds.restaurant]);
-    await client.query(`INSERT INTO service_queues (id, restaurant_id, status)
-      VALUES ($1, $2, 'OPEN') ON CONFLICT (id) DO NOTHING`,
+    // Lab 7 (L7-CR-01): the main demo queue takes parties up to 10. Only this column is updated on
+    // conflict, so re-running the seed never touches status, ticket counter or tickets.
+    await client.query(`INSERT INTO service_queues (id, restaurant_id, status, max_party_size)
+      VALUES ($1, $2, 'OPEN', 10)
+      ON CONFLICT (id) DO UPDATE SET max_party_size = EXCLUDED.max_party_size`,
     [seedIds.queue, seedIds.restaurant]);
     await client.query(`INSERT INTO queue_operator_assignments (queue_id, host_user_id)
       SELECT $1, id FROM users WHERE email = 'host1@dineq.test'

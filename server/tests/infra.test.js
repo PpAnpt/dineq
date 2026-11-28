@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import request from 'supertest';
 import argon2 from 'argon2';
@@ -78,13 +79,18 @@ describe('P2 infrastructure (not feature AC results)', () => {
       WHERE tc.table_schema = 'public' AND tc.constraint_type = 'CHECK'`)).rows;
     const entryChecks = checks.filter(row => row.table_name === 'queue_entries').map(row => row.check_clause).join(' ');
     expect(entryChecks).toMatch(/party_size >= 1/);
-    expect(entryChecks).toMatch(/party_size <= 8/);
+    // Lab 7 (L7-CR-01): the absolute ceiling widened from 8 to 10; the per-queue limit is enforced by the API.
+    expect(entryChecks).toMatch(/party_size <= 10/);
+    expect(entryChecks).not.toMatch(/party_size <= 8/);
     for (const status of ['WAITING', 'CALLED', 'COMPLETED']) expect(entryChecks).toContain(status);
     expect(entryChecks).toContain('called_at');
     expect(entryChecks).toContain('completed_at');
     expect(checks.some(row => row.table_name === 'service_queues'
       && row.check_clause.includes('next_ticket_no >= 1'))).toBe(true);
     const queueChecks = checks.filter(row => row.table_name === 'service_queues').map(row => row.check_clause).join(' ');
+    // Lab 7 (L7-CR-01): service_queues.max_party_size is limited to 1..10.
+    expect(queueChecks).toMatch(/max_party_size >= 1/);
+    expect(queueChecks).toMatch(/max_party_size <= 10/);
     for (const status of ['OPEN', 'CLOSED']) expect(queueChecks).toContain(status);
     const roleChecks = checks.filter(row => row.table_name === 'users').map(row => row.check_clause).join(' ');
     for (const role of ['CUSTOMER', 'HOST']) expect(roleChecks).toContain(role);
@@ -102,7 +108,10 @@ describe('P2 infrastructure (not feature AC results)', () => {
       expect((await client.query('SELECT next_ticket_no FROM service_queues WHERE id = $1', [seedIds.queue])).rows[0].next_ticket_no).toBe(7);
       expect((await client.query('SELECT count(*)::int AS n FROM restaurants')).rows[0].n).toBe(1);
       expect((await client.query('SELECT count(*)::int AS n FROM service_queues')).rows[0].n).toBe(1);
-      expect((await client.query('SELECT count(*)::int AS n FROM schema_migrations')).rows[0].n).toBe(1);
+      // Lab 7 (L7-CR-01): every migration file is recorded exactly once (was a literal 1 with one file).
+      const migrationFiles = readdirSync(new URL('../../database/migrations', import.meta.url))
+        .filter(name => name.endsWith('.sql')).length;
+      expect((await client.query('SELECT count(*)::int AS n FROM schema_migrations')).rows[0].n).toBe(migrationFiles);
     } finally {
       await client.query('UPDATE service_queues SET next_ticket_no = 1 WHERE id = $1', [seedIds.queue]);
       client.release();
@@ -122,7 +131,8 @@ describe('P2 infrastructure (not feature AC results)', () => {
   });
 
   test('INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys', async () => {
-    for (const size of [0, 9]) {
+    // Lab 7 (L7-CR-01): the DB ceiling is 10, so 9 is valid at the DB level and 11 is rejected.
+    for (const size of [0, 11]) {
       await expect(pool.query(`INSERT INTO queue_entries
         (queue_id, customer_id, ticket_no, party_size, status) VALUES ($1, $2, 1, $3, 'WAITING')`,
       [seedIds.queue, customer, size])).rejects.toMatchObject({ code: '23514' });

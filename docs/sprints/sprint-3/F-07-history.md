@@ -1,6 +1,6 @@
 # F-07 Queue History and Filters - Sprint 3 Contract
 
-> **Status:** Draft v0.1 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-04, FR-13, FR-16, BR-08, BR-12, NFR-01, NFR-04, NFR-06
+> **Status:** Draft v0.2 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-04, FR-13, FR-16, BR-08, BR-12, NFR-01, NFR-04, NFR-06
 
 เป้าหมาย: ผู้ใช้ดูประวัติของคิวที่ตนมีสิทธิ์เท่านั้น และกรองตามสถานะและช่วงเวลาได้ แบ่งเป็นสองส่วนตาม Checkpoint: **F-07a (วางแผน Implement ใน Deliverable 2)** คือตัวกรองประวัติตั๋วของ Customer และ **F-07b (PLANNED)** คือประวัติของ Host และประวัติการเปลี่ยนสถานะของตั๋ว
 
@@ -58,8 +58,24 @@ UI (`/my-queue`): ฟอร์มตัวกรอง (เลือกสถา
 - F-07a ใช้ค่า `CANCELLED` (และ `NO_SHOW`) ที่เพิ่มใน Migration 003 ของ F-04 จึงต้อง Merge F-04 ก่อนเทสและ Implement; ไม่เพิ่ม Migration ใหม่
 - ชั้นที่ไม่ต้องแก้: Authentication, Join/Call Next/Complete, Schema (F-07a)
 
+## 5. Execution Results: F-07a (2026-11-28)
+
+Recorded at commit `d52798182651a3eefe2dd7523cbcee108be4edf1` on branch `feature/f-07a-history-filter` (stacked on the F-04 branch because CANCELLED must exist; local PostgreSQL test database in an isolated schema; not merged, not deployed). RED: [f07a-red](../../evidence/f07a-red.txt), 15 failed / 173 passed / 0 skipped of 188 on unmodified application code. GREEN: [f07a-green](../../evidence/f07a-green.txt), 188 passed / 0 failed / 0 skipped; Playwright [f07a-e2e-green](../../evidence/f07a-e2e-green.txt), 8 passed (E2E-9 failed before the filter form existed).
+
+| AC / Test | Actual file | Result |
+| --- | --- | --- |
+| AC-52 / TEST-52 | `server/tests/f07a-history.test.js` | PASS |
+| AC-53 / TEST-53 | `server/tests/f07a-history.test.js` | PASS (from inclusive, to exclusive, offset form, empty range) |
+| AC-54 / TEST-54 | `server/tests/f07a-history.test.js` | PASS (11 invalid inputs, each 400 VALIDATION_ERROR) |
+| AC-55 / TEST-55 | `server/tests/f07a-history.test.js` | PASS (the owner-only case already held before the change) |
+| AC-56 / TEST-56 | `server/tests/f07a-history.test.js` | PASS |
+| AC-57 / TEST-57 | `client/e2e/sprint-2-history.spec.js` (E2E-9) | PASS |
+
+Not covered: F-07b (AC-58/59) stays PLANNED; no manual keyboard audit beyond the Enter-on-button step in E2E-9 (AC-74 stays PLANNED); no deployed-environment check. The CI node checks showed one failure out of 22 twice right after the UI fixture run and could not be reproduced in eight later runs (22 of 22 each); the cause is not known.
+
 ## Revision History
 
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-28 | Initial draft, committed before tests and implementation |
+| v0.2 | 2026-11-28 | Add execution results for F-07a (AC-52..57) from f07a-red, f07a-green and f07a-e2e-green at `d527981`; contract text unchanged, F-07b still planned |

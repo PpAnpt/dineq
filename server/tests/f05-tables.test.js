@@ -178,7 +178,9 @@ describe('F-05 table slice (No-show/Seat pending F-04 migration 003)', () => {
     const queue = await insertQueue(pool);
     const other = (await pool.query("INSERT INTO dining_tables(queue_id,label,capacity) VALUES ($1,'Other',1) RETURNING id", [queue])).rows[0].id;
     await expect(pool.query('UPDATE queue_entries SET table_id=$1 WHERE id=$2', [other,entry.id])).rejects.toMatchObject({ code: '23503' });
-    await expect(pool.query("UPDATE dining_tables SET status='OCCUPIED',occupied_entry_id=$1 WHERE id=$2", [entry.id,other])).rejects.toMatchObject({ code: '23503' });
+    // Isolate FK failure from the separately asserted occupied-entry UNIQUE violation.
+    const unoccupied = await insertEntry(pool, { customer: 3, ticketNo: 3, status: 'COMPLETED' });
+    await expect(pool.query("UPDATE dining_tables SET status='OCCUPIED',occupied_entry_id=$1 WHERE id=$2", [unoccupied.id,other])).rejects.toMatchObject({ code: '23503' });
     await expect(pool.query('UPDATE dining_tables SET queue_id=$1 WHERE id=$2', [absent,T2])).rejects.toMatchObject({ code: '23503' });
   });
   test('TEST-45 / AC-45: migration 004 upgrades legacy rows without changing their existing fields', async () => {

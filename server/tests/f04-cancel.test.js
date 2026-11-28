@@ -264,6 +264,18 @@ describe('F-04 AC-35: constraints, upgrade and persistence', () => {
     await event('NO_SHOW', 'CALLED', 'NO_SHOW');
   });
 
+  // PR #106 review (P2): a NULL from_status makes `from_status = 'WAITING'` evaluate to NULL, and a CHECK
+  // accepts NULL, so the transition rule must say IS NOT NULL explicitly (as the Sprint 1 rules do).
+  test.each([['CANCELLED', 'CANCELLED'], ['NO_SHOW', 'NO_SHOW']])(
+    'TEST-35 / AC-35: a %s event with from_status NULL is rejected (23514)', async (type, to) => {
+      const entry = await insertEntry(pool, { customer: 1, ticketNo: 1 });
+      const actor = await userIdByEmail(pool, customerEmail(1));
+      await expect(pool.query(
+        `INSERT INTO queue_events (entry_id, actor_id, event_type, from_status, to_status) VALUES ($1, $2, $3, NULL, $4)`,
+        [entry.id, actor, type, to])).rejects.toMatchObject({ code: '23514' });
+      expect(await count('SELECT count(*) FROM queue_events WHERE entry_id = $1 AND event_type = $2', [entry.id, type])).toBe(0);
+    });
+
   test('TEST-35 / AC-35: re-running migrations is a no-op', async () => {
     const before = await dbState(pool);
     expect(await migrate(pool)).toEqual([]);

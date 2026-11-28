@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetAndSeed, closeTestPool } from '../../server/tests/helpers/index.js';
+import { seedIds } from '../../database/seed/seedData.js';
 
 // F-04 browser journey (AC-28, AC-33): join, cancel with confirmation, see CANCELLED, join again.
 // Runs against the real API and the PostgreSQL TEST database, from a freshly seeded state.
@@ -21,8 +22,10 @@ async function signIn(browser, email) {
 
 async function join(page, partySize) {
   await page.getByRole('link', { name: 'Queues', exact: true }).click();
-  await page.getByLabel(/^Party size \(1–\d+\)$/).fill(String(partySize));
-  await page.getByTestId('join-queue').click();
+  // Scoped to the main queue's card so the helper also works when /queues lists several queues (F-06).
+  const card = page.locator(`[data-queue-id="${seedIds.queue}"]`);
+  await card.getByLabel(/^Party size \(1–\d+\)$/).fill(String(partySize));
+  await card.getByTestId('join-queue').click();
 }
 
 test('E2E-7 / F-04 AC-28 AC-33: cancel needs a confirmation, shows CANCELLED, and a new join gets a new ticket number', async ({ browser }) => {

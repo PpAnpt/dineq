@@ -1,6 +1,6 @@
 # Part D: Traceability matrix (requirement to result)
 
-> **Status:** Draft v0.1 · snapshot at `sprint-2-staging` `df5923c` (CI run 46128556773: success). A PASS here means a recorded local run at the commit named plus the green CI run; it does not mean deployed. Rows marked PLANNED or NOT EXECUTED have no run.
+> **Status:** v0.2 · updated 28 Nov 2026 after the release: integrated runs at `5e8c9a7` (`s2-integration` 289 passed / 0 failed / 0 skipped; `s2-e2e` 11 passed; CI green) and deployed `main` `f3e7c63`. A PASS here means a recorded local run at the commit named plus the green CI run; deployment checks are listed separately in Part E.5 and were only partly run. Rows marked PLANNED or NOT EXECUTED have no run.
 
 ## D.1 Requirement coverage
 
@@ -50,7 +50,7 @@ One row per range of acceptance criteria. "Ran" and "passed" refer to the record
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | AC-01..24 | F-01, F-02, F-03 | Yes | Yes | Yes | `release-full-run` at `a7a145e` (108); AC-07 and AC-12 revised by Lab 7 |
 | AC-25..27 | Lab 7 | Yes | Yes | Yes | `l7-green-lock` 143 (`6fa36bf`), `l7-e2e-green` |
-| AC-26b | Lab 7 activation | Yes, in PR #114 (not merged at this snapshot) | Yes | Yes (local run and PR #114 CI on `aea7348`; **not** covered by the CI run on `df5923c`) | `l7-activation-green` 289 (`34f461a`) |
+| AC-26b | Lab 7 activation | Yes (PR #114, merged) | Yes | Yes (local run `34f461a`, the integrated `s2-integration` run and CI on the merged branch); on the deployed database the owner saw the main queue limit 10 | `l7-activation-green` 289 (`34f461a`) |
 | AC-28..35 | F-04 | Yes | Yes | Yes | `f04-fix-green` 172 (`af2b247`), `f04-e2e-green` |
 | AC-36..45 | F-05 | Yes | Yes | Yes | `f05-final` 257 (`1a3d66d`), `f05-ui-green` 10 |
 | AC-46..51 | F-06 | Yes | Yes | Yes | `f06-green` 171 (`f8cab1e`), `f06-e2e-green` |
@@ -70,7 +70,7 @@ One row per range of acceptance criteria. "Ran" and "passed" refer to the record
 | NFR-07 | No full keyboard audit | AC-74 checklist |
 | FR-15 | UX states audited only for selected screens | AC-75 checklist |
 | Deployment | No Sprint 2 or Lab 7 behaviour is on the deployed service | release PR, deploy, post-deploy checks |
-| Integrated record | `s2-integration` and `s2-e2e` not recorded yet | after PR #114 is merged |
+| Integrated record | `s2-integration` 289 / 0 / 0 and `s2-e2e` 11 passed, recorded (PR #117) | none; deployed checks are in Part E.5 |
 | Sprint 1 manual walkthrough | not executed (disclosed in `known-limitations.md`) | repeat on the candidate if time allows |
 
 ## D.4 Rules for filling this file

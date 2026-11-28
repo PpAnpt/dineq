@@ -1,0 +1,177 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f07a-red.json"
+Working directory: server
+Commit: 2e075f470d9f7ea0f36478f93e8809118713d741
+Date: 2026-11-28T07:07:32.302Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-f07a/server
+
+ ❯ tests/f07a-history.test.js (16 tests | 15 failed) 1968ms
+     × TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all 258ms
+     × TEST-53 / AC-53: from is inclusive, to is exclusive, and both can be combined 122ms
+     × TEST-54 / AC-54: unknown status is 400 VALIDATION_ERROR with no data and no DB change 97ms
+     × TEST-54 / AC-54: empty status is 400 VALIDATION_ERROR with no data and no DB change 104ms
+     × TEST-54 / AC-54: repeated status is 400 VALIDATION_ERROR with no data and no DB change 98ms
+     × TEST-54 / AC-54: lower-case status is 400 VALIDATION_ERROR with no data and no DB change 84ms
+     × TEST-54 / AC-54: from not a date is 400 VALIDATION_ERROR with no data and no DB change 92ms
+     × TEST-54 / AC-54: from without timezone is 400 VALIDATION_ERROR with no data and no DB change 91ms
+     × TEST-54 / AC-54: date only is 400 VALIDATION_ERROR with no data and no DB change 102ms
+     × TEST-54 / AC-54: to not a date is 400 VALIDATION_ERROR with no data and no DB change 99ms
+     × TEST-54 / AC-54: impossible calendar date is 400 VALIDATION_ERROR with no data and no DB change 96ms
+     × TEST-54 / AC-54: repeated from is 400 VALIDATION_ERROR with no data and no DB change 116ms
+     × TEST-54 / AC-54: from after to is 400 VALIDATION_ERROR with no data and no DB change 113ms
+     ✓ TEST-55 / AC-55: a Customer never sees another Customer ticket under any filter; Host 403 before the filters; anonymous 401 279ms
+     × TEST-56 / AC-56: status and range combine with AND; order is created_at DESC, ticket_no DESC, id; empty is data [] 103ms
+     × TEST-56 / AC-56: the filters work across queues of the same Customer 113ms
+ ✓ tests/f02-join.test.js (44 tests) 7819ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1248ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  427ms
+ ✓ tests/f04-cancel.test.js (18 tests) 4258ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  326ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  1975ms
+     ✓ TEST-35 / AC-35: a cancelled ticket and its event survive a new app instance with a new DB pool  317ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 4092ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  540ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  348ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  306ms
+     ✓ TEST-27 / AC-27: service_queues.max_party_size = 11 is rejected by the DB (23514)  324ms
+     ✓ TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written  508ms
+ ✓ tests/f03-host.test.js (21 tests) 2659ms
+ ✓ tests/f01-auth.test.js (40 tests) 2856ms
+ ✓ tests/f09-payload.test.js (11 tests) 1149ms
+     ✓ TEST-70 / AC-70: public oversized login returns safe 413 without a cookie or DB mutation  301ms
+ ✓ tests/controlled-fifo.test.js (1 test) 477ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  476ms
+ ✓ tests/infra.test.js (11 tests) 790ms
+     ✓ INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys  374ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 15 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f07a-history.test.js > F-07a AC-52: status filter > TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all
+AssertionError: expected [ …(3) ] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+  [
++   "9ecf7b0b-b5bb-4e89-8ef4-0b70f4a44fdd",
+    "bcf56d8a-2d88-4cd2-b624-84bf6a2936e6",
++   "f3f56fd6-146d-4db2-ac08-28bdd24e41a7",
+  ]
+
+ ❯ tests/f07a-history.test.js:53:58
+     51|     const completed = await ticket(1, 3, 'COMPLETED', '2026-11-03T10:0…
+     52|     const cookie = await login(customerEmail(1));
+     53|     expect(ids(await list(cookie, '?status=CANCELLED'))).toEqual([canc…
+       |                                                          ^
+     54|     expect(ids(await list(cookie, '?status=COMPLETED'))).toEqual([comp…
+     55|     expect(ids(await list(cookie, '?status=WAITING'))).toEqual([waitin…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/15]⎯
+
+ FAIL  tests/f07a-history.test.js > F-07a AC-53: created_at range is from <= x < to > TEST-53 / AC-53: from is inclusive, to is exclusive, and both can be combined
+AssertionError: expected [ …(3) ] to deeply equal [ …(2) ]
+
+- Expected
++ Received
+
+  [
+    "d245dc4c-d176-4ff1-967f-a59bb825d77f",
+    "bdb5d007-0e06-4079-9bdc-78d8c995ed46",
++   "c1514a51-cf88-4a64-adf3-8d5acde36b0f",
+  ]
+
+ ❯ tests/f07a-history.test.js:69:71
+     67|     const t3 = await ticket(1, 3, 'COMPLETED', '2026-11-03T10:00:00.00…
+     68|     const cookie = await login(customerEmail(1));
+     69|     expect(ids(await list(cookie, '?from=2026-11-02T10:00:00.000Z'))).…
+       |                                                                       ^
+     70|     expect(ids(await list(cookie, '?to=2026-11-03T10:00:00.000Z'))).to…
+     71|     expect(ids(await list(cookie, '?from=2026-11-02T10:00:00.000Z&to=2…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/15]⎯
+
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: unknown status is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: empty status is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: repeated status is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: lower-case status is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: from not a date is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: from without timezone is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: date only is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: to not a date is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: impossible calendar date is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: repeated from is 400 VALIDATION_ERROR with no data and no DB change
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: invalid filters > TEST-54 / AC-54: from after to is 400 VALIDATION_ERROR with no data and no DB change
+AssertionError: expected 200 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 200
+
+ ❯ expectError tests/f07a-history.test.js:27:27
+     25|
+     26| function expectError(response, status, code) {
+     27|   expect(response.status).toBe(status);
+       |                           ^
+     28|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     29| }
+ ❯ tests/f07a-history.test.js:98:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/15]⎯
+
+ FAIL  tests/f07a-history.test.js > F-07a AC-56: combination, order and empty result > TEST-56 / AC-56: status and range combine with AND; order is created_at DESC, ticket_no DESC, id; empty is data []
+AssertionError: expected [ …(4) ] to deeply equal [ …(2) ]
+
+- Expected
++ Received
+
+  [
++   "b46f7b88-18ec-44af-9b15-0c41a975f1ec",
++   "1dec1923-98a1-4fef-af75-e2f5637bde60",
+    "f7521763-f0d9-44da-b565-4e91b97f634f",
+    "a82d90dc-4746-4542-b781-4aaefcb7cc0b",
+  ]
+
+ ❯ tests/f07a-history.test.js:136:58
+    134|     // Same created_at: higher ticket number first; across times: newe…
+    135|     expect(ids(await list(cookie))).toEqual([d, c, b, a]);
+    136|     expect(ids(await list(cookie, '?status=CANCELLED'))).toEqual([b, a…
+       |                                                          ^
+    137|     expect(ids(await list(cookie, '?status=CANCELLED&from=2026-11-02T0…
+    138|     expect(ids(await list(cookie, '?status=COMPLETED&to=2026-11-02T00:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/15]⎯
+
+ FAIL  tests/f07a-history.test.js > F-07a AC-56: combination, order and empty result > TEST-56 / AC-56: the filters work across queues of the same Customer
+AssertionError: expected [ …(2) ] to deeply equal [ Array(1) ]
+
+- Expected
++ Received
+
+  [
++   "46f77956-ca3b-4405-a15f-f10c94bd8ee1",
+    "cb0c2306-7272-453b-a6a2-9234b3b490e0",
+  ]
+
+ ❯ tests/f07a-history.test.js:151:58
+    149|     const second = await insertEntry(pool, { queueId: seedIds.queue, c…
+    150|     const cookie = await login(customerEmail(1));
+    151|     expect(ids(await list(cookie, '?status=CANCELLED'))).toEqual([firs…
+       |                                                          ^
+    152|     expect(ids(await list(cookie, '?status=WAITING'))).toEqual([second…
+    153|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/15]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  15 failed | 173 passed (188)
+   Start at  14:07:32
+   Duration  28.84s (transform 243ms, setup 0ms, import 1.68s, tests 26.07s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-f07a/docs/evidence/f07a-red.json
+
+Exit code: 1

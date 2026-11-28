@@ -1,0 +1,38 @@
+Mutation check for the under-lock tests (PR #103 review P2). The application code was TEMPORARILY changed to validate partySize against an unlocked pre-read instead of the locked queue row; this file is the output of that run and is not a production run.
+Date: 2026-11-28T05:29:58Z
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-l7red/server
+ ❯ tests/l7-party-limit.test.js (26 tests | 2 failed | 24 skipped) 10391ms
+     × TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written 301ms
+     × TEST-25 / AC-25: limit raised 4 -> 6 while the Join waits: partySize 5 is accepted with ticket 1 10088ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: the limit is read under the queue lock > TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written
+AssertionError: expected 201 to be 400 // Object.is equality
+- Expected
++ Received
+- 400
++ 201
+ ❯ expectInvalidParty tests/l7-party-limit.test.js:33:27
+     31|
+     32| function expectInvalidParty(response, limit) {
+     33|   expect(response.status).toBe(400);
+       |                           ^
+     34|   expect(response.body.error.code).toBe('INVALID_PARTY_SIZE');
+     35|   // The message names the limit of the target queue, e.g. "... from 1…
+ ❯ tests/l7-party-limit.test.js:260:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+ FAIL  tests/l7-party-limit.test.js > Lab 7 TEST-25 / AC-25: the limit is read under the queue lock > TEST-25 / AC-25: limit raised 4 -> 6 while the Join waits: partySize 5 is accepted with ticket 1
+AssertionError: the Join must be waiting for the queue lock: expected 0 to be greater than 0
+ ❯ joinWhileLimitChangesUnderLock tests/l7-party-limit.test.js:247:70
+    245|         await new Promise(resolve => setTimeout(resolve, 20));
+    246|       }
+    247|       expect(waiting, 'the Join must be waiting for the queue lock').t…
+       |                                                                      ^
+    248|
+    249|       await holder.query('COMMIT');
+ ❯ tests/l7-party-limit.test.js:268:35
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+ Test Files  1 failed (1)
+      Tests  2 failed | 24 skipped (26)
+   Start at  12:29:59
+   Duration  10.73s (transform 84ms, setup 0ms, import 234ms, tests 10.39s, environment 0ms)

@@ -46,33 +46,43 @@ function expectError(response, status, code) {
 }
 
 describe('F-02 queue list', () => {
-  const item = (isAssigned, status = 'OPEN') => ({
-    id: seedIds.queue,
-    restaurant: { id: seedIds.restaurant, name: 'DineQ Demo Restaurant' },
-    status,
-    isAssigned,
+  // F-06 (AC-46 revises AC-07): the seed now has two queues in the same restaurant, listed by
+  // restaurant name, queue name, then id: 'Bar counter' before 'Main queue'. Every item has a name.
+  const barQueueId = '33333333-3333-4333-8333-333333333333';
+  const restaurant = { id: seedIds.restaurant, name: 'DineQ Demo Restaurant' };
+  const bar = (isAssigned, status = 'OPEN') => ({
+    id: barQueueId, name: 'Bar counter', restaurant, status, maxPartySize: 8, isAssigned,
+  });
+  // Lab 7 (L7-CR-01, AC-07 revised): the seeded main queue exposes its per-queue limit (10).
+  const main = (isAssigned, status = 'OPEN') => ({
+    id: seedIds.queue, name: 'Main queue', restaurant, status, maxPartySize: 10, isAssigned,
   });
 
   test.each([
-    { email: customerEmail(1), isAssigned: false, who: 'Customer' },
-    { email: 'host1@dineq.test', isAssigned: true, who: 'Assigned Host' },
-    { email: 'host2@dineq.test', isAssigned: false, who: 'Unassigned Host' },
-  ])('TEST-07 / AC-07: $who gets the C.6.1 shape with isAssigned=$isAssigned', async ({ email, isAssigned }) => {
+    { email: customerEmail(1), barAssigned: false, mainAssigned: false, who: 'Customer' },
+    { email: 'host1@dineq.test', barAssigned: false, mainAssigned: true, who: 'Assigned Host (main queue)' },
+    { email: 'host3@dineq.test', barAssigned: true, mainAssigned: false, who: 'Assigned Host (bar counter)' },
+    { email: 'host2@dineq.test', barAssigned: false, mainAssigned: false, who: 'Unassigned Host' },
+  ])('TEST-07 / AC-07: $who gets the C.6.1 shape with per-queue isAssigned', async ({ email, barAssigned, mainAssigned }) => {
     const cookie = await login(email);
     const response = await request(app).get('/api/queues').set('Cookie', cookie);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ data: [item(isAssigned)] });
-    expect(typeof response.body.data[0].isAssigned).toBe('boolean');
+    expect(response.body).toEqual({ data: [bar(barAssigned), main(mainAssigned)] });
+    for (const queue of response.body.data) expect(typeof queue.isAssigned).toBe('boolean');
   });
 
   test('TEST-07 / AC-07: a CLOSED queue is listed with status CLOSED', async () => {
     await pool.query("UPDATE service_queues SET status = 'CLOSED' WHERE id = $1", [seedIds.queue]);
     const response = await request(app).get('/api/queues').set('Cookie', await login(customerEmail(1)));
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ data: [item(false, 'CLOSED')] });
+    expect(response.body).toEqual({ data: [bar(false), main(false, 'CLOSED')] });
   });
 
   test('TEST-07 / AC-07: a fixture with no queues returns { "data": [] }', async () => {
+    // F-05: seeded tables reference queues. Keep this fixture valid before/after 004.
+    if ((await pool.query("SELECT to_regclass('dining_tables') AS name")).rows[0].name) {
+      await pool.query('DELETE FROM dining_tables');
+    }
     await pool.query('DELETE FROM queue_operator_assignments');
     await pool.query('DELETE FROM service_queues');
     for (const email of [customerEmail(1), 'host1@dineq.test']) {
@@ -203,8 +213,12 @@ describe('F-02 join queue', () => {
     expect(await nextTicketNo()).toBe(1);
   });
 
+  // Lab 7 (L7-CR-01, AC-12 revised): the seeded main queue now allows 10, so the old
+  // out-of-range example 9 became 11 here; 9 is still rejected on a limit-8 queue
+  // (see l7-party-limit.test.js, TEST-25). All other invalid shapes are unchanged.
   test.each([
-    ['0', { partySize: 0 }], ['9', { partySize: 9 }], ['1.5', { partySize: 1.5 }],
+    ['0', { partySize: 0 }], ['11', { partySize: 11 }], ['1.5', { partySize: 1.5 }],
+    ['-1', { partySize: -1 }], ['"ten"', { partySize: 'ten' }],
     ['"abc"', { partySize: 'abc' }], ['null', { partySize: null }], ['missing', {}],
   ])('TEST-12 / AC-12: partySize %s is 400 INVALID_PARTY_SIZE and changes nothing', async (_label, body) => {
     const cookie = await login(customerEmail(1));
@@ -218,10 +232,19 @@ describe('F-02 join queue', () => {
     expect(await nextTicketNo()).toBe(1);
   });
 
-  test.each([1, 8])('TEST-12 / AC-12: boundary partySize %i is accepted', async (partySize) => {
+  // Lab 7 (L7-CR-01): the old boundaries 1 and 8 stay valid; 9 and 10 are valid on the seeded main queue.
+  test.each([1, 8, 9, 10])('TEST-12 / AC-12: boundary partySize %i is accepted on the seeded main queue', async (partySize) => {
     const response = await joinAs(await login(customerEmail(1)), partySize);
     expect(response.status).toBe(201);
     expect(response.body.data.partySize).toBe(partySize);
+  });
+
+  test('TEST-12 / AC-12: an out-of-range partySize on a CLOSED queue is still reported as 400 before 409 QUEUE_CLOSED', async () => {
+    await pool.query("UPDATE service_queues SET status = 'CLOSED' WHERE id = $1", [seedIds.queue]);
+    const before = await state();
+    expectError(await joinAs(await login(customerEmail(1)), 11), 400, 'INVALID_PARTY_SIZE');
+    expect(await state()).toBe(before);
+    expectError(await joinAs(await login(customerEmail(1)), 4), 409, 'QUEUE_CLOSED');
   });
 
   test('TEST-13 / AC-13: Host cannot join (403 FORBIDDEN), no ticket and no counter change', async () => {

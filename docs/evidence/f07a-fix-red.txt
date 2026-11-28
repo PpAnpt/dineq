@@ -1,0 +1,81 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f07a-fix-red.json"
+Working directory: server
+Commit: 89c3f267cd34fe55bb0c42670ab7d74aa887872b
+Date: 2026-11-28T07:30:52.138Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-f07a/server
+
+ ❯ tests/f07a-history.test.js (22 tests | 3 failed) 2048ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all 192ms
+     ✓ TEST-53 / AC-53: from is inclusive, to is exclusive, and both can be combined 88ms
+     ✓ TEST-54 / AC-54: unknown status is 400 VALIDATION_ERROR with no data and no DB change 71ms
+     ✓ TEST-54 / AC-54: empty status is 400 VALIDATION_ERROR with no data and no DB change 74ms
+     ✓ TEST-54 / AC-54: repeated status is 400 VALIDATION_ERROR with no data and no DB change 73ms
+     ✓ TEST-54 / AC-54: lower-case status is 400 VALIDATION_ERROR with no data and no DB change 74ms
+     ✓ TEST-54 / AC-54: from not a date is 400 VALIDATION_ERROR with no data and no DB change 80ms
+     ✓ TEST-54 / AC-54: from without timezone is 400 VALIDATION_ERROR with no data and no DB change 84ms
+     ✓ TEST-54 / AC-54: date only is 400 VALIDATION_ERROR with no data and no DB change 81ms
+     ✓ TEST-54 / AC-54: to not a date is 400 VALIDATION_ERROR with no data and no DB change 76ms
+     ✓ TEST-54 / AC-54: impossible calendar date is 400 VALIDATION_ERROR with no data and no DB change 72ms
+     ✓ TEST-54 / AC-54: repeated from is 400 VALIDATION_ERROR with no data and no DB change 75ms
+     ✓ TEST-54 / AC-54: from after to is 400 VALIDATION_ERROR with no data and no DB change 70ms
+     × TEST-54 / AC-54: from after to (microseconds, same millisecond) is 400 VALIDATION_ERROR 74ms
+     × TEST-54 / AC-54: from after to (nanoseconds, same microsecond) is 400 VALIDATION_ERROR 70ms
+     × TEST-54 / AC-54: from after to (same instant with an offset, later fraction) is 400 VALIDATION_ERROR 69ms
+     ✓ TEST-54 / AC-54: from not after to (microseconds in order) is accepted 69ms
+     ✓ TEST-54 / AC-54: from not after to (identical fractions) is accepted 108ms
+     ✓ TEST-54 / AC-54: from not after to (fraction written with a different number of digits) is accepted 120ms
+     ✓ TEST-55 / AC-55: a Customer never sees another Customer ticket under any filter; Host 403 before the filters; anonymous 401 228ms
+     ✓ TEST-56 / AC-56: status and range combine with AND; order is created_at DESC, ticket_no DESC, id; empty is data [] 115ms
+     ✓ TEST-56 / AC-56: the filters work across queues of the same Customer 83ms
+ ✓ tests/f02-join.test.js (44 tests) 6645ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1097ms
+ ✓ tests/f04-cancel.test.js (18 tests) 4738ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  2742ms
+     ✓ TEST-34 / AC-34: ten parallel cancels of one ticket give one 200, nine 409 and a single CANCELLED event  302ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3894ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  356ms
+     ✓ TEST-25 / AC-25: limit lowered 4 -> 2 while the Join waits: partySize 4 is rejected naming 2, nothing written  542ms
+ ✓ tests/f01-auth.test.js (40 tests) 2487ms
+ ✓ tests/f03-host.test.js (21 tests) 2506ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  436ms
+ ✓ tests/f09-payload.test.js (11 tests) 872ms
+ ✓ tests/infra.test.js (11 tests) 748ms
+ ✓ tests/controlled-fifo.test.js (1 test) 433ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  432ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: from/to order at microsecond precision > TEST-54 / AC-54: from after to (microseconds, same millisecond) is 400 VALIDATION_ERROR
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: from/to order at microsecond precision > TEST-54 / AC-54: from after to (nanoseconds, same microsecond) is 400 VALIDATION_ERROR
+ FAIL  tests/f07a-history.test.js > F-07a AC-54: from/to order at microsecond precision > TEST-54 / AC-54: from after to (same instant with an offset, later fraction) is 400 VALIDATION_ERROR
+AssertionError: expected 200 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 200
+
+ ❯ expectError tests/f07a-history.test.js:27:27
+     25|
+     26| function expectError(response, status, code) {
+     27|   expect(response.status).toBe(status);
+       |                           ^
+     28|   expect(response.body).toEqual({ error: { code, message: expect.any(S…
+     29| }
+ ❯ tests/f07a-history.test.js:114:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  3 failed | 191 passed (194)
+   Start at  14:30:52
+   Duration  26.83s (transform 178ms, setup 0ms, import 1.43s, tests 24.37s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-f07a/docs/evidence/f07a-fix-red.json
+
+Exit code: 1

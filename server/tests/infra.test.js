@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import request from 'supertest';
 import argon2 from 'argon2';
@@ -34,13 +35,14 @@ describe('P2 infrastructure (not feature AC results)', () => {
 
   test('INFRA-03: migration creates all tables, UUID IDs, timestamptz fields and foreign keys', async () => {
     const tables = (await pool.query(`SELECT table_name FROM information_schema.tables
-      WHERE table_schema = 'public' AND table_type = 'BASE TABLE'`)).rows.map(row => row.table_name);
+      WHERE table_schema = current_schema() AND table_type = 'BASE TABLE'`)).rows.map(row => row.table_name);
     expect(tables).toEqual(expect.arrayContaining(['schema_migrations', 'users', 'sessions',
-      'restaurants', 'service_queues', 'queue_operator_assignments', 'queue_entries', 'queue_events']));
+      'restaurants', 'service_queues', 'queue_operator_assignments', 'queue_entries', 'queue_events', 'dining_tables']));
     const columns = (await pool.query(`SELECT table_name, column_name, data_type, column_default
-      FROM information_schema.columns WHERE table_schema = 'public'`)).rows;
+      FROM information_schema.columns WHERE table_schema = current_schema()`)).rows;
     const ids = columns.filter(row => row.column_name === 'id');
-    expect(ids).toHaveLength(6);
+    // F-05 contract v0.2: dining_tables adds one UUID id; all original defaults stay checked.
+    expect(ids).toHaveLength(7);
     for (const row of ids) {
       expect(row.data_type).toBe('uuid');
       expect(row.column_default).toContain('gen_random_uuid()');
@@ -52,18 +54,19 @@ describe('P2 infrastructure (not feature AC results)', () => {
       FROM information_schema.table_constraints tc
       JOIN information_schema.key_column_usage kcu
         ON kcu.constraint_name = tc.constraint_name AND kcu.constraint_schema = tc.constraint_schema
-      WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'public'`)).rows;
+      WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = current_schema()`)).rows;
     for (const [table_name, column_name] of [
       ['sessions', 'user_id'], ['service_queues', 'restaurant_id'],
       ['queue_operator_assignments', 'queue_id'], ['queue_operator_assignments', 'host_user_id'],
       ['queue_entries', 'queue_id'], ['queue_entries', 'customer_id'],
       ['queue_events', 'entry_id'], ['queue_events', 'actor_id'],
+      ['dining_tables', 'queue_id'], ['dining_tables', 'occupied_entry_id'], ['queue_entries', 'table_id'],
     ]) expect(foreignKeys).toContainEqual({ table_name, column_name });
   });
 
   test('INFRA-04: PostgreSQL exposes both partial unique indexes and required CHECK constraints', async () => {
     const indexes = (await pool.query(`SELECT indexname, indexdef FROM pg_indexes
-      WHERE schemaname = 'public' AND tablename = 'queue_entries'`)).rows;
+      WHERE schemaname = current_schema() AND tablename = 'queue_entries'`)).rows;
     const active = indexes.find(row => row.indexname === 'queue_entries_one_active_customer');
     const called = indexes.find(row => row.indexname === 'queue_entries_one_called');
     expect(active.indexdef).toMatch(/UNIQUE.*\(queue_id, customer_id\).*WHERE/);
@@ -75,16 +78,21 @@ describe('P2 infrastructure (not feature AC results)', () => {
       FROM information_schema.table_constraints tc
       JOIN information_schema.check_constraints cc
         ON cc.constraint_name = tc.constraint_name AND cc.constraint_schema = tc.constraint_schema
-      WHERE tc.table_schema = 'public' AND tc.constraint_type = 'CHECK'`)).rows;
+      WHERE tc.table_schema = current_schema() AND tc.constraint_type = 'CHECK'`)).rows;
     const entryChecks = checks.filter(row => row.table_name === 'queue_entries').map(row => row.check_clause).join(' ');
     expect(entryChecks).toMatch(/party_size >= 1/);
-    expect(entryChecks).toMatch(/party_size <= 8/);
+    // Lab 7 (L7-CR-01): the absolute ceiling widened from 8 to 10; the per-queue limit is enforced by the API.
+    expect(entryChecks).toMatch(/party_size <= 10/);
+    expect(entryChecks).not.toMatch(/party_size <= 8/);
     for (const status of ['WAITING', 'CALLED', 'COMPLETED']) expect(entryChecks).toContain(status);
     expect(entryChecks).toContain('called_at');
     expect(entryChecks).toContain('completed_at');
     expect(checks.some(row => row.table_name === 'service_queues'
       && row.check_clause.includes('next_ticket_no >= 1'))).toBe(true);
     const queueChecks = checks.filter(row => row.table_name === 'service_queues').map(row => row.check_clause).join(' ');
+    // Lab 7 (L7-CR-01): service_queues.max_party_size is limited to 1..10.
+    expect(queueChecks).toMatch(/max_party_size >= 1/);
+    expect(queueChecks).toMatch(/max_party_size <= 10/);
     for (const status of ['OPEN', 'CLOSED']) expect(queueChecks).toContain(status);
     const roleChecks = checks.filter(row => row.table_name === 'users').map(row => row.check_clause).join(' ');
     for (const role of ['CUSTOMER', 'HOST']) expect(roleChecks).toContain(role);
@@ -101,8 +109,19 @@ describe('P2 infrastructure (not feature AC results)', () => {
       expect((await client.query('SELECT id, email FROM users ORDER BY email')).rows).toEqual(before);
       expect((await client.query('SELECT next_ticket_no FROM service_queues WHERE id = $1', [seedIds.queue])).rows[0].next_ticket_no).toBe(7);
       expect((await client.query('SELECT count(*)::int AS n FROM restaurants')).rows[0].n).toBe(1);
-      expect((await client.query('SELECT count(*)::int AS n FROM service_queues')).rows[0].n).toBe(1);
-      expect((await client.query('SELECT count(*)::int AS n FROM schema_migrations')).rows[0].n).toBe(1);
+      // F-06: the seed holds two queues (Main queue and Bar counter) in the one restaurant; the
+      // re-seed must not rename them or touch the ticket counter (checked above).
+      expect((await client.query('SELECT count(*)::int AS n FROM service_queues')).rows[0].n).toBe(2);
+      expect((await client.query('SELECT name FROM service_queues ORDER BY name')).rows)
+        .toEqual([{ name: 'Bar counter' }, { name: 'Main queue' }]);
+      // Lab 7 (L7-CR-01): every migration file is recorded exactly once (was a literal 1 with one file).
+      const migrationFiles = readdirSync(new URL('../../database/migrations', import.meta.url))
+        .filter(name => name.endsWith('.sql')).length;
+      expect((await client.query('SELECT count(*)::int AS n FROM schema_migrations')).rows[0].n).toBe(migrationFiles);
+      // F-05 contract v0.2: repeated seed keeps the same two configured tables.
+      expect((await client.query("SELECT to_regclass('dining_tables') AS name")).rows[0].name).toBe('dining_tables');
+      expect((await client.query('SELECT label,capacity FROM dining_tables ORDER BY label')).rows)
+        .toEqual([{ label: 'T1', capacity: 4 }, { label: 'T2', capacity: 10 }]);
     } finally {
       await client.query('UPDATE service_queues SET next_ticket_no = 1 WHERE id = $1', [seedIds.queue]);
       client.release();
@@ -113,16 +132,21 @@ describe('P2 infrastructure (not feature AC results)', () => {
     const accounts = (await pool.query('SELECT email, role, password_hash FROM users ORDER BY email')).rows;
     expect(accounts.filter(row => row.role === 'CUSTOMER').map(row => row.email)).toEqual(
       Array.from({ length: 30 }, (_, i) => `customer${String(i + 1).padStart(2, '0')}@dineq.test`));
-    expect(accounts.filter(row => row.role === 'HOST').map(row => row.email)).toEqual(['host1@dineq.test', 'host2@dineq.test']);
+    expect(accounts.filter(row => row.role === 'HOST').map(row => row.email)).toEqual(['host1@dineq.test', 'host2@dineq.test', 'host3@dineq.test']);
     expect(accounts.every(row => row.password_hash.startsWith('$argon2id$'))).toBe(true);
     expect(await argon2.verify(accounts[0].password_hash, process.env.SEED_DEMO_PASSWORD)).toBe(true);
     expect((await pool.query(`SELECT u.email FROM queue_operator_assignments a
       JOIN users u ON u.id = a.host_user_id WHERE a.queue_id = $1`, [seedIds.queue])).rows)
       .toEqual([{ email: 'host1@dineq.test' }]);
+    // F-06: host3 is assigned to the Bar counter only; host2 stays unassigned everywhere.
+    expect((await pool.query(`SELECT u.email, q.name FROM queue_operator_assignments a
+      JOIN users u ON u.id = a.host_user_id JOIN service_queues q ON q.id = a.queue_id ORDER BY u.email`)).rows)
+      .toEqual([{ email: 'host1@dineq.test', name: 'Main queue' }, { email: 'host3@dineq.test', name: 'Bar counter' }]);
   });
 
   test('INFRA-07: DB rejects invalid party sizes, statuses, counters and foreign keys', async () => {
-    for (const size of [0, 9]) {
+    // Lab 7 (L7-CR-01): the DB ceiling is 10, so 9 is valid at the DB level and 11 is rejected.
+    for (const size of [0, 11]) {
       await expect(pool.query(`INSERT INTO queue_entries
         (queue_id, customer_id, ticket_no, party_size, status) VALUES ($1, $2, 1, $3, 'WAITING')`,
       [seedIds.queue, customer, size])).rejects.toMatchObject({ code: '23514' });

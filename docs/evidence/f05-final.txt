@@ -1,0 +1,65 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f05-final.json"
+Working directory: server
+Commit: 1a3d66dfa57e47df1999c215f24e26ef1577419f
+Date: 2026-11-28T08:11:15.018Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/server
+
+ ✓ tests/f02-join.test.js (45 tests) 10611ms
+     ✓ TEST-07 / AC-07: 'Customer' gets the C.6.1 shape with per-queue isAssigned  304ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1727ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  365ms
+ ✓ tests/f05-seating.test.js (37 tests) 9588ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  480ms
+   ✓ TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body  390ms
+   ✓ TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body  427ms
+   ✓ TEST-40 / AC-40: Seat party 1 at table4 atomically completes ticket on CLOSED queue  300ms
+   ✓ TEST-40 / AC-40: Seat party 4 at table4 atomically completes ticket on CLOSED queue  308ms
+   ✓ TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue  303ms
+   ✓ TEST-43 / AC-43: release permits later seating without erasing the previous historical link  312ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  436ms
+ ✓ tests/f04-cancel.test.js (18 tests) 6718ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket  330ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  391ms
+     ✓ TEST-33 / AC-33: rejoin gets a new number, the Waiting List hides the cancelled ticket, Call Next skips it and the CALLED guard still holds  320ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  3154ms
+ ✓ tests/f06-queues.test.js (16 tests) 8163ms
+     ✓ TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys  346ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  479ms
+     ✓ TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403  442ms
+     ✓ TEST-49 / AC-49: Join is 409 without using a number; Waiting List, Call Next and Complete still work; reopening continues the numbering  537ms
+     ✓ TEST-50 / AC-50: one Customer holds a ticket in each queue with separate numbering  391ms
+     ✓ TEST-50 / AC-50: a Host of one queue cannot list, call, complete or read tickets of the other queue  426ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  2273ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1442ms
+     ✓ TEST-51 / AC-51: migration 005 names legacy queues deterministically and the seed then runs twice without a name clash  363ms
+ ✓ tests/f01-auth.test.js (40 tests) 6244ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  306ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 5885ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  529ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  388ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  389ms
+     ✓ TEST-25 / AC-25: changing the limit takes effect on the next Join  365ms
+     ✓ TEST-25 / AC-25: an out-of-range size on a CLOSED limit-4 queue is 400 first; a valid size is 409 QUEUE_CLOSED  321ms
+ ✓ tests/f05-tables.test.js (31 tests) 6936ms
+     ✓ TEST-43 / AC-43: release on CLOSED queue is idempotent and retains completed entry/event/history  323ms
+     ✓ TEST-45 / AC-45: migration 004 upgrades legacy rows without changing their existing fields  309ms
+ ✓ tests/f03-host.test.js (21 tests) 5179ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  336ms
+     ✓ TEST-24c / AC-24: host1@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints  389ms
+     ✓ TEST-24c / AC-24: host2@dineq.test with not-a-uuid gets 400 VALIDATION_ERROR on all three endpoints  389ms
+ ✓ tests/f09-payload.test.js (11 tests) 1925ms
+ ✓ tests/controlled-fifo.test.js (1 test) 605ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  604ms
+ ✓ tests/infra.test.js (11 tests) 593ms
+
+ Test Files  11 passed (11)
+      Tests  257 passed (257)
+   Start at  15:11:15
+   Duration  68.33s (transform 259ms, setup 0ms, import 3.75s, tests 62.45s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f05-noshow-tables/docs/evidence/f05-final.json
+
+Exit code: 0

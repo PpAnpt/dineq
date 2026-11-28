@@ -1,0 +1,97 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f09-payload-red.json"
+Working directory: server
+Commit: fe6637725ab6a6868e750acc1e63bc6ae03ef3e5
+Date: 2026-11-28T05:47:57.051Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f09-payload/server
+
+ ❯ tests/f09-payload.test.js (11 tests | 2 failed) 1581ms
+     × TEST-70 / AC-70: public oversized login returns safe 413 without a cookie or DB mutation 213ms
+     × TEST-71 / AC-71: authorized oversized Join returns safe 413 and consumes no ticket 175ms
+     ✓ TEST-71 / AC-71: anonymous precedes oversized Join parsing 96ms
+     ✓ TEST-71 / AC-71: Host precedes oversized Join parsing 174ms
+     ✓ TEST-71 / AC-71: bad UUID precedes oversized Join parsing 170ms
+     ✓ TEST-71 / AC-71: absent queue precedes oversized Join parsing 165ms
+     ✓ TEST-71 / AC-71: valid JSON below the limit still joins normally 160ms
+     ✓ TEST-72 / AC-72: malformed/missing/empty login JSON "{" retains 400 93ms
+     ✓ TEST-72 / AC-72: malformed/missing/empty login JSON "{}" retains 400 94ms
+     ✓ TEST-72 / AC-72: malformed/missing/empty login JSON "" retains 400 94ms
+     ✓ TEST-72 / AC-72: small invalid credentials remain 401 145ms
+ ✓ tests/f02-join.test.js (39 tests) 8417ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1769ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  348ms
+ ✓ tests/f01-auth.test.js (40 tests) 5235ms
+ ✓ tests/f03-host.test.js (21 tests) 5135ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  446ms
+     ✓ TEST-16b / AC-16: two simultaneous Call Next requests -> exactly one 200 and one 409  300ms
+     ✓ TEST-17 / AC-17: Complete a CALLED ticket -> COMPLETED in DB and visible to the owner  302ms
+     ✓ TEST-19 / AC-19: unassigned Host cannot list / call-next / complete; DB unchanged  306ms
+ ✓ tests/controlled-fifo.test.js (1 test) 587ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  585ms
+ ✓ tests/infra.test.js (11 tests) 485ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f09-payload.test.js > F-09a payload error contract > TEST-70 / AC-70: public oversized login returns safe 413 without a cookie or DB mutation
+AssertionError: expected { error: { …(2) } } to deeply equal { error: { …(2) } }
+
+- Expected
++ Received
+
+  {
+    "error": {
+-     "code": "PAYLOAD_TOO_LARGE",
+-     "message": "Request body is too large",
++     "code": "INTERNAL_ERROR",
++     "message": "request entity too large",
+    },
+  }
+
+ ❯ tooLarge tests/f09-payload.test.js:23:25
+     21| function tooLarge(response) {
+     22|   expect(response.status).toBe(413);
+     23|   expect(response.body).toEqual({ error: { code: 'PAYLOAD_TOO_LARGE', …
+       |                         ^
+     24|   expect(response.headers['set-cookie']).toBeUndefined();
+     25| }
+ ❯ tests/f09-payload.test.js:29:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/f09-payload.test.js > F-09a payload error contract > TEST-71 / AC-71: authorized oversized Join returns safe 413 and consumes no ticket
+AssertionError: expected { error: { …(2) } } to deeply equal { error: { …(2) } }
+
+- Expected
++ Received
+
+  {
+    "error": {
+-     "code": "PAYLOAD_TOO_LARGE",
+-     "message": "Request body is too large",
++     "code": "INTERNAL_ERROR",
++     "message": "request entity too large",
+    },
+  }
+
+ ❯ tooLarge tests/f09-payload.test.js:23:25
+     21| function tooLarge(response) {
+     22|   expect(response.status).toBe(413);
+     23|   expect(response.body).toEqual({ error: { code: 'PAYLOAD_TOO_LARGE', …
+       |                         ^
+     24|   expect(response.headers['set-cookie']).toBeUndefined();
+     25| }
+ ❯ tests/f09-payload.test.js:35:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  2 failed | 121 passed (123)
+   Start at  12:47:57
+   Duration  24.72s (transform 188ms, setup 0ms, import 1.98s, tests 21.44s, environment 1ms)
+
+JSON report written to B:/ProjectBingo/CPE/Year3/term1/CPE334_SoftEN/dineq/.local/worktrees/f09-payload/docs/evidence/f09-payload-red.json
+
+Exit code: 1

@@ -1,0 +1,108 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/l7-activation-green.json"
+Working directory: server
+Commit: dcecc72beae724db5160b2ad08aeb604605c86f6
+Date: 2026-11-28T08:55:04.778Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-006/server
+
+ ✓ tests/l7-activation.test.js (10 tests) 1067ms
+ ✓ tests/f02-join.test.js (45 tests) 5955ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1375ms
+ ❯ tests/f05-seating.test.js (37 tests | 1 failed) 4972ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  317ms
+   ✓ TEST-36 / AC-36: No-show still serves a CALLED ticket on a CLOSED queue 101ms
+   ✓ TEST-37 / AC-37: no-show on WAITING is 409 without mutation 98ms
+   ✓ TEST-37 / AC-37: no-show on COMPLETED is 409 without mutation 102ms
+   ✓ TEST-37 / AC-37: no-show on CANCELLED is 409 without mutation 120ms
+   ✓ TEST-37 / AC-37: no-show on NO_SHOW is 409 without mutation 123ms
+   ✓ TEST-37 / AC-37: repeated no-show is 409 and keeps a single terminal event 132ms
+   ✓ TEST-38 / AC-38: no-show Session, Role, UUID, resource and assignment precede body 258ms
+   ✓ TEST-37 / AC-37: seat on WAITING is 409 without mutation 107ms
+   ✓ TEST-37 / AC-37: seat on COMPLETED is 409 without mutation 104ms
+   ✓ TEST-37 / AC-37: seat on CANCELLED is 409 without mutation 106ms
+   ✓ TEST-37 / AC-37: seat on NO_SHOW is 409 without mutation 109ms
+   ✓ TEST-37 / AC-37: repeated seat is 409 and keeps a single terminal event 110ms
+   ✓ TEST-38 / AC-38: seat Session, Role, UUID, resource and assignment precede body 225ms
+   ✓ TEST-40 / AC-40: Seat party 1 at table4 atomically completes ticket on CLOSED queue 161ms
+   ✓ TEST-40 / AC-40: Seat party 4 at table4 atomically completes ticket on CLOSED queue 161ms
+   ✓ TEST-40 / AC-40: Seat party 10 at table10 atomically completes ticket on CLOSED queue 165ms
+   ✓ TEST-41 / AC-41: invalid Seat body null is 400 with no mutation 103ms
+   ✓ TEST-41 / AC-41: invalid Seat body undefined is 400 with no mutation 101ms
+   ✓ TEST-41 / AC-41: invalid Seat body "text" is 400 with no mutation 99ms
+   ✓ TEST-41 / AC-41: invalid Seat body {} is 400 with no mutation 102ms
+   ✓ TEST-41 / AC-41: invalid Seat body {"tableId":1} is 400 with no mutation 100ms
+   ✓ TEST-41 / AC-41: invalid Seat body {"tableId":null} is 400 with no mutation 110ms
+   ✓ TEST-41 / AC-41: invalid Seat body {"tableId":"not-a-uuid"} is 400 with no mutation 116ms
+   ✓ TEST-41 / AC-41: missing/malformed/oversized Seat body retains validation/error contract 110ms
+   ✓ TEST-41 / AC-41: missing/foreign table precedes CALLED state even for Host assigned to both queues 111ms
+   ✓ TEST-41 / AC-41: missing/foreign table precedes WAITING state even for Host assigned to both queues 110ms
+   ✓ TEST-42 / AC-42: available undersized table rejects; occupied takes precedence over capacity 121ms
+   ✓ TEST-43 / AC-43: release permits later seating without erasing the previous historical link 127ms
+   ✓ TEST-44 / AC-44: concurrent Seat at table4/table4 has one terminal event and occupied table 262ms
+   ✓ TEST-44 / AC-44: concurrent Seat at table4/table10 has one terminal event and occupied table 98ms
+   ✓ TEST-44 / AC-44: Seat racing no-show produces one transition/event and no leaked table 109ms
+   ✓ TEST-44 / AC-44: Seat racing complete produces one transition/event and no leaked table 104ms
+   ✓ TEST-44 / AC-44: Seat racing Release matches a serial history and keeps the historical entry link 105ms
+   ✓ TEST-45 / AC-45: event failure rolls back all no-show changes with a generic 500 105ms
+   ✓ TEST-45 / AC-45: event failure rolls back all seat changes with a generic 500 108ms
+   × TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain 270ms
+ ✓ tests/f06-queues.test.js (16 tests) 4684ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  345ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  1504ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1013ms
+ ✓ tests/f04-cancel.test.js (18 tests) 4103ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  341ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  1754ms
+ ✓ tests/f05-tables.test.js (31 tests) 3583ms
+     ✓ TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references  699ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3629ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  412ms
+     ✓ TEST-27 / AC-27: service_queues.max_party_size = -1 is rejected by the DB (23514)  323ms
+ ✓ tests/f01-auth.test.js (40 tests) 2946ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  343ms
+ ✓ tests/f03-host.test.js (21 tests) 2612ms
+ ✓ tests/f07a-history.test.js (22 tests) 2688ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all  343ms
+ ✓ tests/f09-payload.test.js (11 tests) 970ms
+ ✓ tests/infra.test.js (11 tests) 572ms
+ ✓ tests/controlled-fifo.test.js (1 test) 423ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  421ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/f05-seating.test.js > TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain
+AssertionError: expected [ '001', '002', '003', '004', …(2) ] to deeply equal [ '001', '002', '003', '004', '005' ]
+
+- Expected
++ Received
+
+@@ -2,6 +2,7 @@
+    "001",
+    "002",
+    "003",
+    "004",
+    "005",
++   "006",
+  ]
+
+ ❯ tests/f05-seating.test.js:225:8
+    223|     expect((await fresh.query('SELECT table_id FROM queue_entries WHER…
+    224|     expect((await fresh.query('SELECT name FROM schema_migrations ORDE…
+    225|       .toEqual(['001','002','003','004','005']);
+       |        ^
+    226|   } finally { await fresh.end(); }
+    227| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 12 passed (13)
+      Tests  1 failed | 288 passed (289)
+   Start at  15:55:05
+   Duration  42.23s (transform 218ms, setup 0ms, import 2.38s, tests 38.20s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-006/docs/evidence/l7-activation-green.json
+
+Exit code: 1

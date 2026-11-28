@@ -1,5 +1,5 @@
 import { Router, json } from 'express';
-import { requireUuid } from '../services/queues.js';
+import { parseHistoryFilters, requireUuid } from '../services/queues.js';
 
 // F-02 routes. Session and Role guards run earlier in routes/index.js (SDS C.6.3).
 export function createQueueRoutes({ queueService }) {
@@ -23,8 +23,16 @@ export function createQueueRoutes({ queueService }) {
     res.status(201).json({ data: ticket });
   });
 
+  // F-04: owner cancels a WAITING ticket. No request body is read; identity and ownership
+  // come from the Session, and the Customer-only guard runs earlier in routes/index.js.
+  router.post('/entries/:entryId/cancel', async (req, res) => {
+    const entryId = requireUuid(req.params.entryId, 'entryId');
+    res.json({ data: await queueService.cancel(req.user, entryId) });
+  });
+
   router.get('/me/entries', async (req, res) => {
-    res.json({ data: await queueService.listMyEntries(req.user) });
+    // The Customer-only guard already ran; filters are validated before any query (F-07a).
+    res.json({ data: await queueService.listMyEntries(req.user, parseHistoryFilters(req.query)) });
   });
 
   router.get('/entries/:entryId', async (req, res) => {

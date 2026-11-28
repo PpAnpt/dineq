@@ -10,12 +10,13 @@
 | F-04 | Customer Cancel Ticket ตาม Rule | FR-08; BR-10/12 | 2 |
 | F-05 | Host No-show และ Assign โต๊ะตามความจุ | FR-09/10; BR-10/11/12 | 2 |
 | F-06 | หลาย Queue/Counter, Host Assignment, Open/Close Queue | FR-11/12; BR-03/07/08 | 2 |
-| F-07 | ประวัติคิวและตัวกรองเฉพาะข้อมูลที่มีสิทธิ์ | FR-04/13/16; BR-08/12 | 3 |
-| F-08 | Dashboard รายงาน Queue / Service Summary | FR-14; NFR-04 | 3 |
-| F-09 | Error/UX, Security, Performance, Final Regression | FR-15; NFR-01/02/04/06/07 | 3 |
+| F-07 | ประวัติคิวและตัวกรองเฉพาะข้อมูลที่มีสิทธิ์ (F-07a ตัวกรองประวัติของ Customer = วางแผน Implement ใน Deliverable 2; F-07b ประวัติ Host/Event = PLANNED) | FR-04/13/16; BR-08/12 | 3 |
+| F-08 | Dashboard รายงาน Queue / Service Summary (PLANNED) | FR-14; NFR-04 | 3 |
+| F-09 | Error/UX, Security, Performance, Final Regression (F-09a 413 PAYLOAD_TOO_LARGE = วางแผน Implement ใน Deliverable 2; ส่วนอื่น PLANNED) | FR-15; NFR-01/02/04/06/07 | 3 |
 
 ## Revision History
 
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
+| v0.2 | 2026-11-28 | Mark Sprint 3 Implement/PLANNED checkpoints (F-07a and F-09a selected and planned for implementation in Deliverable 2, none implemented or tested yet; F-07b, F-08 and the rest of F-09 planned only); contracts in `docs/sprints/sprint-3/`; "implemented/tested/accepted" is recorded only after real code and run evidence exist (PR #101 review). Old wording of this row said F-07a and F-09a were implemented |

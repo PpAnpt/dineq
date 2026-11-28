@@ -96,9 +96,11 @@ async function clickAndCapture(page, matcher, click) {
 
 async function uiJoin(page, queueId, size) {
   await page.goto(`${base}/queues`);
-  await page.getByLabel('Party size (1–8)').fill(String(size));
+  // F-06: /queues lists several queues; act inside the card of the queue being joined.
+  const card = page.locator(`[data-queue-id="${queueId}"]`);
+  await card.getByLabel(/^Party size \(1–\d+\)$/).fill(String(size));
   return clickAndCapture(page, (method, path) => method === 'POST' && path === `/api/queues/${queueId}/entries`,
-    () => page.getByTestId('join-queue').click());
+    () => card.getByTestId('join-queue').click());
 }
 
 // The customer's active ticket, or a fresh join through the UI. Returns { entry, joined }.

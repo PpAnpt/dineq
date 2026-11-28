@@ -4,13 +4,14 @@ Reply to the user in **Thai**. Code, identifiers, commit messages and docs stay 
 
 ## Project
 CPE334 group project, Theme 9 "Queue and Service Management" (restaurant walk-in queue, name DineQ). Pair of two students.
-**Current target: Lab 5 delivery infrastructure on the accepted Sprint 1 baseline**. AI assists; the two students own correctness and must be able to explain everything.
+**Current target (28-29 Nov 2026): Project Deliverable 2 (Sprint 2 complete + Sprint 3 progress) and Lab 7 (one bounded change to Sprint 1 behavior), both due 29 Nov 23:59, on the deployed Lab 5/6 release (`main`)**. AI assists; the two students own correctness and must be able to explain everything.
 Sprint 1 = F-01 Auth & roles, F-02 Customer joins queue, F-03 Host FIFO call-next + complete.
-Lab 5 scope: Docker packaging, local PostgreSQL persistence, automated CI and deployment preparation. GCP setup/deployment, billing and IAM require explicit user authorization before execution. Business features beyond Sprint 1 (cancel, no-show, tables, multiple queues, reports) remain out of scope.
+Deliverable 2 scope (allocation in `docs/sprints/plan.md`): Sprint 2 = F-04 Customer cancel, F-05 Host no-show and table assignment, F-06 multiple queues and open/close; Sprint 3 = contracts for F-07, F-08, F-09 plus at least one implemented and tested workflow/rule (F-09a HTTP 413 PAYLOAD_TOO_LARGE; F-07a customer history filter). Lab 7 scope: exactly one change request to an already implemented Sprint 1 rule, defined in `docs/labs/lab-07/change-request.md` (per-queue party-size limit, replacing the fixed 1-8 of BR-09); the instructor's announcement says Lab 7 needs no instructor/TA approval, but the change must not be trivial. Earlier Lab 5/6 scope (Docker, CI, GCP delivery, UAT) is complete and its records are preserved. GCP setup/deployment, billing and IAM still require explicit user authorization; deployment happens only through the reviewed `sprint-2-staging` to `main` release PR and the existing pipeline. Features outside the Sprint 2/3 allocation above remain out of scope.
 
 ## Source of truth (read before coding)
 - `docs/srs.md`, `docs/features.md`, `docs/traceability.md`, `docs/system-sds.md`, `docs/sprints/plan.md`
 - `docs/sprints/sprint-1/F-01-auth.md`, `F-02-join-queue.md`, `F-03-host-queue.md`, `test-spec.md`
+- `docs/sprints/sprint-2/*.md`, `docs/sprints/sprint-3/*.md` (feature contracts and STS) and `docs/labs/lab-07/*.md` (change request, impact analysis, metrics, readiness) once they exist
 - `docs/reference/*.md` — course rules (read-only)
 Implement only what a contract says. If a contract is wrong or silent on something you need: **stop, propose the doc change, wait for my OK, commit the doc change first** (with a Revision History row), then implement. Never silently change specs or rewrite history.
 
@@ -30,8 +31,8 @@ database/{migrations/*.sql,migrate.js,seed/}     client/     docs/     docs/evid
 
 ## Git rules (course workflow — evidence depends on it)
 - Never commit or push to `main`. Never force-push. Never rewrite pushed history. Don't change git identity/config.
-- For Lab 5 branch from `staging`; `sprint-1-staging` is the preserved Sprint 1 integration branch. Branch names: `feature/f-0X-name`, `docs/...`, `chore/...`. Small conventional commits (`feat(F-02): ...`, `test(F-02): ...`, `docs: ...`). You may push your feature branch; I open the PR and my teammate reviews. **You never approve or merge PRs.**
-- Spec/contract/test-design commits come **before** the implementation they describe.
+- For Deliverable 2 and Lab 7 branch from `sprint-2-staging` (created from `main`); `sprint-1-staging`, `staging` and `lab6-staging` are preserved. The release is a reviewed PR `sprint-2-staging` to `main`; merging it deploys. Branch names: `feature/f-0X-name`, `docs/...`, `chore/...`. Small conventional commits (`feat(F-02): ...`, `test(F-02): ...`, `docs: ...`). You may push your feature branch; I open the PR and my teammate reviews. **You never approve or merge PRs.**
+- Spec/contract/test-design commits come **before** the implementation they describe. For Lab 7 the teammate-reviewed contract PR must be merged before the RED test branch exists; for each Sprint 2 feature the merged contract precedes its feature branch.
 
 ## TDD and test integrity
 1. Write the tests from `test-spec.md` first. Name them `TEST-xx / AC-yy: <behaviour>`.
@@ -54,3 +55,5 @@ database/{migrations/*.sql,migrate.js,seed/}     client/     docs/     docs/evid
 | v0.3 | 2026-11-06 | Align 404 guidance and public-login/check-order rules with the PR #1 contract fixes |
 
 | v0.4 | 2026-11-17 | Set Lab 5 infrastructure scope and staging baseline; retain explicit cloud authorization and Sprint 1 business contracts |
+
+| v0.5 | 2026-11-28 | Set Deliverable 2 and Lab 7 as the current target on the deployed `main`; branch from `sprint-2-staging`; record the Lab 7 no-approval announcement; keep Lab 5/6 history and the contract-first and TDD rules |

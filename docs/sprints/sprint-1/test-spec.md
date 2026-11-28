@@ -20,12 +20,16 @@
 
 | AC / Test ID | เงื่อนไข / Test Input | Expected Result | Test Level |
 | :---- | :---- | :---- | :---- |
-| AC-07 / TEST-07 | Customer, Assigned Host และ Unassigned Host GET Queue List หลัง Login | 200 `{ data: [...] }` แต่ละรายการมี `id`, `restaurant: { id, name }`, `status` OPEN/CLOSED, `isAssigned` ตาม SDS C.6.1; Assigned Host ได้ true เฉพาะคิวที่ดูแล อีกสองบทบาทได้ false; ไม่มีคิวได้ `{ "data": [] }` | API / E2E |
+| AC-07 / TEST-07 | Customer, Assigned Host และ Unassigned Host GET Queue List หลัง Login | 200 `{ data: [...] }` แต่ละรายการมี `id`, `restaurant: { id, name }`, `status` OPEN/CLOSED, `maxPartySize` (จำนวนเต็ม 1–10; v0.5), `isAssigned` ตาม SDS C.6.1; Assigned Host ได้ true เฉพาะคิวที่ดูแล อีกสองบทบาทได้ false; ไม่มีคิวได้ `{ "data": [] }` | API / E2E |
 | AC-08 / TEST-08 | Customer Join OPEN Queue ด้วย partySize=4 | 201 WAITING, ticketNo/partySize ตรง, มี JOINED Event และ GET ซ้ำได้ | API + DB |
 | AC-09 / TEST-09 | Customer คนเดิม Join ซ้ำขณะ WAITING/CALLED | 409 DUPLICATE_ACTIVE; Active Entry ไม่เพิ่ม | API + DB |
 | AC-10 / TEST-10 | 30 Customer ต่างบัญชี Join พร้อมกัน | ticketNo ภายใน Queue ไม่ซ้ำ, DB/Counter สอดคล้อง | Concurrency + DB |
 | AC-11 / TEST-11 | Customer A GET Ticket ของ Customer B | 403 ไม่มีข้อมูล B ใน Response | API + Authorization |
-| AC-12 / TEST-12 | Join Queue CLOSED หรือ partySize=0,9,1.5/ข้อความ | 409 QUEUE_CLOSED หรือ 400 INVALID_PARTY_SIZE; ไม่ Insert และไม่กินเลขคิว | API + DB Boundary |
+| AC-12 / TEST-12 (v0.5) | Join Queue CLOSED หรือ partySize=0,-1,1.5/ข้อความ/null/ไม่ส่ง หรือมากกว่า maxPartySize ของ Queue นั้น (Queue หลัก = 10 จึงใช้ 11); ขอบที่ต้องรับ 1 และ 10 บน Queue หลัก (เดิม 0, 9, 1.5 และขอบ 1, 8) | 409 QUEUE_CLOSED หรือ 400 INVALID_PARTY_SIZE; ไม่ Insert และไม่กินเลขคิว; ค่าผิดรายงานก่อน CLOSED | API + DB Boundary |
+| AC-25 / TEST-25 | ดูแถว AC-25 ใน F-02 v0.4: Queue limit 4/8/10 ขอบรับ/ปฏิเสธ, message ระบุ limit, เปลี่ยน limit แล้วมีผลทันที | 201 หรือ 400 INVALID_PARTY_SIZE ตาม limit; ไม่กินเลขคิว | API + DB Boundary |
+| AC-26 / TEST-26 | ดูแถว AC-26 ใน F-02 v0.4: Seed Queue หลัก = 10, ค่าเริ่มต้น 8, ข้อมูลเดิมไม่เสียหลัง Migration 002 | maxPartySize ถูกต้อง; Ticket/Event เดิมไม่เปลี่ยน | API + DB (Migration/Seed) |
+| AC-26b / TEST-26b | ดูแถว AC-26b ใน F-02 v0.5: Migration 006 ตั้ง Queue หลักที่มีค่า 8 (รวมที่ตั้งเอง) เป็น 10 เท่านั้น; ค่า 4/6/9/10 ไม่เปลี่ยน | ค่าอื่นไม่เปลี่ยน; รันซ้ำ/ไม่มีคิวไม่ Error; ข้อมูลเดิมไม่เปลี่ยน | DB Migration (PLANNED) |
+| AC-27 / TEST-27 | ดูแถว AC-27 ใน F-02 v0.4: DB ปฏิเสธ max_party_size และ party_size นอก 1–10 | 23514 | DB Constraint |
 | AC-13 / TEST-13 | Host เรียก Join Endpoint ที่อนุญาตเฉพาะ Customer | 403 ไม่เกิด Ticket ใหม่ | API + Role |
 | AC-21 / TEST-21 | Customer Join สำเร็จ แล้วสร้าง App Instance ใหม่พร้อม DB Pool ใหม่ต่อ DB เดิม (จำลอง Restart) | Ticket และ JOINED Event ที่สร้างไว้ก่อนหน้ายังอ่านได้ครบ (ticketNo/partySize/status ตรงเดิม) | API + DB (Restart Persistence) |
 | AC-23 / TEST-23 | Customer เรียก GET /api/entries/:entryId และ POST /api/queues/:queueId/entries (partySize=4) ด้วย `not-a-uuid` หรือ UUID ที่ยืนยันว่าไม่มีใน DB; ทวนคำขอทั้งสองแบบโดยไม่มี Session | มี Session: UUID ผิดรูปแบบ → 400 VALIDATION_ERROR, UUID ถูกแต่ไม่มี Resource → 404 NOT_FOUND; ไม่มี Session → 401 UNAUTHENTICATED ก่อนตรวจ UUID; ทุกกรณีไม่เพิ่ม Entry/Event/Counter และไม่เปิดเผยข้อมูลส่วนตัว | API + DB Boundary |
@@ -107,6 +111,24 @@ Additional recorded checks at the same source SHA: [E2E](../../evidence/release-
 
 Real process-restart evidence at baseline `3d2ba1b78714f51127cdf07b7e44951c06ed8d7a`: [HTTP/SQL transcript](../../evidence/release-restart-persistence.txt). P8 changed docs only; application/test source is identical between that baseline and the tested SHA above. GCP verification remains NOT EXECUTED (Lab 5).
 
+## Execution Results: Lab 7 (L7-CR-01), 2026-11-28
+
+Recorded at commit `680e8aab2c5977ebc14dfee969af29d7bc44645c` on branch `test/l7-per-queue-party-limit` (local PostgreSQL test database; not merged, not deployed). RED: [l7-red](../../evidence/l7-red.txt), 28 failed / 113 passed / 0 skipped of 141 at `d0554ed` on unmodified application code. GREEN: [l7-green](../../evidence/l7-green.txt), 141 passed / 0 failed / 0 skipped; Playwright [l7-e2e-green](../../evidence/l7-e2e-green.txt), 6 passed / 0 failed / 0 skipped.
+
+| AC / Test | Actual file | Result at the commit above |
+| --- | --- | --- |
+| AC-07 / TEST-07 (revised) | `server/tests/f02-join.test.js` | PASS (4 cases, `maxPartySize: 10` on the seeded queue) |
+| AC-12 / TEST-12 (revised) | `server/tests/f02-join.test.js` | PASS (invalid shapes, 11 rejected, 1/8/9/10 accepted, 400 before 409 on CLOSED) |
+| AC-25 / TEST-25 | `server/tests/l7-party-limit.test.js` | PASS (limits 4/8/10, default 8, invalid shapes, limit change, CLOSED order; plus two under-lock interleaving cases added after the PR #103 review, see l7-green-lock and the mutation check l7-lock-mutation) |
+| AC-26 / TEST-26 | `server/tests/l7-party-limit.test.js` | PASS (seed 10/default 8/explicit 4, migrate+seed rerun, upgrade with existing tickets) |
+| AC-27 / TEST-27 | `server/tests/l7-party-limit.test.js` | PASS (DB constraints 23514 for 0/-1/11, accepted 1/10, party_size 9/10 accepted) |
+
+Latest recorded API/DB run: [l7-green-lock](../../evidence/l7-green-lock.txt), 143 passed / 0 failed / 0 skipped at `6fa36bf7eac7e3457bb0497763a64c3168b6bb93`. The two under-lock tests were added after the implementation (review request); [l7-lock-mutation](../../evidence/l7-lock-mutation.txt) shows they fail (2 failed) when the code validates an unlocked pre-read.
+
+AC-26b / TEST-26b (migration 006): `server/tests/l7-activation.test.js`, 10 cases PASS. RED [l7-activation-red](../../evidence/l7-activation-red.txt) 10 failed / 279 passed of 289 before the file existed; the first full run with 006 failed one existing test (the hard-coded migration list in f05-seating TEST-45), kept as [l7-activation-chain-red](../../evidence/l7-activation-chain-red.txt); GREEN [l7-activation-green](../../evidence/l7-activation-green.txt) 289 passed / 0 failed / 0 skipped at `34f461a0a66bfbb574ff6537ec57ff4e9c15b52f`; Playwright [l7-activation-e2e](../../evidence/l7-activation-e2e.txt) 11 passed. Two temporary mutations (no `= 8` guard, no id filter) made the tests fail and were reverted. Local runs only; not merged, not deployed.
+
+Changed Sprint 1 tests (INFRA-04/05/07, E2E-2/DEMO-03) follow `docs/labs/lab-07/impact-analysis.md` section 4; no assertion was deleted or skipped.
+
 ## Revision History
 
 | Version | Date | Change |
@@ -115,3 +137,8 @@ Real process-restart evidence at baseline `3d2ba1b78714f51127cdf07b7e44951c06ed8
 | v0.2 | 2026-11-06 | Add AC-21/TEST-21 (restart persistence) and AC-22/TEST-22 (Origin check); keep in sync with F-01/F-02 contracts |
 | v0.3 | 2026-11-06 | Sync reviewed contracts: public-login/auth precedence, queue JSON/isAssigned, new AC-23/24 with explicit 400/401/403/404 cases; all tests remain PLANNED |
 | v0.4 | 2026-11-07 | P8: add actual results for all 24 AC from release-full-run, full test-name ledger and honest DoD/manual/release statuses; preserve original AC/design |
+| v0.5 | 2026-11-28 | Lab 7 (L7-CR-01): add TEST-25..27, revise TEST-07/TEST-12 for per-queue party size limits (old TEST-12: partySize=0,9,1.5/text, boundaries 1 and 8). New tests are PLANNED; the earlier Sprint 1 results above stay valid for the v0.4 rows they ran |
+| v0.6 | 2026-11-28 | Lab 7: add actual results for AC-07/12 (revised) and AC-25..27 from the recorded l7-red / l7-green runs at `680e8aa`; earlier Sprint 1 results unchanged |
+| v0.7 | 2026-11-28 | Lab 7 change request v0.2: add TEST-26b (PLANNED) for migration `006`; earlier results unchanged |
+| v0.8 | 2026-11-28 | Review wording fix (PR #112): TEST-26b covers a deliberate 8 (raised) and the values 4, 6, 9, 10 (kept); still PLANNED |
+| v0.9 | 2026-11-28 | Record the TEST-26b results from l7-activation-red / chain-red / green at `34f461a`; earlier results unchanged |

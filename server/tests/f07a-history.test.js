@@ -101,6 +101,32 @@ describe('F-07a AC-54: invalid filters', () => {
   });
 });
 
+// PR #109 review (P2): the order check must use the full fractional precision, not only milliseconds.
+describe('F-07a AC-54: from/to order at microsecond precision', () => {
+  test.each([
+    ['microseconds, same millisecond', '?from=2026-11-02T10:00:00.000900Z&to=2026-11-02T10:00:00.000100Z'],
+    ['nanoseconds, same microsecond', '?from=2026-11-02T10:00:00.0000009Z&to=2026-11-02T10:00:00.0000001Z'],
+    ['same instant with an offset, later fraction', `?from=${encodeURIComponent('2026-11-02T17:00:00.000900+07:00')}&to=2026-11-02T10:00:00.000100Z`],
+  ])('TEST-54 / AC-54: from after to (%s) is 400 VALIDATION_ERROR', async (_label, query) => {
+    await ticket(1, 1, 'WAITING', '2026-11-02T10:00:00.000Z');
+    const cookie = await login(customerEmail(1));
+    const before = await dbState(pool);
+    expectError(await list(cookie, query), 400, 'VALIDATION_ERROR');
+    expect(await dbState(pool)).toBe(before);
+  });
+
+  test.each([
+    ['microseconds in order', '?from=2026-11-02T10:00:00.000100Z&to=2026-11-02T10:00:00.000900Z'],
+    ['identical fractions', '?from=2026-11-02T10:00:00.000500Z&to=2026-11-02T10:00:00.000500Z'],
+    ['fraction written with a different number of digits', '?from=2026-11-02T10:00:00.5Z&to=2026-11-02T10:00:00.500000Z'],
+  ])('TEST-54 / AC-54: from not after to (%s) is accepted', async (_label, query) => {
+    await ticket(1, 1, 'WAITING', '2026-11-02T10:00:00.000Z');
+    const response = await list(await login(customerEmail(1)), query);
+    expect(response.status).toBe(200);
+    expect(response.body.data).toEqual([]);
+  });
+});
+
 describe('F-07a AC-55: owner only', () => {
   test('TEST-55 / AC-55: a Customer never sees another Customer ticket under any filter; Host 403 before the filters; anonymous 401', async () => {
     const mine = await ticket(1, 1, 'CANCELLED', '2026-11-02T10:00:00.000Z');

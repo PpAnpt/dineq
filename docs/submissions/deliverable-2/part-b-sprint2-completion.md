@@ -14,6 +14,8 @@ Each contract was merged before the branch that holds its tests. The history of 
 
 ## B.2 Completion table (what was implemented, run and passed)
 
+The execution records inside the contracts below are kept as they were written at the time (for example "not merged, not deployed"); the integrated and deployed state is in this part and in Part E.
+
 All runs below are recorded evidence files (`docs/evidence/<label>.txt`, with the commit in the header). They are local API/DB and Playwright runs on a real PostgreSQL test database; CI repeated the integrated suite on `df5923c` (run 46128556773, success) and on the release commits (runs 46133241147, 46133838057 and the CI inside deploy run 46151508392).
 
 | Feature | AC | Implementation | RED (tests first) | GREEN (same tests) | Playwright | Review and merge |

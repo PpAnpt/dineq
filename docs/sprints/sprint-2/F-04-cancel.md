@@ -1,6 +1,6 @@
 # F-04 Customer Cancel Ticket - Sprint 2 Contract
 
-> **Status:** Draft v0.4 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-08, FR-16, BR-02, BR-04, BR-10, BR-12, NFR-01, NFR-02, NFR-06
+> **Status:** Draft v0.5 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-08, FR-16, BR-02, BR-04, BR-10, BR-12, NFR-01, NFR-02, NFR-06
 
 เป้าหมาย: Customer ยกเลิกคิวของตนเองที่ยังเป็น WAITING ได้ โดยระบบบันทึกประวัติ (Event) ใน Transaction เดียวกัน ไม่ทำให้เลขคิวของคนอื่นเปลี่ยน และปลดกฎ "หนึ่ง Active Ticket ต่อคิว" ให้กลับมา Join ใหม่ได้; API: `POST /api/entries/:entryId/cancel`
 
@@ -127,6 +127,8 @@ Recorded at commit `0805dca9a4c4eb35613b05296819a23f518e91fe` on branch `feature
 | AC-34 / TEST-34 | `server/tests/f04-cancel.test.js` | PASS (10 rounds of cancel vs Call Next, 10 parallel cancels) |
 | AC-35 / TEST-35 | `server/tests/f04-cancel.test.js` | PASS (constraints, upgrade fixture for 003, restart) |
 
+Review fix (PR #106, P2, NULL from_status): [f04-fix-red](../../evidence/f04-fix-red.txt) 2 failed / 170 passed / 0 skipped of 172 in a freshly created schema before the migration change, then [f04-fix-green](../../evidence/f04-fix-green.txt) 172 passed / 0 failed / 0 skipped and [f04-fix-e2e-green](../../evidence/f04-fix-e2e-green.txt) 7 passed at `af2b247b0a16ddf27cdf4e401a2e0a8b7ef543d8`. These runs supersede the counts above (170) as the latest; the earlier runs stay as recorded history.
+
 Not covered by these runs: manual keyboard audit of the confirmation (AC-74 stays PLANNED) and any deployed-environment check.
 
 ## Revision History
@@ -137,3 +139,4 @@ Not covered by these runs: manual keyboard audit of the confirmation (AC-74 stay
 | v0.2 | 2026-11-28 | Address PR #99 review: AC-33 now completes ticket 1 between the two Call Next requests and asserts the 409 `UNRESOLVED_CALLED` guard in between (old wording: two consecutive Call Next calls returning 1 then 3) |
 | v0.3 | 2026-11-28 | Add execution results for AC-28..35 from f04-red, f04-green and f04-e2e-green at `0805dca`; contract text unchanged |
 | v0.4 | 2026-11-28 | PR #106 review: the event transition CHECK must state `from_status IS NOT NULL` for CANCELLED and NO_SHOW (a NULL from_status otherwise passes); AC-35 now also covers NULL from_status. Contract intent unchanged (CANCELLED only from WAITING, NO_SHOW only from CALLED) |
+| v0.5 | 2026-11-28 | Record the review-fix RED/GREEN runs (f04-fix-red, f04-fix-green, f04-fix-e2e-green) at `af2b247` |

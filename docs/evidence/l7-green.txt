@@ -1,0 +1,27 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/l7-green.json"
+Working directory: server
+Commit: 680e8aab2c5977ebc14dfee969af29d7bc44645c
+Date: 2026-11-28T05:27:48.375Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-l7red/server
+
+ ✓ tests/f02-join.test.js (44 tests) 6396ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1028ms
+ ✓ tests/l7-party-limit.test.js (24 tests) 2601ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  381ms
+ ✓ tests/f01-auth.test.js (40 tests) 2666ms
+ ✓ tests/f03-host.test.js (21 tests) 2085ms
+ ✓ tests/infra.test.js (11 tests) 594ms
+ ✓ tests/controlled-fifo.test.js (1 test) 358ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  357ms
+
+ Test Files  6 passed (6)
+      Tests  141 passed (141)
+   Start at  12:27:48
+   Duration  16.25s (transform 125ms, setup 0ms, import 929ms, tests 14.70s, environment 0ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-l7red/docs/evidence/l7-green.json
+
+Exit code: 0

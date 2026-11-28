@@ -70,8 +70,8 @@ function JoinForm({ queue }) {
     <form onSubmit={join} aria-busy={pending}>
       <fieldset disabled={pending || queue.status !== 'OPEN'}>
         <legend>Join {queue.restaurant.name}</legend>
-        <label htmlFor={inputId}>Party size (1–8)</label>
-        <input id={inputId} name="partySize" type="number" min="1" max="8" step="1" required
+        <label htmlFor={inputId}>Party size (1–{queue.maxPartySize})</label>
+        <input id={inputId} name="partySize" type="number" min="1" max={queue.maxPartySize} step="1" required
           defaultValue="1" data-testid="party-size" />
         <button type="submit" data-testid="join-queue">{pending ? 'Joining…' : 'Join queue'}</button>
       </fieldset>

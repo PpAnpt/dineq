@@ -168,6 +168,35 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 
 บัญชี Seed (v0.2): `customer01@dineq.test` ถึง `customer30@dineq.test` (CUSTOMER), `host1@dineq.test` (HOST, Assigned กับ Queue ที่ Seed), `host2@dineq.test` (HOST, ไม่ Assigned); รหัสผ่านทุกบัญชีอ่านจาก env `SEED_DEMO_PASSWORD` ตอนรัน Seed (ไม่ Commit ลง Git/เอกสาร/Log) และเก็บเป็น Argon2id Hash เท่านั้น; ตัวแปร `TEST_DATABASE_URL` ใช้ฐานข้อมูลแยกสำหรับ Test (เพิ่มใน `.env.example` ร่วมกับ `DATABASE_URL`)
 
+## C.8 Sprint 2-3 Planned Additions (v0.4-s3)
+
+หัวข้อนี้รวบรวมสิ่งที่ Contract ของ Sprint 2-3 เพิ่มจาก C.2-C.6 โดยไม่แก้แถวเดิม (รายละเอียดอยู่ใน Contract แต่ละฟีเจอร์); เมื่อ Implement เสร็จให้ย้ายไปรวมในตาราง C.2/C.6 พร้อม Revision History. สถานะ: PLANNED จนกว่าจะมีผลรันจริง
+
+**ข้อมูล (C.2 เพิ่มเติม)**
+
+| รายการ | ฟีเจอร์ / Migration | รายละเอียด |
+| :---- | :---- | :---- |
+| `queue_entries.status` เพิ่ม `CANCELLED`, `NO_SHOW`; `queue_events.event_type/from_status/to_status` เพิ่มค่าเดียวกัน; Transition CHECK ใหม่ | F-04 / 003 | CANCELLED จาก WAITING เท่านั้น; NO_SHOW จาก CALLED (ใช้โดย F-05) |
+| ตารางโต๊ะและการผูกโต๊ะกับตั๋ว | F-05 / 004 | กำหนดใน Contract F-05 (ความจุ, สถานะ AVAILABLE/OCCUPIED) |
+| `service_queues.name` (1-60 ตัวอักษร, UNIQUE ต่อร้าน) | F-06 / 005 | แยกหลายคิวในร้านเดียวกัน; Seed เพิ่มคิว `Bar counter` และ `host3@dineq.test` |
+| `service_queues.max_party_size` (1-10, ค่าเริ่มต้น 8) | Lab 7 / 002 | BR-09 ต่อคิว; `queue_entries.party_size` CHECK 1-10 |
+
+**API (C.6 เพิ่มเติม)**
+
+| Method | Endpoint | บทบาท | ฟีเจอร์ | สถานะ |
+| :---- | :---- | :---- | :---- | :---- |
+| POST | `/api/entries/:entryId/cancel` | Customer เจ้าของ | F-04 | Implement ใน D2 |
+| PATCH | `/api/queues/:queueId` `{ status }` | Host ที่ Assigned | F-06 | Implement ใน D2 |
+| GET | `/api/queues` (เพิ่ม `name`, `maxPartySize`) | Login แล้ว | F-06, Lab 7 | Implement ใน D2 |
+| GET | `/api/me/entries?status&from&to` | Customer | F-07a | Implement ใน D2 |
+| GET | `/api/queues/:queueId/history`, `/api/entries/:entryId/events` | Host ที่ Assigned / เจ้าของ | F-07b | PLANNED |
+| GET | `/api/queues/:queueId/summary` | Host ที่ Assigned | F-08 | PLANNED |
+| (No-show และจัดสรรโต๊ะ) | ตาม Contract F-05 | Host ที่ Assigned | F-05 | Implement ใน D2 (Contract กำลังร่างโดยเจ้าของ F-05) |
+
+**Error Catalog เพิ่มเติม (C.6.2):** `413 PAYLOAD_TOO_LARGE` (Body JSON เกิน 100 KB; F-09a, ไม่สร้าง Session/Row; Endpoint ที่ตรวจสิทธิ์ก่อน Parse Body ยังคืน 401/403/400/404 ก่อน) ไม่มี Code ใหม่อื่นใน Sprint 2: Cancel/ปิดคิวใช้ `INVALID_TRANSITION`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_ERROR` ที่มีอยู่
+
+**ข้อกำหนดร่วม:** ลำดับตรวจตาม C.6.3 ทุก Endpoint ใหม่; การเปลี่ยนสถานะที่แก้ตั๋วเขียน Event ใน Transaction เดียวกัน (BR-12) และล็อกแถวคิวก่อนแถวตั๋วเพื่อไม่ให้เกิด Deadlock กับ Call Next; ไม่รับ User ID/Role/ticketNo จาก Client
+
 ## Revision History
 
 | Version | Date | Change |
@@ -175,3 +204,4 @@ Login ใช้ Password Hash (Argon2id) จากบัญชี Seed; Server �
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
 | v0.2 | 2026-11-06 | Add error-code catalog and check order (C.6.2), response shapes incl. `isAssigned` and ticket JSON (C.6.1), UUID/timestamptz conventions (C.2), seed accounts and TEST_DATABASE_URL (C.7) |
 | v0.3 | 2026-11-06 | Address PR #1 review: define full queue-list JSON and endpoint-specific check order, clarify public login and the two 404 outcomes, link planned verification |
+| v0.4-s3 | 2026-11-28 | Add C.8 collecting the Sprint 2-3 planned additions (statuses, queue name, new endpoints, 413 error) without editing existing C.2-C.6 rows; label to be merged with the Lab 7 v0.4 row at integration |

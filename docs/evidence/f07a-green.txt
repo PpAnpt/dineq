@@ -1,0 +1,39 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/f07a-green.json"
+Working directory: server
+Commit: d52798182651a3eefe2dd7523cbcee108be4edf1
+Date: 2026-11-28T07:09:57.065Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-f07a/server
+
+ ✓ tests/f02-join.test.js (44 tests) 7607ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1232ms
+     ✓ TEST-11 / AC-11: Assigned Host may read the ticket, Unassigned Host gets 403  377ms
+     ✓ TEST-21 / AC-21: ticket and JOINED event survive a new app instance with a new DB pool  314ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3936ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  485ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  328ms
+ ✓ tests/f04-cancel.test.js (18 tests) 4673ms
+     ✓ TEST-28 / AC-28: the owner cancels, reads it back, and body fields cannot change authority or the ticket  325ms
+     ✓ TEST-30 / AC-30: anonymous 401, Host 403 (even with a bad UUID), another Customer 403, foreign Origin 403; the ticket stays WAITING  436ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  2232ms
+ ✓ tests/f03-host.test.js (21 tests) 2545ms
+     ✓ TEST-14 / AC-14: assigned Host lists WAITING/CALLED in FIFO order without private data  327ms
+ ✓ tests/f01-auth.test.js (40 tests) 2709ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  321ms
+ ✓ tests/f07a-history.test.js (16 tests) 2266ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all  393ms
+ ✓ tests/f09-payload.test.js (11 tests) 874ms
+ ✓ tests/controlled-fifo.test.js (1 test) 552ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  551ms
+ ✓ tests/infra.test.js (11 tests) 516ms
+
+ Test Files  9 passed (9)
+      Tests  188 passed (188)
+   Start at  14:09:57
+   Duration  28.34s (transform 221ms, setup 0ms, import 1.55s, tests 25.68s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-f07a/docs/evidence/f07a-green.json
+
+Exit code: 0

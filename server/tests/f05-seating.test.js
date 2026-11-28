@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { afterAll, beforeEach, expect, test } from 'vitest';
 import request from 'supertest';
 import { seedIds } from '../../database/seed/seedData.js';
@@ -222,6 +223,7 @@ test('TEST-45 / AC-45: No-show and seated history survive new app/pool with full
     }
     expect((await fresh.query('SELECT table_id FROM queue_entries WHERE id=$1',[second.id])).rows[0].table_id).toBe(seedIds.table4);
     expect((await fresh.query('SELECT name FROM schema_migrations ORDER BY name')).rows.map(r=>r.name.slice(0,3)))
-      .toEqual(['001','002','003','004','005']);
+      // Lab 7 migration 006: the expected list follows the migration files instead of a literal (impact analysis v0.6).
+      .toEqual(readdirSync(new URL('../../database/migrations', import.meta.url)).filter(name=>name.endsWith('.sql')).sort().map(name=>name.slice(0,3)));
   } finally { await fresh.end(); }
 });

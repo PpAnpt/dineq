@@ -1,0 +1,47 @@
+Command: node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/s2-integration.json"
+Working directory: server
+Commit: 5e8c9a7f3a8d3ba19b8c4a942dc5958b659e2f07
+Date: 2026-11-28T10:04:39.644Z
+Node: v24.14.0
+
+
+ RUN  v4.1.12 C:/Users/Anapat/Downloads/dineq-skeleton/wt-ev2/server
+
+ ✓ tests/f06-queues.test.js (16 tests) 4934ms
+     ✓ TEST-46 / AC-46: Customer lists both queues ordered by restaurant, queue name, id with exact keys  315ms
+     ✓ TEST-48 / AC-48: Customer 403, unassigned or other-queue Host 403, anonymous 401, foreign Origin 403; nothing changes  385ms
+     ✓ TEST-48 / AC-48: malformed UUID 400, absent queue 404 before the assignment check, bad bodies 400, bad body of an unassigned Host is still 403  302ms
+     ✓ TEST-50 / AC-50: 20 Joins racing a close are each 201 (before the close) or 409 QUEUE_CLOSED (after); numbers stay contiguous and no ticket appears after the close  1524ms
+     ✓ TEST-50 / AC-50: 15 Customers joining both queues at once get unique contiguous numbers per queue  1069ms
+ ✓ tests/f04-cancel.test.js (18 tests) 3932ms
+     ✓ TEST-34 / AC-34: cancel racing Call Next on ticket 1 gives exactly one consistent outcome (10 rounds)  1700ms
+ ✓ tests/f02-join.test.js (45 tests) 6325ms
+     ✓ TEST-10 / AC-10: 30 customers join at once with distinct ticket numbers 1..30  1390ms
+ ✓ tests/f05-seating.test.js (37 tests) 5113ms
+   ✓ TEST-36 / AC-36: No-show records one event, keeps original fields, owner reads and rejoins without FIFO skip  468ms
+   ✓ TEST-45 / AC-45: No-show and seated history survive new app/pool with full migration chain  415ms
+ ✓ tests/f05-tables.test.js (31 tests) 3777ms
+     ✓ TEST-45 / AC-45: DB rejects duplicate label, invalid occupancy/state and cross-queue references  601ms
+ ✓ tests/l7-party-limit.test.js (26 tests) 3556ms
+     ✓ TEST-25 / AC-25: a queue with limit 4 accepts [ 1, 4 ] and rejects 5 naming the limit  399ms
+     ✓ TEST-25 / AC-25: a queue with limit 8 accepts [ 1, 8 ] and rejects 9 naming the limit  325ms
+     ✓ TEST-25 / AC-25: a queue with limit 10 accepts [ 9, 10 ] and rejects 11 naming the limit  308ms
+ ✓ tests/f01-auth.test.js (40 tests) 3141ms
+     ✓ TEST-01 / AC-01: 'CUSTOMER' logs in without a Cookie; identity, Argon2id and hashed session come from the server  315ms
+ ✓ tests/infra.test.js (11 tests) 778ms
+ ✓ tests/f03-host.test.js (21 tests) 2795ms
+ ✓ tests/f07a-history.test.js (22 tests) 2721ms
+     ✓ TEST-52 / AC-52: status=CANCELLED and status=COMPLETED return only that status of the caller; no parameter returns all  372ms
+ ✓ tests/l7-activation.test.js (10 tests) 1057ms
+ ✓ tests/f09-payload.test.js (11 tests) 1007ms
+ ✓ tests/controlled-fifo.test.js (1 test) 537ms
+   ✓ TEST-15-CE / AC-15: sequential joins call the oldest ticket and leave every later ticket WAITING  536ms
+
+ Test Files  13 passed (13)
+      Tests  289 passed (289)
+   Start at  17:04:40
+   Duration  43.80s (transform 221ms, setup 0ms, import 2.44s, tests 39.68s, environment 1ms)
+
+JSON report written to C:/Users/Anapat/Downloads/dineq-skeleton/wt-ev2/docs/evidence/s2-integration.json
+
+Exit code: 0

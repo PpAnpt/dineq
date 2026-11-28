@@ -34,6 +34,7 @@ ALTER TABLE queue_events ADD CONSTRAINT queue_events_transition_check CHECK (
   (event_type = 'JOINED' AND from_status IS NULL AND to_status = 'WAITING')
   OR (event_type = 'CALLED' AND from_status IS NOT NULL AND from_status = 'WAITING' AND to_status = 'CALLED')
   OR (event_type = 'COMPLETED' AND from_status IS NOT NULL AND from_status = 'CALLED' AND to_status = 'COMPLETED')
-  OR (event_type = 'CANCELLED' AND from_status = 'WAITING' AND to_status = 'CANCELLED')
-  OR (event_type = 'NO_SHOW' AND from_status = 'CALLED' AND to_status = 'NO_SHOW')
+  -- from_status IS NOT NULL is explicit: a NULL makes the comparison NULL and a CHECK accepts NULL.
+  OR (event_type = 'CANCELLED' AND from_status IS NOT NULL AND from_status = 'WAITING' AND to_status = 'CANCELLED')
+  OR (event_type = 'NO_SHOW' AND from_status IS NOT NULL AND from_status = 'CALLED' AND to_status = 'NO_SHOW')
 );

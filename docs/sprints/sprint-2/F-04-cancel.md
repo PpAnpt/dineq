@@ -1,6 +1,6 @@
 # F-04 Customer Cancel Ticket - Sprint 2 Contract
 
-> **Status:** Draft v0.1 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-08, FR-16, BR-02, BR-04, BR-10, BR-12, NFR-01, NFR-02, NFR-06
+> **Status:** Draft v0.2 (2026-11-28) · CPE334 Theme 9 · DineQ · เชื่อมโยง FR-08, FR-16, BR-02, BR-04, BR-10, BR-12, NFR-01, NFR-02, NFR-06
 
 เป้าหมาย: Customer ยกเลิกคิวของตนเองที่ยังเป็น WAITING ได้ โดยระบบบันทึกประวัติ (Event) ใน Transaction เดียวกัน ไม่ทำให้เลขคิวของคนอื่นเปลี่ยน และปลดกฎ "หนึ่ง Active Ticket ต่อคิว" ให้กลับมา Join ใหม่ได้; API: `POST /api/entries/:entryId/cancel`
 
@@ -91,7 +91,7 @@ Seed: ไม่เปลี่ยน. ข้อมูลเดิม (WAITING/CA
 | AC-30 / TEST-30 | ไม่มี Session; Host ที่ Assigned และ Host ที่ไม่ Assigned; Customer B ยกเลิก Ticket ของ Customer A; คำขอที่มี Origin ไม่ตรง `APP_ORIGIN` | 401 `UNAUTHENTICATED`; 403 `FORBIDDEN` (Host ทั้งสองแบบ ก่อนตรวจ UUID/Resource); 403 `FORBIDDEN` (Customer B) โดย Response ไม่มีข้อมูลของ A; 403 `ORIGIN_NOT_ALLOWED`; ทุกกรณี Ticket ของ A ยัง WAITING และไม่มี Event ใหม่ | API + Authorization |
 | AC-31 / TEST-31 | Customer ใช้ `not-a-uuid` และ UUID ถูกรูปแบบที่ไม่มีใน DB; ทวนทั้งสองแบบโดยไม่มี Session และโดย Host | Customer: 400 `VALIDATION_ERROR` และ 404 `NOT_FOUND`; ไม่มี Session: 401 ก่อนตรวจ UUID; Host: 403 ก่อนตรวจ UUID; ไม่มีการเปลี่ยนแปลงใน DB | API + DB Boundary |
 | AC-32 / TEST-32 | Customer เจ้าของยกเลิก Ticket ที่เป็น CALLED, COMPLETED และ CANCELLED แล้ว (ยกเลิกซ้ำ) | 409 `INVALID_TRANSITION` ทุกกรณี; Row และ Event ไม่เปลี่ยน | API + DB Boundary |
-| AC-33 / TEST-33 | คิวมี WAITING หมายเลข 1, 2, 3 (ต่างลูกค้า); ลูกค้าหมายเลข 2 ยกเลิก; ลูกค้านั้น Join ใหม่; Host ดู Waiting List และกด Call Next สองครั้ง | ลูกค้า 2 Join ใหม่ได้ (ไม่ติด `DUPLICATE_ACTIVE`) ด้วย ticketNo ใหม่ = 4 (ไม่ Reuse เลข 2); หมายเลข 1 และ 3 ไม่เปลี่ยน; Waiting List ไม่มีใบ CANCELLED; Call Next เรียก 1 แล้ว 3 ตาม FIFO (ข้าม 2) | API + DB |
+| AC-33 / TEST-33 | คิวมี WAITING หมายเลข 1, 2, 3 (ต่างลูกค้า); ลูกค้าหมายเลข 2 ยกเลิก; ลูกค้านั้น Join ใหม่; Host ดู Waiting List, กด Call Next (ได้หมายเลข 1), กด Call Next ซ้ำทันที (ต้องถูกปฏิเสธเพราะยังมี CALLED ค้าง), Complete หมายเลข 1 แล้วตรวจว่าเสร็จ, จากนั้นกด Call Next อีกครั้ง | ลูกค้า 2 Join ใหม่ได้ (ไม่ติด `DUPLICATE_ACTIVE`) ด้วย ticketNo ใหม่ = 4 (ไม่ Reuse เลข 2); หมายเลข 1 และ 3 ไม่เปลี่ยน; Waiting List ไม่มีใบ CANCELLED; Call Next ครั้งแรกเรียกหมายเลข 1; ครั้งที่สองก่อน Complete ได้ 409 `UNRESOLVED_CALLED` (BR-05/TEST-16 ไม่เปลี่ยน และเทสนี้ห้ามผ่อนกฎดังกล่าว); หลัง Complete หมายเลข 1 เป็น COMPLETED แล้ว Call Next เรียกหมายเลข 3 ตาม FIFO (ข้าม 2 ที่ยกเลิก) | API + DB |
 | AC-34 / TEST-34 | (ก) ลูกค้าหมายเลข 1 ยกเลิกพร้อมกับ Host Call Next บนคิวที่มี WAITING 1 และ 2; (ข) Customer เดียวกันยกเลิกใบเดียวพร้อมกัน 10 คำขอ | (ก) ผลลัพธ์ที่เป็นไปได้มีเพียงสองแบบและต้องสอดคล้องกับ DB: ยกเลิกสำเร็จแล้ว Call Next ได้หมายเลข 2, หรือ Call Next ได้หมายเลข 1 แล้วยกเลิกได้ 409; ไม่มีใบที่มีทั้ง CANCELLED และ CALLED; (ข) สำเร็จ 1 ครั้ง (200) ที่เหลือ 409; มี Event CANCELLED เพียงแถวเดียว | Concurrency + DB |
 | AC-35 / TEST-35 | (ก) INSERT/UPDATE ตรงใน DB: Entry สถานะ CANCELLED พร้อม/ไม่พร้อม `called_at`/`completed_at`; Event CANCELLED ที่ `from_status` ไม่ใช่ WAITING; รันไฟล์ Migration ซ้ำ; (ข) ยกเลิกสำเร็จแล้วสร้าง App Instance ใหม่พร้อม DB Pool ใหม่ต่อ DB เดิม | (ก) DB รับ CANCELLED เมื่อ `called_at`/`completed_at` เป็น NULL และปฏิเสธเมื่อมีค่า (23514); ปฏิเสธ Event CANCELLED ที่ผิด `from_status`; Migration ซ้ำไม่เปลี่ยนข้อมูลเดิมและไม่ล้ม; ข้อมูลเดิมก่อน Migration ยังอ่านได้เหมือนเดิม; (ข) Ticket CANCELLED และ Event ยังอ่านได้ครบ | DB Constraint + Restart Persistence |
 
@@ -117,3 +117,4 @@ Seed: ไม่เปลี่ยน. ข้อมูลเดิม (WAITING/CA
 | Version | Date | Change |
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-28 | Initial draft, committed before tests and implementation |
+| v0.2 | 2026-11-28 | Address PR #99 review: AC-33 now completes ticket 1 between the two Call Next requests and asserts the 409 `UNRESOLVED_CALLED` guard in between (old wording: two consecutive Call Next calls returning 1 then 3) |

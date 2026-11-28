@@ -90,9 +90,9 @@ Value: **33** merged (5 into staging, 2 into main, 11 into lab6-staging, 15 into
 | #113 | 2026-11-28 16:02:08 +07 | sprint-2-staging | test(F-05): fix a race in E2E-11 that turned CI on sprint-2-staging red |
 
 ## M3 Automated test results (one suite, one commit)
-Source: `docs/evidence/l7-green-lock.txt/.json`. Command: `node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/l7-green-lock.json"` (working directory `server`). Commit: `6fa36bf7eac7e3457bb0497763a64c3168b6bb93`. Run date: 2026-11-28T05:30:18.464Z.
-Value: **143 passed, 0 failed, 0 skipped/pending of 143** (6 test files). Pass rate 143/143.
-This is the recorded run at that commit, not necessarily the current head; re-run and replace the evidence label before the final PDF.
+Source: `docs/evidence/s2-integration.txt/.json` (PR #117). Command: `node "node_modules/vitest/vitest.mjs" run --reporter=default --reporter=json --outputFile="../docs/evidence/s2-integration.json"` (working directory `server`). Commit: `b05cbd5e2be47fa137dca2b57658b9d9fb1177fb` (the evidence commit on top of `sprint-2-staging` head `5e8c9a7`, CI run 46133241147 green; no code differs). Run date: 2026-11-28T10:04:39.644Z.
+Value: **289 passed, 0 failed, 0 skipped/pending of 289** (13 test files). Pass rate 289/289. Playwright `s2-e2e`: 11 passed.
+This is the recorded run on the integrated Sprint 2 branch, not the deployed commit; re-run on the release commit if it changes. It replaces the earlier `l7-green-lock` value (143/143), which covered the Lab 7 branch only.
 
 ## M4 UAT defect status (DineQ-owned findings)
 Definition of resolved: a finding is RESOLVED only when the fix is merged to main with a RED then GREEN record and the deployed or retested behaviour is confirmed; otherwise OPEN.
@@ -239,6 +239,6 @@ Definition: workflow runs created in the window, grouped by conclusion (`in_prog
 
 ## Interpretation (max 100 words)
 
-CI succeeded in 104 of 111 completed runs (93.7%). Four failures were new Lab 5 browser tests fixed before merge; two were a timing race in the F-05 test E2E-11 on sprint-2-staging, fixed in PR #113 (green again on df5923c); one run was superseded. Risk: nothing is deployed, and the live main queue still allows only 8 until migration 006 (PR #114) is merged and released. Action: Siwarak opens the release PR by 29 Nov 15:00; Anapat runs post-deploy checks that evening and replaces M3 with the deployed commit's full-suite record.
+CI succeeded in 104 of 111 completed runs (93.7%). Four failures were new Lab 5 browser tests fixed before merge; two were a timing race in the F-05 test E2E-11 on sprint-2-staging, fixed in PR #113 (green again on df5923c); one run was superseded. Risk: nothing is deployed, and the live main queue still allows only 8 until migration 006 (merged in PR #114) is released. Action: Siwarak opens the release PR by 29 Nov 15:00; Anapat runs post-deploy checks that evening and replaces M3 with the deployed commit's full-suite record.
 
 (Draft written at the 28 Nov 16:04 snapshot. Regenerate the numbers with the command above at the final snapshot and update this text if a value changes; the limit is 100 words.)

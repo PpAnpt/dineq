@@ -1,5 +1,11 @@
 # Lab 6 contributions and remaining evidence
 
+Latest 28 Nov update: [HairRoot new-release Accepted response](dineq-new-release-decision-20261128.md) relayed by Siwarak for 1ffb8b0 / 00007-pnb. [Anapat UAT-07-R02 tester participation](anapat-retest-statement-20261128.md) confirmed; use original R02 image times, replacing the earlier approximate 22:30 recollection. Owner Refresh/GET supplement remains missing. Earlier status text below is dated history.
+
+
+Latest participation clarification: [Anapat is a UAT-07-R02 retest tester](anapat-retest-statement-20261128.md), reported by Siwarak for 27 Nov around 22:30. This supersedes earlier no-execution-reported status; original screenshot times/attribution are retained.
+
+
 Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
 
 

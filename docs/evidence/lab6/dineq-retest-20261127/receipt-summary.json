@@ -142,15 +142,20 @@
     "Digest/revision are supplied release references, not independent GCP queries by partner."
   ],
   "newReleaseDecision": {
-    "value": "PENDING_NOT_CONFIRMED_FOR_NEW_RELEASE",
-    "latestSource": "Partner clarification relayed by Siwarak on 27 November: Accepted refers to baseline 17c8b90 only; keep new 1ffb8b0 PASS 9/9 separate",
+    "value": "Accepted",
+    "latestSource": "Siwarak explicitly confirms HairRoot Accepted for 1ffb8b0 / 00007-pnb and subsequently identifies Tithinan, 27 Nov after retest. Retest timestamps are not substituted for exact decision time.",
     "supersededInterpretation": {
       "value": "Accepted",
       "source": "Siwarak relayed the partner's single-word response to the explicitly version-bound question in chat on 27 November 2026",
       "exactNamedDecisionAuthor": "Not separately supplied; requested tester is Tithinan, which is not substituted as a signature",
       "authoredMessageArtifact": "Not supplied"
     },
-    "baselineDecision": "Accepted for 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 / s21271a0d-00005-rdp"
+    "baselineDecision": "Accepted for 17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 / s21271a0d-00005-rdp",
+    "previousUnconfirmedStatus": "PENDING_NOT_CONFIRMED_FOR_NEW_RELEASE",
+    "decisionMaker": "Tithinan Sobking",
+    "decisionDateAsReported": "2026-11-27",
+    "decisionClockTime": null,
+    "receiptDate": "2026-11-28"
   },
   "independentRerunByDineQ": false,
   "liveMutationsByThisImport": false,
@@ -170,7 +175,7 @@
         "E-B8",
         "E-B9"
       ],
-      "citedArtifactsInspectedHere": false
+      "citedArtifactsInspectedHere": true
     },
     "retestResultsAndImagesReviewReportedBySiwarak": {
       "role": "Review retest results and images",
@@ -180,7 +185,7 @@
     "newRetestExecutionEvidence": "Not supplied; do not infer from review role"
   },
   "ownerReadbackSupplement": {
-    "state": "PROMISED_NOT_RECEIVED",
-    "scope": "Read-only Refresh and GET for original #22/#23; no new Join/Call/Complete"
+    "state": "NOT_SUPPLIED_DISCLOSED_LIMITATION",
+    "scope": "No later owner Refresh/GET artifact available; original/consolidated discrepancy and step-9 limitation remain disclosed. No new evidence created."
   }
 }

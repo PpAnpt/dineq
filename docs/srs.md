@@ -81,7 +81,7 @@ FR ทุกข้อมีรหัสถาวร แสดงพฤติก�
 | NFR-03 | จำลอง Join พร้อมกันอย่างน้อย 30 คำขอจากลูกค้าต่างบัญชีแล้ว ticketNo ไม่ซ้ำ | Concurrent PostgreSQL Integration Test ตรวจ Unique และ Counter | 1 |
 | NFR-04 | GET /api/queues และ /api/me/entries p95 ≤ 1000 ms สำหรับ 100 Tickets / 20 Requests หลัง Warm-up | วัดจริงและบันทึก Environment, Tool, Time | 3 |
 | NFR-05 | Password เก็บเป็น Argon2id Hash, Session Token เก็บเฉพาะ Hash, ไม่มี Secrets จริงใน Repo | ตรวจ Seed/DB/Repo และ Security Test | 1 |
-| NFR-06 | Error 400/401/403/404/409 คืน Code และข้อความชัดเจนตาม API Contract | Negative API Tests + UI Error Evidence | 1–3 |
+| NFR-06 | Error 400/401/403/404/409/413 คืน Code และข้อความชัดเจนตาม API Contract | Negative API Tests + UI Error Evidence | 1–3 |
 | NFR-07 | Flow Join, Call Next, Complete ใช้งานผ่าน Keyboard ได้ | Manual Keyboard Checklist พร้อมผลจริง | 3 |
 
 
@@ -105,3 +105,4 @@ FR ทุกข้อมีรหัสถาวร แสดงพฤติก�
 | :---- | :---- | :---- |
 | v0.1 | 2026-11-04 | Initial draft, committed before implementation |
 | v0.2 | 2026-11-28 | Lab 7 (L7-CR-01): BR-09 changes from a fixed 1–8 to a per-queue maximum party size (1–10, default 8). Old wording kept here: "partySize ต้องเป็นเลขจำนวนเต็มตั้งแต่ 1 ถึง 8" |
+| v0.3 | 2026-11-28 | Sprint 3 contracts: NFR-06 now also covers 413 PAYLOAD_TOO_LARGE (F-09a); old wording: "Error 400/401/403/404/409"|

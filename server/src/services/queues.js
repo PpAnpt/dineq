@@ -80,6 +80,40 @@ export function createQueueService({ pool }) {
       return toTicket(entry);
     },
 
+    // Cancel Transaction (F-04 contract section 2). Order: 404 -> 403 (owner) outside the
+    // transaction, then queue row FOR UPDATE -> entry row FOR UPDATE (same order as Call Next),
+    // state recheck (409) and the CANCELLED event in the same transaction (BR-12).
+    // The owner and the event actor come from the Session only.
+    async cancel(user, entryId) {
+      const found = await pool.query('SELECT queue_id, customer_id FROM queue_entries WHERE id = $1', [entryId]);
+      if (!found.rows[0]) throw httpError(404, 'NOT_FOUND', 'Queue entry not found');
+      if (found.rows[0].customer_id !== user.id) throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
+
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        await client.query('SELECT id FROM service_queues WHERE id = $1 FOR UPDATE', [found.rows[0].queue_id]);
+        const locked = await client.query('SELECT * FROM queue_entries WHERE id = $1 FOR UPDATE', [entryId]);
+        const entry = locked.rows[0];
+        if (!entry || entry.customer_id !== user.id) throw httpError(403, 'FORBIDDEN', 'This operation is not permitted');
+        if (entry.status !== 'WAITING') {
+          throw httpError(409, 'INVALID_TRANSITION', 'Only a WAITING ticket can be cancelled');
+        }
+        const updated = await client.query(
+          `UPDATE queue_entries SET status = 'CANCELLED' WHERE id = $1 RETURNING *`, [entryId]);
+        await client.query(
+          `INSERT INTO queue_events (entry_id, actor_id, event_type, from_status, to_status)
+           VALUES ($1, $2, 'CANCELLED', 'WAITING', 'CANCELLED')`, [entryId, user.id]);
+        await client.query('COMMIT');
+        return toTicket(updated.rows[0]);
+      } catch (error) {
+        await client.query('ROLLBACK').catch(() => {});
+        throw error;
+      } finally {
+        client.release();
+      }
+    },
+
     async assertQueueExists(queueId) {
       const exists = await pool.query('SELECT 1 FROM service_queues WHERE id = $1', [queueId]);
       if (exists.rowCount === 0) throw httpError(404, 'NOT_FOUND', 'Queue not found');

@@ -29,6 +29,7 @@ test('E2E-10 / F-05 AC-36 AC-37 AC-38: keyboard No-show confirmation, owner refr
     await h.page.getByTestId('call-next').click();
     const called=h.page.getByTestId('currently-called');
     await expect(called.getByTestId('ticket-status')).toHaveText('CALLED');
+    await expect(h.page.getByTestId('no-show-ticket')).toBeVisible();
     await h.page.getByTestId('no-show-ticket').focus();
     await h.page.keyboard.press('Enter');
     await expect(h.page.getByTestId('no-show-confirm-no')).toBeFocused();
@@ -56,6 +57,7 @@ test('E2E-11 / F-05 AC-40 AC-42 AC-43: fit-only table choice, Seat, Release and 
     second=await signIn(browser,'customer02@dineq.test'); await join(second.page,5);
     h=await signIn(browser,'host1@dineq.test');
     await h.page.getByTestId('call-next').click();
+    await expect(h.page.getByTestId('seat-table')).toBeVisible();
     await h.page.getByTestId('seat-table').selectOption(seedIds.table4);
     await h.page.getByTestId('seat-ticket').focus(); await h.page.keyboard.press('Enter');
     await expect(h.page.getByTestId('host-notice')).toContainText('COMPLETED');

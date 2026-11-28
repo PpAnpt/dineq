@@ -22,9 +22,11 @@
 | FR-09/10, BR-11 | F-05 / S2 | No-show/Table Assignment AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-11/12 | F-06 / S2 | Multiple Queue/Config AC/STS | PLANNED / NOT EXECUTED (later sprint) |
 | FR-16 (JOINED/CALLED/COMPLETED) | F-02 & F-03 / S1 | AC-08/15/17 / TEST-08/15/17 (ตรวจ Event ใน DB) | PASS (mapped Sprint 1 API cases; source SHA below) |
-| FR-13, FR-16 (เหตุการณ์ภายหลัง) | F-07 / S3 | History/Filter Verification | PLANNED / NOT EXECUTED (later sprint) |
+| FR-13, FR-16 (เหตุการณ์ภายหลัง) | F-07 / S3 | F-07a: AC-52..57 / TEST-52..57 (Implement ใน D2); F-07b: AC-58/59 / TEST-58/59 (PLANNED) (`docs/sprints/sprint-3/F-07-history.md`) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
 | FR-15 (ส่วน S1) | F-02 / S1 | AC-12 / TEST-12 (400/409 + ไม่ Insert); UI Validation/Loading/Error/Empty ตรวจด้วย E2E/Manual (ยังไม่มี TEST ID) | PASS AC-12 and selected E2E/error states; full UI-state/manual checklist NOT EXECUTED |
-| FR-15 (ส่วนที่เหลือ), FR-14, NFR-04/06/07 | F-08/F-09 / S3 | Reporting, Performance, UX, Regression Verification | PLANNED / NOT EXECUTED (later sprint) |
+| FR-14 | F-08 / S3 | AC-60..64 / TEST-60..64 (`F-08-reporting.md`) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ไม่ Implement ใน D2) |
+| NFR-06 (413) , FR-15 (ส่วนที่เหลือ) | F-09a / S3 | AC-70..72 / TEST-70..72 (`F-09-hardening.md`; 413 PAYLOAD_TOO_LARGE; Implement ใน D2) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
+| NFR-04, NFR-07, FR-15 (UX), Final Regression | F-09 / S3 | AC-73..76 / TEST-73..76 (ผลวัด/Checklist/ผลรันจริงเท่านั้น) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
 
 
 Traceability ของ Sprint 2–3 ระบุเป็น PLANNED ได้ใน D1 โดยต้องเชื่อม Requirement กับฟีเจอร์และ Sprint ครบก่อนเริ่ม Implement; อย่าถือว่ามี Test ที่รันผ่านแล้ว
@@ -45,3 +47,4 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.2 | 2026-11-06 | Close gaps before implementation: add NFR-02→AC-21, NFR-06 S1 mapping, FR-16/FR-15 S1 rows, AC-22 under NFR-01; split BR-03 and NFR-01 |
 | v0.3 | 2026-11-06 | Map queue-shape/assignment checks and new AC-23/24; explicitly cover both 404 codes and auth precedence without changing PLANNED statuses |
 | v0.4 | 2026-11-07 | P8: map actual S1 API/E2E/restart evidence and tested SHA; distinguish later-sprint/manual/release work as NOT EXECUTED |
+| v0.5-s3 | 2026-11-28 | Sprint 3: map FR-13/14/15, NFR-04/06/07 to AC-52..76 (PLANNED); label to be merged with the other v0.5 rows at integration |

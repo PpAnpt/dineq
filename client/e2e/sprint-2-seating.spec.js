@@ -18,7 +18,9 @@ async function join(page,size) {
   const card=page.locator(`[data-queue-id="${seedIds.queue}"]`);
   await card.getByLabel(/^Party size/).fill(String(size));
   await card.getByTestId('join-queue').click();
-  await expect(page.getByTestId('ticket-status').last()).toHaveText('WAITING');
+  // History is newest-first: after rejoining, the old terminal ticket is last.
+  // Assert the active ticket explicitly rather than assuming its position.
+  await expect(page.getByTestId('ticket-status').filter({hasText:/^WAITING$/})).toHaveText('WAITING');
 }
 test('E2E-10 / F-05 AC-36 AC-37 AC-38: keyboard No-show confirmation, owner refresh and rejoin retain old history', async ({browser})=>{
   const c=await signIn(browser,'customer01@dineq.test');

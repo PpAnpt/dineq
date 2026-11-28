@@ -1,6 +1,6 @@
 # F-05 Host No-show and Table Assignment
 
-> Draft v0.2, 28 November 2026. All AC and verification are **PLANNED / NOT EXECUTED**. Contract proposal for teammate review before tests or implementation. Refs: #92 (contracts), #81 (implementation). AC-36..45 are reserved for F-05; F-04 uses 28..35 and F-06 starts at 46.
+> Draft v0.3, 28 November 2026. Full-feature acceptance remains incomplete; see the partial execution record below. Contract proposal for teammate review before tests or implementation. Refs: #92 (contracts), #81 (implementation). AC-36..45 are reserved for F-05; F-04 uses 28..35 and F-06 starts at 46.
 
 ## 1. Requirements and bounded decisions
 
@@ -177,9 +177,14 @@ Selected UI journeys to implement after API GREEN: Join -> Call -> No-show -> ow
 - Intended delivery order if time is tight: (1) reviewed migration 004/test setup plus No-show, access, table read/target validation and capacity rejection (AC-36/37/38/39/41/42); (2) successful seating, release, legal concurrency, rollback/upgrade/restart verification (AC-40/43/44/45); (3) complete the UI journeys and integrated regression. Tests still precede their implementation in each step. This is a work order, not a scope cut: any unfinished AC/UI stays NOT EXECUTED or FAIL as supported by evidence and is reported explicitly; do not call F-05 complete until its full contract/DoD is met.
 - Append AI-use/contribution records and known limitations: seed/SQL table administration, queue-scoped tables, no automatic allocation/release, API enforcement of cross-table capacity/state, and source-qualified unexecuted checks.
 
+## Partial execution record — table slice
+
+[Recorded results](../../evidence/f05-table-verification.md): corrected-fixture RED 23 failed / 157 passed, GREEN 180 passed / 0 failed / 0 skipped at `a6aea0fb2a76f47d55495c6d039addc2b9edda8c`; 26 F-05 table cases, existing E2E 6 passed and Node checks 22 passed. Read/release portions of AC-38/39/43/45 are exercised; this does not certify every subcase in those AC or full F-05. No-show, Seat, their races/rollback, full 003->004 integration and new UI remain PLANNED / NOT EXECUTED.
+
 ## Revision History
 
 | Version | Date | Change |
 | --- | --- | --- |
 | v0.1 | 2026-11-28 | Proposed complete F-05 contract and TEST-36..45 before tests, migrations or implementation; reserved 004 and retained Sprint 1 Complete |
 | v0.2 | 2026-11-28 | Address PpAnpt's PR #104 review: declare INFRA-03 UUID count 6 -> 7, INFRA-05 seed/migration expectations and FK-aware reset impact; clarify valid-table inputs in AC-37 and target-before-state errors in AC-41; state delivery order without silently reducing scope |
+| v0.3 | 2026-11-28 | Record table-slice execution only; disclose corrected TEST-07 empty-queue setup and TEST-45 FK fixture, retain full-feature/integration/UI gaps |

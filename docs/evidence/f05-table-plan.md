@@ -24,3 +24,18 @@ Existing test/setup changes declared by contract v0.2:
 RED must fail on missing endpoint/schema assertions, without importing missing
 implementation modules or attempting fixture inserts into an absent table.
 All partial verification remains NOT EXECUTED until real recorded results.
+
+## Fixture corrections found by the first implementation probe
+
+The first unrecorded probe after implementation returned 178 passed / 2 failed:
+1. Existing TEST-07's empty-queue fixture deletes service_queues while the newly
+   seeded tables still reference it (23503). Clear dining_tables first when it
+   exists; preserve both role responses and the exact `{ data: [] }` assertion.
+2. TEST-45's foreign-queue occupancy input reused an already occupied entry, so
+   PostgreSQL correctly raised 23505 before the intended FK violation. Use a
+   separate unoccupied COMPLETED entry for that input; retain both the separate
+   duplicate-occupancy 23505 assertion and the cross-queue 23503 assertion.
+
+These are fixture fixes, not relaxed expectations. Record corrected RED on a
+fresh test DB with implementation temporarily shelved, then restore unchanged
+implementation and record GREEN. Preserve the original RED record as history.

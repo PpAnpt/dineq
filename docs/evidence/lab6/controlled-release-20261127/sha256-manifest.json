@@ -1,0 +1,60 @@
+{
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": "predeploy-cloud-metadata.json",
+      "sha256": "d8851be75a5b9ec5dc96d25ef01df053ed00a1e5714fb99b5bdbedabbc9d30f1",
+      "bytes": 1819
+    },
+    {
+      "path": "baseline-deploy-link.txt",
+      "sha256": "f8715df54c8884257621ad589a3e48272b95f7dbc36700bf32a56aaca2adb77e",
+      "bytes": 519
+    },
+    {
+      "path": "preflight-before.json",
+      "sha256": "db4dd55281ca4db44f7b37ac19b5e7411ae21440504c39ee3a5f29d8130687f4",
+      "bytes": 1044
+    },
+    {
+      "path": "preflight-retained-called.json",
+      "sha256": "014c324e6cb8c4592b1139f3a2b9e42e0b9ffd5586dffe94819de8edca003f13",
+      "bytes": 1153
+    },
+    {
+      "path": "preflight-retained-called.png",
+      "sha256": "1daa8b10f58e87c5266334f83083367df53166284279da8ab22375cc3d97fbd7",
+      "bytes": 25626
+    },
+    {
+      "path": "preflight-after.json",
+      "sha256": "8d4d9d0f4ca3fcee9d5cc3cf720ab76b6d8982d83cd537673480e6cac6a992da",
+      "bytes": 797
+    },
+    {
+      "path": "deploy-run.json",
+      "sha256": "ce9649777c263a32dcaf795d081750e705c4fbbdd01dc0d316d2a63ad411b8bf",
+      "bytes": 5583
+    },
+    {
+      "path": "deploy-excerpts.txt",
+      "sha256": "15ae19d295fb8237b137d3478ad52e084ce39b217b587932b6b32954652968fa",
+      "bytes": 4809
+    },
+    {
+      "path": "postdeploy-smoke.json",
+      "sha256": "d0f915f8effa64ed6f402fbf825661ab3bfcb69a370db698981fdab23aa13cef",
+      "bytes": 880
+    },
+    {
+      "path": "postdeploy-login.png",
+      "sha256": "ab325bae346554e7bd38899fc8be0a495fefdb58a7bc8e6c03b5d8d5e4f48aa5",
+      "bytes": 18427
+    },
+    {
+      "path": "release-summary.json",
+      "sha256": "7c509a36c22f86ad1311a915af8357cbcc4470525dc6e75a20f3006f3b2fb52e",
+      "bytes": 4473
+    }
+  ]
+}

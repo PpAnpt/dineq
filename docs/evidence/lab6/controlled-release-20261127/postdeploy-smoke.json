@@ -1,0 +1,30 @@
+{
+  "atUtc": "2026-11-27T15:29:36.798Z",
+  "method": "Public read-only Playwright smoke; no login or ticket mutation",
+  "expectedMainCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+  "versionProof": "Deploy run 46024849737, not the unchanged static UI label",
+  "url": "https://s21271a0d-4d7hbszvwq-as.a.run.app/login",
+  "checks": [
+    {
+      "route": "/api/health",
+      "status": 200,
+      "body": {
+        "data": {
+          "status": "ok"
+        }
+      }
+    },
+    {
+      "route": "/api/ready",
+      "status": 200,
+      "body": {
+        "data": {
+          "status": "ready",
+          "db": "connected"
+        }
+      }
+    }
+  ],
+  "text": "Skip to content\nDineQ\nSign in to DineQ\n\nUse your Customer or Host account.\n\nLab 5 release: deployed through the staging to main pipeline.\n\nAccount details\nEmail\nPassword\nSign in",
+  "result": "PASS"
+}

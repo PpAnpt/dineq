@@ -1,0 +1,3 @@
+deploy	Build and push the image	2026-11-22T04:44:26.4969068Z #24 exporting manifest sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8 done
+deploy	Build and push the image	2026-11-22T04:44:26.4972901Z #24 naming to asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d:17c8b90642ecb742b4f8b7e8c55da7fd34ddd620 done
+deploy	Deploy to Cloud Run	2026-11-22T04:45:19.6091817Z Service [s21271a0d] revision [s21271a0d-00005-rdp] has been deployed and is serving 100 percent of traffic.

@@ -5,6 +5,12 @@ Source: Siwarak relayed the partner's current response in the working chat on
 27 November 2026. This is a faithful received-message record, not an independent
 email-header verification or a signature authored by the Product Team.
 
+Later updates: the [partner clarification](partner-clarification-20261127.md)
+confirms original-release-only Accepted and supplies Iivo's original steps plus
+a separately user-reported review of retest results/images. The
+[release record](controlled-fifo-release-20261127.md) supplies subsequent digest
+verification. The receipt below preserves what was available at initial receipt.
+
 ## Partner-declared decision
 
 | Field | Received statement / qualification |

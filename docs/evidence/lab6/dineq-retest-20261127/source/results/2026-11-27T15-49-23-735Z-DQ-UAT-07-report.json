@@ -1,0 +1,203 @@
+{
+  "product": "DineQ",
+  "case": "DQ-UAT-07",
+  "tester": "Tithinan Sobking",
+  "scriptAuthor": "OpenAI Codex (GPT-6), at Tithinan Sobking’s request",
+  "runner": "Playwright automation executed by OpenAI Codex on the user’s behalf",
+  "startedAt": "2026-11-27T15:49:23.736Z",
+  "endedAt": "2026-11-27T15:49:31.961Z",
+  "timezone": "Asia/Bangkok",
+  "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+  "revision": "s21271a0d-00007-pnb",
+  "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+  "runConclusion": "INTERRUPTED",
+  "error": "Active queue changed before Call Next; stopped without action.",
+  "evidence": {
+    "base": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+    "fullCommit": "1ffb8b09b8df7f6b6954047ccdef4c2ccc113931",
+    "revision": "s21271a0d-00007-pnb",
+    "runtimeManifestDigest": "sha256:6cd1b0549e795905ef04d84eb553388e9ee9943089727a2e3a20089e4baf1c47",
+    "queue": {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "name": "DineQ Demo Restaurant",
+      "status": "OPEN"
+    },
+    "tickets": {
+      "T07A": {
+        "id": "e966e16c-b843-4468-81b5-5a4a2dd7fa72",
+        "ticketNo": 18,
+        "partySize": 3,
+        "status": "WAITING",
+        "completedAt": "2026-11-27T15:49:30.435Z"
+      },
+      "T07B": {
+        "id": "0ecf7d4f-ae0e-4a9e-ad16-02beb1cbf49e",
+        "ticketNo": 19,
+        "partySize": 5,
+        "status": "WAITING"
+      }
+    },
+    "steps": [
+      {
+        "step": 1,
+        "status": "PASS",
+        "expected": "C1 joined first with partySize 3 and received a real WAITING ticket",
+        "actual": "T07A #18, UUID e966e16c-b843-4468-81b5-5a4a2dd7fa72; verified by owner and Host read-back after interrupted join",
+        "evidenceId": "inspection-c1-tickets",
+        "at": "2026-11-27T15:49:28.247Z"
+      },
+      {
+        "step": "PRECONDITIONS-RESUME",
+        "status": "PASS",
+        "expected": "Queue OPEN; only the exact interrupted T07A is active; C2 has no active ticket",
+        "actual": "Q 22222222-2222-4222-8222-222222222222; active set contains only T07A #18",
+        "evidenceId": null,
+        "at": "2026-11-27T15:49:28.247Z"
+      },
+      {
+        "step": 1,
+        "status": "PASS",
+        "expected": "Join returns 201; ticket WAITING, partySize 5",
+        "actual": "ticketNo 19, UUID 0ecf7d4f-ae0e-4a9e-ad16-02beb1cbf49e, WAITING",
+        "evidenceId": "T07B-waiting",
+        "at": "2026-11-27T15:49:28.857Z"
+      },
+      {
+        "step": 2,
+        "status": "PASS",
+        "expected": "A then B are WAITING in FIFO order; no CALLED; no customer email exposed",
+        "actual": "Host API returned #18 then #19; both WAITING",
+        "evidenceId": "step2-fifo-waiting",
+        "at": "2026-11-27T15:49:29.141Z"
+      },
+      {
+        "step": 3,
+        "status": "PASS",
+        "expected": "Call Next returns FIFO head A as CALLED; B stays WAITING",
+        "actual": "A #18 CALLED, B #19 WAITING",
+        "evidenceId": "step3-A-called-B-waiting",
+        "at": "2026-11-27T15:49:29.589Z"
+      },
+      {
+        "step": 4,
+        "status": "PASS",
+        "expected": "409 INVALID_TRANSITION; B unchanged",
+        "actual": "409 INVALID_TRANSITION; B remains WAITING, same owner record",
+        "evidenceId": null,
+        "at": "2026-11-27T15:49:29.739Z"
+      },
+      {
+        "step": 5,
+        "status": "PASS",
+        "expected": "409 UNRESOLVED_CALLED; only A CALLED and B WAITING remain",
+        "actual": "409 UNRESOLVED_CALLED; owner/queue snapshots unchanged",
+        "evidenceId": null,
+        "at": "2026-11-27T15:49:29.941Z"
+      },
+      {
+        "step": 6,
+        "status": "PASS",
+        "expected": "Complete A; C1 sees the same UUID as COMPLETED while B remains WAITING",
+        "actual": "A #18 COMPLETED; B #19 WAITING",
+        "evidenceId": "step6-A-completed",
+        "at": "2026-11-27T15:49:30.458Z"
+      },
+      {
+        "step": 7,
+        "status": "PASS",
+        "expected": "409 INVALID_TRANSITION; completed A unchanged",
+        "actual": "409 INVALID_TRANSITION; A completedAt unchanged",
+        "evidenceId": null,
+        "at": "2026-11-27T15:49:30.554Z"
+      }
+    ],
+    "smokePrecheck": {
+      "at": "2026-11-27T15:49:24.228Z",
+      "health": 200,
+      "ready": 200
+    },
+    "preconditions": {
+      "checkedAt": "2026-11-27T15:49:28.247Z",
+      "queueOpen": true,
+      "activeQueueCount": 1,
+      "c1ActiveCount": 1,
+      "c2ActiveCount": 0,
+      "resumeOnlyExactT07A": "e966e16c-b843-4468-81b5-5a4a2dd7fa72"
+    }
+  },
+  "results": [
+    {
+      "step": 1,
+      "status": "PASS",
+      "expected": "C1 joined first with partySize 3 and received a real WAITING ticket",
+      "actual": "T07A #18, UUID e966e16c-b843-4468-81b5-5a4a2dd7fa72; verified by owner and Host read-back after interrupted join",
+      "evidenceId": "inspection-c1-tickets",
+      "at": "2026-11-27T15:49:28.247Z"
+    },
+    {
+      "step": "PRECONDITIONS-RESUME",
+      "status": "PASS",
+      "expected": "Queue OPEN; only the exact interrupted T07A is active; C2 has no active ticket",
+      "actual": "Q 22222222-2222-4222-8222-222222222222; active set contains only T07A #18",
+      "evidenceId": null,
+      "at": "2026-11-27T15:49:28.247Z"
+    },
+    {
+      "step": 1,
+      "status": "PASS",
+      "expected": "Join returns 201; ticket WAITING, partySize 5",
+      "actual": "ticketNo 19, UUID 0ecf7d4f-ae0e-4a9e-ad16-02beb1cbf49e, WAITING",
+      "evidenceId": "T07B-waiting",
+      "at": "2026-11-27T15:49:28.857Z"
+    },
+    {
+      "step": 2,
+      "status": "PASS",
+      "expected": "A then B are WAITING in FIFO order; no CALLED; no customer email exposed",
+      "actual": "Host API returned #18 then #19; both WAITING",
+      "evidenceId": "step2-fifo-waiting",
+      "at": "2026-11-27T15:49:29.141Z"
+    },
+    {
+      "step": 3,
+      "status": "PASS",
+      "expected": "Call Next returns FIFO head A as CALLED; B stays WAITING",
+      "actual": "A #18 CALLED, B #19 WAITING",
+      "evidenceId": "step3-A-called-B-waiting",
+      "at": "2026-11-27T15:49:29.589Z"
+    },
+    {
+      "step": 4,
+      "status": "PASS",
+      "expected": "409 INVALID_TRANSITION; B unchanged",
+      "actual": "409 INVALID_TRANSITION; B remains WAITING, same owner record",
+      "evidenceId": null,
+      "at": "2026-11-27T15:49:29.739Z"
+    },
+    {
+      "step": 5,
+      "status": "PASS",
+      "expected": "409 UNRESOLVED_CALLED; only A CALLED and B WAITING remain",
+      "actual": "409 UNRESOLVED_CALLED; owner/queue snapshots unchanged",
+      "evidenceId": null,
+      "at": "2026-11-27T15:49:29.941Z"
+    },
+    {
+      "step": 6,
+      "status": "PASS",
+      "expected": "Complete A; C1 sees the same UUID as COMPLETED while B remains WAITING",
+      "actual": "A #18 COMPLETED; B #19 WAITING",
+      "evidenceId": "step6-A-completed",
+      "at": "2026-11-27T15:49:30.458Z"
+    },
+    {
+      "step": 7,
+      "status": "PASS",
+      "expected": "409 INVALID_TRANSITION; completed A unchanged",
+      "actual": "409 INVALID_TRANSITION; A completedAt unchanged",
+      "evidenceId": null,
+      "at": "2026-11-27T15:49:30.554Z"
+    }
+  ],
+  "findings": "No unsupported conclusion; see interruption/blocker details."
+}

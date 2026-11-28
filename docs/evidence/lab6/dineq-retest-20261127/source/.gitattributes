@@ -1,0 +1,2 @@
+# Retain provided source bytes, not normalized report edits.
+* -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

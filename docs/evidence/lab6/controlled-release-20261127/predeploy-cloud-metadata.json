@@ -1,0 +1,19 @@
+{
+  "source": "Read-only gcloud commands in the student's authenticated Cloud Shell, observed through native Chrome accessibility; wrapped digest lines joined without changing values",
+  "dateBangkok": "2026-11-27",
+  "project": "cpe-se-course-2026",
+  "region": "asia-southeast1",
+  "service": "s21271a0d",
+  "canonicalUrl": "https://s21271a0d-4d7hbszvwq-as.a.run.app",
+  "latestReadyRevisionName": "s21271a0d-l6-1126161809",
+  "traffic": [{"revisionName": "s21271a0d-l6-1126161809", "percent": 100}],
+  "revisionImages": [
+    {"revision": "s21271a0d-00005-rdp", "specImage": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8", "statusImageDigest": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8"},
+    {"revision": "s21271a0d-l6-1126161809", "specImage": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8", "statusImageDigest": "asia-southeast1-docker.pkg.dev/cpe-se-course-2026/s21271a0d/s21271a0d@sha256:78f53db5fad8092256caf57ef4be872a09286379ab0879ce7487c53223c138b8"}
+  ],
+  "sameRuntimeDigest": true,
+  "baselineCommit": "17c8b90642ecb742b4f8b7e8c55da7fd34ddd620",
+  "baselineLinkSource": "Deployment run 44986245220 build log exports runtime manifest 78f53db5..., names the full 17c8b90 tag, and deploy step reports revision s21271a0d-00005-rdp serving 100 percent; exact excerpts retained in baseline-deploy-link.txt",
+  "registryTagDescribeAttempt": "A supplementary read-only Artifact Registry describe was submitted, but its result has not yet been collected; no claim is made from that attempt",
+  "noGcpMutation": true
+}

@@ -1,0 +1,31 @@
+{
+  "id": "preflight-retained-called",
+  "atUtc": "2026-11-27T15:24:16.904Z",
+  "url": "https://s21271a0d-4d7hbszvwq-as.a.run.app/host/queues/22222222-2222-4222-8222-222222222222",
+  "actor": "host1@dineq.test",
+  "calledResponse": {
+    "data": {
+      "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+      "queueId": "22222222-2222-4222-8222-222222222222",
+      "ticketNo": 17,
+      "partySize": 2,
+      "status": "CALLED",
+      "createdAt": "2026-11-25T14:19:55.446Z",
+      "calledAt": "2026-11-27T15:24:17.385Z",
+      "completedAt": null
+    }
+  },
+  "entries": [
+    {
+      "id": "922aad64-621e-402b-b926-20d0c1fef4ce",
+      "queueId": "22222222-2222-4222-8222-222222222222",
+      "ticketNo": 17,
+      "partySize": 2,
+      "status": "CALLED",
+      "createdAt": "2026-11-25T14:19:55.446Z",
+      "calledAt": "2026-11-27T15:24:17.385Z",
+      "completedAt": null
+    }
+  ],
+  "text": "Skip to content\nDineQ\nAssigned queues\nhost1@dineq.test · HOST\nLogout\nHost queue\nRefresh\nCall Next\n\nTicket #17: CALLED.\n\nCurrently called\nTicket #17\n\nParty size: 2\n\nStatus: CALLED\n\nComplete\nWaiting list (FIFO)\n\nNo waiting tickets."
+}

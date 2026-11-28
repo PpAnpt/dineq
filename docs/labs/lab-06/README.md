@@ -1,25 +1,37 @@
 # Lab 6: DineQ Sprint 1 independent UAT
 
+Latest 28 Nov update: [HairRoot new-release Accepted response](dineq-new-release-decision-20261128.md) relayed by Siwarak for 1ffb8b0 / 00007-pnb. [Anapat UAT-07-R02 tester participation](anapat-retest-statement-20261128.md) confirmed; use original R02 image times, replacing the earlier approximate 22:30 recollection. Owner Refresh/GET supplement remains missing. Earlier status text below is dated history.
+
+
+Latest participation clarification: [Anapat is a UAT-07-R02 retest tester](anapat-retest-statement-20261128.md), reported by Siwarak for 27 Nov around 22:30. This supersedes earlier no-execution-reported status; original screenshot times/attribution are retained.
+
+
+Latest update 28 November: [received supplement](partner-supplement-20261128.md) locates and verifies Iivo E-B7–E-B9. Anapat result/image-review role is reported by Siwarak; actual test execution is not recorded. Supplied message.txt repeats the old raw run, so fresh owner #22/#23 evidence is still missing. Earlier pending statements below retain their dated context.
+
+
 Latest targeted execution: [HairRoot R02, 27 November](hairroot-retest-2026-11-27-R02.md)
 on cbaf1ba passes UAT-07-R02 and UAT-05 step 4. The original R01 FAIL/BLOCKED
 history is retained. [HairRoot's Accepted decision for DineQ](dineq-acceptance-received-20261127.md)
-was relayed on 27 November (Tithinan; TH-060_P1). Baseline/restart digest proof,
-Iivo's actual contribution and DineQ's final HairRoot decision remain pending.
+was relayed on 27 November (Tithinan; TH-060_P1). Baseline/restart digest proof
+is recorded in the release evidence. Iivo's original execution and later review
+role are reported in the clarification below; supporting source details remain qualified.
 
 Updated 27 November 2026. Preparation/cases/handoff merged through PR #53–#57,
 HairRoot R01 through #58, and the reviewed follow-up #59 merged into
 lab6-staging as da7fe9ff0b69ba9156ceca61ab166e86067274d7 at 08:22:52 Bangkok
 on 27 November. **L6-5 / #49** now reconciles the latest received DineQ evidence:
-[follow-up R02](dineq-received-followup-R02.md). Final contribution/digest evidence
-and DineQ's own HairRoot acceptance decision remain outstanding. HairRoot later announced
+[follow-up R02](dineq-received-followup-R02.md). Later evidence and contribution
+updates are linked below. HairRoot later announced
 the corrected deployment; the requested targeted R02 results are linked above.
+
+Latest [partner clarification](partner-clarification-20261127.md): original Accepted applies only to 17c8b90; the [new controlled-release retest](dineq-controlled-retest-received-20261127.md) is reported PASS 9/9, with its final decision pending. Iivo's original steps and later user-reported review are recorded separately.
 
 ## Current recorded results
 
 | Tested product | Who executed / source | Actual recorded outcome | Still needed |
 | --- | --- | --- | --- |
-| HairRoot | DineQ's [R01](hairroot-run-2026-11-26-R01.md) plus [27 Nov R02](hairroot-retest-2026-11-27-R02.md) | Original 5 PASS / 1 FAIL / 1 BLOCKED cases retained. Later UAT-07-R02 and UAT-05 step 4 PASS on cbaf1ba; targeted follow-up, not full-suite rerun | Genuine second-student execution contribution and final version-bound independent decision |
-| DineQ | HairRoot's [original run](dineq-received-triage.md), [26 Nov follow-up](dineq-received-followup-R02.md) and [27 Nov decision receipt](dineq-acceptance-received-20261127.md) | Historical run counts retained; partner declares Accepted for original UAT, Tithinan, 27 Nov; findings none; Playwright author/runner Tithinan | Iivo's actual role/cases, image-digest proof linking original/restart revisions to baseline 17c8b90, and remaining original owner evidence corroboration |
+| HairRoot | DineQ's [R01](hairroot-run-2026-11-26-R01.md) plus [27 Nov R02](hairroot-retest-2026-11-27-R02.md) | Original 5 PASS / 1 FAIL / 1 BLOCKED retained. Later UAT-07-R02 and UAT-05 step 4 PASS on cbaf1ba; targeted follow-up. [Siwarak declared Accepted](hairroot-acceptance-declared-20261127.md) for that corrected version on 27 Nov | Genuine second-student execution contribution and retained scope/evidence qualifications |
+| DineQ | HairRoot's [original run](dineq-received-triage.md), [26 Nov follow-up](dineq-received-followup-R02.md) and [27 Nov decision receipt](dineq-acceptance-received-20261127.md) | Historical run counts retained; partner declares Accepted for original UAT, Tithinan, 27 Nov; findings none; original Playwright author/runner declared Tithinan. Iivo's original steps and retest-result/image review are reported separately | Verify cited Iivo evidence and review details; receive promised owner read-back. New controlled-release acceptance remains separate and unconfirmed; original digest proof is in the release record |
 
 PR #59 and incoming-result PR #60 are merged. Integration into lab6-staging does
 not deploy; approval/CI is separate from independent acceptance.

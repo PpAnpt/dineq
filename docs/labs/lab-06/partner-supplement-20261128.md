@@ -13,6 +13,13 @@ capture time. It therefore does not satisfy the promised fresh read-only
 owner COMPLETED evidence. No original data is changed to manufacture it.
 Original baseline-only Accepted and new-release reported PASS 9/9 stay separate.
 
+Full archive recheck on 28 November parsed all 31 JSON files in lab-06.zip:
+none contains either #22/#23 owner UUID or ticketNo 22/23. All eight JSON files
+in the earlier UAT-DinoQ-Pic-3.zip were also checked: only the known timestamped
+raw run and consolidated final report contain these records. Neither is a newly
+captured owner Refresh/GET supplement. This conclusion uses content, not just
+filenames. No JSON parsing failures occurred.
+
 ## Iivo original evidence located and inspected
 
 Partner report maps E-B7/B8/B9 to the following three original PNGs. All three

@@ -21,7 +21,7 @@
 | FR-07, BR-06/12 | F-03 / S1 | AC-17/18/24 / TEST-17/18/24 | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-08, BR-10 | F-04 / S2 | AC-28..35 / TEST-28..35 (`docs/sprints/sprint-2/F-04-cancel.md`; BR-12/FR-16 ของ Event CANCELLED = AC-28/29/35, BR-02 = AC-33) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ยังไม่มีเทสหรือโค้ด) |
 | FR-09/10, BR-11 | F-05 / S2 | No-show/Table Assignment AC/STS | PLANNED / NOT EXECUTED (later sprint) |
-| FR-11/12 | F-06 / S2 | Multiple Queue/Config AC/STS | PLANNED / NOT EXECUTED (later sprint) |
+| FR-11/12, BR-07/08 (หลายคิว) | F-06 / S2 | AC-46..51 / TEST-46..51 (`docs/sprints/sprint-2/F-06-queues.md`; BR-07 ปิดคิว = AC-49, BR-08 แยกคิว = AC-48/50, NFR-03 ต่อคิว = AC-50) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28; ยังไม่มีเทสหรือโค้ด) |
 | FR-16 (JOINED/CALLED/COMPLETED) | F-02 & F-03 / S1 | AC-08/15/17 / TEST-08/15/17 (ตรวจ Event ใน DB) | PASS (mapped Sprint 1 API cases; source SHA below) |
 | FR-13, FR-16 (เหตุการณ์ภายหลัง) | F-07 / S3 | F-07a: AC-52..57 / TEST-52..57 (วางแผน Implement ใน D2); F-07b: AC-58/59 / TEST-58/59 (PLANNED) (`docs/sprints/sprint-3/F-07-history.md`) | PLANNED / NOT EXECUTED (contract v0.1 2026-11-28) |
 | FR-15 (ส่วน S1) | F-02 / S1 | AC-12 / TEST-12 (400/409 + ไม่ Insert); UI Validation/Loading/Error/Empty ตรวจด้วย E2E/Manual (ยังไม่มี TEST ID) | PASS AC-12 and selected E2E/error states; full UI-state/manual checklist NOT EXECUTED |
@@ -51,3 +51,4 @@ PASS applies to the specified recorded cases, not all future work. Manual two-pr
 | v0.5 | 2026-11-28 | Lab 7 (L7-CR-01): add BR-09 per-queue party-size row (AC-07/12 revised, AC-25..27) as PLANNED; the earlier PASS stays attached to the Sprint 1 baseline rule |
 | v0.6 | 2026-11-28 | F-04: map FR-08/BR-10 to AC-28..35 (PLANNED) |
 | v0.7 | 2026-11-28 | Sprint 3: map FR-13/14/15, NFR-04/06/07 to AC-52..76 (PLANNED)|
+| v0.8 | 2026-11-28 | F-06: map FR-11/12 to AC-46..51 (PLANNED) |
